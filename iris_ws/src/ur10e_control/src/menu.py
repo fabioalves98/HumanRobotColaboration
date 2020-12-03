@@ -3,6 +3,7 @@ import rospy, socket, sys, signal
 from ur10e_control.msg import ArmCommand
 from ur10e_control.srv import ControlArm
 
+
 def signal_handler(sig, frame):
     print('')
     sys.exit(0)
@@ -26,7 +27,6 @@ def callControlArmService(arguments, printFeedback=True):
 
 def main():
     rospy.init_node('menu', anonymous=False)
-    
     signal.signal(signal.SIGINT, signal_handler)
 
     helpStr = callControlArmService(["help"], printFeedback=False)

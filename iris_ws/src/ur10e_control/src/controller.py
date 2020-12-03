@@ -26,6 +26,7 @@ positions_file = "positions.yaml"
 positions = {}
 position_names = []
 
+
 def load_positions(path):
     '''Returns tuple with keys of all possible positions and the dict with the positions previously
        saved in a yaml file'''
@@ -35,10 +36,12 @@ def load_positions(path):
 
     return k, data[0][0]
 
+
 def parseRotationArgs(args):
     for i in range(0, len(args)):
         args[i] = eval(args[i].replace('pi', str(pi)))
     return args
+
 
 def commandStr():
     commands = "\nAvailable commands:\n \
@@ -111,6 +114,7 @@ def test():
     # arm.saveJointPosition(BASE_DIR + "/yaml/positions.yaml", "init_calibration_pos")
 
     # rospy.spin()
+
 
 def main():
     # moveit_commander.roscpp_initialize(sys.argv)
