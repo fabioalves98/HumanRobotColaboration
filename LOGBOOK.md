@@ -136,4 +136,9 @@
   - Repositório iniciado com o iris_ws -> https://github.com/fabioalves98/HumanRobotColaboration
   - Programa wrench.py faz agora display dos valores num gráfico em tempo real no modo live
   
+  ## 3/11 - Teste IRISLab
+  
+  - Ver os resultados em tempo real não ajudou a obter novas conclusões
+  - Os valores de força que o controlador interno do robot publica, são relativos ao eixo da base robot. O nó ur_hardware_interface, antes de publicar para /wrench, multiplica estes valores pelo transform da pose do TCP para obter os valores de força em relação ao TCP
+  
   
