@@ -53,7 +53,7 @@
 
 - Criei 3 workspaces diferentes. 1 com o driver do eurico (iris_ws). 1 com o driver oficial (ros_ws). 1 onde vou tentar dar merge dos 2 (merge_ws)
 
-## 18/11 - Teste e Reunião (IRISLab)
+## 18/11 - Reunião (IRISLab)
 
 - Ao tentar adaptar o merge_ws para os parametros do iris_ws (que funciona) reparei numa linha do ur10e_bringup.launch onde, por alguma razao, o force_torque_sensor_controller nao estava incluido na lista de controladores. Ao incluir, o driver já publica os valores do sensor para o tópico /wrench. Vou prosseguir com a utilização do iris_ws, deixando a adaptação do merge_ws para depois.
 - Implementação do planeador STOMP no iris_ws
@@ -79,7 +79,7 @@
 - 4 bags gravados (wrench3, wrench10, all3, all10)
 - Testes com novo nó tests.py para criar diferentes conjuntos de posições
 
-## 19/11 - Teste IRISLab
+## 19/11 - IRISLab
 
 - À medida que o tempo passa, o sensor de força vai acumulando erros e, sem mexer no robot, os valores vão-se afastando linearmente de como são inicializados (0,0,0)
 
@@ -102,7 +102,7 @@
   - Calibração 10 -  {Payload: 1.69kg, CX: -8.0, CY: -2.0, CZ: 40.0}
 - Após várias tentativas de calibração, decidi usar os valores atuais mas centrar o TCP em X = 0
 
-## 2/12 - Teste IRISLab
+## 2/12 - IRISLab
 
 - Estudo dos valores de força do sensor, gráficos em screenshots -> wrench
   - Movimentos simples em XYZ sem aplicar rotação do EE, provocam oscilações quando o robot se está a mover. Valores oscilam entre [-5, 6]
@@ -130,15 +130,38 @@
     - TESTE - Alterar para X = 50, Y = 50, Z = 50
     - RESULTADO - Exatamente o mesmo do primeiro teste de rotação
   - Alterar o valor do peso do payload ou qualquer componente do centro de gravidade do TCP faz com que o controlador do sensor reinicie os seus valores a zero, por menor que seja a alteração, qualquer que seja, provoca um reset
-  
+
   ****
-  
+
   - Repositório iniciado com o iris_ws -> https://github.com/fabioalves98/HumanRobotColaboration
   - Programa wrench.py faz agora display dos valores num gráfico em tempo real no modo live
-  
-  ## 3/11 - Teste IRISLab
-  
+
+  ## 3/12 - IRISLab
+
   - Ver os resultados em tempo real não ajudou a obter novas conclusões
   - Os valores de força que o controlador interno do robot publica, são relativos ao eixo da base robot. O nó ur_hardware_interface, antes de publicar para /wrench, multiplica estes valores pelo transform da pose do TCP para obter os valores de força em relação ao TCP
-  
-  
+
+  ## 4/12 - IRISLab
+
+  - Guardados 3 novos bags 
+    - wrench_pushes.bag - Onde o gripper agarra num pedaço de cortiça e eu puxo em várias direções com diferentes níveis de força
+    - wrench_taps.bag - Leves toques rápidos nos lados do gripper
+    - wrench_twists.bag - Onde ao agarra no gripper o tento rodar em várias direções para testar a sensibilidade dos valores de torque
+
+  ## 7/12 - Posto 7
+
+  - Descobri um serviço que reinicializa o sensor de força e torque (zero_ftsensor) e outro que reenvia um programa URScript ao robot (resend_robot_program), útil para quando o robot entra em protective stop ou emergency stop
+
+  - Encontrei Issues no Github do driver do UR10e muito parecidos com o problema
+
+    - [Strange FT sensor readings with nothing mounted on the end of the]: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/issues/29
+
+    - [Problem on force_torque_sensor_controller, and its topic /wrench]: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/issues/269
+
+  - Programa wrench integra os valores de /wrench em tempo real para detetar corretamente uma interação com o robot
+
+  #### Tarefas
+
+  - Filtar os valores de ruído e fazer uma função de integração que detete corretamente forças e toques rápidos
+    - Moving Average Filter - https://maker.pro/arduino/tutorial/how-to-clean-up-noisy-sensor-data-with-a-moving-average-filter
+    - Kalman Filter ?
