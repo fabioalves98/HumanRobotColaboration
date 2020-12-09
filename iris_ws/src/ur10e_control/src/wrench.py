@@ -7,6 +7,8 @@ from geometry_msgs.msg import WrenchStamped
 import matplotlib.pyplot as plt
 import numpy as np
 
+from menu import callControlArmService
+
 stream = []
 full_stream = []
 
@@ -19,12 +21,47 @@ y_i_values = []
 z_i_values = []
 
 stream_range = 2000
-integral_range = 10
+stream_count = 0
+integral_range = 20
 integral_idx = 0
+
+force_limit = 15
+grip_ready = 500
+
 
 def signal_handler(sig, frame):
     print('')
     sys.exit(0)
+
+
+def evaluateForce(x, y, z):
+    global grip_ready
+    grip_ready -= 1
+    release, grip = False, False
+    if abs(x) > force_limit:
+        grip = True
+    if abs(y) > force_limit or z > force_limit:
+        release = True
+    
+    if grip_ready < 0:
+        if release:
+            callControlArmService(['release'])
+            print('Release')
+            grip_ready = 500
+
+        if grip:
+            callControlArmService(['grip'])
+            print('Grip')
+            grip_ready = 500
+
+
+def setPlotData(plts, data):
+    if not all(elem == len(data[0]) for elem in [len(x) for x in data]):
+        return
+
+    for i in range(len(plts)):
+        plts[i].set_xdata(range(0, len(data[i])))
+        plts[i].set_ydata(data[i])
 
 
 def callback(data):
@@ -32,16 +69,30 @@ def callback(data):
     y = data.wrench.force.y
     z = data.wrench.force.z
 
-    global stream, full_stream, integral_idx
+    evaluateForce(x, y, z)
 
+    global stream, stream_count, full_stream, integral_idx
+
+    # Aquisition of the force values
     stream.append((x, y, z))
-    full_stream.append((x, y, z))
+    # full_stream.append((x, y, z))
+
+    stream_count += 1
     x_values.append(x)
     y_values.append(y)
     z_values.append(z)
 
-    integral_idx += 1
-    if integral_idx == integral_range:
+    if stream_count > stream_range:
+        del x_values[0]
+        del y_values[0]
+        del z_values[0]
+
+        del x_i_values[0]
+        del y_i_values[0]
+        del z_i_values[0]
+
+    # Integration of the force values
+    if integral_idx > integral_range:
         # X Mean in integral range
         x_i_temp = x_values[-1 - integral_range : -1]
         x_i_sub = []
@@ -60,44 +111,9 @@ def callback(data):
         for i in range(1, len(z_i_temp)):
             z_i_sub.append(z_i_temp[i] - z_i_temp[i-1])
         z_i_values.append(statistics.mean(z_i_sub))
-
-        # x_i_values.append(x_values[-1] - x_values[-1 - integral_range])
-        # y_i_values.append(y_values[-1] - y_values[-1 - integral_range])
-        # z_i_values.append(z_values[-1] - z_values[-1 - integral_range])
-        integral_idx = 0
-    
-    if len(full_stream) > stream_range:
-        del x_values[0]
-        del y_values[0]
-        del z_values[0]
-
-        if integral_idx == 0:
-            del x_i_values[0]
-            del y_i_values[0]
-            del z_i_values[0] 
-
-
-
-    # if len(stream) > 100:
-    #     to_print = '\nMin Max' + '\n'
-    #     to_print += 'X - ' + str(min([e[0] for e in stream])) + ' - ' + str(max([e[0] for e in stream])) + '\n'
-    #     to_print += 'Y - ' + str(min([e[1] for e in stream])) + ' - ' + str(max([e[1] for e in stream])) + '\n'
-    #     to_print += 'Z - ' + str(min([e[2] for e in stream])) + ' - ' + str(max([e[2] for e in stream])) + '\n'
-
-    #     to_print += 'Mean' + '\n'
-    #     to_print += 'X - ' + str(statistics.mean([e[0] for e in stream])) + '\n'
-    #     to_print += 'Y - ' + str(statistics.mean([e[1] for e in stream])) + '\n'
-    #     to_print += 'Z - ' + str(statistics.mean([e[2] for e in stream])) + '\n'
-
-    #     to_print += 'Std Dev' + '\n'
-    #     to_print += 'X - ' + str(statistics.stdev([e[0] for e in stream])) + '\n'
-    #     to_print += 'Y - ' + str(statistics.stdev([e[1] for e in stream])) + '\n'
-    #     to_print += 'Z - ' + str(statistics.stdev([e[2] for e in stream])) + '\n'
-
-    #     # print(to_print)
-
-    #     stream = []
-
+    else:
+        integral_idx += 1
+         
 
 def main():
     rospy.init_node('wrench_listener', anonymous=True)
@@ -110,14 +126,15 @@ def main():
     wrench_sub = rospy.Subscriber("wrench", WrenchStamped, callback)
 
     if args.live:
+        # Create Plots
         plt.ion()
         fig, (ax, ax_i) = plt.subplots(2)
-        # ax = fig.add_subplot(111)
-        ax.set(ylim=(-3, 3))
+
+        ax.set(ylim=(-30, 30))
         ax.set(xlim=(0, stream_range))
 
-        ax_i.set(ylim=(-3, 3))
-        ax_i.set(xlim=(0, stream_range/integral_range))
+        ax_i.set(ylim=(-1, 1))
+        ax_i.set(xlim=(0, stream_range))
 
         x_plt, = ax.plot(range(0, len(x_values)), x_values, 'r-')
         y_plt, = ax.plot(range(0, len(y_values)), y_values, 'g-')
@@ -128,34 +145,8 @@ def main():
         z_i_plt, = ax_i.plot(range(0, len(z_i_values)), z_i_values, 'b-')
 
         while True:
-            x_temp = x_values[:]
-            y_temp = y_values[:]
-            z_temp = z_values[:]
-
-            x_i_temp = x_i_values[:]
-            y_i_temp = y_i_values[:]
-            z_i_temp = z_i_values[:]
-
-            if len(x_temp) != len(y_temp) or len(x_temp) != len(z_temp) or len(z_temp) != len(y_temp):
-                continue
-            if len(x_i_temp) != len(y_i_temp) or len(x_i_temp) != len(z_i_temp) or len(z_i_temp) != len(y_i_temp):
-                continue
-
-            x_plt.set_xdata(range(0, len(x_temp)))
-            y_plt.set_xdata(range(0, len(y_temp)))
-            z_plt.set_xdata(range(0, len(z_temp)))
-
-            x_plt.set_ydata(x_temp)
-            y_plt.set_ydata(y_temp)
-            z_plt.set_ydata(z_temp)
-
-            x_i_plt.set_xdata(range(0, len(x_i_temp)))
-            y_i_plt.set_xdata(range(0, len(y_i_temp)))
-            z_i_plt.set_xdata(range(0, len(z_i_temp)))
-
-            x_i_plt.set_ydata(x_i_temp)
-            y_i_plt.set_ydata(y_i_temp)
-            z_i_plt.set_ydata(z_i_temp)
+            setPlotData([x_plt, y_plt, z_plt], [x_values[:], y_values[:], z_values[:]])
+            setPlotData([x_i_plt, y_i_plt, z_i_plt], [x_i_values[:], y_i_values[:], z_i_values[:]])
 
             fig.canvas.draw_idle()
             fig.canvas.flush_events()

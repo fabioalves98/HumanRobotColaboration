@@ -25,7 +25,7 @@
   - Utilização de posiçoes pré definidas
   - Leitura do sensor de 3 eixos do end-efector para o robot largar o objeto
 
-## 16/11 - Pesquisa (Posto 7)
+## 16/11 - Pesquisa (Posto)
 
  - Ao pesquisar sobre o sensor de força do end-efector (TCP), descobri que o driver oficial publica no tópico /wrench os valores que lê do sensor
 
@@ -148,14 +148,13 @@
     - wrench_taps.bag - Leves toques rápidos nos lados do gripper
     - wrench_twists.bag - Onde ao agarra no gripper o tento rodar em várias direções para testar a sensibilidade dos valores de torque
 
-  ## 7/12 - Posto 7
+  ## 7/12 - Posto
 
   - Descobri um serviço que reinicializa o sensor de força e torque (zero_ftsensor) e outro que reenvia um programa URScript ao robot (resend_robot_program), útil para quando o robot entra em protective stop ou emergency stop
 
   - Encontrei Issues no Github do driver do UR10e muito parecidos com o problema
 
-    - [Strange FT sensor readings with nothing mounted on the end of the]: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/issues/29
-
+    - [Strange FT sensor readings with nothing mounted on the end of the]: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/issues/294
     - [Problem on force_torque_sensor_controller, and its topic /wrench]: https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/issues/269
 
   - Programa wrench integra os valores de /wrench em tempo real para detetar corretamente uma interação com o robot
@@ -164,4 +163,32 @@
 
   - Filtar os valores de ruído e fazer uma função de integração que detete corretamente forças e toques rápidos
     - Moving Average Filter - https://maker.pro/arduino/tutorial/how-to-clean-up-noisy-sensor-data-with-a-moving-average-filter
-    - Kalman Filter ?
+    - Kalman Filter - ?
+
+  ## 9/12 - IRISLab
+
+  - Programa wrench avalia os valores de força e consoante a força aplicada em cada eixo, abre ou fecha o gripper. Valor de força é parametrizavel.
+    - No eixo X (lateral), uma força em qualquer dor sentidos fecha o gripper
+    - No eixo Y e Z (frontal, uma força no sentido do utilizador abre o gripper
+  - Continua o mesmo problema em que se o EE rodar, os valores alteram-se
+    - O driver obtem os valores de FT atraves de um cliente RTDE que comunica com um servidor presente no controlador interno do UR10e. Esse servidor publica os valores de força que calcula em relação ao eixo do robot, e depois o driver transforma-os para a pose do TCP
+  - Para solucionar, é possível usar a nova função que integra os valores e aplica um filtro de média para controlar o gripper. Desta forma o controlo do gripper nao é afetado pelas sucessivas rotações e movimentos do robot e acumulações de erro do sensor FT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

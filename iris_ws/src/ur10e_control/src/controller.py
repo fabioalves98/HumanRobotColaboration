@@ -88,8 +88,8 @@ def parseParams(args):
             arm.release()
         elif("save" in command):
             pos_name = args[1]
-            arm.saveJointPosition(BASE_DIR + "/yaml/" + positions_file + ".yaml", pos_name)
-            position_names, positions = load_positions(BASE_DIR + "/yaml/" + positions_file + ".yaml")
+            arm.saveJointPosition(BASE_DIR + "/yaml/" + positions_file, pos_name)
+            position_names, positions = load_positions(BASE_DIR + "/yaml/" + positions_file)
         else:
             return commandStr()
 

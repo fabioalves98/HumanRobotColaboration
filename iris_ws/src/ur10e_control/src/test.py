@@ -53,24 +53,24 @@ def main():
     # arm.simpleMove([0, 0, 0.2])
 
     # Rotation
-    arm.simpleRotate([pi/4, 0, 0])
-    time.sleep(0.5)
-    arm.simpleRotate([pi/4, 0, 0])
-    time.sleep(0.5)
-    arm.simpleRotate([pi/4, 0, 0])
-    time.sleep(0.5)
+    # arm.simpleRotate([pi/4, 0, 0])
+    # time.sleep(0.5)
+    # arm.simpleRotate([pi/4, 0, 0])
+    # time.sleep(0.5)
+    # arm.simpleRotate([pi/4, 0, 0])
+    # time.sleep(0.5)
     
-    arm.simpleRotate([-3*pi/4, 0, 0])
-    time.sleep(1)
+    # arm.simpleRotate([-3*pi/4, 0, 0])
+    # time.sleep(1)
 
-    arm.simpleRotate([-pi/4, 0, 0])
-    time.sleep(0.5)
-    arm.simpleRotate([-pi/4, 0, 0])
-    time.sleep(0.5)
-    arm.simpleRotate([-pi/4, 0, 0])
-    time.sleep(0.5)
+    # arm.simpleRotate([-pi/4, 0, 0])
+    # time.sleep(0.5)
+    # arm.simpleRotate([-pi/4, 0, 0])
+    # time.sleep(0.5)
+    # arm.simpleRotate([-pi/4, 0, 0])
+    # time.sleep(0.5)
 
-    arm.simpleRotate([3*pi/4, 0, 0])
+    # arm.simpleRotate([3*pi/4, 0, 0])
 
     # Rotate then move XYZ
     # arm.simpleRotate([-pi/2, 0, 0])
