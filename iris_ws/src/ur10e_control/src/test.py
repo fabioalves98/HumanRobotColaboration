@@ -2,7 +2,7 @@
 import rospy
 
 import time
-from math import pi, sin, cos, acos, sqrt
+from math import pi, sin, cos, acos, sqrt, radians
 
 from ArmControl import ArmControl
 
@@ -36,9 +36,21 @@ def main():
     rospy.init_node('test', anonymous=False)
 
     arm = ArmControl()
-    arm.setSpeed(0.5)
+    arm.setSpeed(0.3)
 
-    print(arm.printGeneralStatus())
+    # print(arm.printGeneralStatus())
+    print('')
+    print(arm.getJointValues())
+    current_joints = arm.getJointValues()
+    current_joints[5] = radians(-80)
+
+    arm.jointGoal(current_joints)
+
+
+    # for i in range(180):
+    #     current_joints[5] = radians(i)
+    #     arm.jointGoal(current_joints)
+    #     print('')
 
     # Only move in XYZ - doesn't change orientation
     # arm.simpleMove([0, 0, -0.2])

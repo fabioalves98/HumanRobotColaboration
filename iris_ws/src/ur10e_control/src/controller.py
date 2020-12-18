@@ -140,7 +140,7 @@ def main():
         rospy.loginfo("Connecting to robot")
         arm = ArmControl()
         arm.setSpeed(0.3)
-        arm.config_gripper(100.0)
+        # arm.config_gripper(100.0)
 
     arm.printGeneralStatus()
 

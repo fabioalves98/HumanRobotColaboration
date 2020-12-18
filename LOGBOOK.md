@@ -105,6 +105,9 @@
 ## 2/12 - IRISLab
 
 - Estudo dos valores de força do sensor, gráficos em screenshots -> wrench
+  
+- Pasta 1-wrench
+  
   - Movimentos simples em XYZ sem aplicar rotação do EE, provocam oscilações quando o robot se está a mover. Valores oscilam entre [-5, 6]
   - Rotações do EE provocam maiores oscilações e estes valores permanecem alterados, após a rotação. Ver screenshots
     - TESTE - Mover 3 vezes, pi/4 graus - Mover -3\*pi/4 graus - Mover 3 vezes, -pi/4 graus - Mover 3\*pi/4 graus
@@ -129,14 +132,14 @@
     - RESULTADO - Exatamente o mesmo do primeiro teste de rotação
     - TESTE - Alterar para X = 50, Y = 50, Z = 50
     - RESULTADO - Exatamente o mesmo do primeiro teste de rotação
-  - Alterar o valor do peso do payload ou qualquer componente do centro de gravidade do TCP faz com que o controlador do sensor reinicie os seus valores a zero, por menor que seja a alteração, qualquer que seja, provoca um reset
-
-  ****
-
+- Alterar o valor do peso do payload ou qualquer componente do centro de gravidade do TCP faz com que o controlador do sensor reinicie os seus valores a zero, por menor que seja a alteração, qualquer que seja, provoca um reset
+  
+****
+  
   - Repositório iniciado com o iris_ws -> https://github.com/fabioalves98/HumanRobotColaboration
   - Programa wrench.py faz agora display dos valores num gráfico em tempo real no modo live
 
-  ## 3/12 - IRISLab
+## 3/12 - IRISLab
 
   - Ver os resultados em tempo real não ajudou a obter novas conclusões
   - Os valores de força que o controlador interno do robot publica, são relativos ao eixo da base robot. O nó ur_hardware_interface, antes de publicar para /wrench, multiplica estes valores pelo transform da pose do TCP para obter os valores de força em relação ao TCP
@@ -165,7 +168,7 @@
     - Moving Average Filter - https://maker.pro/arduino/tutorial/how-to-clean-up-noisy-sensor-data-with-a-moving-average-filter
     - Kalman Filter - ?
 
-  ## 9/12 - IRISLab
+  ## 9/12 - Reunião (IRISLab)
 
   - Programa wrench avalia os valores de força e consoante a força aplicada em cada eixo, abre ou fecha o gripper. Valor de força é parametrizavel.
     - No eixo X (lateral), uma força em qualquer dor sentidos fecha o gripper
@@ -174,11 +177,62 @@
     - O driver obtem os valores de FT atraves de um cliente RTDE que comunica com um servidor presente no controlador interno do UR10e. Esse servidor publica os valores de força que calcula em relação ao eixo do robot, e depois o driver transforma-os para a pose do TCP
   - Para solucionar, é possível usar a nova função que integra os valores e aplica um filtro de média para controlar o gripper. Desta forma o controlo do gripper nao é afetado pelas sucessivas rotações e movimentos do robot e acumulações de erro do sensor FT
 
+## 17/12 - Teste (IRISLab)
 
+- Nova tentativa de resolver o problema do wrench. Retirar os valores de força em todos os angulos possiveis, por num gráfico, tentar descobrir um padrão a fim de compensar o comportantomento anómalo do controlador
 
+- Pasta 2-wrench
 
+- Posiçoes
 
+  - P1 - out_of_camera
+  - P2 - P1 -> rotate 0 -pi/4 0
+  - P3 - P1 -> rotate 0 -pi/2
+  - P4 - P1 -> rotate 0 -3/4 0
+  - P5 - P1 -> rotate 0 pi/4 0
+  - P6 - P1 -> rotate 0 0 pi/4
+  - P7 - P1 -> rotate 0 0 -pi/4
 
+- Testes
+
+  - Teste 1 | Posição 1 | zero_ftsensor quando wrist3_joint está a 0       |-180 a 180
+
+  - Teste 2 | Posição 1 | zero_ftsensor quando wrist3_joint está a -180 | -180 a 180
+
+  - Teste 3 | Posição 1 | zero_ftsensor quando wrist3_joint está a 180  | -180 a 180
+
+  - > Fixar os eixos do gráfico para todos os testes ficarem com os mesmos eixos
+
+  - Teste 4   | Posição 1 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+
+  - Teste 5   | Posição 2 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+
+  - Teste 6   | Posição 3 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+
+  - Teste 7   | Posição 4 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+
+  - Teste 8   | Posição 5 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+
+  - Teste 9   | Posição 6 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+
+  - Teste 10 | Posição 7 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180
+  
+- Inconclusivos
+
+## 18/12 - Teste (IRISLab)
+
+- Nova tentativa de resolver o problema do wrench. Fazer os mesmos testes anteriores mas sem o gripper attached ao robot
+
+- Posições
+  - P1 - Joints [0, -90, 0, 0, 0, 0] 
+  - P2 - Joints [0, -90, 0, 0, 90, 0]
+  - P3 - Joints [0, -90, 0, 0, -90, 0]
+  - P4 - Joints [0, -90, 0, 0, -45, 0]
+  - P5 - Joints [0, -90, 0, 0, 45, 0]
+  - P6 - out_of_camera
+  - P7 - init_calibration
+  - P8 - desk_pick
+- Novo gráfico com valores de torque
 
 
 
