@@ -135,7 +135,7 @@
 - Alterar o valor do peso do payload ou qualquer componente do centro de gravidade do TCP faz com que o controlador do sensor reinicie os seus valores a zero, por menor que seja a alteração, qualquer que seja, provoca um reset
   
 ****
-  
+
   - Repositório iniciado com o iris_ws -> https://github.com/fabioalves98/HumanRobotColaboration
   - Programa wrench.py faz agora display dos valores num gráfico em tempo real no modo live
 
@@ -222,7 +222,7 @@
 ## 18/12 - Teste (IRISLab)
 
 - Nova tentativa de resolver o problema do wrench. Fazer os mesmos testes anteriores mas sem o gripper attached ao robot
-
+- Pasta 3-wrench
 - Posições
   - P1 - Joints [0, -90, 0, 0, 0, 0] 
   - P2 - Joints [0, -90, 0, 0, 90, 0]
@@ -233,6 +233,11 @@
   - P7 - init_calibration
   - P8 - desk_pick
 - Novo gráfico com valores de torque
+
+## 08/01 - Desenvolvimento (BMIlhavo)
+
+- Programa fit.py que dessenha 3 funções seno, configuradas de maneira diferente de modo a tentar aproximar as curvas obtidas nos programas de teste do wrench.py
+- Curvas aparentam ter proximidade com os gráficos do wrench.py
 
 
 
