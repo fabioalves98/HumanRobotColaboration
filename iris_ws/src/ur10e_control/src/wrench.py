@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import rospy, statistics, time, signal, sys, argparse
+import rospy, rospkg, statistics, time, signal, sys, argparse, pickle
 from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import WrenchStamped
@@ -27,15 +27,16 @@ t_y_values = [0]
 t_z_values = [0]
 
 # Live parameters
-stream_range = 2000
+stream_range = 100
 stream_count = 0
 integral_range = 20
 integral_idx = 0
 
 # Record parameters
-
 force_limit = 15
 grip_ready = 500
+
+BASE_DIR = rospkg.RosPack().get_path('ur10e_control')
 
 
 def signal_handler(sig, frame):
@@ -78,9 +79,9 @@ def callback(data):
     f_y = data.wrench.force.y
     f_z = data.wrench.force.z
 
-    t_x = data.wrench.torque.x
-    t_y = data.wrench.torque.y
-    t_z = data.wrench.torque.z
+    # t_x = data.wrench.torque.x
+    # t_y = data.wrench.torque.y
+    # t_z = data.wrench.torque.z
 
     # evaluateForce(x, y, z)
 
@@ -94,46 +95,46 @@ def callback(data):
     f_y_values.append(f_y)
     f_z_values.append(f_z)
 
-    t_x_values.append(t_x)
-    t_y_values.append(t_y)
-    t_z_values.append(t_z)
+    # t_x_values.append(t_x)
+    # t_y_values.append(t_y)
+    # t_z_values.append(t_z)
 
     if stream_count > stream_range:
         del f_x_values[0]
         del f_y_values[0]
         del f_z_values[0]
 
-        del f_x_i_values[0]
-        del f_y_i_values[0]
-        del f_z_i_values[0]
+        # del f_x_i_values[0]
+        # del f_y_i_values[0]
+        # del f_z_i_values[0]
 
-        del t_x_values[0]
-        del t_y_values[0]
-        del t_z_values[0]
+        # del t_x_values[0]
+        # del t_y_values[0]
+        # del t_z_values[0]
 
 
-    # Integration of the force values
-    if integral_idx > integral_range:
-        # X Mean in integral range
-        x_i_temp = f_x_values[-1 - integral_range : -1]
-        x_i_sub = []
-        for i in range(1, len(x_i_temp)):
-            x_i_sub.append(x_i_temp[i] - x_i_temp[i-1])
-        f_x_i_values.append(statistics.mean(x_i_sub))
-        # Y Mean in integral range
-        y_i_temp = f_y_values[-1 - integral_range : -1]
-        y_i_sub = []
-        for i in range(1, len(y_i_temp)):
-            y_i_sub.append(y_i_temp[i] - y_i_temp[i-1])
-        f_y_i_values.append(statistics.mean(y_i_sub))
-        # z Mean in integral range
-        z_i_temp = f_z_values[-1 - integral_range : -1]
-        z_i_sub = []
-        for i in range(1, len(z_i_temp)):
-            z_i_sub.append(z_i_temp[i] - z_i_temp[i-1])
-        f_z_i_values.append(statistics.mean(z_i_sub))
-    else:
-        integral_idx += 1
+    # # Integration of the force values
+    # if integral_idx > integral_range:
+    #     # X Mean in integral range
+    #     x_i_temp = f_x_values[-1 - integral_range : -1]
+    #     x_i_sub = []
+    #     for i in range(1, len(x_i_temp)):
+    #         x_i_sub.append(x_i_temp[i] - x_i_temp[i-1])
+    #     f_x_i_values.append(statistics.mean(x_i_sub))
+    #     # Y Mean in integral range
+    #     y_i_temp = f_y_values[-1 - integral_range : -1]
+    #     y_i_sub = []
+    #     for i in range(1, len(y_i_temp)):
+    #         y_i_sub.append(y_i_temp[i] - y_i_temp[i-1])
+    #     f_y_i_values.append(statistics.mean(y_i_sub))
+    #     # z Mean in integral range
+    #     z_i_temp = f_z_values[-1 - integral_range : -1]
+    #     z_i_sub = []
+    #     for i in range(1, len(z_i_temp)):
+    #         z_i_sub.append(z_i_temp[i] - z_i_temp[i-1])
+    #     f_z_i_values.append(statistics.mean(z_i_sub))
+    # else:
+    #     integral_idx += 1
          
 
 def main():
@@ -207,10 +208,19 @@ def main():
             current_joints[5] = radians(i)
             arm.jointGoal(current_joints)
             time.sleep(0.2)
-            temp_stream.append((statistics.mean(t_x_values), statistics.mean(t_y_values), statistics.mean(t_z_values)))
+            temp_stream.append((statistics.mean(f_x_values), statistics.mean(f_y_values), statistics.mean(f_z_values)))
             print('')
+
+        with open(BASE_DIR + '/record/T5_temp.list', 'w') as f:
+            print(len(temp_stream))
+            pickle.dump(temp_stream, f)
         
-        plt.ylim([-0.5, 0.5])
+        with open(BASE_DIR + '/record/T5_full.list', 'w') as f:
+            print(len(stream))
+            pickle.dump(stream, f)
+        
+        
+        plt.ylim([-7.5, 15])
         plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
         plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
         plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')

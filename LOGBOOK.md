@@ -239,7 +239,16 @@
 - Programa fit.py que dessenha 3 funções seno, configuradas de maneira diferente de modo a tentar aproximar as curvas obtidas nos programas de teste do wrench.py
 - Curvas aparentam ter proximidade com os gráficos do wrench.py
 
+## 13/01 - Reunião (IRISLab)
 
+- Novos testes com persistencia dos resultados em memória, sem gripper
+- Pasta F-wrench
+- Posições
+  - P1 -  Joints [0, -90, 0, 0, 90, 0]
+  - P2 -  Joints [0, -90, 0, 0, 45, 0]
+  - P3 - Joints [0, -90, 0, 0, 0, 0] 
+  - P4 - Joints [0, -90, 0, 0, -45, 0]
+  - P5 -  Joints [0, -90, 0, 0, -90, 0]
 
 
 
