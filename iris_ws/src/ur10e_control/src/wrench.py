@@ -185,8 +185,13 @@ def main():
         arm = ArmControl()
         arm.setSpeed(0.3)
 
-        # Reset wrist_3
+        # Set Arm joints
         current_joints = arm.getJointValues()
+        current_joints[0] = radians(0)
+        current_joints[1] = radians(-90)
+        current_joints[2] = radians(0)
+        current_joints[3] = radians(0)
+        current_joints[4] = radians(0)
         current_joints[5] = radians(0)
         arm.jointGoal(current_joints)
 
@@ -203,27 +208,27 @@ def main():
         temp_stream = []
 
         # Move wrist 3
-        for i in range(-180, 180):
+        for i in range(0, 3000):
             print(i, ' - ', len(stream))
-            current_joints[5] = radians(i)
-            arm.jointGoal(current_joints)
+            # current_joints[5] = radians(i)
+            # arm.jointGoal(current_joints)
             time.sleep(0.2)
             temp_stream.append((statistics.mean(f_x_values), statistics.mean(f_y_values), statistics.mean(f_z_values)))
             print('')
 
-        with open(BASE_DIR + '/record/T5_temp.list', 'w') as f:
+        with open(BASE_DIR + '/record/TD_P3_temp.list', 'w') as f:
             print(len(temp_stream))
             pickle.dump(temp_stream, f)
         
-        with open(BASE_DIR + '/record/T5_full.list', 'w') as f:
+        with open(BASE_DIR + '/record/TD_P3_full.list', 'w') as f:
             print(len(stream))
             pickle.dump(stream, f)
         
         
         plt.ylim([-7.5, 15])
-        plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
-        plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
-        plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
+        plt.plot(range(0, 3000), [x[0] for x in temp_stream], 'r')
+        plt.plot(range(0, 3000), [x[1] for x in temp_stream], 'g')
+        plt.plot(range(0, 3000), [x[2] for x in temp_stream], 'b')
 
         plt.show()
         

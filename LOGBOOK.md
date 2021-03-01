@@ -250,6 +250,50 @@
   - P4 - Joints [0, -90, 0, 0, -45, 0]
   - P5 -  Joints [0, -90, 0, 0, -90, 0]
 
+#### To Do
+
+- Verificar repetibilidade dos testes
+- Verificar se dar resest em angulos de wrist_3 diferentes provoca os mesmos resultados
+- Verificar o drift do sensor
+- Dar fit de ums uma função seno nos resultados - Método dos mínimos quadrados
+
+
+
+## 1/03 - IRISLab
+
+##### Repetibilidade
+
+- Repetição dos testes para verificar repetibilidade dos resultados
+- Pasta F-wrench (repeat)
+- Posições
+  - P1 - Joints [0, -90, 0, 0, 90, 0]  - Alguma variabilidade (< 0.5N)
+  - P2 - Joints [0, -90, 0, 0, 45, 0] - Alguma variabilidade (< 1N)
+  - P3 - Joints [0, -90, 0, 0, 0, 0] - Alguma variabilidade (< 0.5N)
+  - P4 - Joints [0, -90, 0, 0, -45, 0] - Alguma variabilidade (< 0.5N)
+  - P5 -  Joints [0, -90, 0, 0, -90, 0] - Alguma variabilidade (< 0.5N)
+- **Resultado - **
+
+##### Dar reset noutro sítio e sobrepor os valores
+
+- Teste T6 - Posição P5 - /zero_ft_sensor chamado com wrist_3 = -75
+- Resulta em curvas com o mesmo padrão mas deslocadas verticalmente
+- Utilizando o fit.py para dar plot de T5 e T6
+- **Resultado - **Se compensarmos T6 com o valor de T5 em wrist_3 = 75, obtemos T5 com pouca variabilidade de (< 0.5N)
+
+##### Drift Temporal
+
+- Teste TD - Posição P2/P3/P4 - /zero_ft_sensor chamado com wrist_3 = 0
+- Gravar valores durante 10 minutos sem movimento
+- **Resultado - **Os valores variam linearmente com o tempo
+
+
+
+## 2/03 - IRISLab
+
+##### Drift Posicional
+
+##### Fit de uma Função
+
 
 
 
