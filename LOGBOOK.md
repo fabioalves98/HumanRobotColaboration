@@ -248,51 +248,84 @@
   - P2 -  Joints [0, -90, 0, 0, 45, 0]
   - P3 - Joints [0, -90, 0, 0, 0, 0] 
   - P4 - Joints [0, -90, 0, 0, -45, 0]
-  - P5 -  Joints [0, -90, 0, 0, -90, 0]
+  - P5 -  Joints [0, -90, 0, 0, -90, 0
+- Média e desvio padrão das diferenças dos resultados
+  - Mean - [ 0.41535386,  0.4073297 ,  0.48555393]
+  - Std Dev - [ 0.07199976,  0.07887803,  0.09579287]
 
 #### To Do
 
 - Verificar repetibilidade dos testes
 - Verificar se dar resest em angulos de wrist_3 diferentes provoca os mesmos resultados
-- Verificar o drift do sensor
-- Dar fit de ums uma função seno nos resultados - Método dos mínimos quadrados
+- Verificar o drift do sensor, tanto temporal como espacial
+- Verificar os valores de TCP Force pelo URScript
+- Dar fit de ums uma função seno nos resultados
+  - Método dos mínimos quadrados
+- Criar modelo que aplique a função para corrigir a variância dos valores de força
 
 
+
+****
 
 ## 1/03 - IRISLab
 
-##### Repetibilidade
+#### Repetibilidade
 
 - Repetição dos testes para verificar repetibilidade dos resultados
 - Pasta F-wrench (repeat)
-- Posições
-  - P1 - Joints [0, -90, 0, 0, 90, 0]  - Alguma variabilidade (< 0.5N)
-  - P2 - Joints [0, -90, 0, 0, 45, 0] - Alguma variabilidade (< 1N)
-  - P3 - Joints [0, -90, 0, 0, 0, 0] - Alguma variabilidade (< 0.5N)
-  - P4 - Joints [0, -90, 0, 0, -45, 0] - Alguma variabilidade (< 0.5N)
-  - P5 -  Joints [0, -90, 0, 0, -90, 0] - Alguma variabilidade (< 0.5N)
-- **Resultado - **
+- Posições e diferença de valores comparado com os testes anteriores
+  - P1 - Joints [0, -90, 0, 0, 90, 0] 
+    - Mean - [ 0.20678017,  0.49250442,  0.29758366]
+    - Std Dev - [ 0.16025934,  0.125027  ,  0.21015851]
+  - P2 - Joints [0, -90, 0, 0, 45, 0] 
+    - Mean - [ 0.29473815,  0.69158735,  0.89929321]
+    - Std Dev - [ 0.17148463,  0.43221503,  0.27771454]
+  - P3 - Joints [0, -90, 0, 0, 0, 0]
+    - Mean - [ 0.30978849,  0.37630247,  0.34874062]
+    - Std Dev - [ 0.18629143,  0.18554891,  0.18170008]
+  - P4 - Joints [0, -90, 0, 0, -45, 0] 
+    - Mean - [ 0.13864991,  0.2199402 ,  0.5447835]
+    - Std Dev - [ 0.09905205,  0.16799613,  0.25183081]
+  - P5 -  Joints [0, -90, 0, 0, -90, 0]
+    - Mean - [ 0.35275194,  0.41744611,  0.24365676]
+    - Std Dev - [ 0.21623916,  0.33241225,  0.18720336]
+- Média e desvio padrão das diferenças dos resultados
+  - Mean - [ 0.48826575,  0.48218191,  0.70701964]
+  - Std Dev - [ 0.11487946,  0.14974243,  0.16440651]
+- **Resultado - **Todos os testes aparentam ser passíveis de ser repetidos e apresentar os mesmos valores
+  - Média e desvio padrão do conjunto dos 10 testes
+    - Mean - [ 0.43229188,  0.47148803,  0.56602416]
+    - Std Dev - [ 0.07462753,  0.15599019,  0.10256855]
 
-##### Dar reset noutro sítio e sobrepor os valores
+#### Dar reset noutro sítio e sobrepor os valores
 
 - Teste T6 - Posição P5 - /zero_ft_sensor chamado com wrist_3 = -75
 - Resulta em curvas com o mesmo padrão mas deslocadas verticalmente
 - Utilizando o fit.py para dar plot de T5 e T6
 - **Resultado - **Se compensarmos T6 com o valor de T5 em wrist_3 = 75, obtemos T5 com pouca variabilidade de (< 0.5N)
 
-##### Drift Temporal
+#### Drift Temporal
 
 - Teste TD - Posição P2/P3/P4 - /zero_ft_sensor chamado com wrist_3 = 0
 - Gravar valores durante 10 minutos sem movimento
 - **Resultado - **Os valores variam linearmente com o tempo
 
-
-
 ## 2/03 - IRISLab
 
-##### Drift Posicional
+- Peso do Gripper - 1.336 Kg
+- Peso do Encaixe do Gripper - 0.178 g
+- Peso do Conjunto - 1.514 Kg
 
-##### Fit de uma Função
+#### Drift Posicional
+
+- Teste TP - Posição P1 - /zero_ft_sensor chamado com wrist_3 = 0
+- Mover o braço para uma posição random - "out_of_camera"
+- Aplicar 180 graus de rotação no wrist_3
+- Voltar para a posição P1
+- Correr o teste sem dar reset no inicio do teste
+- **Resultado - **Comparando com o teste default T1_P1 não há variãncia notável nos resultados
+- Correr o teste mas dar reset no início do teste
+- **Resultado - **Comparando com o teste default T1_P1 não há variãncia notável nos resultados
 
 
 

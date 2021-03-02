@@ -11,6 +11,7 @@ import numpy as np
 
 from menu import callControlArmService
 from ArmControl import ArmControl
+from ur10e_control.srv import ControlArm
 
 stream = []
 
@@ -27,7 +28,7 @@ t_y_values = [0]
 t_z_values = [0]
 
 # Live parameters
-stream_range = 100
+stream_range = 1000
 stream_count = 0
 integral_range = 20
 integral_idx = 0
@@ -150,33 +151,34 @@ def main():
     if args.live:
         # Create Plots
         plt.ion()
-        fig, (f, f_i, t) = plt.subplots(3)
+        fig, f = plt.subplots(1)
+        # fig, (f, f_i, t) = plt.subplots(3)
 
-        f.set(ylim=(-10, 10))
+        f.set(ylim=(-5, 5))
         f.set(xlim=(0, stream_range))
 
-        f_i.set(ylim=(-1, 1))
-        f_i.set(xlim=(0, stream_range))
+        # f_i.set(ylim=(-1, 1))
+        # f_i.set(xlim=(0, stream_range))
 
-        t.set(ylim=(-1, 1))
-        t.set(xlim=(0, stream_range))
+        # t.set(ylim=(-1, 1))
+        # t.set(xlim=(0, stream_range))
 
         x_plt, = f.plot(range(0, len(f_x_values)), f_x_values, 'r-')
         y_plt, = f.plot(range(0, len(f_y_values)), f_y_values, 'g-')
         z_plt, = f.plot(range(0, len(f_z_values)), f_z_values, 'b-')
 
-        x_i_plt, = f_i.plot(range(0, len(f_x_i_values)), f_x_i_values, 'r-')
-        y_i_plt, = f_i.plot(range(0, len(f_y_i_values)), f_y_i_values, 'g-')
-        z_i_plt, = f_i.plot(range(0, len(f_z_i_values)), f_z_i_values, 'b-')
+        # x_i_plt, = f_i.plot(range(0, len(f_x_i_values)), f_x_i_values, 'r-')
+        # y_i_plt, = f_i.plot(range(0, len(f_y_i_values)), f_y_i_values, 'g-')
+        # z_i_plt, = f_i.plot(range(0, len(f_z_i_values)), f_z_i_values, 'b-')
 
-        t_x_plt, = t.plot(range(0, len(t_x_values)), t_x_values, 'r-')
-        t_y_plt, = t.plot(range(0, len(t_y_values)), t_y_values, 'g-')
-        t_z_plt, = t.plot(range(0, len(t_z_values)), t_z_values, 'b-')
+        # t_x_plt, = t.plot(range(0, len(t_x_values)), t_x_values, 'r-')
+        # t_y_plt, = t.plot(range(0, len(t_y_values)), t_y_values, 'g-')
+        # t_z_plt, = t.plot(range(0, len(t_z_values)), t_z_values, 'b-')
 
         while True:
             setPlotData([x_plt, y_plt, z_plt], [f_x_values[:], f_y_values[:], f_z_values[:]])
-            setPlotData([x_i_plt, y_i_plt, z_i_plt], [f_x_i_values[:], f_y_i_values[:], f_z_i_values[:]])
-            setPlotData([t_x_plt, t_y_plt, t_z_plt], [t_x_values[:], t_y_values[:], t_z_values[:]])
+            # setPlotData([x_i_plt, y_i_plt, z_i_plt], [f_x_i_values[:], f_y_i_values[:], f_z_i_values[:]])
+            # setPlotData([t_x_plt, t_y_plt, t_z_plt], [t_x_values[:], t_y_values[:], t_z_values[:]])
 
             fig.canvas.draw_idle()
             fig.canvas.flush_events()
@@ -208,27 +210,26 @@ def main():
         temp_stream = []
 
         # Move wrist 3
-        for i in range(0, 3000):
+        for i in range(-180, 180):
             print(i, ' - ', len(stream))
-            # current_joints[5] = radians(i)
-            # arm.jointGoal(current_joints)
+            current_joints[5] = radians(i)
+            arm.jointGoal(current_joints)
             time.sleep(0.2)
             temp_stream.append((statistics.mean(f_x_values), statistics.mean(f_y_values), statistics.mean(f_z_values)))
             print('')
 
-        with open(BASE_DIR + '/record/TD_P3_temp.list', 'w') as f:
+        with open(BASE_DIR + '/record/TP_P1_w_reset_temp.list', 'w') as f:
             print(len(temp_stream))
             pickle.dump(temp_stream, f)
         
-        with open(BASE_DIR + '/record/TD_P3_full.list', 'w') as f:
+        with open(BASE_DIR + '/record/TP_P1_w_reset_full.list', 'w') as f:
             print(len(stream))
             pickle.dump(stream, f)
         
-        
         plt.ylim([-7.5, 15])
-        plt.plot(range(0, 3000), [x[0] for x in temp_stream], 'r')
-        plt.plot(range(0, 3000), [x[1] for x in temp_stream], 'g')
-        plt.plot(range(0, 3000), [x[2] for x in temp_stream], 'b')
+        plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
+        plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
+        plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
 
         plt.show()
         
