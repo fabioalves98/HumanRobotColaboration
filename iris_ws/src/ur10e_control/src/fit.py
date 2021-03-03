@@ -4,29 +4,27 @@ import rospy, rospkg, pickle
 from math import radians
 import matplotlib.pyplot as plt
 import numpy as np
-
-from dynamic_reconfigure.server import Server
-from ur10e_control.cfg import FitConfig
+from scipy import optimize
 
 BASE_DIR = rospkg.RosPack().get_path('ur10e_control')
+
+tests_1 = [
+    '/record/1-13_01/T1_temp.list',
+    '/record/1-13_01/T2_temp.list',
+    '/record/1-13_01/T3_temp.list',
+    '/record/1-13_01/T4_temp.list',
+    '/record/1-13_01/T5_temp.list'
+]
+tests_2 = [
+    '/record/2-01_03/T1_temp.list',
+    '/record/2-01_03/T2_temp.list',
+    '/record/2-01_03/T3_temp.list',
+    '/record/2-01_03/T4_temp.list',
+    '/record/2-01_03/T5_temp.list'
+]
     
 
 def repeatabilityTest(plt):
-    tests_1 = [
-        '/record/1-13_01/T1_temp.list',
-        '/record/1-13_01/T2_temp.list',
-        '/record/1-13_01/T3_temp.list',
-        '/record/1-13_01/T4_temp.list',
-        '/record/1-13_01/T5_temp.list'
-    ]
-    tests_2 = [
-        '/record/2-01_03/T1_temp.list',
-        '/record/2-01_03/T2_temp.list',
-        '/record/2-01_03/T3_temp.list',
-        '/record/2-01_03/T4_temp.list',
-        '/record/2-01_03/T5_temp.list'
-    ]
-
     x = np.arange(-180,180,1)
     streams = []
 
@@ -149,31 +147,49 @@ def positionalDriftTest(plt):
     plt.plot(x, [t1[1] for t1 in move_w_reset], 'g--')
     plt.plot(x, [t1[2] for t1 in move_w_reset], 'b--')
 
-    
+
 def fitFunction(plt):
-    x_axis = np.arange(-180,180,1)
+    x_global = np.arange(-180,180,1)
 
-    x = 4   * np.sin(np.radians(2.1*(x_axis - 60))) + 2
-    y = 1.5 * np.sin(np.radians(2*(x_axis + 40))) - 0.5
-    z = 2   * np.sin(np.radians(2*(x_axis + 40))) - 2.5
+    streams = []
+    for test in tests_1 + tests_2:
+        stream = []
+        with open(BASE_DIR + test) as f:
+            stream = pickle.load(f)
+            streams.append(np.array(stream))
 
-    plt.plot(x_axis, x, 'r:')
-    plt.plot(x_axis, y, 'g:')
-    plt.plot(x_axis, z, 'b:')
-    
+    data = np.array(streams)
+    colors = ['r', 'g', 'b']
+    init_params = [
+        [1,   2, -60,  2],
+        [1.5, 2,  40, -0.5],
+        [2,   2,  40, -2.5]
+    ]
 
-def callback(config, level):
-    # rospy.loginfo("""Reconfigure Request: {x}, {y}, {amp}, {period}""".format(**config))
-    return config
+    def sin_func(x, a, b, c, d):
+        return a * np.sin(np.radians(b * (x + c))) + d
+
+    for i in range(3):
+        axis = data[:,:,i]
+        axis_mean = np.mean(axis, axis=0)
+
+        for test in axis:
+            plt.plot(x_global, test, colors[i] + ':', alpha=0.5)
+
+        # plt.plot(x_global, axis_mean, colors[i])
+
+        prm, _ = optimize.curve_fit(sin_func, x_global, axis_mean, p0=init_params[i])
+        fit_x = prm[0] * np.sin(np.radians(prm[1]*(x_global + prm[2]))) + prm[3]
+        plt.plot(x_global, fit_x, colors[i])
+
 
 def main():
     rospy.init_node("fit", anonymous = False)
-    srv = Server(FitConfig, callback)
     
     # plt.ylim([-10, 15.0])
 
     # Repeatability and variation test
-    repeatabilityTest(plt)
+    # repeatabilityTest(plt)
 
     # Reset in different angles test function
     # resetTest(plt)
@@ -185,7 +201,7 @@ def main():
     # positionalDriftTest(plt)
 
     # Attempt of a sin function to fit results
-    # fitFunction(plt)
+    fitFunction(plt)
 
     plt.show()
 

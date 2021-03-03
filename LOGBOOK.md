@@ -259,7 +259,7 @@
 - Verificar se dar resest em angulos de wrist_3 diferentes provoca os mesmos resultados
 - Verificar o drift do sensor, tanto temporal como espacial
 - Verificar os valores de TCP Force pelo URScript
-- Dar fit de ums uma função seno nos resultados
+- Dar fit de uma função seno nos resultados
   - Método dos mínimos quadrados
 - Criar modelo que aplique a função para corrigir a variância dos valores de força
 
@@ -323,9 +323,20 @@
 - Aplicar 180 graus de rotação no wrist_3
 - Voltar para a posição P1
 - Correr o teste sem dar reset no inicio do teste
-- **Resultado - **Comparando com o teste default T1_P1 não há variãncia notável nos resultados
+- **Resultado - **Comparando com o teste default T1_P1 não há variância notável nos resultados
 - Correr o teste mas dar reset no início do teste
-- **Resultado - **Comparando com o teste default T1_P1 não há variãncia notável nos resultados
+- **Resultado - **Comparando com o teste default T1_P1 não há variância notável nos resultados
+
+#### Fit de uma Função Seno
+
+- Aplicação da função curve_fit da bilbioteca scipy, com uma função custumizada seno com 4 parametros
+  - y = p1 * np.sin(np.radians(p2 * (x + p3))) + p4
+  - Amplitude, frequencia, offset_x, offset_y
+- Definição de valores de guess iniciais
+- Parametros finais
+  - x - [3.59403687, 2.16328845, -56.15475734, 2.55574389]
+  - y - [1.18181371,  2.16484226, 39.16549121, -0.45171281]
+  - z - [1.96991165,  2.00442201, 41.65549264, -2.1853712 ]
 
 
 
