@@ -1,11 +1,16 @@
 #!/usr/bin/env python
 import rospy
-
-import time
+import time, signal, sys
 from math import pi, sin, cos, acos, sqrt, radians
 from ur10e_control.srv import ControlArm
 from std_srvs.srv import Trigger
 from ArmControl import ArmControl
+
+
+def signal_handler(sig, frame):
+    print('')
+    sys.exit(0)
+
 
 def axisAngleToQuaterion():
     # Axis Angle to Quaternion
@@ -35,6 +40,7 @@ def quaternionToAxisAngle():
 
 def main():
     rospy.init_node('test', anonymous=False)
+    signal.signal(signal.SIGINT, signal_handler)
 
     arm = ArmControl()
     arm.setSpeed(0.3)
@@ -50,30 +56,30 @@ def main():
         print(resp1)
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
-
-    # Move to out of camera pos
-    rospy.wait_for_service('/cork_iris/control_arm')
-    try:
-        alias = rospy.ServiceProxy('/cork_iris/control_arm', ControlArm)
-        resp = alias(['out_of_camera'])
-        print(resp.output_feedback)
-    except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
-
-    current_joints = arm.getJointValues()
-    for i in range(180):
-        current_joints[5] = radians(i)
-        arm.jointGoal(current_joints)
-        print(i)
-
+    
+    # for i in range (-180, 180, 20):
+    #     arm.jointGoal([0, radians(-90), 0, 0, 0, radians(i)])
+    #     time.sleep(5)
+ 
     # Move to default pos
     # arm.jointGoal([0, radians(-90), 0, 0, 0, 0])
 
-
+    # Move wrist_3 in 1 degree steps
+    # current_joints = arm.getJointValues()
     # for i in range(180):
     #     current_joints[5] = radians(i)
     #     arm.jointGoal(current_joints)
     #     print('')
+
+    # Move to out of camera pos
+    # rospy.wait_for_service('/cork_iris/control_arm')
+    # try:
+    #     alias = rospy.ServiceProxy('/cork_iris/control_arm', ControlArm)
+    #     resp = alias(['out_of_camera'])
+    #     print(resp.output_feedback)
+    # except rospy.ServiceException as e:
+    #     print("Service call failed: %s"%e)
+
 
     # Only move in XYZ - doesn't change orientation
     # arm.simpleMove([0, 0, -0.2])

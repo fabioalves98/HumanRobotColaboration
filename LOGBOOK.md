@@ -267,7 +267,7 @@
 
 ****
 
-## 1/03 - IRISLab
+## 01/03 - IRISLab
 
 #### Repetibilidade
 
@@ -310,7 +310,7 @@
 - Gravar valores durante 10 minutos sem movimento
 - **Resultado - **Os valores variam linearmente com o tempo
 
-## 2/03 - IRISLab
+## 02/03 - IRISLab
 
 - Peso do Gripper - 1.336 Kg
 - Peso do Encaixe do Gripper - 0.178 g
@@ -338,11 +338,36 @@
   - y - [1.18181371,  2.16484226, 39.16549121, -0.45171281]
   - z - [1.96991165,  2.00442201, 41.65549264, -2.1853712 ]
 
+## 03/03 - IRISLab (Reunião)
 
+- Tentativa de corrigir os valores de força vindo do wrench
+- Problemas no geral. Possíveis causas
+  - Maneira de obter o valor do wrist_3 do robot
+  - Problema de velocidade dos tópicos
+  - Problema em acesso com exclusividade mutua aos valores no wrench.py
+- **Reunião - To Do**
+  - Dar merge das curvas com gripper e sem gripper
+  - Fazer modelo teórico de como o gripper se deverá comportar em diferentes orientações
+    - Parametros seriam a orientação do gripper, peso e centro de gravidade
+  - Usar esse modelo teórico, repetir os testes e melhorar o modelo com testes
+  - Vídeos - https://www.youtube.com/c/EnergidTechnologies/videos
 
+## 05/03 - IRISLab
 
+- Repetição dos teses com o Gripper attatched
+- Pasta F-Wrench
+- Mesmas 5 posições que anteriormente
+- Mais uma Bónus - out_of_camera
 
+#### Testes com valores diferentes de Payload e COV
 
+- Diferetes valores de payload alteram drasticamente os valores do sensor
+- Diferentes valores de centro de gravidade não alteram os valores do sensor
+
+#### Merge das Curvas com e sem Gripper
+
+- Valores de diferença entre curvas originais e com gripper fazem algum sentido, mas não são suficientes para retirar
+- Ver .md de comparação
 
 
 

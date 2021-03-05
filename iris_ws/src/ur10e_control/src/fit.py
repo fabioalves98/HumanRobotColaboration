@@ -22,6 +22,15 @@ tests_2 = [
     '/record/2-01_03/T4_temp.list',
     '/record/2-01_03/T5_temp.list'
 ]
+tests_gripper = [
+    '/record/4-05_03/TG1_temp.list',
+    '/record/4-05_03/TG2_temp.list',
+    '/record/4-05_03/TG3_temp.list',
+    '/record/4-05_03/TG4_temp.list',
+    '/record/4-05_03/TG5_temp.list'
+]
+correct_fit = '/curves/wrench_correct_fit.list'
+correct_mean = '/curves/wrench_correct_mean.list'
     
 
 def repeatabilityTest(plt):
@@ -166,6 +175,9 @@ def fitFunction(plt):
         [2,   2,  40, -2.5]
     ]
 
+    correction_fit = np.empty((3, 360))
+    correction_mean = np.empty((3, 360))
+
     def sin_func(x, a, b, c, d):
         return a * np.sin(np.radians(b * (x + c))) + d
 
@@ -176,11 +188,45 @@ def fitFunction(plt):
         for test in axis:
             plt.plot(x_global, test, colors[i] + ':', alpha=0.5)
 
-        # plt.plot(x_global, axis_mean, colors[i])
+        plt.plot(x_global, axis_mean, colors[i])
 
         prm, _ = optimize.curve_fit(sin_func, x_global, axis_mean, p0=init_params[i])
-        fit_x = prm[0] * np.sin(np.radians(prm[1]*(x_global + prm[2]))) + prm[3]
-        plt.plot(x_global, fit_x, colors[i])
+        fit = prm[0] * np.sin(np.radians(prm[1]*(x_global + prm[2]))) + prm[3]
+        correction_fit[i] = fit
+        correction_mean[i] = axis_mean
+        plt.plot(x_global, fit, colors[i])
+
+    with open(BASE_DIR + correct_fit, 'w') as f:
+        pickle.dump(correction_fit, f)
+
+    with open(BASE_DIR + correct_mean, 'w') as f:
+        pickle.dump(correction_mean, f)
+
+
+def gripperDiference(plt):
+    x = np.arange(-180,180,1)
+
+    correct = []
+    with open(BASE_DIR + correct_mean) as f:
+        correct = pickle.load(f)
+
+    plt.plot(x, [t1 for t1 in correct[0]], 'r:')
+    plt.plot(x, [t1 for t1 in correct[1]], 'g:')
+    plt.plot(x, [t1 for t1 in correct[2]], 'b:')
+    
+    w_gripper = []
+    with open(BASE_DIR + tests_gripper[0]) as f:
+        w_gripper = pickle.load(f)
+
+    plt.plot(x, [t2[0] for t2 in w_gripper], 'r:')
+    plt.plot(x, [t2[1] for t2 in w_gripper], 'g:')
+    plt.plot(x, [t2[2] for t2 in w_gripper], 'b:')
+
+    difference = np.array(w_gripper).transpose() - np.array(correct)
+        
+    plt.plot(x, [t3 for t3 in difference[0]], 'r')
+    plt.plot(x, [t3 for t3 in difference[1]], 'g')
+    plt.plot(x, [t3 for t3 in difference[2]], 'b')
 
 
 def main():
@@ -201,7 +247,10 @@ def main():
     # positionalDriftTest(plt)
 
     # Attempt of a sin function to fit results
-    fitFunction(plt)
+    # fitFunction(plt)
+
+    # Merge das curvas com e sem gripper
+    gripperDiference(plt)
 
     plt.show()
 
