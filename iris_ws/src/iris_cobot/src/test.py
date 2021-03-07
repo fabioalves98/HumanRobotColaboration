@@ -2,9 +2,11 @@
 import rospy
 import time, signal, sys
 from math import pi, sin, cos, acos, sqrt, radians
-from ur10e_control.srv import ControlArm
-from std_srvs.srv import Trigger
-from ArmControl import ArmControl
+
+from sami.arm import Arm
+from helpers import reset_ft_sensor
+
+arm = None
 
 
 def signal_handler(sig, frame):
@@ -27,7 +29,7 @@ def axisAngleToQuaterion():
 
 def quaternionToAxisAngle():
     # Quaternion to Axis Angle
-    pose = arm.getPose()
+    pose = arm.get_joints()
     print(pose.orientation)
     
     ori = pose.orientation
@@ -42,33 +44,29 @@ def main():
     rospy.init_node('test', anonymous=False)
     signal.signal(signal.SIGINT, signal_handler)
 
-    arm = ArmControl()
-    arm.setSpeed(0.3)
+    global arm
+
+    arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
+    arm.velocity = 0.3
 
     # Move to default pos
-    arm.jointGoal([0, radians(-90), 0, 0, 0, 0])
+    arm.move_joints([0, radians(-90), 0, 0, 0, 0])
 
     # Reset ft sensor
-    rospy.wait_for_service('/ur_hardware_interface/zero_ftsensor')
-    try:
-        zero = rospy.ServiceProxy('/ur_hardware_interface/zero_ftsensor', Trigger)
-        resp1 = zero()
-        print(resp1)
-    except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
+    reset_ft_sensor()
     
     # for i in range (-180, 180, 20):
-    #     arm.jointGoal([0, radians(-90), 0, 0, 0, radians(i)])
+    #     arm.move_joints([0, radians(-90), 0, 0, 0, radians(i)])
     #     time.sleep(5)
  
     # Move to default pos
-    # arm.jointGoal([0, radians(-90), 0, 0, 0, 0])
+    # arm.move_joints([0, radians(-90), 0, 0, 0, 0])
 
     # Move wrist_3 in 1 degree steps
     # current_joints = arm.getJointValues()
     # for i in range(180):
     #     current_joints[5] = radians(i)
-    #     arm.jointGoal(current_joints)
+    #     arm.move_joints(current_joints)
     #     print('')
 
     # Move to out of camera pos

@@ -6,7 +6,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
 
-BASE_DIR = rospkg.RosPack().get_path('ur10e_control')
+from helpers import plotXYZ
+
+BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
 tests_1 = [
     '/record/1-13_01/T1_temp.list',
@@ -43,9 +45,7 @@ def repeatabilityTest(plt):
             stream = pickle.load(f)
             streams.append(np.array(stream))
 
-        plt.plot(x, [t[0] for t in stream], 'r:')
-        plt.plot(x, [t[1] for t in stream], 'g:')
-        plt.plot(x, [t[2] for t in stream], 'b:')
+        plotXYZ(plt, x, stream, ':')
 
     # Mean Min Max differences
     diff = []
@@ -80,26 +80,20 @@ def resetTest(plt):
     with open(BASE_DIR + test_0) as f:
         zero_0 = pickle.load(f)
 
-    plt.plot(x, [t1[0] for t1 in zero_0], 'r')
-    plt.plot(x, [t1[1] for t1 in zero_0], 'g')
-    plt.plot(x, [t1[2] for t1 in zero_0], 'b')
+    plotXYZ(plt, x, zero_0)
 
     zero_75 = []
     with open(BASE_DIR + test_75) as f:
         zero_75 = pickle.load(f)
 
-    plt.plot(x, [t2[0] for t2 in zero_75], 'r--')
-    plt.plot(x, [t2[1] for t2 in zero_75], 'g--')
-    plt.plot(x, [t2[2] for t2 in zero_75], 'b--')
+    plotXYZ(plt, x, zero_75, '--')
     
     comp_value = zero_0[len(zero_0)/2 - 75]
     zero_75_comp = []
     for i in range(len(zero_75)):
         zero_75_comp.append((zero_75[i][0] + comp_value[0], zero_75[i][1] + comp_value[1], zero_75[i][2] + comp_value[2]))
 
-    plt.plot(x, [t3[0] for t3 in zero_75_comp], 'r:')
-    plt.plot(x, [t3[1] for t3 in zero_75_comp], 'g:')
-    plt.plot(x, [t3[2] for t3 in zero_75_comp], 'b:')
+    plotXYZ(plt, x, zero_75_comp, ':')
 
 
 def temporalDriftTest(plt):
@@ -120,9 +114,7 @@ def temporalDriftTest(plt):
         with open(BASE_DIR + tests[i]) as f:
             stream = pickle.load(f)
 
-        sub_plots[i].plot(x, [t[0] for t in stream], 'r:')
-        sub_plots[i].plot(x, [t[1] for t in stream], 'g:')
-        sub_plots[i].plot(x, [t[2] for t in stream], 'b:')
+        plotXYZ(sub_plots[i], x, stream, ':')
 
 
 def positionalDriftTest(plt):
@@ -136,25 +128,19 @@ def positionalDriftTest(plt):
     with open(BASE_DIR + test_no_move) as f:
         no_move = pickle.load(f)
 
-    plt.plot(x, [t1[0] for t1 in no_move], 'r:')
-    plt.plot(x, [t1[1] for t1 in no_move], 'g:')
-    plt.plot(x, [t1[2] for t1 in no_move], 'b:')
+    plotXYZ(plt, x, no_move, ':')
 
     move_wo_reset = []
     with open(BASE_DIR + test_move_wo_reset) as f:
         move_wo_reset = pickle.load(f)
 
-    plt.plot(x, [t1[0] for t1 in move_wo_reset], 'r')
-    plt.plot(x, [t1[1] for t1 in move_wo_reset], 'g')
-    plt.plot(x, [t1[2] for t1 in move_wo_reset], 'b')
+    plotXYZ(plt, x, move_wo_reset, '')
 
     move_w_reset = []
     with open(BASE_DIR + test_move_w_reset) as f:
         move_w_reset = pickle.load(f)
-
-    plt.plot(x, [t1[0] for t1 in move_w_reset], 'r--')
-    plt.plot(x, [t1[1] for t1 in move_w_reset], 'g--')
-    plt.plot(x, [t1[2] for t1 in move_w_reset], 'b--')
+    
+    plotXYZ(plt, x, move_w_reset, '--')
 
 
 def fitFunction(plt):
@@ -210,23 +196,17 @@ def gripperDiference(plt):
     with open(BASE_DIR + correct_mean) as f:
         correct = pickle.load(f)
 
-    plt.plot(x, [t1 for t1 in correct[0]], 'r:')
-    plt.plot(x, [t1 for t1 in correct[1]], 'g:')
-    plt.plot(x, [t1 for t1 in correct[2]], 'b:')
+    plotXYZ(plt, x, np.transpose(correct), ':')
     
     w_gripper = []
-    with open(BASE_DIR + tests_gripper[0]) as f:
+    with open(BASE_DIR + tests_gripper[3]) as f:
         w_gripper = pickle.load(f)
 
-    plt.plot(x, [t2[0] for t2 in w_gripper], 'r:')
-    plt.plot(x, [t2[1] for t2 in w_gripper], 'g:')
-    plt.plot(x, [t2[2] for t2 in w_gripper], 'b:')
+    plotXYZ(plt, x, w_gripper, ':')
 
-    difference = np.array(w_gripper).transpose() - np.array(correct)
-        
-    plt.plot(x, [t3 for t3 in difference[0]], 'r')
-    plt.plot(x, [t3 for t3 in difference[1]], 'g')
-    plt.plot(x, [t3 for t3 in difference[2]], 'b')
+    difference = np.array(w_gripper) - np.array(correct).transpose()
+    
+    plotXYZ(plt, x, difference)
 
 
 def main():
@@ -240,7 +220,7 @@ def main():
     # Reset in different angles test function
     # resetTest(plt)
 
-    # Temporal drift test
+    # Temporal drift test999
     # temporalDriftTest(plt)
 
     # Positional drift test

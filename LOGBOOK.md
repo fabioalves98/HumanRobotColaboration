@@ -369,7 +369,7 @@
 - Valores de diferença entre curvas originais e com gripper fazem algum sentido, mas não são suficientes para retirar
 - Ver .md de comparação
 
+## 06/03 - Casa
 
-
-
-
+- Refactor do workspace com os pacotes iris_sami e iris_ur10e
+- Refactor de código com helper functions

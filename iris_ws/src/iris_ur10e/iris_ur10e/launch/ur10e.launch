@@ -11,7 +11,7 @@
 
 
     <include unless="$(arg sim)" file="$(find ur_robot_driver)/launch/ur10e_bringup.launch">
-        <arg name="limited"     value="$(arg limited)"/>
+        <arg name="limited" value="$(arg limited)"/>
     </include>
 
     <include if="$(arg sim)" file="$(find ur_e_gazebo)/launch/ur10e.launch">

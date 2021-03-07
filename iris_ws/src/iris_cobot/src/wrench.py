@@ -4,43 +4,27 @@ from std_msgs.msg import String
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import WrenchStamped
 from math import radians, degrees, sqrt
-
 import matplotlib.pyplot as plt
 import numpy as np
 
-from menu import callControlArmService
-from ArmControl import ArmControl
-from ur10e_control.srv import ControlArm
+from sami.arm import Arm
+from helpers import reset_ft_sensor
 
 arm = None
 correction = None
 
 stream = []
-stream_correct = []
-
-f_x_values = [0]
-f_y_values = [0]
-f_z_values = [0]
-
-# f_x_i_values = []
-# f_y_i_values = []
-# f_z_i_values = []
-
-# t_x_values = [0]
-# t_y_values = [0]
-# t_z_values = [0]
+force = np.empty([1, 3])
 
 # Live parameters
 stream_range = 100
 stream_count = 0
-# integral_range = 20
-# integral_idx = 0
 
 # Record parameters
 force_limit = 15
 grip_ready = 500
 
-BASE_DIR = rospkg.RosPack().get_path('ur10e_control')
+BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
 
 def signal_handler(sig, frame):
@@ -59,12 +43,12 @@ def evaluateForce(x, y, z):
     
     if grip_ready < 0:
         if release:
-            callControlArmService(['release'])
+            # callControlArmService(['release'])
             print('Release')
             grip_ready = 500
 
         if grip:
-            callControlArmService(['grip'])
+            # callControlArmService(['grip'])
             print('Grip')
             grip_ready = 500
 
@@ -83,40 +67,15 @@ def wrench(data):
     f_y = data.wrench.force.y
     f_z = data.wrench.force.z
 
-    # t_x = data.wrench.torque.x
-    # t_y = data.wrench.torque.y
-    # t_z = data.wrench.torque.z
-
-    # evaluateForce(x, y, z)
-
-    # print("wrench callback")
-
-    global stream, stream_count, stream_correct_count, integral_idx
+    global stream, stream_count, force
 
     # Aquisition of the force values
     stream.append((f_x, f_y, f_z))
-
+    force = np.append(force, [[f_x, f_y, f_z]], axis=0)
     stream_count += 1
-    f_x_values.append(f_x)
-    f_y_values.append(f_y)
-    f_z_values.append(f_z)
-
-    # t_x_values.append(t_x)
-    # t_y_values.append(t_y)
-    # t_z_values.append(t_z)
 
     if stream_count > stream_range:
-        del f_x_values[0]
-        del f_y_values[0]
-        del f_z_values[0]
-
-        # del f_x_i_values[0]
-        # del f_y_i_values[0]
-        # del f_z_i_values[0]
-
-        # del t_x_values[0]
-        # del t_y_values[0]
-        # del t_z_values[0]
+        force = np.delete(force, 0, 0)
 
 
     # # Integration of the force values
@@ -149,75 +108,48 @@ def main():
 
     global arm, correction
 
-    with open(BASE_DIR + '/yaml/wrench_correction.list') as f:
+    with open(BASE_DIR + '/curves/wrench_correct_mean.list') as f:
         correction = pickle.load(f)
 
-    arm = ArmControl()
+    arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
+    arm.velocity = 0.3
 
     parser = argparse.ArgumentParser()
     parser.add_argument("--live", help="run listener with a live view of the values", action="store_true")
     args = parser.parse_args()
 
-    wrench_sub = rospy.Subscriber("wrench", WrenchStamped, wrench)
-
+    rospy.Subscriber("wrench", WrenchStamped, wrench)
 
     if args.live:
         # Create Plots
         plt.ion()
-        fig, (f, f_c) = plt.subplots(2)
-        # fig, (f, f_i, t) = plt.subplots(3)
+        fig, (f) = plt.subplots(1)
 
         f.set(ylim=(-10, 10))
         f.set(xlim=(0, stream_range))
 
-        # f_i.set(ylim=(-1, 1))
-        # f_i.set(xlim=(0, stream_range))
-
-        # t.set(ylim=(-1, 1))
-        # t.set(xlim=(0, stream_range))
-
-        x_plt, = f.plot(range(0, len(f_x_values)), f_x_values, 'r')
-        y_plt, = f.plot(range(0, len(f_y_values)), f_y_values, 'g')
-        z_plt, = f.plot(range(0, len(f_z_values)), f_z_values, 'b')
-
-        # x_i_plt, = f_i.plot(range(0, len(f_x_i_values)), f_x_i_values, 'r-')
-        # y_i_plt, = f_i.plot(range(0, len(f_y_i_values)), f_y_i_values, 'g-')
-        # z_i_plt, = f_i.plot(range(0, len(f_z_i_values)), f_z_i_values, 'b-')
-
-        # t_x_plt, = t.plot(range(0, len(t_x_values)), t_x_values, 'r-')
-        # t_y_plt, = t.plot(range(0, len(t_y_values)), t_y_values, 'g-')
-        # t_z_plt, = t.plot(range(0, len(t_z_values)), t_z_values, 'b-')
+        x_plt, = f.plot(range(0, len(force[:, 0])), force[:, 0], 'r')
+        y_plt, = f.plot(range(0, len(force[:, 1])), force[:, 1], 'g')
+        z_plt, = f.plot(range(0, len(force[:, 2])), force[:, 2], 'b')
 
         while True:
-            setPlotData([x_plt, y_plt, z_plt], [f_x_values[:], f_y_values[:], f_z_values[:]])
-            # setPlotData([x_i_plt, y_i_plt, z_i_plt], [f_x_i_values[:], f_y_i_values[:], f_z_i_values[:]])
-            # setPlotData([t_x_plt, t_y_plt, t_z_plt], [t_x_values[:], t_y_values[:], t_z_values[:]])
-
+            setPlotData([x_plt, y_plt, z_plt], [force[:,0], force[:,1], force[:,2]])
             fig.canvas.draw_idle()
             fig.canvas.flush_events()
     
     else:
-        arm = ArmControl()
-        arm.setSpeed(0.3)
-
         # Set Arm joints
-        current_joints = arm.getJointValues()
+        current_joints = arm.get_joints()
         # current_joints[0] = radians(0)
         # current_joints[1] = radians(-90)
         # current_joints[2] = radians(0)
         # current_joints[3] = radians(0)
         # current_joints[4] = radians(-90)
         current_joints[5] = radians(0)
-        arm.jointGoal(current_joints)
+        arm.move_joints(current_joints)
 
         # Reset ft sensor
-        rospy.wait_for_service('/ur_hardware_interface/zero_ftsensor')
-        try:
-            zero = rospy.ServiceProxy('/ur_hardware_interface/zero_ftsensor', Trigger)
-            resp1 = zero()
-            print(resp1)
-        except rospy.ServiceException as e:
-            print("Service call failed: %s"%e)
+        reset_ft_sensor()
 
         # Init temp stream
         temp_stream = []
@@ -226,19 +158,21 @@ def main():
         for i in range(-180, 180):
             print(i, ' - ', len(stream))
             current_joints[5] = radians(i)
-            arm.jointGoal(current_joints)
+            arm.move_joints(current_joints)
             time.sleep(0.2)
-            temp_stream.append((statistics.mean(f_x_values), statistics.mean(f_y_values), statistics.mean(f_z_values)))
+            temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), statistics.mean(force[:,2])))
             print('')
 
-        with open(BASE_DIR + '/record/TGB_COV_temp.list', 'w') as f:
+        # Save samples of wrench in files
+        with open(BASE_DIR + '/record/test_temp.list', 'w') as f:
             print(len(temp_stream))
             pickle.dump(temp_stream, f)
         
-        with open(BASE_DIR + '/record/TGB_COV_full.list', 'w') as f:
+        with open(BASE_DIR + '/record/test_full.list', 'w') as f:
             print(len(stream))
             pickle.dump(stream, f)
         
+        # Plot results
         plt.ylim([-7.5, 15])
         plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
         plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
