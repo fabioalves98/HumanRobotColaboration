@@ -1,0 +1,6 @@
+[submodule "iris_ws/src/iris_sami"]
+	path = iris_ws/src/iris_sami
+	url = ../iris_sami.git
+[submodule "iris_ws/src/iris_ur10e"]
+	path = iris_ws/src/iris_ur10e
+	url = ../iris_ur10e
