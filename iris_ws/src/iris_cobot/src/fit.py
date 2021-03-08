@@ -31,9 +31,51 @@ tests_gripper = [
     '/record/4-05_03/TG4_temp.list',
     '/record/4-05_03/TG5_temp.list'
 ]
+tests_payload_gripper = [
+    '/record/4-05_03/TGB_temp.list',
+    '/record/4-05_03/TGB_0Kg_temp.list',
+    '/record/4-05_03/TGB_3Kg_temp.list',
+]
+tests_payload = [
+    '/record/5-08_03/TP1_0Kg_temp.list',
+    '/record/5-08_03/TP1_0.2Kg_temp.list',
+    '/record/5-08_03/TP1_1Kg_temp.list',
+    '/record/5-08_03/TP2_0Kg_temp.list',
+    '/record/5-08_03/TP2_0.2Kg_temp.list',
+    '/record/5-08_03/TP2_1Kg_temp.list',
+    '/record/5-08_03/TP3_0Kg_temp.list',
+    '/record/5-08_03/TP3_0.2Kg_temp.list',
+    '/record/5-08_03/TP3_1Kg_temp.list',
+    # 9-10
+    '/record/5-08_03/TPB_0Kg_temp.list',
+    '/record/5-08_03/TPBG_0Kg_temp.list',
+    # 11-17
+    '/record/5-08_03/TPBG_1.2Kg_temp.list',
+    '/record/5-08_03/TPBG_1.3Kg_temp.list',
+    '/record/5-08_03/TPBG_1.4Kg_temp.list',
+    '/record/5-08_03/TPBG_1.5Kg_temp.list',
+    '/record/5-08_03/TPBG_1.6Kg_temp.list',
+    '/record/5-08_03/TPBG_1.7Kg_temp.list',
+    '/record/5-08_03/TPBG_1.8Kg_temp.list',
+    # 18
+    '/record/5-08_03/TP3G_1.5Kg_temp.list',
+]
+
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
     
+
+def compareCurves(plt, curves):
+    x = np.arange(-180,180,1)
+
+    for i in range(len(curves)):
+        print(curves[i])
+        stream = []
+        with open(BASE_DIR + curves[i]) as f:
+            stream = pickle.load(f)
+
+        plotXYZ(plt, x, stream, ['',':',':'][i])
+
 
 def repeatabilityTest(plt):
     x = np.arange(-180,180,1)
@@ -209,10 +251,67 @@ def gripperDiference(plt):
     plotXYZ(plt, x, difference)
 
 
+def payloadTest(plt):
+    x = np.arange(-180,180,1)
+
+    default = []
+    with open(BASE_DIR + tests_payload[6]) as f:
+        default = pickle.load(f)
+
+    plotXYZ(plt, x, default)
+
+    bit_heavier = []
+    with open(BASE_DIR + tests_payload[7]) as f:
+        bit_heavier = pickle.load(f)
+
+    plotXYZ(plt, x, bit_heavier, '--')
+
+    heavier = []
+    with open(BASE_DIR + tests_payload[8]) as f:
+        heavier = pickle.load(f)
+
+    plotXYZ(plt, x, heavier, '+')
+
+
+def gripperCoupling(plt):
+    x = np.arange(-180,180,1)
+
+    default = []
+    with open(BASE_DIR + tests_payload[9]) as f:
+        default = pickle.load(f)
+
+    plotXYZ(plt, x, default)
+
+    gripper = []
+    with open(BASE_DIR + tests_payload[10]) as f:
+        gripper = pickle.load(f)
+
+    plotXYZ(plt, x, gripper, '+')
+
+
+def gripperWeightTest(plt):
+    x = np.arange(-180,180,1)
+
+    default = []
+    with open(BASE_DIR + tests_payload[9]) as f:
+        default = pickle.load(f)
+
+    plotXYZ(plt, x, default)
+
+    for i in range(11, len(tests_payload)):
+        stream = []
+        with open(BASE_DIR + tests_payload[i]) as f:
+            stream = pickle.load(f)
+
+        plotXYZ(plt, x, stream, ':')
+
 def main():
     rospy.init_node("fit", anonymous = False)
     
     # plt.ylim([-10, 15.0])
+
+    # Quickly compare curves
+    compareCurves(plt, [tests_payload[6], tests_payload[14], tests_payload[18]])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -230,7 +329,16 @@ def main():
     # fitFunction(plt)
 
     # Merge das curvas com e sem gripper
-    gripperDiference(plt)
+    # gripperDiference(plt)
+
+    # Test different payloads without gripper
+    # payloadTest(plt)
+
+    # Test coupling gripper without reset
+    # gripperCoupling(plt)
+
+    # Test different payload with gripper to get best match
+    # gripperWeightTest(plt)
 
     plt.show()
 

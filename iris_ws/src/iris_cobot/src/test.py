@@ -3,7 +3,7 @@ import rospy
 import time, signal, sys
 from math import pi, sin, cos, acos, sqrt, radians
 
-from sami.arm import Arm
+from sami.arm import Arm # pylint: disable=import-error, no-name-in-module
 from helpers import reset_ft_sensor
 
 arm = None
@@ -26,6 +26,8 @@ def axisAngleToQuaterion():
     qz = az * sin(angle/2)
     qw = cos(angle/2)
 
+    print(qx, qy, qz, qw)
+
 
 def quaternionToAxisAngle():
     # Quaternion to Axis Angle
@@ -39,6 +41,8 @@ def quaternionToAxisAngle():
     y = ori.y / sqrt(1-ori.w*ori.w)
     z = ori.z / sqrt(1-ori.w*ori.w)
 
+    print(angle, x, y, z)
+
 
 def main():
     rospy.init_node('test', anonymous=False)
@@ -47,7 +51,7 @@ def main():
     global arm
 
     arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
-    arm.velocity = 0.3
+    arm.velocity = 0.2
 
     # Move to default pos
     arm.move_joints([0, radians(-90), 0, 0, 0, 0])

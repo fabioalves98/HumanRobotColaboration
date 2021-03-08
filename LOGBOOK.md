@@ -373,3 +373,37 @@
 
 - Refactor do workspace com os pacotes iris_sami e iris_ur10e
 - Refactor de código com helper functions
+
+## 07/03 - Casa
+
+- Paper - Human–robot interaction in industrial collaborative robotics: a literature review of the decade
+
+## 08/03 - IRISLab
+
+- Testes com diferentes valores de payload sem Gripper
+- Pasta F-Wrench
+- Teste Payload | Posição 1 | Payload de x Kg
+- TP1_0Kg
+  - Igual ao teste default
+- TP1_0.2Kg e TP1_1Kg
+  - Exatamente igual a TP1_0Kg
+- TP2_0Kg
+  - Igual ao teste default
+- TP2_0.2kg e TP2_1Kg
+  - Apresentam diferenças significativas em relação a TP2 que fazem todo o sentido
+- Repetição para a P3 com resultados analogos a P1, ou seja, as diferenças foram ainda maiores
+
+****
+
+- Teste com Payload 0 com e sem gripper (sem dar reset entre os testes)
+- Posição B - [0, -90, -90, 0, 0, 0]
+- Teste Payload | Posição B | Payload de x Kg
+- TPB_0Kg
+  - Igual ao teste default
+- TPBG_0Kg
+  - Diferenças extremas devido ao acopulamento do gripper, os valores fazen sentido, no geral
+  - Força com que o gripper é acopulado ao end effector interfere com os valores de Z
+
+****
+
+- Testes com Gripper e diferentes valores de payload para obter o melhor valor de peso
