@@ -142,7 +142,7 @@ def main():
         current_joints[1] = radians(-90)
         current_joints[2] = radians(0)
         current_joints[3] = radians(0)
-        current_joints[4] = radians(0)
+        current_joints[4] = radians(-90)
         current_joints[5] = radians(0)
         arm.move_joints(current_joints)
 
@@ -162,11 +162,11 @@ def main():
             print('')
 
         # Save samples of wrench in files
-        with open(BASE_DIR + '/record/TP3G_1.5Kg_temp.list', 'w') as f:
+        with open(BASE_DIR + '/record/TG5_3Kg_temp.list', 'w') as f:
             print(len(temp_stream))
             pickle.dump(temp_stream, f)
         
-        with open(BASE_DIR + '/record/TP3G_1.5Kg_full.list', 'w') as f:
+        with open(BASE_DIR + '/record/TG5_3Kg_full.list', 'w') as f:
             print(len(stream))
             pickle.dump(stream, f)
         

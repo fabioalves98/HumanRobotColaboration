@@ -372,7 +372,8 @@
   - Ainda mais estranho, é que o valor de Z se altera
 - Uma possível explicação é que estes 2 testes diferem no valor configurado de payload
   - Quando foram medidos sem gripper - Payload era 0Kg
-  - Quando foram medidos com gripper - Pauload era 1.77Kg
+  - Quando foram medidos com gripper - Payload era 1.77Kg
+- **Resultado - **Inconclusivo
 
 ## 06/03 - Casa
 
@@ -385,7 +386,8 @@
 
 ## 08/03 - IRISLab
 
-- Testes com diferentes valores de payload sem Gripper
+#### Testes com diferentes valores de payload sem Gripper
+
 - Pasta F-Wrench
 - Teste Payload | Posição 1 | Payload de x Kg
 - TP1_0Kg
@@ -402,7 +404,8 @@
 
 ****
 
-- Teste com Payload 0 com e sem gripper (sem dar reset entre os testes)
+#### Teste com Payload 0 com e sem gripper (sem dar reset entre os testes)
+
 - Posição B - [0, -90, -90, 0, 0, 0]
 - Teste Payload | Posição B | Payload de x Kg
 - TPB_0Kg
@@ -420,4 +423,21 @@
 
 ****
 
-- Testes com Gripper e diferentes valores de payload para obter o melhor valor de peso para inserir no payload
+#### Testes com diferentes valores de payload com Gripper
+
+- Obter o melhor valor de peso para inserir no payload
+- gripperWeightTest()
+
+## 09/03 - IRISLab
+
+#### Testes com diferentes valores de COG com gripper
+
+- centerOfGravityTest()
+
+#### Testes com Gripper em diferentes posições e payloads
+
+- gripperCorrect()
+- Payload 0 | 1.5kg | 3Kg
+
+
+

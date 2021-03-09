@@ -10,6 +10,8 @@ from helpers import plotXYZ
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
+# 1 - 13/01
+# Test robot FT sensor in along wrist_3 rotation in 5 different positions
 tests_1 = [
     '/record/1-13_01/T1_temp.list',
     '/record/1-13_01/T2_temp.list',
@@ -17,6 +19,8 @@ tests_1 = [
     '/record/1-13_01/T4_temp.list',
     '/record/1-13_01/T5_temp.list'
 ]
+# 2 - 01/03
+# Verify repeatability of the previous tests
 tests_2 = [
     '/record/2-01_03/T1_temp.list',
     '/record/2-01_03/T2_temp.list',
@@ -24,6 +28,8 @@ tests_2 = [
     '/record/2-01_03/T4_temp.list',
     '/record/2-01_03/T5_temp.list'
 ]
+# 4 - 05/03
+# Perform the same tests with gripper attached (payload - 1.77kg)
 tests_gripper = [
     '/record/4-05_03/TG1_temp.list',
     '/record/4-05_03/TG2_temp.list',
@@ -31,11 +37,14 @@ tests_gripper = [
     '/record/4-05_03/TG4_temp.list',
     '/record/4-05_03/TG5_temp.list'
 ]
+# Perform payload test in a specific position with gripper attached (0 - 3Kg)
 tests_payload_gripper = [
     '/record/4-05_03/TGB_temp.list',
     '/record/4-05_03/TGB_0Kg_temp.list',
     '/record/4-05_03/TGB_3Kg_temp.list',
 ]
+# 5 - 08/03
+# Perform in depth payload test without gripper in 3 different postions (0 | 0.2 | 1kg)
 tests_payload = [
     '/record/5-08_03/TP1_0Kg_temp.list',
     '/record/5-08_03/TP1_0.2Kg_temp.list',
@@ -47,10 +56,12 @@ tests_payload = [
     '/record/5-08_03/TP3_0.2Kg_temp.list',
     '/record/5-08_03/TP3_1Kg_temp.list',
 ]
+# Perform gripper coupling tests in a specific position
 tests_gripper_coupling = [
     '/record/5-08_03/TPB_0Kg_temp.list',
     '/record/5-08_03/TPBG_0Kg_temp.list',
 ]
+# Perform various tests with gripper changing the programmed payload
 tests_gripper_weight = [
     '/record/5-08_03/TPBG_1.2Kg_temp.list',
     '/record/5-08_03/TPBG_1.3Kg_temp.list',
@@ -60,7 +71,9 @@ tests_gripper_weight = [
     '/record/5-08_03/TPBG_1.7Kg_temp.list',
     '/record/5-08_03/TPBG_1.8Kg_temp.list',
 ]
+# Sanity check test where the same payload is tested in a different position
 test_gripper_weight = '/record/5-08_03/TP3G_1.5Kg_temp.list'
+# 6 - 09/03
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -293,6 +306,7 @@ def gripperCoupling(plt):
 
     plotXYZ(plt, x, gripper, '+')
 
+
 def getWeight(plt, curve):
     x = np.arange(-180,180,1)
 
@@ -313,18 +327,31 @@ def getWeight(plt, curve):
 def gripperWeightTest(plt):
     x = np.arange(-180,180,1)
 
+    fig, sub_plots = plt.subplots(2, 2)
+
     default = []
-    with open(BASE_DIR + tests_payload[9]) as f:
+    with open(BASE_DIR + tests_gripper_coupling[0]) as f:
         default = pickle.load(f)
 
-    plotXYZ(plt, x, default)
+    plotXYZ(sub_plots[0, 0], x, default)
 
-    for i in range(11, len(tests_payload)):
+    for i in range(1, 4):
         stream = []
-        with open(BASE_DIR + tests_payload[i]) as f:
+        print(tests_gripper_weight[i+1])
+        with open(BASE_DIR + tests_gripper_weight[i+1]) as f:
             stream = pickle.load(f)
+        
+        # correct(sub_plots[i/2, i%2], tests_gripper_weight[i+1])
+        # getWeight(sub_plots[i/2, i%2], tests_gripper_weight[i+1])
 
-        plotXYZ(plt, x, stream, ':')
+
+def centerOfGravityTest(plt):
+    pass
+
+
+def gripperCorrect(plt):
+    pass
+
 
 def main():
     rospy.init_node("fit", anonymous = False)
@@ -360,10 +387,17 @@ def main():
     # Test coupling gripper without reset
     # gripperCoupling(plt)
     # correct(plt, tests_gripper_coupling[1])
-    getWeight(plt, tests_gripper_coupling[1])
+    # getWeight(plt, tests_gripper_coupling[1])
 
-    # Test different payload with gripper to get best match
+    # =====================
+    # Test different payload values with gripper to get best match
     # gripperWeightTest(plt)
+
+    # Test different center of gravity values with gripper
+    centerOfGravityTest(plt)
+
+    # Test diffrente positions and payloads with gripper
+    gripperCorrect(plt)
 
     plt.show()
 
