@@ -46,10 +46,12 @@ tests_payload = [
     '/record/5-08_03/TP3_0Kg_temp.list',
     '/record/5-08_03/TP3_0.2Kg_temp.list',
     '/record/5-08_03/TP3_1Kg_temp.list',
-    # 9-10
+]
+tests_gripper_coupling = [
     '/record/5-08_03/TPB_0Kg_temp.list',
     '/record/5-08_03/TPBG_0Kg_temp.list',
-    # 11-17
+]
+tests_gripper_weight = [
     '/record/5-08_03/TPBG_1.2Kg_temp.list',
     '/record/5-08_03/TPBG_1.3Kg_temp.list',
     '/record/5-08_03/TPBG_1.4Kg_temp.list',
@@ -57,9 +59,8 @@ tests_payload = [
     '/record/5-08_03/TPBG_1.6Kg_temp.list',
     '/record/5-08_03/TPBG_1.7Kg_temp.list',
     '/record/5-08_03/TPBG_1.8Kg_temp.list',
-    # 18
-    '/record/5-08_03/TP3G_1.5Kg_temp.list',
 ]
+test_gripper_weight = '/record/5-08_03/TP3G_1.5Kg_temp.list'
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -231,43 +232,47 @@ def fitFunction(plt):
         pickle.dump(correction_mean, f)
 
 
-def gripperDiference(plt):
+def correct(plt, curve, alpha=0.5):
     x = np.arange(-180,180,1)
 
     correct = []
     with open(BASE_DIR + correct_mean) as f:
         correct = pickle.load(f)
 
-    plotXYZ(plt, x, np.transpose(correct), ':')
+    if plt:
+        plotXYZ(plt, x, np.transpose(correct), ':', alpha=alpha)
     
-    w_gripper = []
-    with open(BASE_DIR + tests_gripper[3]) as f:
-        w_gripper = pickle.load(f)
+    to_correct = []
+    with open(BASE_DIR + curve) as f:
+        to_correct = pickle.load(f)
 
-    plotXYZ(plt, x, w_gripper, ':')
+    if plt:
+        plotXYZ(plt, x, to_correct, ':', alpha=alpha)
 
-    difference = np.array(w_gripper) - np.array(correct).transpose()
+    difference = np.array(to_correct) - np.array(correct).transpose()
     
-    plotXYZ(plt, x, difference)
+    if plt:
+        plotXYZ(plt, x, difference)
+
+    return difference
 
 
-def payloadTest(plt):
+def payloadTest(plt, pos):
     x = np.arange(-180,180,1)
-
     default = []
-    with open(BASE_DIR + tests_payload[6]) as f:
+    with open(BASE_DIR + tests_payload[pos * 3 + 0]) as f:
         default = pickle.load(f)
 
     plotXYZ(plt, x, default)
 
     bit_heavier = []
-    with open(BASE_DIR + tests_payload[7]) as f:
+    with open(BASE_DIR + tests_payload[pos * 3 + 1]) as f:
         bit_heavier = pickle.load(f)
 
     plotXYZ(plt, x, bit_heavier, '--')
 
     heavier = []
-    with open(BASE_DIR + tests_payload[8]) as f:
+    with open(BASE_DIR + tests_payload[pos * 3 + 2]) as f:
         heavier = pickle.load(f)
 
     plotXYZ(plt, x, heavier, '+')
@@ -277,16 +282,32 @@ def gripperCoupling(plt):
     x = np.arange(-180,180,1)
 
     default = []
-    with open(BASE_DIR + tests_payload[9]) as f:
+    with open(BASE_DIR + tests_gripper_coupling[0]) as f:
         default = pickle.load(f)
 
     plotXYZ(plt, x, default)
 
     gripper = []
-    with open(BASE_DIR + tests_payload[10]) as f:
+    with open(BASE_DIR + tests_gripper_coupling[1]) as f:
         gripper = pickle.load(f)
 
     plotXYZ(plt, x, gripper, '+')
+
+def getWeight(plt, curve):
+    x = np.arange(-180,180,1)
+
+    corrected = correct(None, curve)
+
+    weight = np.empty(360)
+    z_comp = np.mean(corrected[:, 2])
+    print('Z comp - ', z_comp)
+    
+    weight = np.sqrt( np.power(corrected[:,0], 2) + np.power(corrected[:,1], 2) +
+                      np.power(corrected[:,2] - z_comp, 2))
+    print('Mean Weight - ', np.mean(weight))
+
+    plotXYZ(plt, x, corrected)
+    plt.plot(x, weight, 'k')
 
 
 def gripperWeightTest(plt):
@@ -311,7 +332,7 @@ def main():
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    compareCurves(plt, [tests_payload[6], tests_payload[14], tests_payload[18]])
+    # compareCurves(plt, [tests_payload[6], tests_payload[14], tests_payload[18]])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -319,7 +340,7 @@ def main():
     # Reset in different angles test function
     # resetTest(plt)
 
-    # Temporal drift test999
+    # Temporal drift test
     # temporalDriftTest(plt)
 
     # Positional drift test
@@ -329,13 +350,17 @@ def main():
     # fitFunction(plt)
 
     # Merge das curvas com e sem gripper
-    # gripperDiference(plt)
+    # correct(plt, tests_gripper[2])
 
     # Test different payloads without gripper
-    # payloadTest(plt)
+    # pos = 2
+    # payloadTest(plt, pos)
+    # correct(plt, tests_payload[pos * 3 + 2])
 
     # Test coupling gripper without reset
     # gripperCoupling(plt)
+    # correct(plt, tests_gripper_coupling[1])
+    getWeight(plt, tests_gripper_coupling[1])
 
     # Test different payload with gripper to get best match
     # gripperWeightTest(plt)

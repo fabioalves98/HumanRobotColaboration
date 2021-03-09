@@ -333,14 +333,14 @@
   - y = p1 * np.sin(np.radians(p2 * (x + p3))) + p4
   - Amplitude, frequencia, offset_x, offset_y
 - Definição de valores de guess iniciais
-- Parametros finais
+- **Resultado - ** Parametros finais
   - x - [3.59403687, 2.16328845, -56.15475734, 2.55574389]
   - y - [1.18181371,  2.16484226, 39.16549121, -0.45171281]
   - z - [1.96991165,  2.00442201, 41.65549264, -2.1853712 ]
 
 ## 03/03 - IRISLab (Reunião)
 
-- Tentativa de corrigir os valores de força vindo do wrench
+- Tentativa de corrigir os valores de força vindo do wrench em tempo real
 - Problemas no geral. Possíveis causas
   - Maneira de obter o valor do wrist_3 do robot
   - Problema de velocidade dos tópicos
@@ -367,7 +367,12 @@
 #### Merge das Curvas com e sem Gripper
 
 - Valores de diferença entre curvas originais e com gripper fazem algum sentido, mas não são suficientes para retirar
-- Ver .md de comparação
+  - Valores de diferença em X, fazem sentido pois a posição wrist_3 = 0 tem o eixo X alinhado verticalmente, ou seja, quando ha o zerto_ft_sensor(), todo o peso do gripper está sobre esse eixo, e há medida que rodamos, esse peso vai passando para o eixo Y, logo é normal que o valor de X aumente
+  - A parte estranha é que o valor de Y não se altera em todo o teste
+  - Ainda mais estranho, é que o valor de Z se altera
+- Uma possível explicação é que estes 2 testes diferem no valor configurado de payload
+  - Quando foram medidos sem gripper - Payload era 0Kg
+  - Quando foram medidos com gripper - Pauload era 1.77Kg
 
 ## 06/03 - Casa
 
@@ -392,6 +397,8 @@
 - TP2_0.2kg e TP2_1Kg
   - Apresentam diferenças significativas em relação a TP2 que fazem todo o sentido
 - Repetição para a P3 com resultados analogos a P1, ou seja, as diferenças foram ainda maiores
+- **Resutlado -** Após verificação dos resultados corrigidos faz todo o sentido
+  - Ao adicionarmos valores falsos de payload, eles vão ser retratados nas curvas
 
 ****
 
@@ -403,7 +410,14 @@
 - TPBG_0Kg
   - Diferenças extremas devido ao acopulamento do gripper, os valores fazen sentido, no geral
   - Força com que o gripper é acopulado ao end effector interfere com os valores de Z
+- **Restulado - **Compensasão dos valores obtidos com a acopulação do gripper demonstram curvas sinosoidais realistas e cujos valores fazem sentido
+  - Obtenção do peso do gripper fazendo primeiro
+    - Compensasão da component Z com a sua média
+    - A raiz dos quadrados das 3 compoentes
+    - Obtemos a cada posição de wrist_3 a magnitude do vector forca 
+    - Fazendo a média obteve-se o valor de 15.13 N
+    - O peso do conjunto é de 1.514 Kg
 
 ****
 
-- Testes com Gripper e diferentes valores de payload para obter o melhor valor de peso
+- Testes com Gripper e diferentes valores de payload para obter o melhor valor de peso para inserir no payload
