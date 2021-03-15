@@ -283,9 +283,10 @@ def correct(plt, curve, alpha=0.5):
     if plt:
         plotXYZ(plt, x, np.transpose(correct), ':', alpha=alpha)
     
-    to_correct = []
-    with open(BASE_DIR + curve) as f:
-        to_correct = pickle.load(f)
+    to_correct = curve
+    if isinstance(to_correct, str):
+        with open(BASE_DIR + curve) as f:
+            to_correct = pickle.load(f)
 
     if plt:
         plotXYZ(plt, x, to_correct, ':', alpha=alpha)
@@ -300,6 +301,7 @@ def correct(plt, curve, alpha=0.5):
 
 def payloadTest(plt, pos):
     x = np.arange(-180,180,1)
+    
     default = []
     with open(BASE_DIR + tests_payload[pos * 3 + 0]) as f:
         default = pickle.load(f)
@@ -389,11 +391,54 @@ def gripperWeightTest(plt):
 
 
 def centerOfGravityTest(plt):
-    pass
+    x = np.arange(-180,180,1)
+
+    fig, sub_plots = plt.subplots(3)
+
+    for i in range(3):
+
+        default = []
+        with open(BASE_DIR + tests_cog[i]) as f:
+            default = pickle.load(f)
+
+        plotXYZ(sub_plots[i], x, default, ':')
+
+        cog_100 = []
+        with open(BASE_DIR + tests_cog[i+1]) as f:
+            cog_100 = pickle.load(f)
+
+        plotXYZ(sub_plots[i], x, cog_100, '--')
+
+        cog_200 = []
+        with open(BASE_DIR + tests_cog[i+2]) as f:
+            cog_200 = pickle.load(f)
+
+        plotXYZ(sub_plots[i], x, cog_200, '+')
 
 
-def gripperCorrect(plt):
-    pass
+def gripperPayloadTest(plt, pos):
+    x = np.arange(-180,180,1)
+    
+    lighter = []
+    with open(BASE_DIR + tests_payload_gripper[pos * 3 + 0]) as f:
+        lighter = pickle.load(f)
+
+    lighter = correct(None, lighter)
+    plotXYZ(plt, x, lighter, '--')
+
+    default = []
+    with open(BASE_DIR + tests_payload_gripper[pos * 3 + 1]) as f:
+        default = pickle.load(f)
+
+    default = correct(None, default)
+    plotXYZ(plt, x, default)
+
+    heavier = []
+    with open(BASE_DIR + tests_payload_gripper[pos * 3 + 2]) as f:
+        heavier = pickle.load(f)
+
+    heavier = correct(None, heavier)
+    plotXYZ(plt, x, heavier, '+')
 
 
 def main():
@@ -402,7 +447,7 @@ def main():
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    # compareCurves(plt, tests_payload_gripper[6:9])
+    # compareCurves(plt, [correct_mean, tests_payload_gripper[10]])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -435,12 +480,14 @@ def main():
     # Test different payload values with gripper to get best match
     # gripperWeightTest(plt)
 
-    # =====================
     # Test different center of gravity values with gripper
     # centerOfGravityTest(plt)
+    
+    # Test different positions and payloads with gripper
+    # pos = 4
+    # gripperPayloadTest(plt, pos)
 
-    # Test diffrente positions and payloads with gripper
-    # gripperCorrect(plt)
+    # Test more positions and minor payload changes with gripper
 
     plt.show()
 

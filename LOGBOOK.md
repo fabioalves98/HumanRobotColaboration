@@ -437,12 +437,21 @@
 
 #### Testes com diferentes valores de COG com gripper
 
-- centerOfGravityTest()
+- Testar impacto de COG nas curvas obtidas
+- Teste COG | Posição [1, 2, 3]
+  - Center of Gravity com 0mm em todas as componentes
+  - Center of Gravity com 100mm em todas as componentes
+  - Center of Gravity com 200mm em todas as componentes
+- **Resultado - **Parece haver alguma variação mas nem suficientemente grande que necessite de ser corrigida, nem apresenta um padrão definido
 
 #### Testes com Gripper em diferentes posições e payloads
 
-- gripperCorrect()
-- Payload 0 | 1.5kg | 3Kg
+- Testar o efeito de diferentes valores em diferentes posições
+- Teste Payload | Posição [1, 2, 3, 4, 5] | Payloas [0, 1.5, 3]
+- **Resultado**
+  - Tanto na posição 1 como 5 as curvas não apresentaram diferenças cosoante a alteração do payload, como era esperado
+  - Nas posições 2, 3 e 4 as curvas apresntam diferenças nas magnitudes esperadas
+  - No entanto, quando corrigidas em 1.5kg (peso real do gripper) apresentam algumas oscilações que terão que ser corrigidas
 
 ## 15/03 - IRISLab
 
