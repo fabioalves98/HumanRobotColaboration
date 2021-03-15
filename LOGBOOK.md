@@ -426,7 +426,12 @@
 #### Testes com diferentes valores de payload com Gripper
 
 - Obter o melhor valor de peso para inserir no payload
-- gripperWeightTest()
+- Posição B - [0, -90, -90, 0, 0, 0]
+- Teste Payload | Posição B | Payload de x Kg
+- Testados payloads de 1.2kg a 1.8Kg com intervalos de 100g
+- Objetivo é ver qual payload é que produz a curva mais aproximada à curva de correção
+- **Resultado - **Nenhuma curva de aproxima completamente mas as mais próximas em termos de média e desvio padrão são 1.5Kg e 1.6kg que é aproximadamente o peso do gripper
+  - Os desvios poderão estar a ser causados pelo COG
 
 ## 09/03 - IRISLab
 
@@ -439,5 +444,8 @@
 - gripperCorrect()
 - Payload 0 | 1.5kg | 3Kg
 
+## 15/03 - IRISLab
 
+#### Obter melhor peso do Gripper com várias posições e payloads
 
+- A curva do gripper não tem que ser necessariamente igual à curva sem gripper, no entanto, não pode mudar consoante a posição

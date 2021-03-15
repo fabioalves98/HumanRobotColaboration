@@ -37,12 +37,6 @@ tests_gripper = [
     '/record/4-05_03/TG4_temp.list',
     '/record/4-05_03/TG5_temp.list'
 ]
-# Perform payload test in a specific position with gripper attached (0 - 3Kg)
-tests_payload_gripper = [
-    '/record/4-05_03/TGB_temp.list',
-    '/record/4-05_03/TGB_0Kg_temp.list',
-    '/record/4-05_03/TGB_3Kg_temp.list',
-]
 # 5 - 08/03
 # Perform in depth payload test without gripper in 3 different postions (0 | 0.2 | 1kg)
 tests_payload = [
@@ -54,7 +48,7 @@ tests_payload = [
     '/record/5-08_03/TP2_1Kg_temp.list',
     '/record/5-08_03/TP3_0Kg_temp.list',
     '/record/5-08_03/TP3_0.2Kg_temp.list',
-    '/record/5-08_03/TP3_1Kg_temp.list',
+    '/record/5-08_03/TP3_1Kg_temp.list'
 ]
 # Perform gripper coupling tests in a specific position
 tests_gripper_coupling = [
@@ -69,11 +63,41 @@ tests_gripper_weight = [
     '/record/5-08_03/TPBG_1.5Kg_temp.list',
     '/record/5-08_03/TPBG_1.6Kg_temp.list',
     '/record/5-08_03/TPBG_1.7Kg_temp.list',
-    '/record/5-08_03/TPBG_1.8Kg_temp.list',
+    '/record/5-08_03/TPBG_1.8Kg_temp.list'
 ]
 # Sanity check test where the same payload is tested in a different position
 test_gripper_weight = '/record/5-08_03/TP3G_1.5Kg_temp.list'
 # 6 - 09/03
+# Perform in depth center of gravity test with gripper attached
+tests_cog = [
+    '/record/6-09_03/T1_COG_temp.list',
+    '/record/6-09_03/T1_COG_100_temp.list',
+    '/record/6-09_03/T1_COG_200_temp.list',
+    '/record/6-09_03/T2_COG_temp.list',
+    '/record/6-09_03/T2_COG_100_temp.list',
+    '/record/6-09_03/T2_COG_200_temp.list',
+    '/record/6-09_03/T3_COG_temp.list',
+    '/record/6-09_03/T3_COG_100_temp.list',
+    '/record/6-09_03/T3_COG_200_temp.list'
+]
+# Perform in depth gripper curves with different payloads (0 - 3Kg)
+tests_payload_gripper = [
+    '/record/6-09_03/TG1_0Kg_temp.list',
+    '/record/6-09_03/TG1_1.5Kg_temp.list',
+    '/record/6-09_03/TG1_3Kg_temp.list',
+    '/record/6-09_03/TG2_0Kg_temp.list',
+    '/record/6-09_03/TG2_1.5Kg_temp.list',
+    '/record/6-09_03/TG2_3Kg_temp.list',
+    '/record/6-09_03/TG3_0Kg_temp.list',
+    '/record/6-09_03/TG3_1.5Kg_temp.list',
+    '/record/6-09_03/TG3_3Kg_temp.list',
+    '/record/6-09_03/TG4_0Kg_temp.list',
+    '/record/6-09_03/TG4_1.5Kg_temp.list',
+    '/record/6-09_03/TG4_3Kg_temp.list',
+    '/record/6-09_03/TG5_0Kg_temp.list',
+    '/record/6-09_03/TG5_1.5Kg_temp.list',
+    '/record/6-09_03/TG5_3Kg_temp.list'
+]
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -87,6 +111,10 @@ def compareCurves(plt, curves):
         stream = []
         with open(BASE_DIR + curves[i]) as f:
             stream = pickle.load(f)
+
+        stream = np.array(stream)
+        if stream.shape == (3, 360):
+            stream = stream.transpose()
 
         plotXYZ(plt, x, stream, ['',':',':'][i])
 
@@ -327,7 +355,7 @@ def getWeight(plt, curve):
 def gripperWeightTest(plt):
     x = np.arange(-180,180,1)
 
-    fig, sub_plots = plt.subplots(2, 2)
+    fig, sub_plots = plt.subplots(3, 3)
 
     default = []
     with open(BASE_DIR + tests_gripper_coupling[0]) as f:
@@ -335,14 +363,29 @@ def gripperWeightTest(plt):
 
     plotXYZ(sub_plots[0, 0], x, default)
 
-    for i in range(1, 4):
-        stream = []
-        print(tests_gripper_weight[i+1])
-        with open(BASE_DIR + tests_gripper_weight[i+1]) as f:
-            stream = pickle.load(f)
+    for i in range(len(tests_gripper_weight)):
+        test = []
+        print('\n%d - %s' % (i, tests_gripper_weight[i]))
+        with open(BASE_DIR + tests_gripper_weight[i]) as f:
+            test = pickle.load(f)
         
-        # correct(sub_plots[i/2, i%2], tests_gripper_weight[i+1])
-        # getWeight(sub_plots[i/2, i%2], tests_gripper_weight[i+1])
+        # Plot gripper
+        legend = tests_gripper_weight[i].split('/')[3].split('_')[1]
+        pos = i + 1
+        plotXYZ(sub_plots[pos/3, pos%3], x, test, title=legend)
+        plotXYZ(sub_plots[pos/3, pos%3], x, default, ':')
+
+        # Calculate curve that has the minimum amount of differences
+        diff = np.array(default) - np.array(test)
+        axes = ['X', 'Y', 'Z']
+        print('A - %f  %f' % (np.mean(diff), np.std(diff)))
+        for i in range(3):
+            print('%s - %f - %f' % (axes[i], np.mean(diff[:,i]), np.std(diff[:,i])))
+
+        # Plot the corrected curve
+        correct = np.array(test) - np.array(default)
+        plotXYZ(sub_plots[pos/3, pos%3], x, correct, '+')
+        sub_plots[pos/3, pos%3].plot(x, np.mean(correct, axis=1), 'k')
 
 
 def centerOfGravityTest(plt):
@@ -359,7 +402,7 @@ def main():
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    # compareCurves(plt, [tests_payload[6], tests_payload[14], tests_payload[18]])
+    # compareCurves(plt, tests_payload_gripper[6:9])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -389,15 +432,15 @@ def main():
     # correct(plt, tests_gripper_coupling[1])
     # getWeight(plt, tests_gripper_coupling[1])
 
-    # =====================
     # Test different payload values with gripper to get best match
     # gripperWeightTest(plt)
 
+    # =====================
     # Test different center of gravity values with gripper
-    centerOfGravityTest(plt)
+    # centerOfGravityTest(plt)
 
     # Test diffrente positions and payloads with gripper
-    gripperCorrect(plt)
+    # gripperCorrect(plt)
 
     plt.show()
 

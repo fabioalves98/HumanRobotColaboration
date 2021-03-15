@@ -24,7 +24,9 @@ def reset_ft_sensor():
         print("Service call failed: %s"%e)
 
 
-def plotXYZ(plt, x, array, line='', alpha=1):
+def plotXYZ(plt, x, array, line='', alpha=1, title=''):
     plt.plot(x, [t[0] for t in array], 'r' + line, alpha=alpha)
     plt.plot(x, [t[1] for t in array], 'g' + line, alpha=alpha)
     plt.plot(x, [t[2] for t in array], 'b' + line, alpha=alpha)
+    if title:
+        plt.set_title(title, loc='center')
