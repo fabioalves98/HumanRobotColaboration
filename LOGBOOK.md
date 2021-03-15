@@ -457,4 +457,7 @@
 
 #### Obter melhor peso do Gripper com várias posições e payloads
 
+- Voltar a tentar testar o melhor valor de payload introduzido no robot para ver se é possível obter uma única curva em várias posições
+
 - A curva do gripper não tem que ser necessariamente igual à curva sem gripper, no entanto, não pode mudar consoante a posição
+

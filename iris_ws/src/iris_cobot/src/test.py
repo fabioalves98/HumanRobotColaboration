@@ -54,7 +54,7 @@ def main():
     arm.velocity = 0.2
 
     # Move to default pos
-    arm.move_joints([0, radians(-90), 0, 0, 0, 0])
+    arm.move_joints([0, radians(-90), 0, 0, radians(90), 0])
 
     # Reset ft sensor
     # reset_ft_sensor()

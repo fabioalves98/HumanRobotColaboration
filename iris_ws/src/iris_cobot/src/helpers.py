@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-import rospy
+import rospy, rospkg, pickle
+import numpy as np
 from ur_msgs.srv import SetSpeedSliderFraction
 from std_srvs.srv import Trigger
 
@@ -24,9 +25,22 @@ def reset_ft_sensor():
         print("Service call failed: %s"%e)
 
 
+def openList(filename):
+    base_dir = rospkg.RosPack().get_path('iris_cobot')
+    
+    with open(base_dir + filename) as f:
+        return np.array(pickle.load(f))
+
+
 def plotXYZ(plt, x, array, line='', alpha=1, title=''):
+    array = np.array(array)
+
+    if array.shape == (3, 360):
+        array = array.transpose()
+
     plt.plot(x, [t[0] for t in array], 'r' + line, alpha=alpha)
     plt.plot(x, [t[1] for t in array], 'g' + line, alpha=alpha)
     plt.plot(x, [t[2] for t in array], 'b' + line, alpha=alpha)
+    
     if title:
         plt.set_title(title, loc='center')

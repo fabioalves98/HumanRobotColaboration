@@ -104,7 +104,7 @@ def main():
     rospy.init_node('wrench_listener', anonymous=True)
     signal.signal(signal.SIGINT, signal_handler)
 
-    global arm, correction
+    global arm, correction, stream, stream_count
 
     with open(BASE_DIR + '/curves/wrench_correct_mean.list') as f:
         correction = pickle.load(f)
@@ -136,47 +136,52 @@ def main():
             fig.canvas.flush_events()
     
     else:
-        # Set Arm joints
-        current_joints = arm.get_joints()
-        current_joints[0] = radians(0)
-        current_joints[1] = radians(-90)
-        current_joints[2] = radians(0)
-        current_joints[3] = radians(0)
-        current_joints[4] = radians(-90)
-        current_joints[5] = radians(0)
-        arm.move_joints(current_joints)
+        positions = [
+            [0, radians(-90), 0, 0, radians(90), 0],
+            [0, radians(-90), 0, 0, radians(45), 0],
+            [0, radians(-90), 0, 0, 0, 0],
+            [0, radians(-90), 0, 0, radians(-45), 0],
+            [0, radians(-90), 0, 0, radians(-90), 0],
+        ]
 
-        # Reset ft sensor
-        reset_ft_sensor()
+        for pos in positions:
+            # Set Arm joints
+            arm.move_joints(pos)
 
-        # Init temp stream
-        temp_stream = []
+            # Reset ft sensor
+            reset_ft_sensor()
 
-        # Move wrist 3
-        for i in range(-180, 180):
-            print(i, ' - ', len(stream))
-            current_joints[5] = radians(i)
-            arm.move_joints(current_joints)
-            time.sleep(0.2)
-            temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), statistics.mean(force[:,2])))
-            print('')
+            # Init temp stream
+            temp_stream = []
 
-        # Save samples of wrench in files
-        with open(BASE_DIR + '/record/TG5_3Kg_temp.list', 'w') as f:
-            print(len(temp_stream))
-            pickle.dump(temp_stream, f)
-        
-        with open(BASE_DIR + '/record/TG5_3Kg_full.list', 'w') as f:
-            print(len(stream))
-            pickle.dump(stream, f)
+            # Move wrist 3
+            for i in range(-180, 180):
+                print(i, ' - ', len(stream))
+                pos[5] = radians(i)
+                arm.move_joints(pos)
+                time.sleep(0.2)
+                temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
+                                    statistics.mean(force[:,2])))
+
+            # Save samples of wrench in files
+            with open(BASE_DIR + '/record/TG%d_1.4Kg_temp.list' % (positions.index(pos) + 1), 'w') as f:
+                print(len(temp_stream))
+                pickle.dump(temp_stream, f)
+            
+            with open(BASE_DIR + '/record/TG%d_1.4Kg_full.list' % (positions.index(pos) + 1), 'w') as f:
+                print(len(stream))
+                pickle.dump(stream, f)
+
+            stream = []
+            stream_count = 0
         
         # Plot results
-        plt.ylim([-7.5, 15])
-        plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
-        plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
-        plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
+        # plt.ylim([-7.5, 15])
+        # plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
+        # plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
+        # plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
 
-        plt.show()
+        # plt.show()
         
     rospy.spin()
 

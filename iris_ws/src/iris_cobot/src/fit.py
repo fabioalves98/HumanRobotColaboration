@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
 
-from helpers import plotXYZ
+from helpers import openList, plotXYZ
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
@@ -441,6 +441,15 @@ def gripperPayloadTest(plt, pos):
     plotXYZ(plt, x, heavier, '+')
 
 
+def gripperCorrectTest(plt):
+    for i in range(5):
+        x = np.arange(-180,180,1)
+        test = openList(tests_payload_gripper[i * 3 + 1])
+        plotXYZ(plt, x, test, [':', '', '+', '', ':'][i])
+
+    plotXYZ(plt, x, openList(correct_mean), '--')
+
+
 def main():
     rospy.init_node("fit", anonymous = False)
     
@@ -488,6 +497,7 @@ def main():
     # gripperPayloadTest(plt, pos)
 
     # Test more positions and minor payload changes with gripper
+    gripperCorrectTest(plt)
 
     plt.show()
 
