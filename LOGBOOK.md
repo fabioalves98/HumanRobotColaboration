@@ -447,7 +447,7 @@
 #### Testes com Gripper em diferentes posições e payloads
 
 - Testar o efeito de diferentes valores em diferentes posições
-- Teste Payload | Posição [1, 2, 3, 4, 5] | Payloas [0, 1.5, 3]
+- Teste Payload | Posição [1, 2, 3, 4, 5] | Payload [0, 1.5, 3]
 - **Resultado**
   - Tanto na posição 1 como 5 as curvas não apresentaram diferenças cosoante a alteração do payload, como era esperado
   - Nas posições 2, 3 e 4 as curvas apresntam diferenças nas magnitudes esperadas
@@ -458,6 +458,20 @@
 #### Obter melhor peso do Gripper com várias posições e payloads
 
 - Voltar a tentar testar o melhor valor de payload introduzido no robot para ver se é possível obter uma única curva em várias posições
-
 - A curva do gripper não tem que ser necessariamente igual à curva sem gripper, no entanto, não pode mudar consoante a posição
+- Teste Gripper | Posição 1 [1, 2, 3, 4, 5]  | Payloads [1.4, 1.5, 1.6]
+
+## 16/03 - IRISLab
+
+#### Conjunto extenso de poses de forma abrangir o maior número de orientações
+
+- Array de angulos - [-180, -135, -90, -45, 0, 45, 90, 135, 180]
+- 2 ciclos de iteração por este array e atribução de valor de junta a wrist_1 e wrist_2
+- Total de 70 posições
+
+#### Modelo teórico do comportamento do sensor de força quando o gripper está acopulado
+
+- 3 vetores com a orientação do Sensor
+- 1 vetor com magnitude e orientação da gravidade
+- Calcular teoricamente cada componente do vetor gravidade em cada 1 dos 3 eixos do sensor FT
 

@@ -3,6 +3,7 @@ import rospy, rospkg, pickle
 import numpy as np
 from ur_msgs.srv import SetSpeedSliderFraction
 from std_srvs.srv import Trigger
+from geometry_msgs.msg import Quaternion
 
 
 def set_speed_slider(self, speed):
@@ -44,3 +45,21 @@ def plotXYZ(plt, x, array, line='', alpha=1, title=''):
     
     if title:
         plt.set_title(title, loc='center')
+
+
+def orientation_to_list(orientation):
+    ori = []
+    ori.append(orientation.x)
+    ori.append(orientation.y)
+    ori.append(orientation.z)
+    ori.append(orientation.w)
+    return ori
+
+def list_to_orientation(ori_list):
+    orientation = Quaternion()
+    orientation.x = ori_list[0]
+    orientation.y = ori_list[1]
+    orientation.z = ori_list[2]
+    orientation.w = ori_list[3]
+    return orientation
+
