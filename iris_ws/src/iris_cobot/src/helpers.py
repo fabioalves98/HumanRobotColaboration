@@ -46,6 +46,12 @@ def plotXYZ(plt, x, array, line='', alpha=1, title=''):
     if title:
         plt.set_title(title, loc='center')
 
+def point_to_list(point):
+    p_list = []
+    p_list.append(point.x)
+    p_list.append(point.y)
+    p_list.append(point.z)
+    return p_list
 
 def orientation_to_list(orientation):
     ori = []

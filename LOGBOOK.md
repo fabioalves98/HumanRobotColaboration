@@ -475,3 +475,9 @@
 - 1 vetor com magnitude e orientação da gravidade
 - Calcular teoricamente cada componente do vetor gravidade em cada 1 dos 3 eixos do sensor FT
 
+## 17/03 - IRISLab
+
+
+
+- Utilização dos 4 vetores criados para obter, para cada eixo, o produto interno entre o vetor gravidade e o vetor orientação
+

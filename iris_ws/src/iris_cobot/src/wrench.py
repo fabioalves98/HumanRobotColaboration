@@ -17,7 +17,7 @@ stream = []
 force = np.empty([1, 3])
 
 # Live parameters
-stream_range = 100
+stream_range = 50
 stream_count = 0
 
 # Record parameters
@@ -137,11 +137,11 @@ def main():
     
     else:
         positions = [
-            [0, radians(-90), 0, 0, radians(90), 0],
-            [0, radians(-90), 0, 0, radians(45), 0],
-            [0, radians(-90), 0, 0, 0, 0],
-            [0, radians(-90), 0, 0, radians(-45), 0],
-            [0, radians(-90), 0, 0, radians(-90), 0],
+            # [0, radians(-90), 0, 0, radians(90), 0],
+            # [0, radians(-90), 0, 0, radians(45), 0],
+            [0, radians(-90), radians(-90), 0, 0, 0]
+            # [0, radians(-90), 0, 0, radians(-45), 0],
+            # [0, radians(-90), 0, 0, radians(-90), 0],
         ]
 
         for pos in positions:
@@ -159,16 +159,16 @@ def main():
                 print(i, ' - ', len(stream))
                 pos[5] = radians(i)
                 arm.move_joints(pos)
-                time.sleep(0.2)
+                time.sleep(1)
                 temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
                                     statistics.mean(force[:,2])))
 
             # Save samples of wrench in files
-            with open(BASE_DIR + '/record/TG%d_1.4Kg_temp.list' % (positions.index(pos) + 1), 'w') as f:
+            with open(BASE_DIR + '/record/TG3_theory_temp.list', 'w') as f:
                 print(len(temp_stream))
                 pickle.dump(temp_stream, f)
             
-            with open(BASE_DIR + '/record/TG%d_1.4Kg_full.list' % (positions.index(pos) + 1), 'w') as f:
+            with open(BASE_DIR + '/record/TG3_theory_full.list', 'w') as f:
                 print(len(stream))
                 pickle.dump(stream, f)
 
@@ -176,12 +176,12 @@ def main():
             stream_count = 0
         
         # Plot results
-        # plt.ylim([-7.5, 15])
-        # plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
-        # plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
-        # plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
+        plt.ylim([-7.5, 15])
+        plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
+        plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
+        plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
 
-        # plt.show()
+        plt.show()
         
     rospy.spin()
 

@@ -80,7 +80,7 @@ tests_cog = [
     '/record/6-09_03/T3_COG_100_temp.list',
     '/record/6-09_03/T3_COG_200_temp.list'
 ]
-# Perform in depth gripper curves with different payloads (0 - 3Kg)
+# Perform in depth gripper tests with different payloads (0 - 3Kg)
 tests_payload_gripper = [
     '/record/6-09_03/TG1_0Kg_temp.list',
     '/record/6-09_03/TG1_1.5Kg_temp.list',
@@ -98,6 +98,28 @@ tests_payload_gripper = [
     '/record/6-09_03/TG5_1.5Kg_temp.list',
     '/record/6-09_03/TG5_3Kg_temp.list'
 ]
+# 7 - 15/03
+# Perform in depth gripper tests with minor payload diferences and multiple positions
+tests_correct_gripper = [
+    '/record/7-15_03/TG1_1.4Kg_temp.list',
+    '/record/7-15_03/TG1_1.5Kg_temp.list',
+    '/record/7-15_03/TG1_1.6Kg_temp.list',
+    '/record/7-15_03/TG2_1.4Kg_temp.list',
+    '/record/7-15_03/TG2_1.5Kg_temp.list',
+    '/record/7-15_03/TG2_1.6Kg_temp.list',
+    '/record/7-15_03/TG3_1.4Kg_temp.list',
+    '/record/7-15_03/TG3_1.5Kg_temp.list',
+    '/record/7-15_03/TG3_1.6Kg_temp.list',
+    '/record/7-15_03/TG4_1.4Kg_temp.list',
+    '/record/7-15_03/TG4_1.5Kg_temp.list',
+    '/record/7-15_03/TG4_1.6Kg_temp.list',
+    '/record/7-15_03/TG5_1.4Kg_temp.list',
+    '/record/7-15_03/TG5_1.5Kg_temp.list',
+    '/record/7-15_03/TG5_1.6Kg_temp.list'
+]
+# 8 - 17/03
+# Create theoretical model for force sensor behavior
+test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -442,12 +464,25 @@ def gripperPayloadTest(plt, pos):
 
 
 def gripperCorrectTest(plt):
+    # Compare tests_payload_gripper 1.5 with tests_correct_gripper 1.5
+
+    # Compute best payload for gripper
+
     for i in range(5):
         x = np.arange(-180,180,1)
         test = openList(tests_payload_gripper[i * 3 + 1])
         plotXYZ(plt, x, test, [':', '', '+', '', ':'][i])
 
     plotXYZ(plt, x, openList(correct_mean), '--')
+
+def gripperTheoreticalModel(plt):
+    x = np.arange(-180,180,1)
+
+    # Corrected gripper curve
+    plotXYZ(plt, x, correct(None, openList(tests_gripper_coupling[1])), ':')
+
+    # Curve made with theoretical model of sensor behavior
+    plotXYZ(plt, x, openList(test_theory_sensor))
 
 
 def main():
@@ -456,7 +491,7 @@ def main():
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    # compareCurves(plt, [correct_mean, tests_payload_gripper[10]])
+    # compareCurves(plt, [test_theory_sensor, tests_gripper_coupling[1]])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -497,7 +532,10 @@ def main():
     # gripperPayloadTest(plt, pos)
 
     # Test more positions and minor payload changes with gripper
-    gripperCorrectTest(plt)
+    # gripperCorrectTest(plt)
+
+    # Showcase theoretical model for sensor behavior
+    # gripperTheoreticalModel(plt)
 
     plt.show()
 
