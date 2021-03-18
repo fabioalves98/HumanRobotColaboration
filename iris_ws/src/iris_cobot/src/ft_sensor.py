@@ -1,16 +1,28 @@
+#!/usr/bin/env python
+import sys, signal
+import rospy
+import numpy as np
+from math import radians
+from std_msgs.msg import ColorRGBA
+from tf.transformations import quaternion_multiply, quaternion_from_euler
+from tf2_geometry_msgs import do_transform_pose
+from visualization_msgs.msg import Marker
+from geometry_msgs.msg import TransformStamped, PoseStamped, Point, Vector3, WrenchStamped, Quaternion
+from moveit_commander.move_group import MoveGroupCommander
+
+from helpers import orientation_to_list, list_to_orientation, point_to_list
+
+
+def signal_handler(sig, frame):
+    print('')
+    sys.exit(0)
 
 
 def main():
-    rospy.init_node('test', anonymous=False)
+    rospy.init_node('ft_sensor', anonymous=False)
     signal.signal(signal.SIGINT, signal_handler)
 
-    global arm
-
-    arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
-    arm.velocity = 0.2
-
-    # Test
-    arm.move_pose([0.5, 0.5, 0.8, 0, 0, 0])
+    moveg = MoveGroupCommander('manipulator')
 
     m_x_pub = rospy.Publisher('mx_marker', Marker, queue_size=10)
     m_p_x_pub = rospy.Publisher('mpx_marker', Marker, queue_size=10)
@@ -24,7 +36,9 @@ def main():
     wrench_pub = rospy.Publisher('wrench', WrenchStamped, queue_size=1)
 
     while not rospy.is_shutdown():
-        origin = [0.5, 0.5, 0.5]
+        ee_ori = moveg.get_current_pose().pose.orientation
+
+        origin = [0.5, 0.5, 0]
 
         # Arrow x
         m_x = Marker()
@@ -34,8 +48,7 @@ def main():
         m_x.scale = Vector3(*[0.2, 0.02, 0.02])
 
         rot = quaternion_from_euler(0, 0, radians(-90))
-        arm_ori = orientation_to_list(arm.get_pose().orientation)
-        m_x_ori = quaternion_multiply(arm_ori, rot)
+        m_x_ori = quaternion_multiply(orientation_to_list(ee_ori), rot)
         m_x.pose.orientation = list_to_orientation(m_x_ori)
 
         m_x.pose.position  = Point(*origin)
@@ -49,8 +62,7 @@ def main():
         m_y.scale = Vector3(*[0.2, 0.02, 0.02])
 
         rot = quaternion_from_euler(0, radians(90), 0)
-        arm_ori = orientation_to_list(arm.get_pose().orientation)
-        m_y_ori = quaternion_multiply(arm_ori, rot)
+        m_y_ori = quaternion_multiply(orientation_to_list(ee_ori), rot)
         m_y.pose.orientation = list_to_orientation(m_y_ori)
 
         m_y.pose.position = Point(*origin)
@@ -63,7 +75,7 @@ def main():
         m_z.action = m_z.ADD
         m_z.scale = Vector3(*[0.2, 0.02, 0.02])
 
-        m_z.pose.orientation = arm.get_pose().orientation
+        m_z.pose.orientation = ee_ori
         m_z.pose.position = Point(*origin)
         m_z.color = ColorRGBA(*[0, 0, 1, 1])
 
@@ -182,6 +194,7 @@ def main():
         wrench_pub.publish(wrench)
 
         rospy.sleep(0.002)
+
 
 if __name__ == "__main__":
     main()

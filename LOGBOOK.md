@@ -477,7 +477,9 @@
 
 ## 17/03 - IRISLab
 
+#### Conclusão do modelo teórico do sensor
 
+- Utilização do produto interno dos vetores normalizados anteriormente definidos para calculo do valor da força em cada componente
 
-- Utilização dos 4 vetores criados para obter, para cada eixo, o produto interno entre o vetor gravidade e o vetor orientação
+## 18/03 - IRISLab
 

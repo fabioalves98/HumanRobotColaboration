@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from helpers import reset_ft_sensor, set_speed_slider
-from sami.arm import Arm # pylint: disable=import-error, no-name-in-module
+from sami.arm import Arm
 
 arm = None
 correction = None
@@ -30,25 +30,6 @@ BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 def signal_handler(sig, frame):
     print('')
     sys.exit(0)
-
-
-def evaluateForce(x, y, z):
-    global grip_ready
-    grip_ready -= 1
-    release, grip = False, False
-    if abs(x) > force_limit:
-        grip = True
-    if abs(y) > force_limit or z > force_limit:
-        release = True
-    
-    if grip_ready < 0:
-        if release:
-            print('Release')
-            grip_ready = 500
-
-        if grip:
-            print('Grip')
-            grip_ready = 500
 
 
 def setPlotData(plts, data):
@@ -74,30 +55,6 @@ def wrench(data):
 
     if stream_count > stream_range:
         force = np.delete(force, 0, 0)
-
-
-    # # Integration of the force values
-    # if integral_idx > integral_range:
-    #     # X Mean in integral range
-    #     x_i_temp = f_x_values[-1 - integral_range : -1]
-    #     x_i_sub = []
-    #     for i in range(1, len(x_i_temp)):
-    #         x_i_sub.append(x_i_temp[i] - x_i_temp[i-1])
-    #     f_x_i_values.append(statistics.mean(x_i_sub))
-    #     # Y Mean in integral range
-    #     y_i_temp = f_y_values[-1 - integral_range : -1]
-    #     y_i_sub = []
-    #     for i in range(1, len(y_i_temp)):
-    #         y_i_sub.append(y_i_temp[i] - y_i_temp[i-1])
-    #     f_y_i_values.append(statistics.mean(y_i_sub))
-    #     # z Mean in integral range
-    #     z_i_temp = f_z_values[-1 - integral_range : -1]
-    #     z_i_sub = []
-    #     for i in range(1, len(z_i_temp)):
-    #         z_i_sub.append(z_i_temp[i] - z_i_temp[i-1])
-    #     f_z_i_values.append(statistics.mean(z_i_sub))
-    # else:
-    #     integral_idx += 1
          
 
 def main():
@@ -123,7 +80,7 @@ def main():
         plt.ion()
         fig, (f) = plt.subplots(1)
 
-        f.set(ylim=(-10, 10))
+        f.set(ylim=(-15, 15))
         f.set(xlim=(0, stream_range))
 
         x_plt, = f.plot(range(0, len(force[:, 0])), force[:, 0], 'r')
