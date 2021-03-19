@@ -35,10 +35,12 @@ def main():
 
     wrench_pub = rospy.Publisher('wrench', WrenchStamped, queue_size=1)
 
+    weight = 1.5
+
     while not rospy.is_shutdown():
         ee_ori = moveg.get_current_pose().pose.orientation
 
-        origin = [0.5, 0.5, 0]
+        origin = [0.6, 0.6, 1.4]
 
         # Arrow x
         m_x = Marker()
@@ -182,9 +184,9 @@ def main():
         v_g = v_g / np.linalg.norm(v_g)
         
         # Obtain force
-        f_x = np.inner(v_x, v_g) * 15
-        f_y = np.inner(v_y, v_g) * 15
-        f_z = np.inner(v_z, v_g) * 15
+        f_x = np.inner(v_x, v_g) * weight * 10
+        f_y = np.inner(v_y, v_g) * weight * 10
+        f_z = np.inner(v_z, v_g) * weight * 10
 
         # Wrench pub
         wrench = WrenchStamped()

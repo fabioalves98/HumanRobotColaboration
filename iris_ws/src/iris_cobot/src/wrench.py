@@ -80,7 +80,7 @@ def main():
         plt.ion()
         fig, (f) = plt.subplots(1)
 
-        f.set(ylim=(-15, 15))
+        f.set(ylim=(-17, 17))
         f.set(xlim=(0, stream_range))
 
         x_plt, = f.plot(range(0, len(force[:, 0])), force[:, 0], 'r')

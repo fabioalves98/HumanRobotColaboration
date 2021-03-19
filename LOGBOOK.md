@@ -460,6 +460,9 @@
 - Voltar a tentar testar o melhor valor de payload introduzido no robot para ver se é possível obter uma única curva em várias posições
 - A curva do gripper não tem que ser necessariamente igual à curva sem gripper, no entanto, não pode mudar consoante a posição
 - Teste Gripper | Posição 1 [1, 2, 3, 4, 5]  | Payloads [1.4, 1.5, 1.6]
+- **Resultado**
+  - Os testes são repetíveis - caso de exemplo 1.5kg
+  - Estas diferenças no payload são representadas nos resultados, sendo que 1.5Kg é o valor que mais se aproximo à curva default (sem gripper)
 
 ## 16/03 - IRISLab
 
@@ -483,3 +486,14 @@
 
 ## 18/03 - IRISLab
 
+#### Teste de COG no robot real
+
+- Com uma tabua de um metro acopulada ao gripper numa posição horizontal, colocar em ambas as extremidades um peso de ~1Kg para ver se a força sentida pelo sensor é a mesma
+  - Apesar de não ser exatamente a mesma, as diferenças não sao significativas nem apresentam um padrão
+  - Obviamente o torque sentido pelo sensor é inverso quando colocamos o objeto do lado contrário da tábua
+
+#### Teste de Correção do Gripper
+
+- Em cada 1 das 70 posições de writs_1 e wrist_2 fazer o wrist_3 girar em 360 e obter os resultados obtidos com o modelo teórico
+- Nas mesmas 70 posições obter os resultados obter os resultados com o robot real
+- Fazer um merge e criar um modelo de correção, sendo que em cada posição do robot real, o valor de força deve ser 0

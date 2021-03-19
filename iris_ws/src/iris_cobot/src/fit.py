@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 import rospy, rospkg, pickle
-
-from math import radians
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
@@ -464,16 +462,31 @@ def gripperPayloadTest(plt, pos):
 
 
 def gripperCorrectTest(plt):
+    x = np.arange(-180,180,1)
+
     # Compare tests_payload_gripper 1.5 with tests_correct_gripper 1.5
+    # for i in range(5):
+    #     test_before = openList(tests_payload_gripper[i*3+1])
+    #     plotXYZ(plt, x, test_before, [':', '', '+', '', ':'][i], 0.5)
 
-    # Compute best payload for gripper
+    #     test_after = openList(tests_correct_gripper[i*3+1])
+    #     plotXYZ(plt, x, test_after, [':', '', '+', '', ':'][i])
 
+    # Compare tests_payload_gripper 1.4 1.5 1.6
     for i in range(5):
-        x = np.arange(-180,180,1)
-        test = openList(tests_payload_gripper[i * 3 + 1])
-        plotXYZ(plt, x, test, [':', '', '+', '', ':'][i])
+        test_1_4 = openList(tests_correct_gripper[i*3])
+        plotXYZ(plt, x, test_1_4, '--')
 
-    plotXYZ(plt, x, openList(correct_mean), '--')
+        test_1_5 = openList(tests_correct_gripper[i*3 + 1])
+        plotXYZ(plt, x, test_1_5)
+
+        test_1_6 = openList(tests_correct_gripper[i*3 + 2])
+        plotXYZ(plt, x, test_1_6, '+')
+
+    #     # print("\nShowing %s" % tests_correct_gripper[i])
+    #     # plt.show()
+    #     # plt.cla()
+    
 
 def gripperTheoreticalModel(plt):
     x = np.arange(-180,180,1)
@@ -483,6 +496,17 @@ def gripperTheoreticalModel(plt):
 
     # Curve made with theoretical model of sensor behavior
     plotXYZ(plt, x, openList(test_theory_sensor))
+
+    theory = openList(test_theory_sensor)
+
+    weight = np.empty(360)
+    weight = np.sqrt( np.power(theory[:,0], 2) + np.power(theory[:,1], 2) +
+                      np.power(theory[:,2], 2))
+    print('Mean Weight - ', np.mean(weight))
+    plt.plot(x, weight, 'k')
+
+
+
 
 
 def main():
@@ -535,7 +559,7 @@ def main():
     # gripperCorrectTest(plt)
 
     # Showcase theoretical model for sensor behavior
-    # gripperTheoreticalModel(plt)
+    gripperTheoreticalModel(plt)
 
     plt.show()
 
