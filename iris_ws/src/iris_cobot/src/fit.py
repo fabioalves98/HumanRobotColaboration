@@ -119,6 +119,9 @@ tests_correct_gripper = [
 # Create theoretical model for force sensor behavior
 test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 
+test_random = '/record/TCG16_-90_-180_temp.list'
+test_random_2 = '/record/TCG17_-90_-135_temp.list'
+
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
     
@@ -506,16 +509,13 @@ def gripperTheoreticalModel(plt):
     plt.plot(x, weight, 'k')
 
 
-
-
-
 def main():
     rospy.init_node("fit", anonymous = False)
     
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    # compareCurves(plt, [test_theory_sensor, tests_gripper_coupling[1]])
+    compareCurves(plt, [test_random, test_random_2])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -559,7 +559,7 @@ def main():
     # gripperCorrectTest(plt)
 
     # Showcase theoretical model for sensor behavior
-    gripperTheoreticalModel(plt)
+    # gripperTheoreticalModel(plt)
 
     plt.show()
 

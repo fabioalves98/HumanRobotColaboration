@@ -495,5 +495,23 @@
 #### Teste de Correção do Gripper
 
 - Em cada 1 das 70 posições de writs_1 e wrist_2 fazer o wrist_3 girar em 360 e obter os resultados obtidos com o modelo teórico
-- Nas mesmas 70 posições obter os resultados obter os resultados com o robot real
+- Nas mesmas 70 posições obter os resultados obter os resultados com o robot real com gripper e um payload de 1.5Kg
 - Fazer um merge e criar um modelo de correção, sendo que em cada posição do robot real, o valor de força deve ser 0
+
+## 19/03 - Reunião
+
+- Continuar
+
+## 23/03 - IRISLab
+
+#### Teste Correção do Gripper
+
+- Pasta F-Wrench
+
+- 70 posições reduzidas para 54 por causa de duplicados (180 = -180)
+- Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} 
+- TCx_w1_w2 
+  - Teste das 54 posições sem gripper e Payload 0kg
+
+- **Resultado - **Maioria destes testes inutilizaveis devido a uma atenuação dos valores das curvas por motivos desconhecidos
+  - Alguns testes com gripper com valores inbutilizaveis devido à pressao feita pelo cabo do gripper nas posições mais extremas

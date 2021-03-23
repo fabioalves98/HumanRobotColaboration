@@ -2,7 +2,7 @@
 
 # State of the Art
 
-## 2019 - Human–robot interaction in industrial collaborative robotics: a literature review of the decade
+## 1 - 2019 - Human–robot interaction in industrial collaborative robotics: a literature review of the decade
 
 - **HRI -** the process of conveying human intentions and interpreting task descriptions into a sequence of robot motions complying with robot capabilities and working requirements
 
@@ -21,30 +21,30 @@
   - (i) Physical collaboration where an explicit and intentional contact with forces exchange exists between human and robot [23]. By measuring or estimating these forces/torques [10], the robot can predict human motion intentions and react accordingly [24,25]. 
   - (ii) Contactless collaboration where no physical interaction exists. In such a case, actions are coordinated from information exchange which can be achieved via direct communication (speech, gestures, etc.), or indirect communication (intentions recognition, eye gaze direction, facial expressions, etc.) [26,27]. In such scenarios, the operator performs task parts requiring dexterity or decision-making, while the robot realizes parts that are not well suited to direct human involvement (repetitive or high-force applications, chemical deposition, precision placement, etc.)
 
-<img src="screenshots/papers/1.png" width=100%>
+<img src="screenshots/papers/1/1.png" width=100%>
 
-<img src="screenshots/papers/2.png" width=50%>
+<img src="screenshots/papers/1/2.png" width=50%>
 
-<img src="screenshots/papers/3.png" width=100%>
+<img src="screenshots/papers/1/3.png" width=100%>
 
 > Boa tabela de comparação de artigos
 
 #### Safety in Industrial Robots
 
-<img src="screenshots/papers/4.png" width=100%>
+<img src="screenshots/papers/1/4.png" width=100%>
 
 - Distributed real-time approach based on a 3D simulation [117]
   - 121, 122, 123, 304
 - Real-time collision avoidance approach based on depth sensor [119]
 - Pre-collision algorithms and virtual reality tools [154]
 
-<img src="screenshots/papers/5.png" width=60%>
+<img src="screenshots/papers/1/5.png" width=60%>
 
 > Capítulo com bué conteudo em referências
 
 #### Cognitive Human Robot Interactions
 
-<img src="screenshots/papers/6.png" width=90%>
+<img src="screenshots/papers/1/6.png" width=90%>
 
 - Human actions recognition [192-194]
 - Gestures recognition [201]
@@ -55,7 +55,7 @@
 
 #### Robot Programming Approaches
 
-<img src="screenshots/papers/7.png" width=90%>
+<img src="screenshots/papers/1/7.png" width=90%>
 
 - Generation of Robotic Skills [216]
 - Augmented and Virtual Reality [215]
@@ -65,7 +65,7 @@
 
 #### Human Robot Tasks Allocation
 
-<img src="screenshots/papers/8.png" width=90%>
+<img src="screenshots/papers/1/8.png" width=90%>
 
 - Ontology-based Knowledge
   - Simplify user interface [93, 222]
@@ -93,12 +93,50 @@
 
 
 
+## 2 - 2019 - Human–Robot Collaboration in Manufacturing Applications: A Review
 
+- Concept of cobots invented in 1996 [2]
+- Classification of human robot interaction [7]
+  - **Coexistence - **Human operator and cobot are in the ame environment but do not interact with each other
+  - **Synchronised - **Human operator and cobot work in the same workspace, but at different times
+  - **Cooperation - **Human operator and cobot work in the same workspace at the same time, though focusing on separate tasks
+  - **Collaboration - **Human operator and the cobot must execute a task together, the action of the one has immediate consequences on the other, thaks to special sensors and vision systems
 
-- Facilitating Human–Robot Collaborative Tasks by TLC From Human Demonstrations - 2019
-- Toward Safe Close-Proximity Human-Robot Interaction with Standard Industrial Robots - 2014
-- Survey on Human-Robot Interaction for Robot Programming in Industrial Applications - 2018
-- Safety in Human-Robot Collaboration - 2016
-- Human-Robot Interaction for Cooperative Manipulation - 2007
-- Human-Robot Collaboration in Manufacturing Applications - 2019
-- Emerging Research Fields in Safety and Ergonomics in Industrial Collaborative Robotics - 2020
+<img src="screenshots/papers/2/1.png" width=90%>
+
+- Other classifications [8-11]
+- Safety requirements for cobots
+  - **Safety-rated Monitored Stop (SMS) - **used to cease robot motion in the collabortice workspace before an operator enter the collaborative workspace
+  - **Hand-guiding (HG) - **where an operator uses a hand-operated device, locate at or nead the robot end-effector, to transmit motion commands to the robot
+  - **Speed and separation monitoring (SSM) - **where the robot system and operator may move concurrently in the collaborative workspace. During robot motion, the orbot system never gets closer to the operator than the protective separaton distance
+  - **Power and force limitting (PFL) - **where the robot system shall be designed to adequatly reduce risk to an operator by not exceeding the applicable threshlod limit values
+- Defined in [13], cobots should be equipped with additional features such as force and toque sensors, force limits, vision systems (cameras), laser systems, anti-collision systems, recognition of voice commands, and / or system to coordinate the actions of human operators with their motion
+- Robot learning from demonstratoin [15] - **IMPORTANTE**
+- Table comparing humans, cobots and tobots
+  - Assembly - attatching 2 or more components
+  - Placement - positiong each part in the proper position
+  - Handling - manipulation of the picked part
+  - Picking - tacking from the feeding point
+
+<img src="screenshots/papers/2/2.png" width=90%>
+
+- Collaborative robots are especially advantageous for assembly tasks, particularly if the task is executed with a human operator. They are also suitable for pick and place applications, though the adoption of a traditional robot or a handling system can offer better results in terms of speed, precision, and payload
+- Aplications of cobots in this review
+  - Assembly - when the cobot collaborated with the operator in an assembly process
+  - Human Assistance - when the cobot acts as an ergonomic support for the operator
+  - Machine Tending - when the cobot performs loading / unloading operations
+- Physical human-robot interaction in 6DOF [28] - **IMPORTANTE**
+- End-effector precise hand-guiding for collaborative robots [30] - **IMPORTANTE**
+- **Results of the review**
+  - Cobots are being researched more than tobots
+  - The most used control system is vision
+  - The most used methodologie was hand guiding but the others were aso used
+  - The most researched task was assembly, by a large margin
+  - To increase safety, productivity and task performance, researchers will need to improve planners, environment and task understanding, operator intention understanding and ergonomic cell setups
+  - To imporve HRI systems, common future work focuses on increasing the robots' and operators' awareness of the task and environment by object redognition and integrating multi-modal sensing in an intuitive manner for the operator
+- **Trends of Market**
+  - Robot market is going ot grow
+  - The fall in robot prices has led to a growing market for cobots
+  - Small and medium sized enterprises could not afford robotic applications due to the high capital costs
+- Trust-based compliant robot-human handovers of payloads [29] - **IMPORTANTE**
+- Table with the reviewed papers
