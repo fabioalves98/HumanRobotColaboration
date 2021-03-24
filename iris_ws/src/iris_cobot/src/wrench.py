@@ -99,9 +99,9 @@ def main():
         # ]
 
         angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-        forbidden = [(45, -180),  (45, -135), (45, -90),
+        forbidden = [(45, -180),  (45, -135),
                     (90, -180),  (90, -135), (90, 135),
-                    (135, -180), (135, 135)]
+                    (135, -180),  (135, 135)]
         idx = 0
         for w_1 in angles:
             for w_2 in angles:
@@ -129,11 +129,11 @@ def main():
                                             statistics.mean(force[:,2])))
 
                     # Save samples of wrench in files
-                    with open(BASE_DIR + '/record/TC%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
+                    with open(BASE_DIR + '/record/TCG%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
                         print(len(temp_stream))
                         pickle.dump(temp_stream, f)
                     
-                    with open(BASE_DIR + '/record/TC%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
+                    with open(BASE_DIR + '/record/TCG%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
                         print(len(stream))
                         pickle.dump(stream, f)
 

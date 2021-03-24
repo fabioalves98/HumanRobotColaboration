@@ -60,45 +60,42 @@ def main():
     poses_pub = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=10)
     markers = []
 
-    # Move in various positions
-    # angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-    # forbidden = [(45, -180),  (45, -135), (45, -90),
-    #              (90, -180),  (90, -135), (90, 135),
-    #              (135, -180), (135, 90),  (135, 135)]
-    # idx = 0
-    # for w_1 in angles:
-    #     for w_2 in angles:
-            
-    #         if (w_1, w_2) not in forbidden:
-    #             print('\nWrist 1 - %d' % w_1)
-    #             print('Wrist 2 - %d' % w_2)
-    #             print('Idx - %d' % idx)
+    # # Move in various positions
+    angles = [-180, -135, -90, -45, 0, 45, 90, 135]
+    forbidden = [(45, -180),  (45, -135),
+                 (90, -180),  (90, -135), (90, 135),
+                 (135, -180),  (135, 135)]
+    idx = 0
+    for w_1 in angles:
+        for w_2 in angles:
+            if (w_1, w_2) not in forbidden:
+                print('Idx - %d - %d - %d' % (idx, w_1, w_2))
 
-    #             arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
+                arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
 
-    #             marker = Marker()
-    #             marker.header.frame_id = "base_link"
-    #             marker.header.stamp = rospy.Time()
-    #             marker.id = idx
-    #             idx += 1
-    #             marker.type = marker.ARROW
-    #             marker.action = marker.ADD
-    #             marker.scale = Vector3(*[0.1, 0.01, 0.01])
-    #             ee_pose = arm.get_pose()
-    #             marker.pose = ee_pose
-    #             print('Orientation - %s' % str(ee_pose.orientation))
-    #             marker.color = ColorRGBA(*[1, 1, 0, 1])
+                marker = Marker()
+                marker.header.frame_id = "base_link"
+                marker.header.stamp = rospy.Time()
+                marker.id = idx
+                idx += 1
+                marker.type = marker.ARROW
+                marker.action = marker.ADD
+                marker.scale = Vector3(*[0.1, 0.01, 0.01])
+                ee_pose = arm.get_pose()
+                marker.pose = ee_pose
+                print('Orientation - %s' % str(ee_pose.orientation))
+                marker.color = ColorRGBA(*[1, 1, 0, 1])
 
-    #             markers.append(marker)
+                markers.append(marker)
 
-    #             poses_pub.publish(markers)
+                poses_pub.publish(markers)
 
 
     # Move to default pos
-    arm.move_joints([0, radians(-90), 0, radians(135), radians(90), 0])
+    # arm.move_joints([0, radians(-90), 0, radians(45), radians(-90), 0])
 
-    # Reset ft sensor
-    helpers.reset_ft_sensor()
+    # # Reset ft sensor
+    # helpers.reset_ft_sensor()
     
     # for i in range (-180, 180, 20):
     #     arm.move_joints([0, radians(-90), 0, 0, 0, radians(i)])
