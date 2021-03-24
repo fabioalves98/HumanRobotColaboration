@@ -98,7 +98,7 @@ tests_payload_gripper = [
 ]
 # 7 - 15/03
 # Perform in depth gripper tests with minor payload diferences and multiple positions
-tests_correct_gripper = [
+tests_payload_gripper_minor = [
     '/record/7-15_03/TG1_1.4Kg_temp.list',
     '/record/7-15_03/TG1_1.5Kg_temp.list',
     '/record/7-15_03/TG1_1.6Kg_temp.list',
@@ -119,8 +119,9 @@ tests_correct_gripper = [
 # Create theoretical model for force sensor behavior
 test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 
-test_random = '/record/TCG16_-90_-180_temp.list'
-test_random_2 = '/record/TCG17_-90_-135_temp.list'
+# 9 - 24/03
+# Test robot FT sensor without gripper along wrist_3 in 56 diferent positions
+tests_56_no_gripper = '/record/TC'
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -464,34 +465,34 @@ def gripperPayloadTest(plt, pos):
     plotXYZ(plt, x, heavier, '+')
 
 
-def gripperCorrectTest(plt):
+def gripperPayloadMinorTest(plt):
     x = np.arange(-180,180,1)
 
-    # Compare tests_payload_gripper 1.5 with tests_correct_gripper 1.5
+    # Compare tests_payload_gripper 1.5 with tests_payload_gripper_minor 1.5
     # for i in range(5):
     #     test_before = openList(tests_payload_gripper[i*3+1])
     #     plotXYZ(plt, x, test_before, [':', '', '+', '', ':'][i], 0.5)
 
-    #     test_after = openList(tests_correct_gripper[i*3+1])
+    #     test_after = openList(tests_payload_gripper_minor[i*3+1])
     #     plotXYZ(plt, x, test_after, [':', '', '+', '', ':'][i])
 
     # Compare tests_payload_gripper 1.4 1.5 1.6
     for i in range(5):
-        test_1_4 = openList(tests_correct_gripper[i*3])
+        test_1_4 = openList(tests_payload_gripper_minor[i*3])
         plotXYZ(plt, x, test_1_4, '--')
 
-        test_1_5 = openList(tests_correct_gripper[i*3 + 1])
+        test_1_5 = openList(tests_payload_gripper_minor[i*3 + 1])
         plotXYZ(plt, x, test_1_5)
 
-        test_1_6 = openList(tests_correct_gripper[i*3 + 2])
+        test_1_6 = openList(tests_payload_gripper_minor[i*3 + 2])
         plotXYZ(plt, x, test_1_6, '+')
 
-    #     # print("\nShowing %s" % tests_correct_gripper[i])
+    #     # print("\nShowing %s" % tests_payload_gripper_minor[i])
     #     # plt.show()
     #     # plt.cla()
     
 
-def gripperTheoreticalModel(plt):
+def gripperTheoreticalTest(plt):
     x = np.arange(-180,180,1)
 
     # Corrected gripper curve
@@ -509,13 +510,39 @@ def gripperTheoreticalModel(plt):
     plt.plot(x, weight, 'k')
 
 
+def gripperCorrectTest(plt):
+    x = np.arange(-180,180,1)
+
+    angles = [-180, -135, -90, -45, 0, 45, 90, 135]
+    forbidden = [(45, -180),  (45, -135), (45, -90),
+                (90, -180),  (90, -135), (90, 135),
+                (135, -180), (135, 135)]
+    
+    wrist_1_2_pos = []
+    for w_1 in angles:
+        for w_2 in angles:
+            if (w_1, w_2) not in forbidden:
+                wrist_1_2_pos += [(w_1, w_2)]
+
+    for i in range(len(wrist_1_2_pos)):
+        try:
+            (w_1, w_2) = wrist_1_2_pos[i]
+            test = openList('%s%d_%d_%d_temp.list' % (tests_56_no_gripper, i, w_1, w_2))
+            print('Opened - %d - %d - %d' % (i, w_1, w_2))
+            plotXYZ(plt, x, test)
+            plt.show()
+            plt.cla()
+        except IOError:
+            print('Test does not exist')
+            break
+
 def main():
     rospy.init_node("fit", anonymous = False)
     
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    compareCurves(plt, [test_random, test_random_2])
+    # compareCurves(plt, [test_random, test_random_2])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -556,10 +583,13 @@ def main():
     # gripperPayloadTest(plt, pos)
 
     # Test more positions and minor payload changes with gripper
-    # gripperCorrectTest(plt)
+    # gripperPayloadMinorTest(plt)
 
     # Showcase theoretical model for sensor behavior
-    # gripperTheoreticalModel(plt)
+    # gripperTheoreticalTest(plt)
+
+    # Test 56 positions in order to correct FT sensor
+    gripperCorrectTest(plt)
 
     plt.show()
 

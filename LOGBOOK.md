@@ -508,10 +508,24 @@
 
 - Pasta F-Wrench
 
-- 70 posições reduzidas para 54 por causa de duplicados (180 = -180)
+- 70 posições reduzidas para 56 por causa de duplicados (180 = -180)
 - Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} 
 - TCx_w1_w2 
-  - Teste das 54 posições sem gripper e Payload 0kg
+  - Teste das 56 posições sem gripper e Payload 0kg
 
-- **Resultado - **Maioria destes testes inutilizaveis devido a uma atenuação dos valores das curvas por motivos desconhecidos
-  - Alguns testes com gripper com valores inbutilizaveis devido à pressao feita pelo cabo do gripper nas posições mais extremas
+- **Resultado - **Maioria destes testes inutilizáveis devido a uma atenuação dos valores das curvas por motivos desconhecidos
+  - Alguns testes com gripper com valores inutilizáveis devido à pressão feita pelo cabo do gripper nas posições mais extremas
+
+## 24/03 - IRISLab
+
+- A razão pela qual os testes anteriores estavam a apresentar uma atenuação nos valores das curvas devese ao facto da fila que guardava os valores de força estar a aumentar de tamanho, para o sobro a cada teste
+
+#### Teste Correção Gripper (Repeat)
+
+- Pasta F-Wrench
+- 70 posições reduzidas para 56 por causa de duplicados (180 = -180)
+- Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} 
+- TCx_w1_w2 
+  - Teste das 56 posições sem gripper e Payload 0kg
+- TCG_w1_w1
+  - Teste das 56 posições com gripper e Payload 1.5kg (sem cabo)

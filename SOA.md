@@ -87,11 +87,27 @@
 - Error Diagnosis
 - Recovery
 
-#### Open Issues on Cobots
+### Papers Para Ler
 
-- Paper importante [325]
+- [7] - Human centered assistance applications for the working environment of the future. 2015
+- [14] - Evaluation of flexible graphical user interface for intuitive human robot interactions. 2014
+- [18] - Integration of active and passive compliance control for safe human-robot coexistence. 2009
+- [19] - A design approach for incorporating task coordination for human-robot coexistence within assembly systems. 2015
+- [21] - Integrated control for PHRI: collision avoidance, detection, reaction and collaboration. 2012
+- [22] - A brief review on safety strategies of physical human-robot interaction. 2019
+- [23] - A depth space approach for evaluating distance to objects. 2015
+- [24] - Multimodal control for human-robot cooperation. 2013
+- [27] - Planning safe and legible hand-over motions for human-robot interaction. 2010
+- [28] - Study on application of a human-robot collaborative system using hand-guiding in a production line. 2016
+- [44] - Ros based coordination of human robot cooperative assembly tasks. 2015
+- [49] - Human-robot physical interaction and collaboration using an industrial robot with a closed control architecture. 2013
+- [55] - Optimized assistive human–robot interaction using reinforcement learning. 2016
+- [60] - Introducing robots without creating fear of unemployment and high cost in industries. 2018
+- [70] - Human-robot collaboration for tooling path guidance. 2016
+- [88] - Real-time computation of distance to dynamic obstacles with multiple depth sensors. 2016
+- [100] - Working together: a review on safe human-robot collaboration in industrial environments. 2017
 
-
+- [325] - Key challenges and open issues of industrial collaborative robotics. 2018
 
 ## 2 - 2019 - Human–Robot Collaboration in Manufacturing Applications: A Review
 
