@@ -106,7 +106,27 @@
 - [70] - Human-robot collaboration for tooling path guidance. 2016
 - [88] - Real-time computation of distance to dynamic obstacles with multiple depth sensors. 2016
 - [100] - Working together: a review on safe human-robot collaboration in industrial environments. 2017
-
+- [104] - Toward safe human robot collaboration by using multiple kinects based real-time human tracking. 2014
+- [117] - A real time distributed approach to collision avoidance for industrial manipulators. 2014
+- [119] - A depth space approach to human-robot collision avoidance. 2012
+- [124] - A general procedure for collision detection between an industrial robot and the environment. 2015
+- [167] - Cooperative tasks between humans and robots in industrial environments. 2012
+- [170] - Safety-aware trajectory scaling for human-robot collaboration with prediction of human occupancy. 2015
+- [190] - Design of a collaborative architecture for human-robot assembly tasks. 2017
+- [191] - A user-adaptive gesture recognition system applied to human-robot collaboration in factories. 2016
+- [192] - Action recognition for human robot interaction in industrial applications. 2015
+- [195] - A proposed gesture set for the control of industrial collaborative robots. 2012
+- [197] - On a human-robot collaboration in an assembly cell. 2017
+- [200] - Dynamic time warping for gesture-based user identification and authentication with kinect. 2013
+- [217] - Intuitive and model-based on-line programming of industrial robots: a modular on-line programming environment. 2008
+- [218] - Spatial programming for industrial robots through task demonstration. 2013
+- [221] - Human–robot interaction review and challenges on task planning and programming. 2016
+- [229] - Costar: instructing collaborative robots with behavior trees and vision. 2017
+- [288] - How human-robot teamwork will upend manufacturing. 2014
+- [293] - Manual guidance for industrial robot programming. 2015
+- [310] - On a new generation of torque controlled light-weight robots. 2001
+- [319] - Collision-free motion planning for human-robot collaborative safety under cartesian constraint. 2018
+- [321] - Survey on human–robot collaboration in industrial settings: safety, intuitive interfaces and applications. 2018
 - [325] - Key challenges and open issues of industrial collaborative robotics. 2018
 
 ## 2 - 2019 - Human–Robot Collaboration in Manufacturing Applications: A Review
@@ -156,3 +176,11 @@
   - Small and medium sized enterprises could not afford robotic applications due to the high capital costs
 - Trust-based compliant robot-human handovers of payloads [29] - **IMPORTANTE**
 - Table with the reviewed papers
+
+### Papers Para Ler
+
+- [15] - Robot learning from demonstration in robotic assembly: A survey. 2018
+- [28] - Physical human–robot interaction (pHRI) in 6 DOF with asymmetric cooperation. 2017
+- [29] - Trust-based compliant robot-human handovers of payloads in collaborative assembly in flexible manufacturing. 2016
+- [30] - End-effector precise hand-guiding for collaborative robots. 2017
+

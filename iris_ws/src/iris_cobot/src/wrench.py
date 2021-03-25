@@ -106,10 +106,6 @@ def main():
         for w_1 in angles:
             for w_2 in angles:
                 if (w_1, w_2) not in forbidden:
-                    if idx != 24 and idx < 30:
-                        idx += 1
-                        continue
-                    
                     # Set Arm joints
                     arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
 

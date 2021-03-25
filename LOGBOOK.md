@@ -508,7 +508,7 @@
 
 - Pasta F-Wrench
 
-- 70 posições reduzidas para 56 por causa de duplicados (180 = -180)
+- 70 posições reduzidas para 57 por causa de duplicados (180 = -180) e posições impossíveis de posicionar o robot (colisões)
 - Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} 
 - TCx_w1_w2 
   - Teste das 56 posições sem gripper e Payload 0kg
@@ -523,9 +523,30 @@
 #### Teste Correção Gripper (Repeat)
 
 - Pasta F-Wrench
-- 70 posições reduzidas para 56 por causa de duplicados (180 = -180)
+- 70 posições reduzidas para 57 por causa de duplicados (180 = -180) e posições impossíveis de posicionar o robot (colisões)
 - Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} 
 - TCx_w1_w2 
-  - Teste das 56 posições sem gripper e Payload 0kg
+  - Teste das 57 posições sem gripper e Payload 0kg
 - TCG_w1_w1
-  - Teste das 56 posições com gripper e Payload 1.5kg (sem cabo)
+  - Teste das 57 posições com gripper e Payload 1.5kg (sem cabo)
+- **Resultado**
+  - Testes sem gripper tem divergências muito pequenas entre si, sendo possível extrair uma curva média de todos os testes sendo que o máximo de erro que poderá existir será de 1.5N
+  - Tests com gripper apresentam divergências entre si muito maiores, sendo que para utilizar estes dados num modelo de correção teríamos que adicionar a orientação do gripper
+
+## 25/03 - IRISLab
+
+#### Modelo de Correção do Gripper
+
+- Retirar a média dos testes sem gripper
+- Corrigir os testes com gripper com a curva média dos testes sem gripper e guardar os valores resultantes numa matriz
+- Utilizar esses valores para corrigir o sensor tendo em conta que a orientação do end effector tem que entrar na equação
+
+#### Bags de Coreção com e sem gripper
+
+- correct_no_gripper_px.bag - 5 bags sem gripper nas 5 posições deafult
+- correct_gripper_px.bag - 5 bags com gripper nas 5 posições default
+- Em cada bag o robot posiciona-se na posição indicada e roda o wrist_3 em 360
+
+#### Setup Kinect para deteção de gestos
+
+- http://wiki.ros.org/mit-ros-pkg/KinectDemos/HandDetection

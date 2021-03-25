@@ -121,7 +121,9 @@ test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 
 # 9 - 24/03
 # Test robot FT sensor without gripper along wrist_3 in 56 diferent positions
-tests_56_no_gripper = '/record/9-24_03/TC'
+tests_57_no_gripper = '/record/9-24_03/TC'
+tests_57_with_gripper = '/record/9-24_03/TCG'
+
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -514,7 +516,7 @@ def gripperCorrectTest(plt):
     x = np.arange(-180,180,1)
 
     angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-    forbidden = [(45, -180),  (45, -135), (45, -90),
+    forbidden = [(45, -180),  (45, -135),
                 (90, -180),  (90, -135), (90, 135),
                 (135, -180), (135, 135)]
     
@@ -524,14 +526,28 @@ def gripperCorrectTest(plt):
             if (w_1, w_2) not in forbidden:
                 wrist_1_2_pos += [(w_1, w_2)]
 
+    # No gripper tests
+    # for i in range(len(wrist_1_2_pos)):
+    #     try:
+    #         (w_1, w_2) = wrist_1_2_pos[i]
+    #         test = openList('%s%d_%d_%d_temp.list' % (tests_57_no_gripper, i, w_1, w_2))
+    #         print('Opened - %d - %d - %d' % (i, w_1, w_2))
+    #         plotXYZ(plt, x, test, ':')
+    #         # plt.show()
+    #         # plt.cla()
+    #     except IOError:
+    #         print('Test does not exist')
+    #         break
+    
+    # With gripper tests
     for i in range(len(wrist_1_2_pos)):
         try:
             (w_1, w_2) = wrist_1_2_pos[i]
-            test = openList('%s%d_%d_%d_temp.list' % (tests_56_no_gripper, i, w_1, w_2))
+            test = openList('%s%d_%d_%d_temp.list' % (tests_57_with_gripper, i, w_1, w_2))
             print('Opened - %d - %d - %d' % (i, w_1, w_2))
             plotXYZ(plt, x, test, ':')
-            plt.show()
-            plt.cla()
+            # plt.show()
+            # plt.cla()
         except IOError:
             print('Test does not exist')
             break
