@@ -546,7 +546,37 @@
 - correct_no_gripper_px.bag - 5 bags sem gripper nas 5 posições deafult
 - correct_gripper_px.bag - 5 bags com gripper nas 5 posições default
 - Em cada bag o robot posiciona-se na posição indicada e roda o wrist_3 em 360
+- **Erro - **bags apenas gravaram /wrench e não /joint_states - Inutilizável
 
 #### Setup Kinect para deteção de gestos
 
 - http://wiki.ros.org/mit-ros-pkg/KinectDemos/HandDetection
+
+## 26/03 - IRISLab
+
+#### Pesquisa relativa a controlo por gestos
+
+- Muita utilização de leap motion controllers
+- Kinect muito utilizada para gestos com o corpo todo
+
+#### Melhoramento da geração de várias posições para o end effector
+
+- Cada valor de wrist_1 tem agora uma cor associada para ser mais facil fazer a distinção 
+
+
+#### Controlo do Gripper através de Força
+
+- Controlo simples por peso - **Funciona**
+- Controlo por eixo - **Funciona**
+  - Força no X fecha
+  - Força no Y abre
+- Controlo quando lida com objetos - **Funciona +/-**
+  - Variável está a agarrar algo?
+    - Pois apenas o controlo por força ns eixos fica desiquilibrado quando o robot está a agarrar algo
+  - Quando está a agarrar algo, a maneira de abrir o gripper tem que ser diferente
+    - Quando mede uma força no sentido contrário à orientação do gripper - **Funciona**
+    - Quando mede um peso próximo de zero - **Funciona +/-** (objetos mais pesados)
+      - **Problema** de quando pega em objetos mais leves
+      - **Problema** do utilizador fazer uma força sobre o objeto que não faça o valor de peso passar pelo threshold
+- **Problema** de quando dar reset ao sensor
+  - Periodicamente quando for observável que nada está a interagir com o robot, e que não tem nenhum objeto agarrado

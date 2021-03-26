@@ -1,12 +1,8 @@
 #!/usr/bin/env python
 from numpy.core.numeric import full
 import rospy, rospkg
-import signal, sys, os, time
-from math import pi, sin, cos, acos, sqrt, radians
-from std_msgs.msg import ColorRGBA
-from geometry_msgs.msg import Vector3
-from visualization_msgs.msg import MarkerArray, Marker
-from moveit_commander.move_group import MoveGroupCommander
+import signal, sys, os, time, timeit
+from math import degrees, pi, sin, cos, acos, sqrt, radians
 
 from sami.arm import Arm
 import helpers
@@ -58,59 +54,11 @@ def main():
     arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     arm.velocity = 1
 
-    poses_pub = rospy.Publisher('visualization_marker_array', MarkerArray, queue_size=10)
-    markers = []
-
-    # # Move in various positions
-    # angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-    # forbidden = [(45, -180),  (45, -135),
-    #              (90, -180),  (90, -135), (90, 135),
-    #              (135, -180),  (135, 135)]
-
-    # base_dir = rospkg.RosPack().get_path('iris_cobot')
-    # idx = 0
-    # for w_1 in angles:
-    #     for w_2 in angles:
-    #         if (w_1, w_2) not in forbidden:
-    #             print('Idx - %d - %d - %d' % (idx, w_1, w_2))
-                
-    #             arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
-
-                # marker = Marker()
-                # marker.header.frame_id = "base_link"
-                # marker.header.stamp = rospy.Time()
-                # marker.id = idx
-                # idx += 1
-                # marker.type = marker.ARROW
-                # marker.action = marker.ADD
-                # marker.scale = Vector3(*[0.1, 0.01, 0.01])
-                # ee_pose = arm.get_pose()
-                # marker.pose = ee_pose
-                # print('Orientation - %s' % str(ee_pose.orientation))
-                # marker.color = ColorRGBA(*[1, 1, 0, 1])
-
-                # markers.append(marker)
-
-                # poses_pub.publish(markers)
-
-
     # Move to default pos
     # arm.move_joints([0, radians(-90), 0, radians(0), radians(0), 0])
 
-    # # Reset ft sensor
+    # Reset ft sensor
     # helpers.reset_ft_sensor()
-    
-    # for i in range (-180, 180, 20):
-    #     arm.move_joints([0, radians(-90), 0, 0, 0, radians(i)])
-    #     time.sleep(5)
-
-    # Move wrist_3 in 1 degree steps
-    # current_joints = arm.get_joints()
-    # for i in range(-180, 180):
-    #     print(i)
-    #     current_joints[5] = radians(i)
-    #     arm.move_joints(current_joints)
-    #     time.sleep(0.2)
 
     # Move to out of camera pos
     # rospy.wait_for_service('/cork_iris/control_arm')
@@ -166,7 +114,6 @@ def main():
     # arm.simpleMove([0, -0.2, 0])
     # arm.simpleMove([-0.2, 0, 0])
     # arm.simpleMove([0, 0, 0.2])
-
 
 
 if __name__ == "__main__":

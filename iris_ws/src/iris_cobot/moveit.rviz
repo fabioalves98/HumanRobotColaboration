@@ -302,6 +302,8 @@ Visualization Manager:
           Value: false
         tool0:
           Value: true
+        tool0_controller:
+          Value: false
         upper_arm_link:
           Value: false
         world:
@@ -321,7 +323,8 @@ Visualization Manager:
         world:
           base_link:
             base:
-              {}
+              tool0_controller:
+                {}
             shoulder_link:
               upper_arm_link:
                 forearm_link:
@@ -343,7 +346,7 @@ Visualization Manager:
       Marker Topic: /mg_marker
       Name: MG_Marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -351,7 +354,7 @@ Visualization Manager:
       Marker Topic: /mx_marker
       Name: MX_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -359,7 +362,7 @@ Visualization Manager:
       Marker Topic: /my_marker
       Name: MY_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -367,7 +370,7 @@ Visualization Manager:
       Marker Topic: /mz_marker
       Name: MZ_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -375,7 +378,7 @@ Visualization Manager:
       Marker Topic: /mpg_marker
       Name: MPG_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -383,7 +386,7 @@ Visualization Manager:
       Marker Topic: /mpx_marker
       Name: MPX_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -391,7 +394,7 @@ Visualization Manager:
       Marker Topic: /mpy_marker
       Name: MPY_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Marker
@@ -399,7 +402,7 @@ Visualization Manager:
       Marker Topic: /mpz_marker
       Name: MPZ_marker
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -407,7 +410,7 @@ Visualization Manager:
       Marker Topic: visualization_marker_array
       Name: MarkerArray
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
   Enabled: true
@@ -438,25 +441,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.917451858520508
+      Distance: 2.223015785217285
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.6014267206192017
-        Y: -0.06041920557618141
-        Z: 0.5795024633407593
+        X: 0.3274022340774536
+        Y: 0.2795199751853943
+        Z: 0.37397730350494385
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.41979703307151794
+      Pitch: 0.4097970724105835
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.295412063598633
+      Yaw: 0.8204129934310913
     Saved: ~
 Window Geometry:
   Displays:

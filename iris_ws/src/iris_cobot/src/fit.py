@@ -519,38 +519,35 @@ def gripperCorrectTest(plt):
     forbidden = [(45, -180),  (45, -135),
                 (90, -180),  (90, -135), (90, 135),
                 (135, -180), (135, 135)]
+
+    colors = ['blue' ,'cyan', 'green', 'yellow', 'red', 'pink', 'white', 'black']
+    color = 'blue'
     
-    wrist_1_2_pos = []
+    idx=0
+
     for w_1 in angles:
         for w_2 in angles:
             if (w_1, w_2) not in forbidden:
-                wrist_1_2_pos += [(w_1, w_2)]
+                if color:
+                    color_i = colors.index(color)
+                    if angles.index(w_1) != color_i:
+                        idx += 1
+                        continue
+                try:
+                    test_grip = openList('%s%d_%d_%d_temp.list' % (tests_57_with_gripper, idx, w_1, w_2))
+                    test_no_grip = openList('%s%d_%d_%d_temp.list' % (tests_57_no_gripper, idx, w_1, w_2))
+                    test_grip_correct = test_grip - test_no_grip
+                    print('Opened - %d - %d - %d' % (idx, w_1, w_2))
+                    plotXYZ(plt, x, test_grip, ':', alpha=0.3)
+                    plotXYZ(plt, x, test_no_grip, '--', alpha=0.3)
+                    plotXYZ(plt, x, test_grip_correct)
 
-    # No gripper tests
-    # for i in range(len(wrist_1_2_pos)):
-    #     try:
-    #         (w_1, w_2) = wrist_1_2_pos[i]
-    #         test = openList('%s%d_%d_%d_temp.list' % (tests_57_no_gripper, i, w_1, w_2))
-    #         print('Opened - %d - %d - %d' % (i, w_1, w_2))
-    #         plotXYZ(plt, x, test, ':')
-    #         # plt.show()
-    #         # plt.cla()
-    #     except IOError:
-    #         print('Test does not exist')
-    #         break
-    
-    # With gripper tests
-    for i in range(len(wrist_1_2_pos)):
-        try:
-            (w_1, w_2) = wrist_1_2_pos[i]
-            test = openList('%s%d_%d_%d_temp.list' % (tests_57_with_gripper, i, w_1, w_2))
-            print('Opened - %d - %d - %d' % (i, w_1, w_2))
-            plotXYZ(plt, x, test, ':')
-            # plt.show()
-            # plt.cla()
-        except IOError:
-            print('Test does not exist')
-            break
+                    idx += 1
+                    # plt.show()
+                    # plt.cla()
+                except IOError:
+                    print('Test does not exist')
+                    break
 
 def main():
     rospy.init_node("fit", anonymous = False)
