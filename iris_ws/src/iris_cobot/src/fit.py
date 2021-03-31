@@ -124,6 +124,10 @@ test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 tests_57_no_gripper = '/record/9-24_03/TC'
 tests_57_with_gripper = '/record/9-24_03/TCG'
 
+# 10 - 26/03
+# Test the relativity of the 57 positions
+test_57_relative = '/record/10-26_03/TCG_relative_temp.list'
+
 
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
@@ -549,6 +553,15 @@ def gripperCorrectTest(plt):
                     print('Test does not exist')
                     break
 
+
+def gripperRelativeTest(plt):
+    x = range(57)
+
+    test_relative = openList(test_57_relative)
+
+    plotXYZ(plt, x, test_relative)
+
+
 def main():
     rospy.init_node("fit", anonymous = False)
     
@@ -602,7 +615,10 @@ def main():
     # gripperTheoreticalTest(plt)
 
     # Test 56 positions in order to correct FT sensor
-    gripperCorrectTest(plt)
+    # gripperCorrectTest(plt)
+
+    # Test the relativity of the 56 positions
+    gripperRelativeTest(plt)
 
     plt.show()
 

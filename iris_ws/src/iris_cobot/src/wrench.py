@@ -8,7 +8,7 @@ from math import radians, degrees, sqrt
 import matplotlib.pyplot as plt
 import numpy as np
 
-from helpers import reset_ft_sensor, set_speed_slider
+import helpers
 from sami.arm import Arm
 
 arm = None
@@ -129,7 +129,7 @@ def main():
                     arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
 
                     # Reset ft sensor
-                    reset_ft_sensor()
+                    helpers.reset_ft_sensor()
 
                     # Init temp stream
                     temp_stream = []

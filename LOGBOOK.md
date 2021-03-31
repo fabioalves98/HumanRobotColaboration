@@ -511,7 +511,7 @@
 - 70 posições reduzidas para 57 por causa de duplicados (180 = -180) e posições impossíveis de posicionar o robot (colisões)
 - Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} 
 - TCx_w1_w2 
-  - Teste das 56 posições sem gripper e Payload 0kg
+  - Teste das 57 posições sem gripper e Payload 0kg
 
 - **Resultado - **Maioria destes testes inutilizáveis devido a uma atenuação dos valores das curvas por motivos desconhecidos
   - Alguns testes com gripper com valores inutilizáveis devido à pressão feita pelo cabo do gripper nas posições mais extremas
@@ -580,3 +580,18 @@
       - **Problema** do utilizador fazer uma força sobre o objeto que não faça o valor de peso passar pelo threshold
 - **Problema** de quando dar reset ao sensor
   - Periodicamente quando for observável que nada está a interagir com o robot, e que não tem nenhum objeto agarrado
+
+## 30/03 - IRISLab
+
+#### Modelo de Correção do Gripper
+
+- Necessidade de uma matriz que relacione os valores das várias posições do end effector
+- Cada teste apenas dá os valores de correção relativos à posição da junta wrist_3
+- Para criar um modelo que possa corrigir os valores em qualquer orientação é preciso algo que relacione as orientações
+- TCG_correct
+  - Teste das 57 posições em que a cada iteração o robot é posicionado numa posição default [0, -90, 0, 0, 0, 0]
+  - É feito o zero_ft_sensor()
+  - O robot move-se para a dada posição e o valor de força é medido
+- **Resultado - **É notável a diferença de valores de força que existe entre a posição default e cada uma das posições, e estas diferenças teram que ser contabilizadas no modelo de correção
+
+## 31/03 - IRISLab
