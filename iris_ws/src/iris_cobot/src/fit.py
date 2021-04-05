@@ -595,7 +595,7 @@ def main():
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    # compareCurves(plt, [correct_fit, correct_mean, correct_56])
+    compareCurves(plt, [test])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -642,7 +642,7 @@ def main():
     # gripperTheoreticalTest(plt)
 
     # Test 56 positions in order to correct FT sensor
-    gripperCorrectTest(plt)
+    # gripperCorrectTest(plt)
 
     # Test the relativity of the 56 positions
     # gripperRelativeTest(plt)

@@ -607,3 +607,7 @@
 #### Modelo de Correção do Gripper
 - Incluir a função de reset
 - Utilizar numa fase inicial a média das curvas com gripper
+- Criação de um conjunto de vetores correspondentes a cada uma das 56 posições para comparação com a orientação corrente do EE
+
+**VERIFICAR TESTES DAS 56 POSIÇÕES COM GRIPPER E VERIFICAR POSSÍVEIS ERROS**
+
