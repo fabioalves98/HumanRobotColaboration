@@ -595,3 +595,15 @@
 - **Resultado - **É notável a diferença de valores de força que existe entre a posição default e cada uma das posições, e estas diferenças teram que ser contabilizadas no modelo de correção
 
 ## 31/03 - IRISLab
+
+#### Controlo por gestos
+
+- Segmentação da point cloud vinda da kinect utilizando primeiro um cropbox, facilitado por uma bounding box, em que apenas se visualiza a mesa
+- Utilização de Euclidean Clustering para segmentar a nova cloud, obtendo apenas 2 clusters que correspondem às mãos / braços
+- viewer.cpp
+
+## 05/04 - IRISLab
+
+#### Modelo de Correção do Gripper
+- Incluir a função de reset
+- Utilizar numa fase inicial a média das curvas com gripper

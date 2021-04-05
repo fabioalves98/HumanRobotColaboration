@@ -54,28 +54,14 @@ def main():
     arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     arm.velocity = 1
 
-    angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-    forbidden = [(45, -180),  (45, -135),
-                (90, -180),  (90, -135), (90, 135),
-                (135, -180),  (135, 135)]
-    idx = 0
-    for w_1 in angles:
-        for w_2 in angles:
-            if (w_1, w_2) not in forbidden:
-                print('\nIdx %d - %d - %d' % (idx, w_1, w_2))
-                # Move to default pos
-                arm.move_joints([0, radians(-90), 0, radians(0), radians(0), 0])
+    # Rotate wrist_3
 
-                time.sleep(1)
-                
-                # Reset ft sensor
-                helpers.reset_ft_sensor()
-                
-                # Set Arm joints
-                arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
-
-                raw_input("Continue?")
-
+    for i in range(-180, 180, 30):
+        print('Wrist_3 - %d' % i)
+        joints = arm.get_joints()
+        joints[5] = radians(i)
+        arm.move_joints(joints)
+        raw_input("Move next? ")
 
     # Move to default pos
     # arm.move_joints([0, radians(-90), 0, radians(0), radians(0), 0])

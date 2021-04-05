@@ -4,3 +4,12 @@
 [submodule "iris_ws/src/iris_ur10e"]
 	path = iris_ws/src/iris_ur10e
 	url = ../iris_ur10e
+[submodule "iris_ws/src/PlotJuggler"]
+	path = iris_ws/src/PlotJuggler
+	url = ../../facontidavide/PlotJuggler.git
+[submodule "iris_ws/src/plotjuggler-ros-plugins"]
+	path = iris_ws/src/plotjuggler-ros-plugins
+	url = ../../PlotJuggler/plotjuggler-ros-plugins.git
+[submodule "iris_ws/src/plotjuggler_msgs"]
+	path = iris_ws/src/plotjuggler_msgs
+	url = ../../PlotJuggler/plotjuggler_msgs.git

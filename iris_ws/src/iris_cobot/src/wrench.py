@@ -88,84 +88,86 @@ def main():
 
     wrench_filtered = rospy.Publisher('wrench_filtered', WrenchStamped, queue_size=1)
 
-    if args.live:
-        # Create Plots
-        plt.ion()
-        fig, (f) = plt.subplots(1)
-
-        f.set(ylim=(-10, 10))
-        f.set(xlim=(0, stream_range))
-
-        x_plt, = f.plot(range(0, len(force[:, 0])), force[:, 0], 'r')
-        y_plt, = f.plot(range(0, len(force[:, 1])), force[:, 1], 'g')
-        z_plt, = f.plot(range(0, len(force[:, 2])), force[:, 2], 'b')
-
-        while True:
-            setPlotData([x_plt, y_plt, z_plt], [force[:,0], force[:,1], force[:,2]])
-            # print('\nForce - %s' % str(force.shape))
-            # print('Mean - %s' % str(np.mean(force, axis=0)))
-            # print('Std Dev - %s' % str(np.std(force, axis=0)))
-            fig.canvas.draw_idle()
-            fig.canvas.flush_events()
-    
-    else:
-        # positions = [
-        #     # [0, radians(-90), 0, 0, radians(90), 0],
-        #     # [0, radians(-90), 0, 0, radians(45), 0],
-        #     [0, radians(-90), radians(-90), 0, 0, 0]
-        #     # [0, radians(-90), 0, 0, radians(-45), 0],
-        #     # [0, radians(-90), 0, 0, radians(-90), 0],
-        # ]
-
-        angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-        forbidden = [(45, -180),  (45, -135),
-                    (90, -180),  (90, -135), (90, 135),
-                    (135, -180),  (135, 135)]
-        idx = 0
-        for w_1 in angles:
-            for w_2 in angles:
-                if (w_1, w_2) not in forbidden:
-                    # Set Arm joints
-                    arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
-
-                    # Reset ft sensor
-                    helpers.reset_ft_sensor()
-
-                    # Init temp stream
-                    temp_stream = []
-
-                    # Move wrist 3
-                    for i in range(-180, 180):
-                        print(idx, ' - ', i)
-                        # pos[5] = radians(i)
-                        arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(i)])
-                        time.sleep(0.2)
-                        temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
-                                            statistics.mean(force[:,2])))
-
-                    # Save samples of wrench in files
-                    with open(BASE_DIR + '/record/TCG%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
-                        print(len(temp_stream))
-                        pickle.dump(temp_stream, f)
-                    
-                    with open(BASE_DIR + '/record/TCG%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
-                        print(len(stream))
-                        pickle.dump(stream, f)
-
-                    idx += 1
-                    stream = []
-                    stream_count = 0
-
-        
-        # # Plot results
-        # plt.ylim([-7.5, 15])
-        # plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
-        # plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
-        # plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
-
-        # plt.show()
-        
     rospy.spin()
+
+    # if args.live:
+    #     # Create Plots
+    #     plt.ion()
+    #     fig, (f) = plt.subplots(1)
+
+    #     f.set(ylim=(-10, 10))
+    #     f.set(xlim=(0, stream_range))
+
+    #     x_plt, = f.plot(range(0, len(force[:, 0])), force[:, 0], 'r')
+    #     y_plt, = f.plot(range(0, len(force[:, 1])), force[:, 1], 'g')
+    #     z_plt, = f.plot(range(0, len(force[:, 2])), force[:, 2], 'b')
+
+    #     while True:
+    #         setPlotData([x_plt, y_plt, z_plt], [force[:,0], force[:,1], force[:,2]])
+    #         # print('\nForce - %s' % str(force.shape))
+    #         # print('Mean - %s' % str(np.mean(force, axis=0)))
+    #         # print('Std Dev - %s' % str(np.std(force, axis=0)))
+    #         fig.canvas.draw_idle()
+    #         fig.canvas.flush_events()
+    
+    # else:
+    #     # positions = [
+    #     #     # [0, radians(-90), 0, 0, radians(90), 0],
+    #     #     # [0, radians(-90), 0, 0, radians(45), 0],
+    #     #     [0, radians(-90), radians(-90), 0, 0, 0]
+    #     #     # [0, radians(-90), 0, 0, radians(-45), 0],
+    #     #     # [0, radians(-90), 0, 0, radians(-90), 0],
+    #     # ]
+
+    #     angles = [-180, -135, -90, -45, 0, 45, 90, 135]
+    #     forbidden = [(45, -180),  (45, -135),
+    #                 (90, -180),  (90, -135), (90, 135),
+    #                 (135, -180),  (135, 135)]
+    #     idx = 0
+    #     for w_1 in angles:
+    #         for w_2 in angles:
+    #             if (w_1, w_2) not in forbidden:
+    #                 # Set Arm joints
+    #                 arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
+
+    #                 # Reset ft sensor
+    #                 helpers.reset_ft_sensor()
+
+    #                 # Init temp stream
+    #                 temp_stream = []
+
+    #                 # Move wrist 3
+    #                 for i in range(-180, 180):
+    #                     print(idx, ' - ', i)
+    #                     # pos[5] = radians(i)
+    #                     arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(i)])
+    #                     time.sleep(0.2)
+    #                     temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
+    #                                         statistics.mean(force[:,2])))
+
+    #                 # Save samples of wrench in files
+    #                 with open(BASE_DIR + '/record/TCG%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
+    #                     print(len(temp_stream))
+    #                     pickle.dump(temp_stream, f)
+                    
+    #                 with open(BASE_DIR + '/record/TCG%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
+    #                     print(len(stream))
+    #                     pickle.dump(stream, f)
+
+    #                 idx += 1
+    #                 stream = []
+    #                 stream_count = 0
+
+        
+    #     # # Plot results
+    #     # plt.ylim([-7.5, 15])
+    #     # plt.plot(range(-180, 180), [x[0] for x in temp_stream], 'r')
+    #     # plt.plot(range(-180, 180), [x[1] for x in temp_stream], 'g')
+    #     # plt.plot(range(-180, 180), [x[2] for x in temp_stream], 'b')
+
+    #     # plt.show()
+        
+    # rospy.spin()
 
 
 if __name__ == '__main__':
