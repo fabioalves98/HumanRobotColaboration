@@ -12,8 +12,8 @@ BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 # Possible combinations of angles
 ANGLES = [-180, -135, -90, -45, 0, 45, 90, 135]
 FORBIDDEN = [(45, -180),  (45, -135),
-                (90, -180),  (90, -135), (90, 135),
-                (135, -180),  (135, 135)]
+             (90, -180),  (90, -135), (90, 135),
+             (135, -180), (135, 135)]
 
 # Color array for markers
 COLORS = [

@@ -122,17 +122,18 @@ test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 # 9 - 24/03
 # Test robot FT sensor without gripper along wrist_3 in 56 diferent positions
 tests_56_no_gripper = '/record/9-24_03/TC'
-tests_56_with_gripper = '/record/9-24_03/TCG'
+tests_56_gripper = '/record/9-24_03/TCG'
+tests_56_no_payload = '/record/TCGP'
 
 # 10 - 26/03
 # Test the relativity of the 56 positions
-test_57_relative = '/record/10-26_03/TCG_relative_temp.list'
+test_56_relative = '/record/10-26_03/TCG_relative_temp.list'
 
-
+# Correction curves
 correct_fit = '/curves/wrench_correct_fit.list'
 correct_mean = '/curves/wrench_correct_mean.list'
 correct_56 = '/curves/wrench_correct_56.list'
-    
+
 
 def compareCurves(plt, curves):
     x = np.arange(-180,180,1)
@@ -505,6 +506,7 @@ def gripperTheoreticalTest(plt):
     # Corrected gripper curve
     plotXYZ(plt, x, correct(None, openList(tests_gripper_coupling[1])), ':')
 
+
     # Curve made with theoretical model of sensor behavior
     plotXYZ(plt, x, openList(test_theory_sensor))
 
@@ -549,42 +551,44 @@ def gripperCorrectTest(plt):
                 #     continue
 
                 try:
-                    test_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_with_gripper, idx, w_1, w_2))
-                    test_no_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_no_gripper, idx, w_1, w_2))
-                    test_grip_correct = test_grip - test_no_grip
-                    curves.append(test_grip)
+                    # test_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_gripper, idx, w_1, w_2))
+                    test_no_payl = openList('%s%d_%d_%d_temp.list' % (tests_56_no_payload, idx, w_1, w_2))
+                    # test_no_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_no_gripper, idx, w_1, w_2))
+                    # test_grip_correct = test_grip - test_no_grip
+                    # curves.append(test_grip)
 
                     print('Opened - %d - %d - %d' % (idx, w_1, w_2))
-                    plotXYZ(plt, x, test_grip, ':', alpha=0.3)
+                    # plotXYZ(plt, x, test_grip, ':', alpha=0.3)
                     # plotXYZ(plt, x, test_no_grip, '--', alpha=0.3)
+                    plotXYZ(plt, x, test_no_payl)
                     # plotXYZ(plt, x, test_grip_correct)
 
                     idx += 1
-                    # plt.show()
-                    # plt.cla()
+                    plt.show()
+                    plt.cla()
                 except IOError:
                     print('Test does not exist')
                     break
 
     # Create correction mean
-    correction = np.empty((3, 360))
-    data = np.array(curves)
+    # correction = np.empty((3, 360))
+    # data = np.array(curves)
 
-    for i in range(3):
-        axis = data[:,:,i]
-        axis_mean = np.mean(axis, axis=0) 
-        correction[i] = axis_mean
+    # for i in range(3):
+    #     axis = data[:,:,i]
+    #     axis_mean = np.mean(axis, axis=0) 
+    #     correction[i] = axis_mean
     
-    plotXYZ(plt, x, correction)
+    # plotXYZ(plt, x, correction)
 
-    with open(BASE_DIR + correct_56, 'w') as f:
-        pickle.dump(correction, f)
+    # with open(BASE_DIR + correct_56, 'w') as f:
+    #     pickle.dump(correction, f)
 
 
 def gripperRelativeTest(plt):
     x = range(57)
 
-    test_relative = openList(test_57_relative)
+    test_relative = openList(6)
 
     plotXYZ(plt, x, test_relative)
 
@@ -595,7 +599,7 @@ def main():
     # plt.ylim([-10, 15.0])
 
     # Quickly compare curves
-    compareCurves(plt, [test])
+    # compareCurves(plt, [test])
 
     # Repeatability and variation test
     # repeatabilityTest(plt)
@@ -642,12 +646,12 @@ def main():
     # gripperTheoreticalTest(plt)
 
     # Test 56 positions in order to correct FT sensor
-    # gripperCorrectTest(plt)
+    gripperCorrectTest(plt)
 
     # Test the relativity of the 56 positions
     # gripperRelativeTest(plt)
 
-    plt.show()
+    # plt.show()
 
 if __name__ == "__main__":
     main()

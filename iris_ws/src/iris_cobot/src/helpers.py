@@ -5,6 +5,8 @@ from ur_msgs.srv import SetSpeedSliderFraction
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import Quaternion
 
+BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
+
 
 def set_speed_slider(self, speed):
     try:
@@ -26,10 +28,8 @@ def reset_ft_sensor():
         print("Service call failed: %s"%e)
 
 
-def openList(filename):
-    base_dir = rospkg.RosPack().get_path('iris_cobot')
-    
-    with open(base_dir + filename) as f:
+def openList(filename):    
+    with open(BASE_DIR + filename) as f:
         return np.array(pickle.load(f))
 
 

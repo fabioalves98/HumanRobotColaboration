@@ -55,13 +55,12 @@ def main():
     arm.velocity = 1
 
     # Rotate wrist_3
-
-    for i in range(-180, 180, 30):
-        print('Wrist_3 - %d' % i)
-        joints = arm.get_joints()
-        joints[5] = radians(i)
-        arm.move_joints(joints)
-        raw_input("Move next? ")
+    # for i in range(-180, 180, 30):
+    #     print('Wrist_3 - %d' % i)
+    #     joints = arm.get_joints()
+    #     joints[5] = radians(i)
+    #     arm.move_joints(joints)
+    #     raw_input("Move next? ")
 
     # Move to default pos
     # arm.move_joints([0, radians(-90), 0, radians(0), radians(0), 0])

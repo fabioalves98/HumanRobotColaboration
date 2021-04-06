@@ -7,9 +7,7 @@ from geometry_msgs.msg import WrenchStamped
 import helpers
 from sami.arm import Arm
 
-
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
-
 
 arm = None
 
@@ -43,7 +41,7 @@ def main():
     arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     arm.velocity = 1
 
-    rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
+    # rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
     
     # positions = [
     #     # [0, radians(-90), 0, 0, radians(90), 0],
@@ -58,8 +56,8 @@ def main():
                 (90, -180),  (90, -135), (90, 135),
                 (135, -180),  (135, 135)]
     idx = 0
-    for w_1 in [0]:
-        for w_2 in [0]:
+    for w_1 in angles:
+        for w_2 in angles:
             if (w_1, w_2) not in forbidden:
                 # Set Arm joints
                 arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
@@ -72,27 +70,31 @@ def main():
 
                 # Move wrist 3
                 for i in range(-180, 180):
-                    print(idx, ' - ', i)
+                    print('%d - %d' % (idx, i))
                     arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(i)])
                     force = np.empty([1, 3])
-                    time.sleep(0.2)
+                    print('Force RESET - %s' % str(force.shape))
+                    subs = rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
+                    while force.shape[0] < 50:
+                        continue
+                    subs.unregister()
+                    print('Force Shape - %s' % str(force.shape))
                     temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
                                         statistics.mean(force[:,2])))
-                    force = np.empty([1, 3])
 
                 # Save samples of wrench in files
-                with open(BASE_DIR + '/record/TCG%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
+                with open(BASE_DIR + '/record/TCGP%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
                     print(len(temp_stream))
                     pickle.dump(temp_stream, f)
                 
-                with open(BASE_DIR + '/record/TCG%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
+                with open(BASE_DIR + '/record/TCGP%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
                     print(len(stream))
                     pickle.dump(stream, f)
 
                 idx += 1
                 stream = []
         
-    rospy.spin()
+    # rospy.spin()
 
 
 if __name__ == '__main__':
