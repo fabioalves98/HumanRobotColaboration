@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import rospy, rospkg, pickle
+import rospy, rospkg, pickle, signal, sys
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
@@ -123,7 +123,8 @@ test_theory_sensor = '/record/8-17_03/TG3_theory_temp.list'
 # Test robot FT sensor without gripper along wrist_3 in 56 diferent positions
 tests_56_no_gripper = '/record/9-24_03/TC'
 tests_56_gripper = '/record/9-24_03/TCG'
-tests_56_no_payload = '/record/TCGP'
+tests_56_no_payload = '/record/11-06_04/TCGP'
+tests_56_theory = '/record/11-06_04/TCGT'
 
 # 10 - 26/03
 # Test the relativity of the 56 positions
@@ -309,7 +310,7 @@ def correct(plt, curve, alpha=0.5):
     x = np.arange(-180,180,1)
 
     correct = []
-    with open(BASE_DIR + correct_mean) as f:
+    with open(BASE_DIR + correct_56) as f:
         correct = pickle.load(f)
 
     if plt:
@@ -528,61 +529,85 @@ def gripperCorrectTest(plt):
                 (135, -180), (135, 135)]
 
     colors = ['blue' ,'cyan', 'green', 'yellow', 'red', 'pink', 'white', 'black']
-    color = ''
+    color_select = ''
+    w2_select = []
+    id_select = [] # [2, 6, 34, 38] - Correction curve
+    plot_step = False
+    create_correct = False
+    curves = []
 
     idx=0
-
-    curves = []
 
     # Observe curves with the same W_1 value - Same color
     for w_1 in angles:
         for w_2 in angles:
             if (w_1, w_2) not in forbidden:
                 # Specific test based on W_1
-                if color:
-                    color_i = colors.index(color)
+                if color_select:
+                    color_i = colors.index(color_select)
                     if angles.index(w_1) != color_i:
                         idx += 1
                         continue
 
                 # Specific test based on W_2
-                # if w_2 != 0:
-                #     idx +=1
-                #     continue
+                if w2_select and w_2 not in w2_select:
+                    idx += 1
+                    continue
+
+                # Specific test based on Idx
+                if id_select and idx not in id_select:
+                    idx += 1
+                    continue
 
                 try:
-                    # test_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_gripper, idx, w_1, w_2))
+                    # Tests with real robot
+                    test_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_gripper, idx, w_1, w_2))
+                    test_no_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_no_gripper, idx, w_1, w_2))
                     test_no_payl = openList('%s%d_%d_%d_temp.list' % (tests_56_no_payload, idx, w_1, w_2))
-                    # test_no_grip = openList('%s%d_%d_%d_temp.list' % (tests_56_no_gripper, idx, w_1, w_2))
-                    # test_grip_correct = test_grip - test_no_grip
-                    # curves.append(test_grip)
+                    
+                    # Tests with theoretical model
+                    test_theory = openList('%s%d_%d_%d_temp.list' % (tests_56_theory, idx, w_1, w_2))
+                    offset = test_theory[180,:]
+                    test_theory -= offset
+
+                    # Diference between real and theoretical
+                    test_diff = test_theory - correct(None, test_no_payl)
+
+                    # curves.append(test_no_payl)
 
                     print('Opened - %d - %d - %d' % (idx, w_1, w_2))
-                    # plotXYZ(plt, x, test_grip, ':', alpha=0.3)
-                    # plotXYZ(plt, x, test_no_grip, '--', alpha=0.3)
-                    plotXYZ(plt, x, test_no_payl)
-                    # plotXYZ(plt, x, test_grip_correct)
+                    # plotXYZ(plt, x, test_grip, ':', alpha=1)
+                    # plotXYZ(plt, x, test_no_grip, '', alpha=0.3)
+                    # plotXYZ(plt, x, test_no_payl, '--', alpha=1)
+                    # plotXYZ(plt, x, test_theory, '', alpha=0.5)
+                    plotXYZ(plt, x, test_diff, '', alpha=1)
+                    # plotXYZ(plt, x, correct(None, test_grip), '', alpha=1)
+                    # plotXYZ(plt, x, correct(None, test_no_payl), '--', alpha=1)
 
                     idx += 1
-                    plt.show()
-                    plt.cla()
+
+                    if plot_step:
+                        plt.show()
+                        plt.cla()
+
                 except IOError:
                     print('Test does not exist')
                     break
 
     # Create correction mean
-    # correction = np.empty((3, 360))
-    # data = np.array(curves)
+    if create_correct:
+        correction = np.empty((3, 360))
+        data = np.array(curves)
 
-    # for i in range(3):
-    #     axis = data[:,:,i]
-    #     axis_mean = np.mean(axis, axis=0) 
-    #     correction[i] = axis_mean
-    
-    # plotXYZ(plt, x, correction)
+        for i in range(3):
+            axis = data[:,:,i]
+            axis_mean = np.mean(axis, axis=0) 
+            correction[i] = axis_mean
+        
+        plotXYZ(plt, x, correction)
 
-    # with open(BASE_DIR + correct_56, 'w') as f:
-    #     pickle.dump(correction, f)
+        with open(BASE_DIR + correct_56, 'w') as f:
+            pickle.dump(correction, f)
 
 
 def gripperRelativeTest(plt):
@@ -593,8 +618,14 @@ def gripperRelativeTest(plt):
     plotXYZ(plt, x, test_relative)
 
 
+def signal_handler(sig, frame):
+    print('Exiting Program')
+    sys.exit(0)
+
+
 def main():
     rospy.init_node("fit", anonymous = False)
+    signal.signal(signal.SIGINT, signal_handler)
     
     # plt.ylim([-10, 15.0])
 
@@ -651,7 +682,11 @@ def main():
     # Test the relativity of the 56 positions
     # gripperRelativeTest(plt)
 
-    # plt.show()
+    # EXPERIMENTAL AREA
+    # test = '/record/T0_0_-90_temp.list'
+    # plotXYZ(plt, np.arange(-180, 180, 1), openList(test))
+
+    plt.show()
 
 if __name__ == "__main__":
     main()

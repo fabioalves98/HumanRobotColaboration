@@ -63,7 +63,7 @@ def main():
     #     raw_input("Move next? ")
 
     # Move to default pos
-    # arm.move_joints([0, radians(-90), 0, radians(0), radians(0), 0])
+    arm.move_joints([0, radians(-90), 0, radians(0), radians(-90), 0])
 
     # Reset ft sensor
     # helpers.reset_ft_sensor()

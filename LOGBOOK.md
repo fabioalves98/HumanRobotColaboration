@@ -611,3 +611,29 @@
 
 **VERIFICAR TESTES DAS 56 POSIÇÕES COM GRIPPER E VERIFICAR POSSÍVEIS ERROS**
 
+- Divisão do wrench.py em filter.py (filtro de média com janela de 30 valores) e record.py (programa que move o wrist_3 de -180 a 180 e guarda os valores do sensor FT)
+
+## 06/04 - IRISLab
+
+#### Testes nas 56 posições com Gripper e Payload 0
+
+- Comparar com os testes "sem gripper" e "com gripper e payload 1.5" para tentar chegar a uma conclusão
+
+****
+
+- Melhoramento do programa record.py para garantir que os valores de força são corretamente gravados em cada posição do wrist_3
+
+## 07/04 - IRISLab
+
+#### Modelo de Correção do Gripper
+
+- Seja qual for o payload, pode-se considerar como curvas de correção as curvas obtidas em testes onde o EE está verticalmente alinhado com o ambiente, ou seja, ao rodar o wrist_3, nenhuma força deverá ser exercida sobre os 3 eixos XYZ em qualquer posiçào de wrist_3
+- Curva de correção feita através das posições de indices 2, 6, 34 e 38 (Posições onde o EE está verticalmente orientado)
+- Gravação de testes com o modelo teórico para comparação com os testes reais
+
+##### Neste momento exitem 4 tipos de curvas
+
+- Curva de correção posicional do Wrist3  (proveniente da média das curvas das posições de indices 2, 6, 34, 38)
+- Curva de teste das 56 posições com gripper e Payload 1.5Kg
+- Curva de teste das 56 posições com gripper e Payload 0Kg
+- Curva de teste das 56 posições provenientes do modelo teórico
