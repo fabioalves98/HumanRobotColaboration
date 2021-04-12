@@ -637,3 +637,11 @@
 - Curva de teste das 56 posições com gripper e Payload 1.5Kg
 - Curva de teste das 56 posições com gripper e Payload 0Kg
 - Curva de teste das 56 posições provenientes do modelo teórico
+
+****
+
+- Implementação da função reset com o modelo de correção
+
+## 12/04 - IRISLab
+
+- GUI em GTK para os serviços do iris_sami
