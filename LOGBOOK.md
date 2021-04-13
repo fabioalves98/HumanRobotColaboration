@@ -504,7 +504,7 @@
 
 ## 23/03 - IRISLab
 
-#### Teste Correção do Gripper
+#### Teste Correção do Sensor FT
 
 - Pasta F-Wrench
 
@@ -535,7 +535,7 @@
 
 ## 25/03 - IRISLab
 
-#### Modelo de Correção do Gripper
+#### Modelo de Correção do Sensor FT
 
 - Retirar a média dos testes sem gripper
 - Corrigir os testes com gripper com a curva média dos testes sem gripper e guardar os valores resultantes numa matriz
@@ -583,7 +583,7 @@
 
 ## 30/03 - IRISLab
 
-#### Modelo de Correção do Gripper
+#### Modelo de Correção do Sensor FT
 
 - Necessidade de uma matriz que relacione os valores das várias posições do end effector
 - Cada teste apenas dá os valores de correção relativos à posição da junta wrist_3
@@ -604,7 +604,7 @@
 
 ## 05/04 - IRISLab
 
-#### Modelo de Correção do Gripper
+#### Modelo de Correção do Sensor FT
 - Incluir a função de reset
 - Utilizar numa fase inicial a média das curvas com gripper
 - Criação de um conjunto de vetores correspondentes a cada uma das 56 posições para comparação com a orientação corrente do EE
@@ -625,7 +625,7 @@
 
 ## 07/04 - IRISLab
 
-#### Modelo de Correção do Gripper
+#### Modelo de Correção do Sensor FT
 
 - Seja qual for o payload, pode-se considerar como curvas de correção as curvas obtidas em testes onde o EE está verticalmente alinhado com o ambiente, ou seja, ao rodar o wrist_3, nenhuma força deverá ser exercida sobre os 3 eixos XYZ em qualquer posiçào de wrist_3
 - Curva de correção feita através das posições de indices 2, 6, 34 e 38 (Posições onde o EE está verticalmente orientado)
@@ -645,3 +645,31 @@
 ## 12/04 - IRISLab
 
 - GUI em GTK para os serviços do iris_sami
+
+## 13/04 - IRISLab
+
+#### Modelo de Correcção do Sensor FT
+
+- Fazendo a compraração entre as curvas do teste teórico com as curvas com payload 0, vemos que existe um padrão entre as diferenças do 2 testes
+  - Em X, se **diminuirmos** a amplitude do modelo teórico em +/- 10%, aproximamos os modelo teórico aos valores reais
+  - Em Y, se **aumentarmos** a amplitude do modelo teórico em +/- 10% aproximamos o model teórico aos valores reais
+  - Em Z, as diferenças são causadas por outros fatores, pois o modelo teórico, nos testes executados é sempre 0
+    - Necessita de outro tipo de correção - também divido à força com que é acopulado o gripper ao EE
+- Modelo completamente implementado no programa correct.py
+  - Corrige possicionalemnte com o angulo do wrist_3
+  - Corrige orientacionalmente com o modelo teórico
+  - Função de reset implementada nas 2 fases
+
+#### Correções finais ao Modelo
+
+- Corrigir modelo teórico com os resultados obtidos
+  - Obter um valor (os tais +/- 10%) para corrigir o modelo teórico
+  - Testes inicias com simples médias das diferenças
+    - X = 0.846 e Y = 1.115
+    - Possibilidade de obter melhores resultados com metodo dos minimos quadrados
+- Corrigir o eixo Z 
+  - Fazer um test onde se faça variar o EE em torno de X ou Y de forma a obter os valores reais de Z
+  - Comparar com o modelo teórico
+  - Obter o offset criado pela força com que se apertou o gripper
+  - Obter o desvio de amplitude provavelmente existente (tal como X e Y)
+- Corrigir o drift

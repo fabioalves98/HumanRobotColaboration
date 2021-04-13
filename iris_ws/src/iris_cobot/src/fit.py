@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from numpy.core.fromnumeric import mean
 import rospy, rospkg, pickle, signal, sys
 import matplotlib.pyplot as plt
 import numpy as np
@@ -531,8 +532,8 @@ def gripperCorrectTest(plt):
     colors = ['blue' ,'cyan', 'green', 'yellow', 'red', 'pink', 'white', 'black']
     color_select = ''
     w2_select = []
-    id_select = [] # [2, 6, 34, 38] - Correction curve
-    plot_step = False
+    id_select = [2, 6, 34, 36] # [2, 6, 34, 38] - Correction curve
+    plot_step = True
     create_correct = False
     curves = []
 
@@ -555,7 +556,7 @@ def gripperCorrectTest(plt):
                     continue
 
                 # Specific test based on Idx
-                if id_select and idx not in id_select:
+                if id_select and idx in id_select:
                     idx += 1
                     continue
 
@@ -570,6 +571,9 @@ def gripperCorrectTest(plt):
                     offset = test_theory[180,:]
                     test_theory -= offset
 
+                    test_theory[:,0] = test_theory[:,0] * 0.846
+                    test_theory[:,1] = test_theory[:,1] * 1.115
+
                     # Diference between real and theoretical
                     test_diff = test_theory - correct(None, test_no_payl)
 
@@ -579,10 +583,10 @@ def gripperCorrectTest(plt):
                     # plotXYZ(plt, x, test_grip, ':', alpha=1)
                     # plotXYZ(plt, x, test_no_grip, '', alpha=0.3)
                     # plotXYZ(plt, x, test_no_payl, '--', alpha=1)
-                    # plotXYZ(plt, x, test_theory, '', alpha=0.5)
+                    plotXYZ(plt, x, test_theory, '', alpha=0.3)
                     plotXYZ(plt, x, test_diff, '', alpha=1)
                     # plotXYZ(plt, x, correct(None, test_grip), '', alpha=1)
-                    # plotXYZ(plt, x, correct(None, test_no_payl), '--', alpha=1)
+                    plotXYZ(plt, x, correct(None, test_no_payl), '--', alpha=0.3)
 
                     idx += 1
 
@@ -593,7 +597,7 @@ def gripperCorrectTest(plt):
                 except IOError:
                     print('Test does not exist')
                     break
-
+    
     # Create correction mean
     if create_correct:
         correction = np.empty((3, 360))
@@ -610,10 +614,85 @@ def gripperCorrectTest(plt):
             pickle.dump(correction, f)
 
 
+def theoreticalCorrect(plt):
+    x = np.arange(-180,180,1)
+
+    angles = [-180, -135, -90, -45, 0, 45, 90, 135]
+    forbidden = [(45, -180),  (45, -135),
+                (90, -180),  (90, -135), (90, 135),
+                (135, -180), (135, 135)]
+
+    id_select = [2, 6, 34, 36] # [2, 6, 34, 38] - Correction curve
+    plot_step = False
+
+    idx=0
+
+    fig, sub_plots = plt.subplots(2)
+    average_correct = np.empty([1, 2])
+
+    # Observe curves with the same W_1 value - Same color
+    for w_1 in angles:
+        for w_2 in angles:
+            if (w_1, w_2) not in forbidden:
+                # Specific test based on Idx
+                if id_select and idx in id_select:
+                    idx += 1
+                    continue
+
+                try:
+                    # Tests with real robot
+                    test_no_payl = openList('%s%d_%d_%d_temp.list' % (tests_56_no_payload, idx, w_1, w_2))
+                    
+                    # Tests with theoretical model
+                    test_theory = openList('%s%d_%d_%d_temp.list' % (tests_56_theory, idx, w_1, w_2))
+                    offset = test_theory[180,:]
+                    test_theory -= offset
+
+                    # Diference between real and theoretical
+                    a = correct(None, test_no_payl)
+                    b = test_theory
+                    
+                    test_diff = np.divide(a, b, out=np.zeros_like(a), where=b!=0)
+                    
+                    test_diff[:,2] = 0
+                    # X outlier removal
+                    for i in range(len(test_diff[:,0])):
+                        if test_diff[i,0] > 1 or test_diff[i,0] < 0:
+                            test_diff[i,0] = 1
+
+                    # X outlier removal
+                    for i in range(len(test_diff[:,1])):
+                        if test_diff[i,1] < 1 or test_diff[i,1] > 2:
+                            test_diff[i,1] = 1
+
+
+                    print('Opened - %d - %d - %d' % (idx, w_1, w_2))
+                    
+                    # fig, sub_plots = plt.subplots(2)
+                    plotXYZ(sub_plots[0], x, test_theory, '', alpha=0.5)
+                    plotXYZ(sub_plots[0], x, correct(None, test_no_payl), '--', alpha=0.5)
+                    plotXYZ(sub_plots[1], x, test_diff)
+                    print('Average X - %f' % np.mean(test_diff[:, 0]))
+                    print('Average Y - %f' % np.mean(test_diff[:, 1]))
+
+                    average_correct = np.append(average_correct, [[np.mean(test_diff[:, 0]), np.mean(test_diff[:,1])]], axis=0)
+
+                    idx += 1
+
+                    if plot_step:
+                        plt.show()
+
+                except IOError:
+                    print('Test does not exist')
+                    break
+    
+    # Extract values to correct theory model
+    print('Final Average - %s' % str(np.mean(average_correct, axis = 0)))
+
 def gripperRelativeTest(plt):
     x = range(57)
 
-    test_relative = openList(6)
+    test_relative = openList(test_56_relative)
 
     plotXYZ(plt, x, test_relative)
 
@@ -677,14 +756,17 @@ def main():
     # gripperTheoreticalTest(plt)
 
     # Test 56 positions in order to correct FT sensor
-    gripperCorrectTest(plt)
+    # gripperCorrectTest(plt)
+
+    # Test the difference between theory model and no payload in order to correct theoretical model
+    # theoreticalCorrect(plt)
 
     # Test the relativity of the 56 positions
     # gripperRelativeTest(plt)
 
     # EXPERIMENTAL AREA
-    # test = '/record/T0_0_-90_temp.list'
-    # plotXYZ(plt, np.arange(-180, 180, 1), openList(test))
+    test = '/record/TZ0_0_0_temp.list'
+    plotXYZ(plt, np.arange(-180, 180, 1), openList(test))
 
     plt.show()
 

@@ -57,7 +57,7 @@ def main():
                 (135, -180),  (135, 135)]
     idx = 0
     for w_1 in [0]:
-        for w_2 in [-90]:
+        for w_2 in [0]:
             if (w_1, w_2) not in forbidden:
                 # Set Arm joints
                 arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), 0])
@@ -71,10 +71,10 @@ def main():
                 # Move wrist 3
                 for i in range(-180, 180):
                     print('%d - %d' % (idx, i))
-                    arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(i)])
+                    arm.move_joints([0, radians(-90), 0, radians(w_1), radians(i), 0])
                     force = np.empty([1, 3])
                     print('Force RESET - %s' % str(force.shape))
-                    subs = rospy.Subscriber("wrench_correct", WrenchStamped, wrench_filtered)
+                    subs = rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
                     while force.shape[0] < 50:
                         continue
                     subs.unregister()
@@ -83,11 +83,11 @@ def main():
                                         statistics.mean(force[:,2])))
 
                 # Save samples of wrench in files
-                with open(BASE_DIR + '/record/T%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
+                with open(BASE_DIR + '/record/TZ%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
                     print(len(temp_stream))
                     pickle.dump(temp_stream, f)
                 
-                with open(BASE_DIR + '/record/T%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
+                with open(BASE_DIR + '/record/TZ%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
                     print(len(stream))
                     pickle.dump(stream, f)
 

@@ -33,7 +33,7 @@ def main():
     m_g_pub = rospy.Publisher('mg_marker', Marker, queue_size=10)
     m_p_g_pub = rospy.Publisher('mpg_marker', Marker, queue_size=10)
 
-    wrench_pub = rospy.Publisher('wrench', WrenchStamped, queue_size=1)
+    wrench_pub = rospy.Publisher('wrench_theory', WrenchStamped, queue_size=1)
 
     weight = 1.5
 
