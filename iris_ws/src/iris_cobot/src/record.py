@@ -74,22 +74,23 @@ def main():
                     arm.move_joints([0, radians(-90), 0, radians(w_1), radians(i), 0])
                     force = np.empty([1, 3])
                     print('Force RESET - %s' % str(force.shape))
-                    subs = rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
-                    while force.shape[0] < 50:
+                    subs = rospy.Subscriber("wrench_theory", WrenchStamped, wrench_filtered)
+                    while force.shape[0] < 5:
                         continue
                     subs.unregister()
                     print('Force Shape - %s' % str(force.shape))
-                    temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
-                                        statistics.mean(force[:,2])))
+                    # temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
+                    #                     statistics.mean(force[:,2])))
+                    temp_stream.append((force[-1,0], force[-1,1], force[-1,2]))
 
                 # Save samples of wrench in files
-                with open(BASE_DIR + '/record/TZ%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
+                with open(BASE_DIR + '/record/TTZ%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
                     print(len(temp_stream))
                     pickle.dump(temp_stream, f)
                 
-                with open(BASE_DIR + '/record/TZ%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
-                    print(len(stream))
-                    pickle.dump(stream, f)
+                # with open(BASE_DIR + '/record/TZ%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
+                #     print(len(stream))
+                #     pickle.dump(stream, f)
 
                 idx += 1
                 stream = []

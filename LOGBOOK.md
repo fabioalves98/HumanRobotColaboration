@@ -666,10 +666,52 @@
   - Obter um valor (os tais +/- 10%) para corrigir o modelo teórico
   - Testes inicias com simples médias das diferenças
     - X = 0.846 e Y = 1.115
-    - Possibilidade de obter melhores resultados com metodo dos minimos quadrados
+    - Possibilidade de obter melhores resultados com metodo dos mínimos quadrados
 - Corrigir o eixo Z 
   - Fazer um test onde se faça variar o EE em torno de X ou Y de forma a obter os valores reais de Z
   - Comparar com o modelo teórico
   - Obter o offset criado pela força com que se apertou o gripper
   - Obter o desvio de amplitude provavelmente existente (tal como X e Y)
 - Corrigir o drift
+
+## 15/04 - IRISLab
+
+#### Modelo de Correção do Sensor FT
+
+- Antes de aplicar os fatores de correção
+
+  - Mean Mean - **[ 1.30804571  1.50272948  1.576232  ]**
+    Mean Std - [ 0.34988912  0.50012359  0.46279643]
+    Mean Max - [ 2.24789183  2.51883549  3.06942575]
+
+    Std Mean - **[ 0.81536524  0.93259604  0.99550626]**
+    Std Std - [ 0.2548648   0.31685171  0.33100798]
+    Std Max - [ 1.41419107  1.48037816  1.6792048 ]
+
+    Max Mean - **[ 2.92629354  3.01282345  3.47414803]**
+    Max Std - [ 0.86005843  0.99741032  0.9491934 ]
+    Max Max - [ 4.6716544   4.6230199   5.58771009]
+
+- Necessário fazer mais testes para corrigir Z
+
+  - Z parece ser afetado diretamente por X
+  - Utilizando o mesmo fator de correção que em X ( -0.154 )
+
+- Após aplicar o fator de correção em XYZ
+
+  - Mean Mean - **[ 0.6251545   0.59968417  0.61334835]**
+    Mean Std  - [ 0.30244126  0.32259647  0.26306484]
+    Mean Max  - [ 1.5099673   1.38590574  1.27972879]
+
+    Std  Mean - **[ 0.33315744  0.24697093  0.32907034]**
+    Std  Std  - [ 0.08915038  0.09833696  0.10477162]
+    Std  Max  - [ 0.75        0.75        0.67033111]
+
+    Max  Mean - **[ 1.52328022  1.1413761   1.48248086]**
+    Max  Std  - [ 0.41916193  0.39568526  0.40593537]
+    Max  Max  - [ 2.56008408  2.00279845  2.24928167]
+
+****
+
+- Z também é afetado por um fator proporcional ao
+  - Nevessário fazer mais testes isoladamente ao eixo Z para o encontrar 

@@ -532,12 +532,17 @@ def gripperCorrectTest(plt):
     colors = ['blue' ,'cyan', 'green', 'yellow', 'red', 'pink', 'white', 'black']
     color_select = ''
     w2_select = []
-    id_select = [2, 6, 34, 36] # [2, 6, 34, 38] - Correction curve
-    plot_step = True
+    id_select = [2, 6, 34, 38] # [2, 6, 34, 38] - Correction curve
+    plot_step = False
     create_correct = False
+    statistics = True
     curves = []
 
     idx=0
+
+    stat_mean = np.empty([1, 3])
+    stat_std = np.empty([1, 3])
+    stat_max = np.empty([1, 3])
 
     # Observe curves with the same W_1 value - Same color
     for w_1 in angles:
@@ -571,11 +576,30 @@ def gripperCorrectTest(plt):
                     offset = test_theory[180,:]
                     test_theory -= offset
 
+                    test_theory[:,2] += test_theory[:,0] * 0.154
                     test_theory[:,0] = test_theory[:,0] * 0.846
                     test_theory[:,1] = test_theory[:,1] * 1.115
 
                     # Diference between real and theoretical
                     test_diff = test_theory - correct(None, test_no_payl)
+
+                    # EXPERIMENTAL
+                    test_no_payl_z = correct(None, test_no_payl)
+                    test_no_payl_z[:,0] = 0
+                    test_no_payl_z[:,1] = 0
+                    np.subtract(test_no_payl_z[:,2], test_diff[:,0], test_no_payl_z[:,2])
+
+                    # Statistics about the tests
+                    stat_diff = np.abs(test_diff)
+                    diff_mean = np.mean(stat_diff, axis=0)
+                    diff_std = np.std(stat_diff, axis=0)
+                    diff_max = np.max(stat_diff, axis=0)
+                    stat_mean = np.append(stat_mean, [diff_mean], axis=0)
+                    stat_std = np.append(stat_std, [diff_std], axis=0)
+                    stat_max = np.append(stat_max, [diff_max], axis=0)
+                    print('\nMean Difference  - %s ' % diff_mean)
+                    print('Std Dev - %s ' % diff_std)
+                    print('Max Differenve - %s' % diff_max)
 
                     # curves.append(test_no_payl)
 
@@ -585,8 +609,9 @@ def gripperCorrectTest(plt):
                     # plotXYZ(plt, x, test_no_payl, '--', alpha=1)
                     plotXYZ(plt, x, test_theory, '', alpha=0.3)
                     plotXYZ(plt, x, test_diff, '', alpha=1)
+                    # plotXYZ(plt, x, test_no_payl_z, '+', alpha=1)
                     # plotXYZ(plt, x, correct(None, test_grip), '', alpha=1)
-                    plotXYZ(plt, x, correct(None, test_no_payl), '--', alpha=0.3)
+                    plotXYZ(plt, x, correct(None, test_no_payl), '--', alpha=0.5)
 
                     idx += 1
 
@@ -612,6 +637,21 @@ def gripperCorrectTest(plt):
 
         with open(BASE_DIR + correct_56, 'w') as f:
             pickle.dump(correction, f)
+
+    # Statistics
+    if statistics:
+        print('\nMean Mean - %s' % np.mean(stat_mean, axis=0))
+        print('Mean Std  - %s' % np.std(stat_mean, axis=0))
+        print('Mean Max  - %s' % np.max(stat_mean, axis=0))
+
+        print('\nStd  Mean - %s' % np.mean(stat_std, axis=0))
+        print('Std  Std  - %s' % np.std(stat_std, axis=0))
+        print('Std  Max  - %s' % np.max(stat_std, axis=0))
+
+        print('\nMax  Mean - %s' % np.mean(stat_max, axis=0))
+        print('Max  Std  - %s' % np.std(stat_max, axis=0))
+        print('Max  Max  - %s' % np.max(stat_max, axis=0))
+
 
 
 def theoreticalCorrect(plt):
@@ -765,8 +805,25 @@ def main():
     # gripperRelativeTest(plt)
 
     # EXPERIMENTAL AREA
-    test = '/record/TZ0_0_0_temp.list'
-    plotXYZ(plt, np.arange(-180, 180, 1), openList(test))
+    test = openList('/record/TZ0_0_0_temp.list')
+    test_theory = openList('/record/TTZ0_0_0_temp.list')
+
+    offset = test_theory[180,:]
+    test_theory -= offset
+
+    test_theory[:,2] += test_theory[:,0] * 0.154
+    test_theory[:,0] = test_theory[:,0] * 0.846
+    test_theory[:,1] = test_theory[:,1] * 1.115
+
+    test_diff = test_theory - test
+
+    plotXYZ(plt, np.arange(-180, 180, 1), test_theory, '', alpha=0.3)
+    plotXYZ(plt, np.arange(-180, 180, 1), test_diff, '', alpha=1)
+    plotXYZ(plt, np.arange(-180, 180, 1), test, '--', alpha=0.5)
+
+
+
+
 
     plt.show()
 
