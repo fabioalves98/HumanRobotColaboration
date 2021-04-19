@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import rospy, rospkg, pickle
 import numpy as np
+from tf2_geometry_msgs.tf2_geometry_msgs import do_transform_pose
 from ur_msgs.srv import SetSpeedSliderFraction
 from std_srvs.srv import Trigger
-from geometry_msgs.msg import Quaternion
+from geometry_msgs.msg import Vector3, Point, Pose, PoseStamped, Quaternion, Transform, TransformStamped
+from visualization_msgs.msg import Marker
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
@@ -47,7 +49,38 @@ def plotXYZ(plt, x, array, line='', alpha=1, title=''):
         plt.set_title(title, loc='center')
 
 
-def point_to_list(point):
+def arrowMarker(pose, color):
+    ''' Returns an ROS arrow marker
+    Parameters:
+        pose -          geometry_msgs Pose
+        color -         std_msgs ColorRGBA
+    '''
+    marker = Marker()
+    marker.header.frame_id = "base_link"
+    marker.type = marker.ARROW
+    marker.action = marker.ADD
+    marker.scale = Vector3(*[0.2, 0.02, 0.02])
+    marker.pose = pose
+    marker.color = color
+
+    return marker
+
+def vectorFromQuaternion(quaternion):
+    ''' Returns a normalized vector form a quaternion
+    Parameters:
+        quaterion -     geometry_msgs Quaternion
+        color -         std_msgs ColorRGBA
+    '''
+    initial_pose = PoseStamped(pose=Pose(Point(*[1, 0, 0]), Quaternion(*[0, 0, 0, 1])))
+
+    transform = TransformStamped(transform=Transform(Vector3(*[0, 0, 0]), quaternion))
+
+    new_pose = do_transform_pose(initial_pose, transform)
+
+    return pointToList(new_pose.pose.position)
+
+
+def pointToList(point):
     p_list = []
     p_list.append(point.x)
     p_list.append(point.y)
@@ -55,7 +88,7 @@ def point_to_list(point):
     return p_list
 
 
-def orientation_to_list(orientation):
+def quaternionToList(orientation):
     ori = []
     ori.append(orientation.x)
     ori.append(orientation.y)
@@ -63,12 +96,4 @@ def orientation_to_list(orientation):
     ori.append(orientation.w)
     return ori
 
-
-def list_to_orientation(ori_list):
-    orientation = Quaternion()
-    orientation.x = ori_list[0]
-    orientation.y = ori_list[1]
-    orientation.z = ori_list[2]
-    orientation.w = ori_list[3]
-    return orientation
 
