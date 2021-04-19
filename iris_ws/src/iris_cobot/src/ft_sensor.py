@@ -10,7 +10,7 @@ from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Pose, Point, Vector3, WrenchStamped, Quaternion
 from moveit_commander.move_group import MoveGroupCommander
 
-from helpers import arrowMarker, quaternionToList, pointToList, vectorFromQuaternion
+from helpers import arrowMarker, quaternionToList, vectorFromQuaternion
 
 
 def signal_handler(sig, frame):
@@ -36,7 +36,7 @@ def main():
     while not rospy.is_shutdown():
         ee_ori = moveg.get_current_pose().pose.orientation
 
-        origin = [0.6, 0.6, 1.4]
+        origin = [-0.7, 0.3, 0.5]
 
         # Arrow x
         x_rot = quaternion_from_euler(0, 0, radians(-90))

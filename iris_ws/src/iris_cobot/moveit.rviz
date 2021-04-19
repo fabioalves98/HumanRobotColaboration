@@ -6,6 +6,7 @@ Panels:
       Expanded:
         - /Global Options1
         - /MotionPlanning1/Planning Request1
+        - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.5
     Tree Height: 455
@@ -300,6 +301,8 @@ Visualization Manager:
           Value: false
         tool0:
           Value: true
+        tool0_controller:
+          Value: false
         upper_arm_link:
           Value: false
         world:
@@ -319,7 +322,8 @@ Visualization Manager:
         world:
           base_link:
             base:
-              {}
+              tool0_controller:
+                {}
             shoulder_link:
               upper_arm_link:
                 forearm_link:
@@ -373,7 +377,7 @@ Visualization Manager:
       Marker Topic: /w_marker
       Name: W_marker
       Namespaces:
-        {}
+        "": true
       Queue Size: 100
       Value: true
     - Class: rviz/MarkerArray
@@ -412,25 +416,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.7005603313446045
+      Distance: 2.303788661956787
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.19462895393371582
-        Y: 0.23947207629680634
-        Z: 0.5578390955924988
+        X: 0.0429847314953804
+        Y: 0.18802829086780548
+        Z: 0.12882603704929352
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.4597967267036438
+      Pitch: 0.384796679019928
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 1.3154127597808838
+      Yaw: 2.560415744781494
     Saved: ~
 Window Geometry:
   Displays:
