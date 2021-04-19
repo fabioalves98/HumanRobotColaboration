@@ -3,32 +3,32 @@
  <tabbed_widget parent="main_window" name="Main Window">
   <Tab tab_name="Wrench" containers="1">
    <Container>
-    <DockSplitter sizes="0.332574;0.332574;0.334852" count="3" orientation="-">
+    <DockSplitter count="3" sizes="0.332574;0.332574;0.334852" orientation="-">
      <DockArea name="...">
-      <plot style="Lines" mode="TimeSeries">
-       <range left="15.647135" bottom="-20.000000" right="25.646256" top="20.000000"/>
-       <limitY max="20" min="-20"/>
-       <curve color="#ff0003" name="/wrench_filtered/wrench/force/x"/>
-       <curve color="#01ff00" name="/wrench_filtered/wrench/force/y"/>
-       <curve color="#0e00ff" name="/wrench_filtered/wrench/force/z"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range top="30.000000" right="239.849772" left="229.853168" bottom="-30.000000"/>
+       <limitY max="30" min="-30"/>
+       <curve name="/wrench_filtered/wrench/force/x" color="#ff0003"/>
+       <curve name="/wrench_filtered/wrench/force/y" color="#01ff00"/>
+       <curve name="/wrench_filtered/wrench/force/z" color="#0e00ff"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot style="Lines" mode="TimeSeries">
-       <range left="15.649036" bottom="-20.000000" right="25.644588" top="20.000000"/>
-       <limitY max="20" min="-20"/>
-       <curve color="#ff000a" name="/wrench_theory/wrench/force/x"/>
-       <curve color="#06ff00" name="/wrench_theory/wrench/force/y"/>
-       <curve color="#1600ff" name="/wrench_theory/wrench/force/z"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range top="30.000000" right="239.845935" left="229.852120" bottom="-30.000000"/>
+       <limitY max="30" min="-30"/>
+       <curve name="/wrench_theory/wrench/force/x" color="#ff000a"/>
+       <curve name="/wrench_theory/wrench/force/y" color="#06ff00"/>
+       <curve name="/wrench_theory/wrench/force/z" color="#1600ff"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot style="Lines" mode="TimeSeries">
-       <range left="15.644871" bottom="-20.000000" right="25.644672" top="20.000000"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range top="20.000000" right="239.850187" left="229.853813" bottom="-20.000000"/>
        <limitY max="20" min="-20"/>
-       <curve color="#ff0300" name="/wrench_correct/wrench/force/x"/>
-       <curve color="#00ff05" name="/wrench_correct/wrench/force/y"/>
-       <curve color="#1d00ff" name="/wrench_correct/wrench/force/z"/>
+       <curve name="/wrench_correct/wrench/force/x" color="#ff0300"/>
+       <curve name="/wrench_correct/wrench/force/y" color="#00ff05"/>
+       <curve name="/wrench_correct/wrench/force/z" color="#1d00ff"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -36,14 +36,14 @@
   </Tab>
   <Tab tab_name="Raw Wrench" containers="1">
    <Container>
-    <DockSplitter sizes="1" count="1" orientation="-">
+    <DockSplitter count="1" sizes="1" orientation="-">
      <DockArea name="...">
-      <plot style="Lines" mode="TimeSeries">
-       <range left="-185.805843" bottom="-3.263583" right="-175.806234" top="1.559523"/>
+      <plot mode="TimeSeries" style="Lines">
+       <range top="1.468240" right="-1762.422987" left="-1763.297558" bottom="-0.463628"/>
        <limitY/>
-       <curve color="#ff0002" name="/wrench/wrench/force/x"/>
-       <curve color="#00ff03" name="/wrench/wrench/force/y"/>
-       <curve color="#0100ff" name="/wrench/wrench/force/z"/>
+       <curve name="/wrench/wrench/force/x" color="#ff0002"/>
+       <curve name="/wrench/wrench/force/y" color="#00ff03"/>
+       <curve name="/wrench/wrench/force/z" color="#0100ff"/>
       </plot>
      </DockArea>
     </DockSplitter>

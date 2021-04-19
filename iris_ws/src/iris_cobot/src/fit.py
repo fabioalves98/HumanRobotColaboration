@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from numpy.core.fromnumeric import mean
+from numpy.lib.function_base import append
 import rospy, rospkg, pickle, signal, sys
 import matplotlib.pyplot as plt
 import numpy as np
@@ -533,7 +534,7 @@ def gripperCorrectTest(plt):
     color_select = ''
     w2_select = []
     id_select = [2, 6, 34, 38] # [2, 6, 34, 38] - Correction curve
-    plot_step = False
+    plot_step = True
     create_correct = False
     statistics = True
     curves = []
@@ -579,6 +580,7 @@ def gripperCorrectTest(plt):
                     test_theory[:,2] += test_theory[:,0] * 0.154
                     test_theory[:,0] = test_theory[:,0] * 0.846
                     test_theory[:,1] = test_theory[:,1] * 1.115
+                    test_theory[:,2] = test_theory[:,2] * 1.230
 
                     # Diference between real and theoretical
                     test_diff = test_theory - correct(None, test_no_payl)
@@ -700,7 +702,7 @@ def theoreticalCorrect(plt):
                         if test_diff[i,0] > 1 or test_diff[i,0] < 0:
                             test_diff[i,0] = 1
 
-                    # X outlier removal
+                    # Y outlier removal
                     for i in range(len(test_diff[:,1])):
                         if test_diff[i,1] < 1 or test_diff[i,1] > 2:
                             test_diff[i,1] = 1
@@ -796,7 +798,7 @@ def main():
     # gripperTheoreticalTest(plt)
 
     # Test 56 positions in order to correct FT sensor
-    # gripperCorrectTest(plt)
+    gripperCorrectTest(plt)
 
     # Test the difference between theory model and no payload in order to correct theoretical model
     # theoreticalCorrect(plt)
@@ -804,26 +806,59 @@ def main():
     # Test the relativity of the 56 positions
     # gripperRelativeTest(plt)
 
+    return 0
     # EXPERIMENTAL AREA
-    test = openList('/record/TZ0_0_0_temp.list')
-    test_theory = openList('/record/TTZ0_0_0_temp.list')
+    tests = [
+        '/record/TZ0_0_0_temp.list',
+        '/record/TZ0_0_90_temp.list',
+        '/record/TZ0_-180_0_temp.list',
+        '/record/TZ0_-180_90_temp.list'
+    ]
 
-    offset = test_theory[180,:]
-    test_theory -= offset
+    tests_theory = [
+        '/record/TTZ0_0_0_temp.list',
+        '/record/TTZ0_0_90_temp.list',
+        '/record/TTZ0_-180_0_temp.list',
+        '/record/TTZ0_-180_90_temp.list'
+    ]
 
-    test_theory[:,2] += test_theory[:,0] * 0.154
-    test_theory[:,0] = test_theory[:,0] * 0.846
-    test_theory[:,1] = test_theory[:,1] * 1.115
+    average_correct = []
 
-    test_diff = test_theory - test
+    for i in range(len(tests)):
+        test = openList(tests[i])
+        test_theory = openList(tests_theory[i])
 
-    plotXYZ(plt, np.arange(-180, 180, 1), test_theory, '', alpha=0.3)
-    plotXYZ(plt, np.arange(-180, 180, 1), test_diff, '', alpha=1)
-    plotXYZ(plt, np.arange(-180, 180, 1), test, '--', alpha=0.5)
+        offset = test_theory[180,:]
+        test_theory -= offset
 
+        # test_theory[:,2] += test_theory[:,0] * 0.154
+        # test_theory[:,0] = test_theory[:,0] * 0.846
+        # test_theory[:,1] = test_theory[:,1] * 1.115
+        # test_theory[:,2] = test_theory[:,2] * 1.230
 
+        test_diff = test_theory - test
+        
+        # Z Correction
+        # a = test
+        # b = test_theory
+        # test_diff = np.divide(a, b, out=np.zeros_like(a), where=b!=0)
 
+        # test_diff[:,0] = 0
+        # test_diff[:,1] = 0
+        # for i in range(len(test_diff[:,2])):
+        #     if test_diff[i,2] < 1 or test_diff[i,2] > 2:
+        #         test_diff[i,2] = 1
+        
+        # average_correct.append(np.mean(test_diff[:,2]))
 
+        plotXYZ(plt, np.arange(-180, 180, 1), test_theory, '', alpha=0.3)
+        plotXYZ(plt, np.arange(-180, 180, 1), test_diff, '', alpha=1)
+        plotXYZ(plt, np.arange(-180, 180, 1), test, '--', alpha=0.5)
+
+        plt.show()
+        plt.cla()
+
+    # print(np.mean(average_correct))
 
     plt.show()
 

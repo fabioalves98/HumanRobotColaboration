@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-from os import WIFCONTINUED
-import rospy, time
+import rospy
 import math
 from geometry_msgs.msg import WrenchStamped
 
 from sami.gripper import Gripper
-import helpers
 
 GRIPPER_STANDBY = 1000
 
@@ -56,7 +54,7 @@ def gripperControl(data):
     # Example of gripper contorl when handling objects
     else:
         if gripper_ready < 0:
-            if abs(weight) < 1.5 or abs(f_z) > 10:
+            if abs(weight) < 2 or abs(f_z) > 10:
                     gripper.release()
                     print('Releasing Object')
                     gripper_ready = GRIPPER_STANDBY
@@ -65,12 +63,10 @@ def gripperControl(data):
 def main():
     rospy.init_node('gripper', anonymous=True)
 
-    global gripper 
+    global gripper
     gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
 
-    helpers.reset_ft_sensor()
-
-    wrench_sub = rospy.Subscriber('wrench_filtered', WrenchStamped, gripperControl)
+    wrench_sub = rospy.Subscriber('wrench_correct', WrenchStamped, gripperControl)
 
     rospy.spin()
 

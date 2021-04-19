@@ -714,4 +714,34 @@
 ****
 
 - Z também é afetado por um fator proporcional ao
-  - Nevessário fazer mais testes isoladamente ao eixo Z para o encontrar 
+  - Nevessário fazer mais testes isoladamente ao eixo Z para o encontrar
+
+## 16/04 - IRISLab
+
+#### Modelo de Corrreção do Sensor FT
+
+- Testes isolados ao eixo Z
+
+- Fixar o wrist_3 numa posição e fazer rodar o wrist_2 sobre um dos eixos Y ou X
+
+- **Resultado - **Fator de correção de Z = 1.230
+
+- Todos os fatores têm que ser melhorados com o metodo dos quadrados minimos
+
+- É necessário criar um conjunto de testes de treino, onde se iram retirar os fatores de correção e um cojunto de testes de validação onde os parametros possam ser testados
+
+  - Os fatores de correção devem ser referentes tanto aos exos isolados como entre eixos (XZ ou YZ)
+
+- Até agora os fatores de correção obtidos com médias de diferenças retiradas das observações são
+
+  - theory[:,z] += theory[:,x] * 0.154
+
+    theory[:,x] = theory[:,x] * 0.846
+
+    theory[:,y] = theory[:,y] * 1.115
+
+    theory[:,z] = theory[:,z] * 1.230
+
+#### Controlo do Gripper Através de Forças
+
+- Criação do vetor peso para atribuir acçoes ao gripper beaseadas nesse vetor

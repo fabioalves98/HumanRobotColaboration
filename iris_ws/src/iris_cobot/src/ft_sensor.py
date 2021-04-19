@@ -186,7 +186,13 @@ def main():
         # Obtain force
         f_x = np.inner(v_x, v_g) * weight * 10
         f_y = np.inner(v_y, v_g) * weight * 10
-        f_z = np.inner(v_z, v_g) * weight * 10
+        f_z = np.inner(v_z, v_g) * weight * 10 
+
+        # Correction Factors
+        f_x = f_x * 0.846
+        f_y = f_y * 1.115
+        f_z += f_x * 0.154
+        f_z = f_z * 1.230
 
         # Wrench pub
         wrench = WrenchStamped()
