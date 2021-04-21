@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.2.0)
 project(iris_cobot)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(catkin REQUIRED COMPONENTS
   roscpp
@@ -10,6 +13,8 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   pcl_ros
   pcl_conversions
+  moveit_core
+  moveit_ros_planning_interface
 )
 
 catkin_python_setup()
@@ -26,4 +31,8 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(viewer src/viewer.cpp)
 target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
+add_executable(fk_ik_jacobian src/fk_ik_jacobian.cpp)
+target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
 
+add_executable(controller src/controller.cpp)
+target_link_libraries(controller ${catkin_LIBRARIES})

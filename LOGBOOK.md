@@ -716,7 +716,7 @@
 - Z também é afetado por um fator proporcional ao
   - Nevessário fazer mais testes isoladamente ao eixo Z para o encontrar
 
-## 16/04 - IRISLab
+## 16/04 - Reunião
 
 #### Modelo de Corrreção do Sensor FT
 
@@ -742,6 +742,36 @@
 
     theory[:,z] = theory[:,z] * 1.230
 
-#### Controlo do Gripper Através de Forças
+#### Controlo do Gripper através de Forças
 
-- Criação do vetor peso para atribuir acçoes ao gripper beaseadas nesse vetor
+- Criação do vetor peso para atribuir açoes ao gripper beaseadas nesse vetor
+
+#### Tarefas
+
+- Controlo do Robot pelos movimentos de força
+  - Fazer com que quando o robot pegue numa peça, isole o peso dela, para que as forças sentidas sejam utilizadas para controlar o seu movimento
+  - Real time motion planning
+
+## 19/04 - IRISLab
+
+- Refactor do modelo teórico
+
+#### Controlo do Gripper através de Forças
+
+- Utilização do vetor peso para que em conjunto com o vetor gravidade controlar a açao do gripper largar um objeto
+
+## 20/04 - IRISLab
+
+#### Controlo do Robot através de Forças
+
+- Direct communication with robot
+  - RTDE - https://www.universal-robots.com/articles/ur/interface-communication/real-time-data-exchange-rtde-guide/
+  - URScript through socket - https://www.zacobria.com/universal-robots-zacobria-forum-hints-tips-how-to/script-via-socket-connection/
+  - ur_rtde - https://sdurobotics.gitlab.io/ur_rtde/
+- Inverse Kinematics
+  - MovIt - http://docs.ros.org/en/melodic/api/moveit_tutorials/html/doc/robot_model_and_robot_state/robot_model_and_robot_state_tutorial.html
+  - Jacobian - https://www.rosroboticslearning.com/jacobian#:~:text=Jacobian%20is%20Matrix%20in%20robotics,(%20)%20of%20a%20robot%20manipulator.&text=Each%20column%20in%20the%20Jacobian,variation%20in%20each%20joint%20velocity
+  - Orocos KDL - https://www.orocos.org/wiki/orocos/kdl-wiki.html
+
+## 21/04 - IRISLab
+
