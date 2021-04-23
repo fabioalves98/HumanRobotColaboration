@@ -7,11 +7,12 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 
+bool KEYBOARD = false;
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "controller");
-    ros::NodeHandle n;
+    ros::NodeHandle n_handle;
 
     ros::AsyncSpinner spinner(1); 
     spinner.start();
@@ -51,22 +52,101 @@ int main(int argc, char **argv)
     // Pose obtained directly from move group
     std::cout << move_group.getCurrentPose() << std::endl;
 
-
-    // Goal EE pose
-    Eigen::Vector3d new_position = position;
-    new_position[0] += 0.1;
-    new_position[1] += 0.1;
-    new_position[2] += 0.1;
-    Eigen::Quaterniond new_orientation = orientation;
-
     while(true)
-    {   
+    {
+        // Goal EE pose
+        Eigen::Vector3d translation;
+        translation << 0, 0, 0;
+        Eigen::Vector3d rotation;
+        rotation << 0, 0, 0;
+
+        // Input character for direction
+        if (KEYBOARD)
+        {
+            char input;
+            while(1) {
+                system("stty raw");
+                input = getchar();
+                system("stty cooked");
+                system("clear");
+                if(input == '.') {
+                    system("stty cooked");
+                    exit(0);
+                }
+                else
+                {
+                    if(input == 'w')
+                    {
+                        translation[0] = 0.2;
+                        break;
+                    }
+                    else if(input == 's')
+                    {
+                        translation[0] = -0.2;
+                        break;
+                    }
+                    else if(input == 'a')
+                    {
+                        translation[1] = 0.2;
+                        break;
+                    }
+                    else if(input == 'd')
+                    {
+                        translation[1] = -0.2;
+                        break;
+                    }
+                    else if(input == 'u')
+                    {
+                        rotation[0] = 0.2;
+                        break;
+                    }
+                    else if(input == 'j')
+                    {
+                        rotation[0] = -0.2;
+                        break;
+                    }
+                    else if(input == 'h')
+                    {
+                        rotation[2] = 0.2;
+                        break;
+                    }
+                    else if(input == 'k')
+                    {
+                        rotation[2] = -0.2;
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            boost::shared_ptr<geometry_msgs::Vector3 const> message;
+            geometry_msgs::Vector3 weight;
+            message = ros::topic::waitForMessage<geometry_msgs::Vector3>("weight_vector", n_handle);
+            if(message != NULL)
+            {
+                weight = *message;
+            }
+            std::cout << weight << std::endl;
+
+            if (abs(weight.x) > 0.1)
+            {
+                translation[0] = weight.x * 2;
+            }
+            if (abs(weight.y) > 0.1)
+            {
+                translation[1] = weight.y * 2;
+            }
+            if (abs(weight.z) > 0.1)
+            {
+                translation[2] = weight.z * 2;
+            }
+        }
+        
         // auto start = std::chrono::high_resolution_clock::now();
-        // Get current position
+        // Create Kinematic State
         current_joint_values = move_group.getCurrentJointValues();
         kinematic_state->setJointGroupPositions(joint_model_group, current_joint_values);
-        const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("gripper_link");
-        position = end_effector_state.translation();
 
         // Jacobian Matrix
         Eigen::Vector3d reference_point_position(0.0, 0.0, 0.0);
@@ -74,11 +154,10 @@ int main(int argc, char **argv)
         kinematic_state->getJacobian(joint_model_group,
                                     kinematic_state->getLinkModel(joint_model_group->getLinkModelNames().back()),
                                     reference_point_position, jacobian);
-        // std::cout << "Jacobian: \n" << jacobian << "\n" << std::endl;
 
         // Movement calculator
         Eigen::VectorXd displacement(6);
-        displacement << new_position - position, 0, 0, 0;
+        displacement << translation, rotation;
         // std::cout << "Displacement" << std::endl << displacement << std::endl;
         double scaling_factor = 0.1;
         displacement *= scaling_factor;
@@ -100,19 +179,13 @@ int main(int argc, char **argv)
         // std::chrono::duration<double> elapsed = finish - start;
         // std::cout << "Elapsed time: " << elapsed.count() << " s\n";
         // std::cout << "Frequency: " << 1 / elapsed.count() << " hz\n";
-
+        
+        // move_group.stop();
         move_group.setJointValueTarget(joint_command);
         
-        // auto start = std::chrono::high_resolution_clock::now();
         // move_group.move();
-        // auto finish = std::chrono::high_resolution_clock::now();
-        // std::chrono::duration<double> elapsed = finish - start;
-        // std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-        // std::cout << "Frequency: " << 1 / elapsed.count() << " hz\n";
-        
-        move_group.stop();
         move_group.asyncMove();
-        ros::Duration(0.05).sleep();
+        ros::Duration(0.1).sleep();
     }
     
     ros::shutdown();

@@ -43,7 +43,7 @@ def weightMarker(data):
 
     # Create and normalize vector
     v_w = np.array(pointToList(p_w_new.pose.position) - np.array(origin))
-    v_w = v_w / np.linalg.norm(v_w)
+    # v_w = v_w / np.linalg.norm(v_w)
 
     # Create point marker
     m_w = Marker()
