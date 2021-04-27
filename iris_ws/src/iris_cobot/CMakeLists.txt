@@ -22,6 +22,7 @@ catkin_python_setup()
 catkin_package()
 
 find_package(PCL REQUIRED)
+find_package(ur_rtde REQUIRED)
 
 include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${PCL_INCLUDE_DIRS})
@@ -36,3 +37,6 @@ target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
 
 add_executable(controller src/controller.cpp)
 target_link_libraries(controller ${catkin_LIBRARIES})
+
+add_executable(rtde src/rtde.cpp)
+target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES})

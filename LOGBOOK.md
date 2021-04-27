@@ -775,9 +775,37 @@
 
 ## 21/04 - IRISLab
 
-- Jacobian
+#### Jacobian Theory
+
+- Introduction to jacobian matrix
+- Move it robot state, ik and jacobian tutorial made
+- Start experimenting with movements in simulated ur10e (gazebo). **Problems**
+  - Gazebo só publica o estado do robot a 50Hz, ou seja, o ciclo de calculo de juntas do robot apenas pode correr num máximo de 50Hz
+  - Gazebo apenas aceita controlo de movimento através de valores de juntas, ou seja, requer o moveit para enviar valores de juntas -> mais lento
+    - Enviar movimento sincronamente faz com que o movimento do robot seja aos solavancos, pois, entre cada movimento há o tempo de calculo do proximo
+    - Enviar movimentos assincronamente funciona mas é necessário encontrar a frequencia certa/ótima para enviar os movimentos, senao o robot "encrava"
 
 ## 22/04 - IRISLab
 
-- Jacobian
+#### Jacobian Simulation
+
+- Envio de valores de juntas asincronamente ao robot através do moveit
+- Maioria dos movimentos são fluídos mas há certas posições onde o robot "falha" em calcular a trajetoria
+  - Ou por exceder o limite das juntas
+  - Ou por exceder o limite de alcance
+  - Ou por nao conseguir mesmo se mover nessa dada direção
+- Há a necessidade de controlar as juntas do robot por velocidade em ves de por posição
+
+## 23/04 - IRISLab
+
+#### Jacobian Real UR10e
+
+- O controlador funciona um pouco melhor pois os valores das juntas são publicados a 500Hz
+- Ainda hà alguns solavancos, mas são muito suaves
+- Controlador integrado com o peso calculado para que o robot se mova na direção que está a ser empurrado
+  - Resultados positivos
+  - Apenas há numa diferença na velocidade com que o EE se move dependendo da força que esta a ser execida e da sua posição
+    - Pode ser resolvido efetuando o controlo das juntas por velocidade
+
+## 26/04 - IRISLab
 
