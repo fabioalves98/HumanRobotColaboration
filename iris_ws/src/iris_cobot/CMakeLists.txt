@@ -23,6 +23,7 @@ catkin_package()
 
 find_package(PCL REQUIRED)
 find_package(ur_rtde REQUIRED)
+find_package(Curses REQUIRED)
 
 include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${PCL_INCLUDE_DIRS})
@@ -39,4 +40,4 @@ add_executable(controller src/controller.cpp)
 target_link_libraries(controller ${catkin_LIBRARIES})
 
 add_executable(rtde src/rtde.cpp)
-target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES})
+target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})

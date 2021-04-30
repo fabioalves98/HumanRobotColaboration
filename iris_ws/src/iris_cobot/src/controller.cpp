@@ -7,7 +7,10 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 
+#include <geometry_msgs/Vector3.h>
+
 bool KEYBOARD = false;
+
 
 int main(int argc, char **argv)
 {
@@ -54,6 +57,8 @@ int main(int argc, char **argv)
 
     while(true)
     {
+        auto start = std::chrono::high_resolution_clock::now();
+
         // Goal EE pose
         Eigen::Vector3d translation;
         translation << 0, 0, 0;
@@ -129,21 +134,15 @@ int main(int argc, char **argv)
             }
             std::cout << weight << std::endl;
 
-            if (abs(weight.x) > 0.1)
+            if (abs(weight.x) > 0.15 || abs(weight.y) > 0.15 || abs(weight.z) > 0.15)
             {
                 translation[0] = weight.x * 2;
-            }
-            if (abs(weight.y) > 0.1)
-            {
                 translation[1] = weight.y * 2;
-            }
-            if (abs(weight.z) > 0.1)
-            {
                 translation[2] = weight.z * 2;
-            }
+            }            
         }
+
         
-        // auto start = std::chrono::high_resolution_clock::now();
         // Create Kinematic State
         current_joint_values = move_group.getCurrentJointValues();
         kinematic_state->setJointGroupPositions(joint_model_group, current_joint_values);
@@ -185,6 +184,12 @@ int main(int argc, char **argv)
         
         // move_group.move();
         move_group.asyncMove();
+
+        auto finish = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double> elapsed = finish - start;
+        std::cout << "Elapsed time: " << elapsed.count() << " s\n";
+        std::cout << "Frequency: " << 1 / elapsed.count() << " hz\n";
+        
         ros::Duration(0.1).sleep();
     }
     

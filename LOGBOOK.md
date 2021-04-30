@@ -133,7 +133,6 @@
     - TESTE - Alterar para X = 50, Y = 50, Z = 50
     - RESULTADO - Exatamente o mesmo do primeiro teste de rotação
 - Alterar o valor do peso do payload ou qualquer componente do centro de gravidade do TCP faz com que o controlador do sensor reinicie os seus valores a zero, por menor que seja a alteração, qualquer que seja, provoca um reset
-  
 ****
 
   - Repositório iniciado com o iris_ws -> https://github.com/fabioalves98/HumanRobotColaboration
@@ -818,3 +817,5 @@
 ## 28/04 - IRISLab
 
 - UR10e
+
+## 30/04 - Reunião
