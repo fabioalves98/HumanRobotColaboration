@@ -808,14 +808,51 @@
 
 ## 26/04 - IRISLab
 
-- UR10e
+#### URScript and RTDE Interfaces
+
+- Envio de instrucoes em URScript para o Robot através de sockets pela interface Real-Time 30003
+  - Tentativa de utilização do pacote pip python-urx mas é preferível enviar os comandos manualmente
+  - Robot recebe e executa bem as intruções
+  - Falta testar a velocidade com que se consegue interagir com o robot
+- Utilização da bilblioteca C++ ur_rtde para interagir com o robot
+  - Bilbioteca muito completa com muitas funcionalidades
+  - No entanto o robot apenas suporta uma ligação à porta 30004 simultaneamente o que significa que o driver não pode estar ligado, pois este tambem usa a interface RTDE
 
 ## 27/04 - IRISLab
 
-- UR10e
+#### URDriver mais recente
+
+- Experimentação da versao mais recente do ur_robot_driver que contem controladores de velocidade
+  - Tanto controladores poderosos em PID como os de posição, tal como um controlador direto de velocidade das juntas do robot
 
 ## 28/04 - IRISLab
 
-- UR10e
+#### URSim em Virtual Machine
+
+- Simulador oficial do UR10e que providencia todas as interfaces e funcionalidades do robot real (excepto controlos por força)
+- Aceita comandos URScript
+- Boa plataforma para testes de interação com o robot
 
 ## 30/04 - Reunião
+
+#### Jacobian Weight Real UR10e
+
+- Testes com vários parametros de controlo assincrono da posição do robot
+- Comportamento actual é aceitável na medida em que as trajetorias calculadas são precisas
+  - No entanto existe delay, a velocidade é muito lenta, e é necessário ser adaptada à força que se faz (quanto mais força, mais rápido)
+- Necessário incorporar movimentos rotacionais utilizado o torque
+
+#### Multiple Control Interfaces
+
+
+
+<img src="screenshots/logbook/1.jpg" width=80%>
+
+#### Reunião
+
+- Necessidade de implementar controlador com velocidades de juntas
+- Implementar movimentos angulares com os valores de torque
+- Fazer o robot pegar em algo e depois move-lo com a força
+- Dar reset no peso quando o robot pega em algo (dar um X tempo de calibração)
+- Implementar double-tap
+- Tentar distinguir entre mover o EE e pegar numa peça (relação torque / força)
