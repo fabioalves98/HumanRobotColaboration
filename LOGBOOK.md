@@ -856,3 +856,6 @@
 - Dar reset no peso quando o robot pega em algo (dar um X tempo de calibração)
 - Implementar double-tap
 - Tentar distinguir entre mover o EE e pegar numa peça (relação torque / força)
+
+## 05/05 - IRISLab
+

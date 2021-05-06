@@ -6,8 +6,9 @@ from math import radians
 from std_msgs.msg import ColorRGBA
 from tf.transformations import quaternion_multiply, quaternion_from_euler
 from tf2_geometry_msgs import do_transform_pose
+import tf2_ros
 from visualization_msgs.msg import Marker
-from geometry_msgs.msg import Pose, Point, Vector3, WrenchStamped, Quaternion
+from geometry_msgs.msg import Pose, Point, Vector3, WrenchStamped, Quaternion, TransformStamped
 from moveit_commander.move_group import MoveGroupCommander
 
 from helpers import arrowMarker, quaternionToList, vectorFromQuaternion
@@ -24,14 +25,22 @@ def main():
 
     moveg = MoveGroupCommander('manipulator')
 
-    m_x_pub = rospy.Publisher('mx_marker', Marker, queue_size=10)
-    m_y_pub = rospy.Publisher('my_marker', Marker, queue_size=10)
-    m_z_pub = rospy.Publisher('mz_marker', Marker, queue_size=10)
+    br = tf2_ros.TransformBroadcaster()
+
+    # m_x_pub = rospy.Publisher('mx_marker', Marker, queue_size=10)
+    # m_y_pub = rospy.Publisher('my_marker', Marker, queue_size=10)
+    # m_z_pub = rospy.Publisher('mz_marker', Marker, queue_size=10)
     m_g_pub = rospy.Publisher('mg_marker', Marker, queue_size=10)
 
     wrench_pub = rospy.Publisher('wrench_theory', WrenchStamped, queue_size=1)
 
     weight = 1.5
+
+    x_rot = quaternion_from_euler(0, 0, radians(-90))
+    y_rot = quaternion_from_euler(0, radians(90), 0)
+
+    ft_rot = quaternion_from_euler(radians(-90), 0, radians(-90))
+
 
     while not rospy.is_shutdown():
         ee_ori = moveg.get_current_pose().pose.orientation
@@ -39,20 +48,31 @@ def main():
         origin = [-0.7, 0.3, 0.5]
 
         # Arrow x
-        x_rot = quaternion_from_euler(0, 0, radians(-90))
         x_ori = Quaternion(*quaternion_multiply(quaternionToList(ee_ori), x_rot))
-        x_pose = Pose(Point(*origin), x_ori)
-        m_x = arrowMarker(x_pose, ColorRGBA(*[1, 0, 0, 1]))
+        # x_pose = Pose(Point(*origin), x_ori)
+        # m_x = arrowMarker(x_pose, ColorRGBA(*[1, 0, 0, 1]))
 
-        # Arrow y
-        y_rot = quaternion_from_euler(0, radians(90), 0)
+        # # Arrow y
         y_ori = Quaternion(*quaternion_multiply(quaternionToList(ee_ori), y_rot))
-        y_pose = Pose(Point(*origin), y_ori)
-        m_y = arrowMarker(y_pose, ColorRGBA(*[0, 1, 0, 1]))
+        # y_pose = Pose(Point(*origin), y_ori)
+        # m_y = arrowMarker(y_pose, ColorRGBA(*[0, 1, 0, 1]))
 
-        # Arrow z
-        z_pose = Pose(Point(*origin),ee_ori)
-        m_z = arrowMarker(z_pose, ColorRGBA(*[0, 0, 1, 1]))
+        # # Arrow z
+        # z_pose = Pose(Point(*origin),ee_ori)
+        # m_z = arrowMarker(z_pose, ColorRGBA(*[0, 0, 1, 1]))
+
+
+        # FT Orientation
+        ft_ori = quaternion_multiply(quaternionToList(ee_ori), ft_rot)
+        tcp_marker = TransformStamped()
+        tcp_marker.header.stamp = rospy.Time.now()
+        tcp_marker.header.frame_id = "world"
+        tcp_marker.child_frame_id = "ft_sensor"
+        tcp_marker.transform.translation = Vector3(*origin)
+        tcp_marker.transform.rotation = Quaternion(*ft_ori)
+
+
+        br.sendTransform(tcp_marker)
 
         # Gravity
         g_ori = Quaternion(*quaternion_from_euler(0, radians(90), 0))
@@ -60,9 +80,9 @@ def main():
         m_g = arrowMarker(g_pose, ColorRGBA(*[1, 0, 0.5, 1]))
 
         # Publishers
-        m_x_pub.publish(m_x)
-        m_y_pub.publish(m_y)
-        m_z_pub.publish(m_z)
+        # m_x_pub.publish(m_x)
+        # m_y_pub.publish(m_y)
+        # m_z_pub.publish(m_z)
         m_g_pub.publish(m_g)
 
         # Vectors

@@ -39,5 +39,8 @@ target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
 add_executable(controller src/controller.cpp)
 target_link_libraries(controller ${catkin_LIBRARIES})
 
+add_executable(rotation src/rotation.cpp)
+target_link_libraries(rotation ${catkin_LIBRARIES})
+
 add_executable(rtde src/rtde.cpp)
 target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})
