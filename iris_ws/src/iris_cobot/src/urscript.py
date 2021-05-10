@@ -12,7 +12,8 @@ def socketConnection():
     s.connect((HOST, PORT))
 
     # s.send ("set_digital_out(2,True)" + "\n")
-    s.send(b'speedj([0.2,0,0,0,0,0], 0.5, 3)\n')
+    # s.send(b'speedl([0.2,0,0,0,0,0], 0.5, 3)\n')
+    s.send(b'speedl([0,-0.4,0.0,0.0,0,0.0],0.5,2)\n')
     # s.send("movej([0,1.57,-1.57,3.14,-1.57,1.57], a=1.4, v=1.05, t=0, r=0)" + "\n")
 
     data = s.recv(1024)

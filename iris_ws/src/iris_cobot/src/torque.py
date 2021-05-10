@@ -21,6 +21,19 @@ def torqueRotation(data):
     t_y = data.wrench.torque.y
     t_z = data.wrench.torque.z
 
+    if t_x > radians(45):
+        t_x = radians(45)
+    if t_x < -radians(45):
+        t_x = -radians(45)
+    if t_y > radians(45):
+        t_y = radians(45)
+    if t_y < -radians(45):
+        t_y = -radians(45)
+    if t_z > radians(45):
+        t_z = radians(45)
+    if t_z < -radians(45):
+        t_z = -radians(45)
+    
     br = tf2_ros.TransformBroadcaster()
 
     origin = [-0.7, 0.3, 0.5]
