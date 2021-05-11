@@ -40,29 +40,32 @@ def torqueRotation(data):
     ee_ori = moveg.get_current_pose().pose.orientation
 
     rot = quaternion_from_euler(radians(-90), 0, radians(-90))
-    w_ori = quaternion_multiply(quaternionToList(ee_ori), rot)
+    ft_sensor_ori = quaternion_multiply(quaternionToList(ee_ori), rot)
 
     # Point in space with coordinates representing the weight
-    w_pose = PoseStamped()
-    w_pose.header.frame_id = "base_link"
-    w_pose.pose.position = Point(*[0, 0, 0])
-    w_pose.pose.orientation = Quaternion(*quaternion_from_euler(t_x, t_y, t_z))
+    torque_pose = PoseStamped()
+    torque_pose.header.frame_id = "world"
+    torque_pose.pose.position = Point(*[0, 0, 0])
+    torque_pose.pose.orientation = Quaternion(*quaternion_from_euler(t_x, t_y, t_z))
 
     # Transform such point to visualization axes
-    t_w = TransformStamped()
-    t_w.header.frame_id = "base_link"
-    t_w.transform.translation = Vector3(*origin)
-    t_w.transform.rotation = Quaternion(*w_ori)
+    ft_sensor_transform = TransformStamped()
+    ft_sensor_transform.header.frame_id = "world"
+    ft_sensor_transform.transform.translation = Vector3(*origin)
+    ft_sensor_transform.transform.rotation = Quaternion(*ft_sensor_ori)
 
-    p_w_new = do_transform_pose(w_pose, t_w)
+    torque_pose_new = do_transform_pose(torque_pose, ft_sensor_transform)
 
-    t = TransformStamped()
-    t.header.stamp = rospy.Time.now()
-    t.header.frame_id = "world"
-    t.child_frame_id = "torque"
-    t.transform.translation = Vector3(*origin)
-    t.transform.rotation = p_w_new.pose.orientation
-    br.sendTransform(t)
+    torque_transform = TransformStamped()
+    torque_transform.header.stamp = rospy.Time.now()
+    torque_transform.header.frame_id = "world"
+    torque_transform.child_frame_id = "torque"
+    torque_transform.transform.translation = Vector3(*origin)
+    torque_transform.transform.rotation = torque_pose_new.pose.orientation
+
+    # print()
+
+    br.sendTransform(torque_transform)
 
     # Create and normalize vector
     # rot_q = quaternion_multiply(quaternionToList(p_w_new.pose.orientation), 

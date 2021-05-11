@@ -60,11 +60,11 @@ def weightMarker(data):
 
 
 def main():
-    rospy.init_node('weight', anonymous=True)
+    rospy.init_node('force_to_linvel', anonymous=True)
 
     global weight_marker, weight_pub, moveg
     weight_marker = rospy.Publisher('w_marker', Marker, queue_size=1)
-    weight_pub = rospy.Publisher('weight_vector', Vector3, queue_size=1)
+    weight_pub = rospy.Publisher('linear_velocity', Vector3, queue_size=1)
 
     moveg = MoveGroupCommander('manipulator')
 

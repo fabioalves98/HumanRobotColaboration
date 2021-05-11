@@ -3,32 +3,32 @@
  <tabbed_widget parent="main_window" name="Main Window">
   <Tab tab_name="Wrench" containers="1">
    <Container>
-    <DockSplitter count="3" sizes="0.332574;0.332574;0.334852" orientation="-">
+    <DockSplitter orientation="-" count="3" sizes="0.332574;0.332574;0.334852">
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines">
-       <range top="30.000000" right="239.849772" left="229.853168" bottom="-30.000000"/>
+      <plot style="Lines" mode="TimeSeries">
+       <range top="30.000000" bottom="-30.000000" left="-21.739679" right="-19.568517"/>
        <limitY max="30" min="-30"/>
-       <curve name="/wrench_filtered/wrench/force/x" color="#ff0003"/>
-       <curve name="/wrench_filtered/wrench/force/y" color="#01ff00"/>
-       <curve name="/wrench_filtered/wrench/force/z" color="#0e00ff"/>
+       <curve color="#ff0003" name="/wrench_filtered/wrench/force/x"/>
+       <curve color="#01ff00" name="/wrench_filtered/wrench/force/y"/>
+       <curve color="#0e00ff" name="/wrench_filtered/wrench/force/z"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines">
-       <range top="30.000000" right="239.845935" left="229.852120" bottom="-30.000000"/>
+      <plot style="Lines" mode="TimeSeries">
+       <range top="30.000000" bottom="-30.000000" left="-21.727744" right="-19.567517"/>
        <limitY max="30" min="-30"/>
-       <curve name="/wrench_theory/wrench/force/x" color="#ff000a"/>
-       <curve name="/wrench_theory/wrench/force/y" color="#06ff00"/>
-       <curve name="/wrench_theory/wrench/force/z" color="#1600ff"/>
+       <curve color="#ff000a" name="/wrench_theory/wrench/force/x"/>
+       <curve color="#06ff00" name="/wrench_theory/wrench/force/y"/>
+       <curve color="#1600ff" name="/wrench_theory/wrench/force/z"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines">
-       <range top="20.000000" right="239.850187" left="229.853813" bottom="-20.000000"/>
+      <plot style="Lines" mode="TimeSeries">
+       <range top="20.000000" bottom="-20.000000" left="-21.740331" right="-19.568386"/>
        <limitY max="20" min="-20"/>
-       <curve name="/wrench_correct/wrench/force/x" color="#ff0300"/>
-       <curve name="/wrench_correct/wrench/force/y" color="#00ff05"/>
-       <curve name="/wrench_correct/wrench/force/z" color="#1d00ff"/>
+       <curve color="#ff0300" name="/wrench_correct/wrench/force/x"/>
+       <curve color="#00ff05" name="/wrench_correct/wrench/force/y"/>
+       <curve color="#1d00ff" name="/wrench_correct/wrench/force/z"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -36,20 +36,29 @@
   </Tab>
   <Tab tab_name="Raw Wrench" containers="1">
    <Container>
-    <DockSplitter count="1" sizes="1" orientation="-">
+    <DockSplitter orientation="-" count="2" sizes="0.500569;0.499431">
      <DockArea name="...">
-      <plot mode="TimeSeries" style="Lines">
-       <range top="1.468240" right="-1762.422987" left="-1763.297558" bottom="-0.463628"/>
+      <plot style="Lines" mode="TimeSeries">
+       <range top="25.810948" bottom="-3.911868" left="6.760879" right="16.760726"/>
        <limitY/>
-       <curve name="/wrench/wrench/force/x" color="#ff0002"/>
-       <curve name="/wrench/wrench/force/y" color="#00ff03"/>
-       <curve name="/wrench/wrench/force/z" color="#0100ff"/>
+       <curve color="#ff0002" name="/wrench/wrench/force/x"/>
+       <curve color="#00ff03" name="/wrench/wrench/force/y"/>
+       <curve color="#0100ff" name="/wrench/wrench/force/z"/>
+      </plot>
+     </DockArea>
+     <DockArea name="...">
+      <plot style="Lines" mode="TimeSeries">
+       <range top="0.732778" bottom="-3.098683" left="6.760879" right="16.760726"/>
+       <limitY/>
+       <curve color="#ff0000" name="/wrench/wrench/torque/x"/>
+       <curve color="#00ff00" name="/wrench/wrench/torque/y"/>
+       <curve color="#0000ff" name="/wrench/wrench/torque/z"/>
       </plot>
      </DockArea>
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="0"/>
+  <currentTabIndex index="1"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
@@ -76,8 +85,8 @@
   <plugin ID="UDP Server"/>
   <plugin ID="WebSocket Server"/>
   <plugin ID="ZMQ Subscriber"/>
-  <plugin status="idle" ID="ROS /rosout Visualization"/>
-  <plugin status="idle" ID="ROS Topic Re-Publisher"/>
+  <plugin ID="ROS /rosout Visualization" status="idle"/>
+  <plugin ID="ROS Topic Re-Publisher" status="idle"/>
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles/>
