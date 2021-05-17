@@ -1,23 +1,42 @@
 #include <iostream>
-#include <ros/ros.h>
 #include <chrono>
+
+#include <ros/ros.h>
+#include <geometry_msgs/Vector3.h>
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 
-#include <geometry_msgs/Vector3.h>
+#include <iris_cobot/JointSpeed.h>
 
 bool KEYBOARD = false;
 
+geometry_msgs::Vector3 *linear_velocity_ptr;
+geometry_msgs::Vector3 *angular_velocity_ptr;
+
+
+void linearVelSub(geometry_msgs::Vector3 lin_vel)
+{
+    linear_velocity_ptr->x = lin_vel.x;
+    linear_velocity_ptr->y = lin_vel.y;
+    linear_velocity_ptr->z = lin_vel.z;
+}
+
+void angularVelSub(geometry_msgs::Vector3 ang_vel)
+{
+    angular_velocity_ptr->x = ang_vel.x;
+    angular_velocity_ptr->y = ang_vel.y;
+    angular_velocity_ptr->z = ang_vel.z;
+}
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "controller");
-    ros::NodeHandle n_handle;
-
-    ros::AsyncSpinner spinner(1); 
+    
+    ros::NodeHandle nh;
+    ros::AsyncSpinner spinner(2); 
     spinner.start();
 
     // Cucrrent Joint Values    
@@ -29,7 +48,6 @@ int main(int argc, char **argv)
         std::cout << i << '\n';
     std::cout << std::endl;
     
-
     // Current EE pose
     robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
     robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
@@ -55,10 +73,18 @@ int main(int argc, char **argv)
     // Pose obtained directly from move group
     std::cout << move_group.getCurrentPose() << std::endl;
 
+    geometry_msgs::Vector3 linear_velocity;
+    linear_velocity_ptr = &linear_velocity;
+    ros::Subscriber lin_vel_sub = nh.subscribe("linear_velocity", 1, linearVelSub);
+
+    geometry_msgs::Vector3 angular_velocity;
+    angular_velocity_ptr = &angular_velocity;
+    ros::Subscriber ang_vel_sub = nh.subscribe("angular_velocity", 1, angularVelSub);
+
+    ros::Publisher joint_speed_pub = nh.advertise<iris_cobot::JointSpeed>("joint_speeds", 1);
+
     while(true)
     {
-        auto start = std::chrono::high_resolution_clock::now();
-
         // Goal EE pose
         Eigen::Vector3d translation;
         translation << 0, 0, 0;
@@ -124,25 +150,21 @@ int main(int argc, char **argv)
             }
         }
         else
-        {
-            boost::shared_ptr<geometry_msgs::Vector3 const> message;
-            geometry_msgs::Vector3 weight;
-            message = ros::topic::waitForMessage<geometry_msgs::Vector3>("weight_vector", n_handle);
-            if(message != NULL)
+        { 
+            geometry_msgs::Vector3 linear = *linear_velocity_ptr;
+            geometry_msgs::Vector3 angular = *angular_velocity_ptr;
+            if (abs(linear.x) > 0.15 || abs(linear.y) > 0.15 || abs(linear.z) > 0.15 ||
+                abs(angular.x) > 0.3 || abs(angular.y) > 0.3 || abs(angular.z) > 0.3)
             {
-                weight = *message;
+                translation[0] = linear.x;
+                translation[1] = linear.y;
+                translation[2] = linear.z;
+                rotation[0] = angular.x;
+                rotation[1] = angular.y;
+                rotation[2] = angular.z;
             }
-            std::cout << weight << std::endl;
-
-            if (abs(weight.x) > 0.15 || abs(weight.y) > 0.15 || abs(weight.z) > 0.15)
-            {
-                translation[0] = weight.x * 2;
-                translation[1] = weight.y * 2;
-                translation[2] = weight.z * 2;
-            }            
         }
 
-        
         // Create Kinematic State
         current_joint_values = move_group.getCurrentJointValues();
         kinematic_state->setJointGroupPositions(joint_model_group, current_joint_values);
@@ -154,43 +176,25 @@ int main(int argc, char **argv)
                                     kinematic_state->getLinkModel(joint_model_group->getLinkModelNames().back()),
                                     reference_point_position, jacobian);
 
-        // Movement calculator
-        Eigen::VectorXd displacement(6);
-        displacement << translation, rotation;
-        // std::cout << "Displacement" << std::endl << displacement << std::endl;
+        // Velocity calculator
+        Eigen::VectorXd velocity(6);
+        velocity << translation, rotation;
         double scaling_factor = 0.1;
-        displacement *= scaling_factor;
+        velocity *= scaling_factor;
+
         // Jacobian Pseudo Inverse
         Eigen::MatrixXd jacobian_inv = jacobian.completeOrthogonalDecomposition().pseudoInverse();
-        // New joint increments
-        Eigen::VectorXd joint_increments = jacobian_inv * displacement;
-        // std::cout << "Joint Increments" << std::endl << joint_increments << std::endl;
-        Eigen::VectorXd new_joints = Eigen::VectorXd::Map(current_joint_values.data(), 6) + joint_increments;
-        // std::cout << "New Joints" << std::endl << new_joints << std::endl;
+        
+        // Joint Velocities
+        Eigen::VectorXd joint_velocities = jacobian_inv * velocity;
 
-        std::vector<double> joint_command;
-        for (int i = 0; i < new_joints.size(); i++) 
+        iris_cobot::JointSpeed joint_speed_msg;
+        for (int i = 0; i < joint_velocities.size(); i++) 
         {
-            joint_command.push_back(new_joints(i));
+            joint_speed_msg.joint_speeds.push_back(joint_velocities(i));
         }
 
-        // auto finish = std::chrono::high_resolution_clock::now();
-        // std::chrono::duration<double> elapsed = finish - start;
-        // std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-        // std::cout << "Frequency: " << 1 / elapsed.count() << " hz\n";
-        
-        // move_group.stop();
-        move_group.setJointValueTarget(joint_command);
-        
-        // move_group.move();
-        move_group.asyncMove();
-
-        auto finish = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double> elapsed = finish - start;
-        std::cout << "Elapsed time: " << elapsed.count() << " s\n";
-        std::cout << "Frequency: " << 1 / elapsed.count() << " hz\n";
-        
-        ros::Duration(0.1).sleep();
+        joint_speed_pub.publish(joint_speed_msg);
     }
     
     ros::shutdown();

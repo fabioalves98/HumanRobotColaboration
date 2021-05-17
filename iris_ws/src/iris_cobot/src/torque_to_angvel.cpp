@@ -44,16 +44,8 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     tf2::Transform torque_tf;
     torque_tf.setRotation(torque_ori);
 
-    // Diference between transforms
-    tf2::Transform diff_tf;
-    diff_tf = torque_tf * ft_sensor_tf.inverse();
-
-    double roll, pitch, yaw;
-    tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
-    std::cout << roll << " | " << pitch << " | " << yaw << std::endl;
-
+    // Publish Torque Transform
     geometry_msgs::TransformStamped torque_tf_stamped;
-    
     torque_tf_stamped.header.stamp = ros::Time::now();
     torque_tf_stamped.header.frame_id = "world";
     torque_tf_stamped.child_frame_id = "torque";
@@ -63,6 +55,21 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     torque_tf_stamped.transform.rotation = tf2::toMsg(torque_tf.getRotation());
 
     br_ptr->sendTransform(torque_tf_stamped);
+
+    // Diference between transforms
+    tf2::Transform diff_tf;
+    double roll, pitch, yaw;
+    diff_tf = torque_tf * ft_sensor_tf.inverse();
+    tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
+    // std::cout << roll << " | " << pitch << " | " << yaw << std::endl;
+
+    // Publish Difference between transforms - angular velocity
+    geometry_msgs::Vector3 angvel;
+    angvel.x = roll;
+    angvel.y = pitch;
+    angvel.z = yaw;
+
+    ang_vel_pub_ptr->publish(angvel);
 }
 
 int main(int argc, char** argv){
@@ -79,40 +86,10 @@ int main(int argc, char** argv){
     br_ptr = &br;
 
     ros::Publisher angvel_pub = nh.advertise<geometry_msgs::Vector3>("angular_velocity", 1);
+    ang_vel_pub_ptr = &angvel_pub;
 
-    ros::Subscriber sub = nh.subscribe("wrench", 1, rotationCalculator);
+    ros::Subscriber wrench_sub = nh.subscribe("wrench", 1, rotationCalculator);
 
-//   ros::Rate rate(10.0);
-//   while (nh.ok())
-//   {
-//     tf::StampedTransform ft_sensor_tf;
-//     try{
-//       listener.lookupTransform("/world", "/ft_sensor",  
-//                                ros::Time(0), ft_sensor_tf);
-//     }
-//     catch (tf::TransformException ex){
-//       ROS_ERROR("%s",ex.what());
-//       ros::Duration(1.0).sleep();
-//     }
-
-//     tf::StampedTransform torque_tf;
-//     try{
-//       listener.lookupTransform("/world", "/torque",  
-//                                ros::Time(0), torque_tf);
-//     }
-//     catch (tf::TransformException ex){
-//       ROS_ERROR("%s",ex.what());
-//       ros::Duration(1.0).sleep();
-//     }
-
-//     // tf::Transform diff_tf = torque_tf.inverse().inverseTimes(ft_sensor_tf.inverse());
-//     tf::Transform diff_tf = torque_tf * ft_sensor_tf.inverse();
-//     double roll, pitch, yaw;
-//     tf::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
-//     std::cout << roll << " | " << pitch << " | " << yaw << std::endl;
-// }
-
-    // ros::spin();
     ros::waitForShutdown();
 
     return 0;

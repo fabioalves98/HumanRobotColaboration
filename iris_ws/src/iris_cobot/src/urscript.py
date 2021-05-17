@@ -1,29 +1,54 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 import socket, time, math
+import rospy
+
+from iris_cobot.msg import JointSpeed
 
 M_PI = math.pi
 
-HOST = "192.168.56.101" # The remote host
+HOST = "192.168.56.101" # Simulation host
+# HOST = "10.1.0.2" # Real robot
 PORT = 30003 # The same port as used by the server
 
+joint_speeds = [0.1, 0, 0, 0, 0, 0]
 
-def socketConnection():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect((HOST, PORT))
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.connect((HOST, PORT))
 
-    # s.send ("set_digital_out(2,True)" + "\n")
-    # s.send(b'speedl([0.2,0,0,0,0,0], 0.5, 3)\n')
-    s.send(b'speedl([0,-0.4,0.0,0.0,0,0.0],0.5,2)\n')
-    # s.send("movej([0,1.57,-1.57,3.14,-1.57,1.57], a=1.4, v=1.05, t=0, r=0)" + "\n")
 
-    data = s.recv(1024)
+def sendJointSpeed():
+    jspeed_str = str([round(js, 3) for js in joint_speeds])
+    accel = '0.5'
+    time = '0.05'
+    speed_j_str = 'speedj(' + jspeed_str + ',' + accel + ',' + time + ')\n'
 
+    print(speed_j_str)
+
+    s.send(bytes(speed_j_str))
+
+
+def jointSpeedSub(data):
+    global joint_speeds
+    joint_speeds = data.joint_speeds
+
+
+def main():
+    rospy.init_node('urscript', anonymous=True)
+
+    rospy.Subscriber('joint_speeds', JointSpeed, jointSpeedSub, queue_size=1)
+
+    rate = rospy.Rate(50)
+    while not rospy.is_shutdown():
+        start = time.time()
+        sendJointSpeed()
+        rate.sleep()
+        end = time.time()
+        print(1/(end-start))
+    
     s.close()
 
-    print ("Received", repr(data))
-    
 
 if __name__ == '__main__':
-    socketConnection()
+    main()
 
 

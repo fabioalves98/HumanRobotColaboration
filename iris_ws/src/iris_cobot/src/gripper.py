@@ -69,7 +69,7 @@ def main():
     gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
 
     rospy.Subscriber('wrench_correct', WrenchStamped, gripperControl, queue_size=1)
-    rospy.Subscriber('weight_vector', Vector3, weightVector, queue_size=1)
+    rospy.Subscriber('linear_velocity', Vector3, weightVector, queue_size=1)
 
     rospy.spin()
 

@@ -1,70 +1,43 @@
-#include <ur_rtde/rtde_control_interface.h>
-#include <ncurses.h>
-#include <chrono>
 #include <iostream>
+#include <ur_rtde/rtde_control_interface.h>
 #include <thread>
+#include <chrono>
 
 using namespace ur_rtde;
 using namespace std::chrono;
 
 int main(int argc, char* argv[])
 {
-  RTDEControlInterface rtde_control("10.1.0.2");
+    RTDEControlInterface rtde_control("10.1.0.2");
 
-  // Curses Initialisations
-  initscr();
-  raw();
-  keypad(stdscr, TRUE);
-  noecho();
-  timeout(10);
+    std::cout << "Connected to rtde interface" << std::endl;
+    // Parameters
+    double acceleration = 0.5;
+    double dt = 1.0/500; // 2ms
+    std::vector<double> joint_q = {-1.54, -1.83, -2.28, -0.59, 1.60, 0.023};
+    std::vector<double> joint_speed = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
-  // Parameters
-  double speed_magnitude = 0.15;
-  std::vector<double> speed_vector = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-  rtde_control.jogStart(speed_vector, RTDEControlInterface::FEATURE_TOOL);
+    // Move to initial joint position with a regular moveJ
+        // rtde_control.moveJ(joint_q);
 
-  std::string instructions("[ Use arrow keys to control the robot, to exit press 'q' ]");
-  int c, row, col;
-  getmaxyx(stdscr, row, col);
-  mvprintw(row / 2, (col-strlen(instructions.c_str())) / 2, "%s", instructions.c_str());
-
-  while ((c = getch()) != 'q')
-  {
-    c = getch();
-    switch (c)
+    // Execute 500Hz control loop for 2 seconds, each cycle is ~2ms
+    for (unsigned int i=0; i<1000; i++)
     {
-      case KEY_UP:
-        speed_vector = {0.0, 0.0, -speed_magnitude, 0.0, 0.0, 0.0};
-        // rtde_control.jogStart(speed_vector, RTDEControlInterface::FEATURE_TOOL);
-        rtde_control.speedL(speed_vector);
-        break;
-      case KEY_DOWN:
-        speed_vector = {0.0, 0.0, speed_magnitude, 0.0, 0.0, 0.0};
-        // rtde_control.jogStart(speed_vector, RTDEControlInterface::FEATURE_TOOL);
-        rtde_control.speedL(speed_vector);
-        break;
-      case KEY_LEFT:
-        speed_vector = {speed_magnitude, 0.0, 0.0, 0.0, 0.0, 0.0};
-        // rtde_control.jogStart(speed_vector, RTDEControlInterface::FEATURE_TOOL);
-        rtde_control.speedL(speed_vector);
-        break;
-      case KEY_RIGHT:
-        speed_vector = {-speed_magnitude, 0.0, 0.0, 0.0, 0.0, 0.0};
-        // rtde_control.jogStart(speed_vector, RTDEControlInterface::FEATURE_TOOL);
-        rtde_control.speedL(speed_vector);
-        break;
-      default:
-        speed_vector = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-        // rtde_control.jogStart(speed_vector, RTDEControlInterface::FEATURE_TOOL);
-        rtde_control.speedL(speed_vector);
-        break;
+        auto t_start = high_resolution_clock::now();
+        rtde_control.speedJ(joint_speed, acceleration, dt);
+        joint_speed[0] -= 0.0005;
+        joint_speed[1] -= 0.0005;
+        auto t_stop = high_resolution_clock::now();
+        auto t_duration = std::chrono::duration<double>(t_stop - t_start);
+
+        if (t_duration.count() < dt)
+        {
+        std::this_thread::sleep_for(std::chrono::duration<double>(dt - t_duration.count()));
+        }
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(20));
-  }
 
-  endwin();
-  rtde_control.jogStop();
-  rtde_control.stopScript();
+    rtde_control.speedStop();
+    rtde_control.stopScript();
 
-  return 0;
+    return 0;
 }
