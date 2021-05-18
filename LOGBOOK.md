@@ -859,17 +859,72 @@
 
 ## 05/05 - IRISLab
 
-- Torque
+#### Movimentos angulares com os valores de torque
+
+- Tentativa de traduzir valores de torque sentido no sensor FT (tool0) em rotações globais (world)
+- Criação de um TF (torque) que traduz uma rotação do tool0 no eixo do torque sentido no sensor
+  - Obter a diferença de rotação dos 2 transforms e usar essa rotação
+  - **Problema - **Apenas consegui obter a rotação do TF "torque"  em relação ao TF "original"
+
+https://answers.ros.org/question/42289/difference-between-two-rigid-body-transformations/
 
 ## 10/05 - IRISLab
 
-- Torque
+#### Movimentos angulares com os valores de torque
+
+- Consegui obter a rotação global dos 2 TFs
+  - Foi necessário fazer a multiplicação dos TFs utilizando os seus inversos, para que assim o resultado seja em relação ao world
+  - Ou seja 
+    - Rot = Inv(Inv(TFtq)) * Inv(TFft) = TFtq * Inv(TFft)
+    - Para mais info -> torque_to_angvel.cpp
 
 ## 11/05 - IRISLab
 
-- Torque
+- Refactor da disposição de todos os nós
+- Criação de nós especificos para velocidades lineares e angulares
+- Criação de fatores para traduzir força / torque em velocidade
+
+<img src="screenshots/logbook/2.jpg" width=80%>
 
 ## 13/04 - Reunião
 
-- Torque
 - Continuar
+
+## 17/04 - IRISLab
+
+#### Controlar as juntas por Velocidade
+
+- **Comandos URScript por TCP para a porta 30003**
+  - Comando speedj não apresenta bom funcionamento, cada vez que se envia um comando novo, o anterior para abruptamente
+- **Bilioteca UR_RTDE**
+  - Comandos de velocidade funcionam corretamente e à frequencia de 500Hz
+  - Não é possível utilizar esta bilbioteca em paralelo com o driver ROS
+- **Novo driver ROS**
+  - Controlador de velocidade de juntas aparenta funcionar bem
+  - Apenas testado em URSim
+
+## 18/04 - IRISLab
+
+#### Controlar as juntar por Velocidade
+
+- **Comandos URScript por TCP para a porta 30003**
+  - Nenhuma combinação de parametros de speedj funcionou corretamente
+    - O problema sendo que a cada novo comando urscript enviado, o anterior para abruptamente
+  - Teste com servoj que seria o comando apropriado para movimentos continuos / RT tambem nao deu resultados
+    - O robot claramente movia-se aos solavancos
+  - No entanto a interface real-time pode ser util na prespectiva de read-only para um programa de monitorament
+    - A porta 30003 esta ativa e envia informação a 500Hz independentemente do modo de operação do robot
+- **Biblioteca UR_RTDE**
+  - Movimentos suaves e continuos a 500Hz
+  - Continua a nao haver a possibilidade de utilização em paralelo com o driver
+  - Possibilidade de utilização em Remote Control ou atravez do urcap de external control
+    - Necessidade de ser compilada manualmente para obter a versão mais recente
+- **Novo driver ROS**
+  - Testado no robot real com a utilização "obrigatoria" do external_control.urcap
+  - Movimentos suaves, no entanto aparentam ausencia de controlador pois o robot, assim que lhe é enviado um comando de velocidade, aparenta ganhar essa velocidade instantaneamente ao inves de progressivamente
+- **Tarefas**
+  - Comparar UR_RTDE com o novo driver ROS a nível de
+    - Suavidade das trajetórias
+    - Estabilidade
+    - Delay no envio de comandos
+  - Isolar todo o sistema o mais possível do driver / moveit
