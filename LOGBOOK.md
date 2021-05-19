@@ -886,11 +886,11 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 <img src="screenshots/logbook/2.jpg" width=80%>
 
-## 13/04 - Reunião
+## 13/05 - Reunião
 
 - Continuar
 
-## 17/04 - IRISLab
+## 17/05 - IRISLab
 
 #### Controlar as juntas por Velocidade
 
@@ -903,7 +903,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Controlador de velocidade de juntas aparenta funcionar bem
   - Apenas testado em URSim
 
-## 18/04 - IRISLab
+## 18/05 - IRISLab
 
 #### Controlar as juntar por Velocidade
 
@@ -928,3 +928,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
     - Estabilidade
     - Delay no envio de comandos
   - Isolar todo o sistema o mais possível do driver / moveit
+
+## 19/05 - IRISLab
+
+- 

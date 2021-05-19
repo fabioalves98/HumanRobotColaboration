@@ -16,13 +16,16 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
 {
     geometry_msgs::Vector3 torque = wrench.wrench.torque;
 
-    // Constrain torque
-    if (torque.x > M_PI_4) torque.x = M_PI_4;
-    if (torque.x < -M_PI_4) torque.x = -M_PI_4;
-    if (torque.y > M_PI_4) torque.y = M_PI_4;
-    if (torque.y < -M_PI_4) torque.y = -M_PI_4;
-    if (torque.z > M_PI_4) torque.z = M_PI_4;
-    if (torque.z < -M_PI_4) torque.z = -M_PI_4;
+    // Temporary limit and contrain torque sensibility
+    torque.x /= 10;
+    torque.y /= 10;
+    torque.z /= 10;
+    if (torque.x > M_PI_4/2) torque.x = M_PI_4/2;
+    if (torque.x < -M_PI_4/2) torque.x = -M_PI_4/2;
+    if (torque.y > M_PI_4/2) torque.y = M_PI_4/2;
+    if (torque.y < -M_PI_4/2) torque.y = -M_PI_4/2;
+    if (torque.z > M_PI_4/2) torque.z = M_PI_4/2;
+    if (torque.z < -M_PI_4/2) torque.z = -M_PI_4/2;
 
     // Create FT Sensor Orientation
     geometry_msgs::PoseStamped ee_pose = move_group_ptr->getCurrentPose();

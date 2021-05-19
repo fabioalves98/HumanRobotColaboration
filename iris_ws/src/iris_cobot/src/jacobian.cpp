@@ -33,7 +33,7 @@ void angularVelSub(geometry_msgs::Vector3 ang_vel)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "controller");
+    ros::init(argc, argv, "jacobian");
     
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2); 
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
             geometry_msgs::Vector3 linear = *linear_velocity_ptr;
             geometry_msgs::Vector3 angular = *angular_velocity_ptr;
             if (abs(linear.x) > 0.15 || abs(linear.y) > 0.15 || abs(linear.z) > 0.15 ||
-                abs(angular.x) > 0.3 || abs(angular.y) > 0.3 || abs(angular.z) > 0.3)
+                abs(angular.x) > 0.15 || abs(angular.y) > 0.15 || abs(angular.z) > 0.15)
             {
                 translation[0] = linear.x;
                 translation[1] = linear.y;
@@ -176,11 +176,9 @@ int main(int argc, char **argv)
                                     kinematic_state->getLinkModel(joint_model_group->getLinkModelNames().back()),
                                     reference_point_position, jacobian);
 
-        // Velocity calculator
+        // Velocity builder
         Eigen::VectorXd velocity(6);
         velocity << translation, rotation;
-        double scaling_factor = 0.1;
-        velocity *= scaling_factor;
 
         // Jacobian Pseudo Inverse
         Eigen::MatrixXd jacobian_inv = jacobian.completeOrthogonalDecomposition().pseudoInverse();

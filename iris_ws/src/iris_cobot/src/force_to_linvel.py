@@ -21,6 +21,18 @@ def weightMarker(data):
     f_y = data.wrench.force.y
     f_z = data.wrench.force.z
 
+    # Temporary limit and contrain force sensibility
+    f_x /= 50
+    f_y /= 50
+    f_z /= 50
+    if f_x > 0.4: f_x = 0.4
+    if f_x < -0.4: f_x = -0.4
+    if f_y > 0.4: f_y = 0.4
+    if f_y < -0.4: f_y = -0.4
+    if f_z > 0.4: f_z = 0.4
+    if f_z < -0.4: f_z = -0.4
+
+    # Obtain base frame and ee orientation
     origin = [-0.7, 0.3, 0.5]
     ee_ori = moveg.get_current_pose().pose.orientation
 
@@ -30,7 +42,7 @@ def weightMarker(data):
     # Point in space with coordinates representing the weight
     w_pose = PoseStamped()
     w_pose.header.frame_id = "base_link"
-    w_pose.pose.position = Point(*[f_x/50, f_y/50, f_z/50])
+    w_pose.pose.position = Point(*[f_x, f_y, f_z])
     w_pose.pose.orientation = Quaternion(*[0, 0, 0, 1])
 
     # Transform such point to visualization axes
