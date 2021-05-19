@@ -928,7 +928,25 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
     - Estabilidade
     - Delay no envio de comandos
   - Isolar todo o sistema o mais possível do driver / moveit
+  - Fechar o sistema mesmo com o controlador em posição utilizando o moveit
 
 ## 19/05 - IRISLab
 
-- 
+#### Sistema Fechado utilizando controlo de Posição pelo MoveIt
+
+- Calculo de velocidades funciona bem (jacobian)
+- **Controlador posicional moveit** funciona bem se for aplicada uma força constante
+  - Funciona mal ao parar, pois para abruptmanete devido aos limites superiores e inferiores de força
+  - Funciona muito mal quando é aplicada uma força baixa e constante, pois estando perto dos limites definidos, o controlo fica a oscilar entre 0 e o limite
+    - Outra razão, é que para calcular um novo valor de juntas, é necessário o valor presente, e não há possibilidade de saber a precisão com que esse valor é obtido
+  - **Solução**
+    - Suavizar os comandos de velocidade (controlador a sério ou um filtro de média)
+    - Controlar o robot diretamente por velocidade
+      - Ou pela interface RTDE diretamente
+      - Ou com o driver novo que tem controladores de velocidade
+
+#### Novo Driver
+
+- Criação de um ws novo onde dou merge de todas as funcionalidades com a versão mais recente do driver ROS do UR10e que já implementa controladores de velocidade
+- Até agora, tanto o moveit, como iris_sami e controlo por velocidade aparenta funcionar
+- Falta testar todos o iris_cobot
