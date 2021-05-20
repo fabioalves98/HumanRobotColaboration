@@ -951,7 +951,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Até agora, tanto o moveit, como iris_sami e controlo por velocidade aparenta funcionar
 - Falta testar todos o iris_cobot
 
-## 20/05 - IRISLab
+## 20/05 - IRISLab / Reunião
 
 #### Controlo por Velocidade no Driver novo
 
