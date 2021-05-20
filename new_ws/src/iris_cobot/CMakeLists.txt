@@ -54,6 +54,10 @@ add_executable(moveit_controller src/moveit_controller.cpp)
 target_link_libraries(moveit_controller ${catkin_LIBRARIES})
 add_dependencies(moveit_controller iris_cobot_generate_messages_cpp)
 
+add_executable(vel_group_controller src/vel_group_controller.cpp)
+target_link_libraries(vel_group_controller ${catkin_LIBRARIES})
+add_dependencies(vel_group_controller iris_cobot_generate_messages_cpp)
+
 
 # Helpers
 add_executable(fk_ik_jacobian src/fk_ik_jacobian.cpp)

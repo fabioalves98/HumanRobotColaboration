@@ -950,3 +950,15 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Criação de um ws novo onde dou merge de todas as funcionalidades com a versão mais recente do driver ROS do UR10e que já implementa controladores de velocidade
 - Até agora, tanto o moveit, como iris_sami e controlo por velocidade aparenta funcionar
 - Falta testar todos o iris_cobot
+
+## 20/05 - IRISLab
+
+#### Controlo por Velocidade no Driver novo
+
+- O controlador scaled_vel_joint_traj_controller nao funciona como esperado
+  - Ele nao envia um conjunto de velocidades às juntas
+  - Ele recebe uma trajetoria contendo posicoes e velocidades e assim, controla o robot
+  - https://forum.universal-robots.com/t/ur5-constant-motion/14305
+  - Programa scaled_vel_controller que cria trajetorias e as envia para o robot baseado no exemplo do ur_modern_driver
+    - https://github.com/ros-industrial/ur_modern_driver/blob/master/test_move.py
+- O mais provável é vir a usar o joint_group_vel_controller
