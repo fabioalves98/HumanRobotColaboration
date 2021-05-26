@@ -65,7 +65,7 @@ int main(int argc, char **argv)
         std::cout << "Joint " << joint_names[i].c_str() << " - " << joint_values[i] << std::endl;
     }
     // Pose obtained with robot state - FK
-    const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("ee_link");
+    const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("flange");
     Eigen::Vector3d position = end_effector_state.translation();
     std::cout << "Position\n" << position << std::endl;
     Eigen::Quaterniond orientation(end_effector_state.rotation());

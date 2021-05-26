@@ -13,14 +13,13 @@
     </node>
 
     <!-- IRIS Sami GUI Launcher -->
-    <!-- <include file="$(find iris_sami)/launch/iris_sami.launch"/> -->
+    <include file="$(find iris_sami)/launch/iris_sami.launch"/>
 
     <!-- Wrench -->
     <include file="$(find iris_cobot)/launch/wrench.launch"/>
 
     <!-- Plotjuggler -->
-    <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
-        args="-l $(find iris_cobot)/curves/pj_layout.xml"/> -->
-
+    <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
+        args="-l $(find iris_cobot)/curves/pj_layout.xml"/>
 
 </launch>

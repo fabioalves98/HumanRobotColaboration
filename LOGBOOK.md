@@ -971,3 +971,6 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 26/05 - IRISLab
 
+- Integração do novo driver através de forks do driver em si e do pacote da descrição
+- Movimentos com um peso de 1kg e payload 0 funcionam perfeitamente
+- Movimenos com um peso de 2kg e payload 0 tem algumas falhas

@@ -50,7 +50,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     // Publish Torque Transform
     geometry_msgs::TransformStamped torque_tf_stamped;
     torque_tf_stamped.header.stamp = ros::Time::now();
-    torque_tf_stamped.header.frame_id = "world";
+    torque_tf_stamped.header.frame_id = "base_link";
     torque_tf_stamped.child_frame_id = "torque";
     torque_tf_stamped.transform.translation.x = -0.7;
     torque_tf_stamped.transform.translation.y = 0.3;

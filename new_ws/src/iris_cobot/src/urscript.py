@@ -88,6 +88,16 @@ def servoSpeedControl():
         print(1 / (end - start))
 
 
+def zeroFtSensor():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect((HOST, PORT))
+
+    zero_str = 'zero_ftsensor()\n'
+
+    s.send(bytes(zero_str))
+
+    s.close()
+
 
 def jointSpeedSub(data):
     global joint_speeds
@@ -107,7 +117,9 @@ def main():
     # rospy.Subscriber('joint_states', JointState, jointStateSub, queue_size=1)
 
     # jointSpeedControl()
-    servoSpeedControl()
+    # servoSpeedControl()
+    zeroFtSensor()
+
     
 
 if __name__ == '__main__':
