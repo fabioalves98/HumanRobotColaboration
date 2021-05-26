@@ -13,9 +13,6 @@
 [submodule "iris_ws/src/plotjuggler_msgs"]
 	path = iris_ws/src/plotjuggler_msgs
 	url = ../../PlotJuggler/plotjuggler_msgs.git
-[submodule "new_ws/src/fmauch_universal_robot"]
-	path = new_ws/src/fmauch_universal_robot
-	url = ../../fmauch/universal_robot.git
 [submodule "new_ws/src/iris_sami"]
 	path = new_ws/src/iris_sami
 	url = ../iris_sami.git
@@ -28,6 +25,3 @@
 [submodule "new_ws/src/plotjuggler_msgs"]
 	path = new_ws/src/plotjuggler_msgs
 	url = ../../PlotJuggler/plotjuggler_msgs.git
-[submodule "new_ws/src/Universal_Robots_ROS_Driver"]
-	path = new_ws/src/Universal_Robots_ROS_Driver
-	url = ../../UniversalRobots/Universal_Robots_ROS_Driver.git

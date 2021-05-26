@@ -962,3 +962,9 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Programa scaled_vel_controller que cria trajetorias e as envia para o robot baseado no exemplo do ur_modern_driver
     - https://github.com/ros-industrial/ur_modern_driver/blob/master/test_move.py
 - O mais provável é vir a usar o joint_group_vel_controller
+
+- Utilização do joint_vel_group_controller para enviar os valores de velocidade às juntas
+  - Utilização de um filtro de média com uma sliding window de 50
+  - Movimentos lineares muito suaves e requerem pouca força
+  - Movimetos rotacionais apresentam muitas oscilações e a dada altura o robot gaha um comportamento de feedback em que se nao largarmos o gripper ele aumenta e fica "agressivo"
+  - Necessidade de tornar este controlador mais complexo (pid ou um filtro diferente)
