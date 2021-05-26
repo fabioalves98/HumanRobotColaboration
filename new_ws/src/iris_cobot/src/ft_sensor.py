@@ -66,7 +66,7 @@ def main():
         ft_ori = quaternion_multiply(quaternionToList(ee_ori), ft_rot)
         tcp_marker = TransformStamped()
         tcp_marker.header.stamp = rospy.Time.now()
-        tcp_marker.header.frame_id = "world"
+        tcp_marker.header.frame_id = "base_link"
         tcp_marker.child_frame_id = "ft_sensor"
         tcp_marker.transform.translation = Vector3(*origin)
         tcp_marker.transform.rotation = Quaternion(*ft_ori)

@@ -25,3 +25,9 @@
 [submodule "new_ws/src/plotjuggler_msgs"]
 	path = new_ws/src/plotjuggler_msgs
 	url = ../../PlotJuggler/plotjuggler_msgs.git
+[submodule "new_ws/src/universal_robot"]
+	path = new_ws/src/universal_robot
+	url = ../universal_robot.git
+[submodule "new_ws/src/Universal_Robots_ROS_Driver"]
+	path = new_ws/src/Universal_Robots_ROS_Driver
+	url = ../Universal_Robots_ROS_Driver.git

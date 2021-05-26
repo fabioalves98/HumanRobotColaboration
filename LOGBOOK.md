@@ -968,3 +968,6 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Movimentos lineares muito suaves e requerem pouca força
   - Movimetos rotacionais apresentam muitas oscilações e a dada altura o robot gaha um comportamento de feedback em que se nao largarmos o gripper ele aumenta e fica "agressivo"
   - Necessidade de tornar este controlador mais complexo (pid ou um filtro diferente)
+
+## 26/05 - IRISLab
+
