@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+from rosgraph.names import get_ros_namespace
 import rospy, math
 import numpy as np
+from std_srvs.srv import Trigger
 from geometry_msgs.msg import Vector3, WrenchStamped
 
 from sami.gripper import Gripper
@@ -8,68 +10,80 @@ import helpers
 
 GRIPPER_STANDBY = 500
 
-gripper = None
-gripper_ready = GRIPPER_STANDBY
-has_object = False
+# gripper_ready = GRIPPER_STANDBY
+# gripper = None
+# gripped = False
+
+gripper_toggle = False
+
 weight_vector = [0, 0, 0]
+force = [0, 0, 0]
+
+
+def gripperToggleServ(data):
+    global gripper_toggle
+    gripper_toggle = True
+
+    return [True ,'Gripper Toggled']
+
 
 def weightVector(data):
     global weight_vector
     weight_vector = helpers.pointToList(data)
 
-def gripperControl(data):
-    f_x = data.wrench.force.x
-    f_y = data.wrench.force.y
-    f_z = data.wrench.force.z
 
-    weight = math.sqrt(math.pow(f_x, 2) + math.pow(f_y, 2) + math.pow(f_z, 2))
-
-    # Gripper Controls
-    global gripper_ready
-    gripper_ready -= 1
-    gripped = gripper.get_status() == 8
-    has_object = gripped and gripper.get_position() > 27
-
-    # Weight direction analysis
-    v_g = [0, 0, -1]
-    prod = np.inner(v_g, weight_vector)
-
-    print('\nWeight %f' % weight)
-    print('Gripped? - %r' % gripped)
-    print('Has Object? - %r' % has_object)
-    print('Prod - %f' % prod)
-
-    # Example of gripper control throgh specific force on each axis
-    if not has_object:
-        if gripper_ready < 0:
-            if abs(f_x) > 10:
-                if not gripped:
-                    gripper.grip()
-                    print('Gripping')
-                    gripper_ready = GRIPPER_STANDBY
-            elif abs(f_y) > 10:
-                if gripped:
-                    gripper.release()
-                    print('Releasing')
-                    gripper_ready = GRIPPER_STANDBY
-
-    # Example of gripper contorl when handling objects
-    else:
-        if gripper_ready < 0:
-            if abs(weight) < 2 or abs(f_z) > 10 or prod < 0:
-                    gripper.release()
-                    print('Releasing Object')
-                    gripper_ready = GRIPPER_STANDBY
+def forceCallback(data):
+    global force
+    force[0] = data.wrench.force.x
+    force[1] = data.wrench.force.y
+    force[2] = data.wrench.force.z
 
 
 def main():
     rospy.init_node('gripper', anonymous=True)
 
-    global gripper
+    # global gripper
     gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
 
-    rospy.Subscriber('wrench_correct', WrenchStamped, gripperControl, queue_size=1)
+    rospy.Service('gripper_toggle', Trigger, gripperToggleServ)
+
+    rospy.Subscriber('wrench_correct', WrenchStamped, forceCallback, queue_size=1)
     rospy.Subscriber('linear_velocity', Vector3, weightVector, queue_size=1)
+
+    gripper_ready = GRIPPER_STANDBY 
+    has_object = False
+
+    global gripper_toggle
+
+    rate = rospy.Rate(500)
+
+    while not rospy.is_shutdown():
+        weight = math.sqrt(math.pow(force[0], 2) + math.pow(force[1], 2) + math.pow(force[2], 2))
+
+        # Gripper Controls
+        gripper_ready -= 1
+        gripped = gripper.get_status() == 8
+        has_object = gripped and gripper.get_position() > 27
+
+        # Weight direction analysis
+        v_g = [0, 0, -1]
+        prod = np.inner(v_g, weight_vector)
+
+        print('\nWeight %f' % weight)
+        print('Gripped? - %r' % gripped)
+        print('Has Object? - %r' % has_object)
+        print('Prod - %f' % prod)
+
+        if gripper_toggle:
+            if gripper_ready < 0:
+                if gripped:
+                    gripper.release()
+                else:
+                    gripper.grip()
+                gripper_ready = GRIPPER_STANDBY
+            gripper_toggle = False
+        
+        rate.sleep()
 
     rospy.spin()
 

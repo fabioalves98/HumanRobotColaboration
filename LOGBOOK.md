@@ -971,6 +971,26 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 26/05 - IRISLab
 
-- Integração do novo driver através de forks do driver em si e do pacote da descrição
-- Movimentos com um peso de 1kg e payload 0 funcionam perfeitamente
-- Movimenos com um peso de 2kg e payload 0 tem algumas falhas
+#### Forks do Novo Driver e Descrição
+
+- **Descrição - **https://github.com/fabioalves98/universal_robot/tree/calibration_devel
+- **Driver - **https://github.com/fabioalves98/Universal_Robots_ROS_Driver
+- Pequenas alterações aos pacotes para utiliza,ão com o UR10e do iries
+
+#### Teste de movimentos com objetos pesados
+
+- Testes com pesos de 1Kg e 2Kg e payload 0 Kg definido da dashboard
+- Movimentos com o peso de 1Kg funcionam perfeitamente
+- Movimentos com o peso de 2Kg funcionam bem, mas alguma trajetórias, apresentam solavancos... Provavelment devido ao calculo dos movimentos feito pelo robot nao acontar com o novo peso
+
+## 28/05 - IRISLab
+
+#### Deteção de Double tap no gripper
+
+- Integração dos valores de força provenientes diretamente do /wrench
+- Avaliação dos valores e escolha dos melhores parametros que permitam identificar um toque rápido e distinguir de um toque normal
+  - Valor de diferenção mínima de 5N
+  - Distanca temporal minima entre toques - 100ms
+  - Distancia temporal maxima entre toques - 400ms
+- Quando o nó **double_tap** deteta um double tap, chama o serviço de **gripper_toggle**
+

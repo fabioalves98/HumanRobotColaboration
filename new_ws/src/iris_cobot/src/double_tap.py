@@ -1,16 +1,15 @@
 #!/usr/bin/env python
-
 import rospy, time, signal, sys
+from std_srvs.srv import Trigger
 from geometry_msgs.msg import WrenchStamped, Vector3
 
-from sami.gripper import Gripper
 
-GRIPPER_STANDBY = 500
+DTAP_STANDBY = 500
 INT_FORCE = 5
 
 prev = (0, 0, 0)
 
-gripper_ready = GRIPPER_STANDBY
+dtap_ready = DTAP_STANDBY
 tap = False
 tap_counter = 0
 
@@ -23,13 +22,13 @@ def signal_handler(sig, frame):
     sys.exit(0)
 
 
-def gripperToggle():
-    print(time.time(), 'Double Tap')
-    gripped = gripper.get_status() == 8
-    if gripped:
-        gripper.release()
-    else:
-        gripper.grip()
+def triggerToggle():
+    rospy.wait_for_service('gripper_toggle')
+    try:
+        trigServ = rospy.ServiceProxy('gripper_toggle', Trigger)
+        print(trigServ())
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
 
 
 def wrenchCallback(data):
@@ -46,8 +45,8 @@ def wrenchCallback(data):
     prev = (x, y, z)
 
     # Gripper Control
-    global gripper_ready
-    gripper_ready -= 1
+    global dtap_ready
+    dtap_ready -= 1
 
 
     # Tap Control
@@ -61,9 +60,9 @@ def wrenchCallback(data):
             tap = False
         if tap_counter > 50 and tap_counter < 200:
             if abs(x_int) > INT_FORCE or abs(y_int) > INT_FORCE or abs(z_int) > INT_FORCE:
-                if gripper_ready < 1:
-                    gripperToggle()
-                    gripper_ready = GRIPPER_STANDBY
+                if dtap_ready < 1:
+                    triggerToggle()
+                    dtap_ready = DTAP_STANDBY
                 tap_counter = 0
                 tap = False
 
@@ -72,17 +71,15 @@ def wrenchCallback(data):
 
 
 def main():
-    rospy.init_node('gripper_tap', anonymous=True)
+    rospy.init_node('double_tap', anonymous=True)
     signal.signal(signal.SIGINT, signal_handler)
 
-    global gripper
-    gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
-
-    wrench_sub = rospy.Subscriber("wrench", WrenchStamped, wrenchCallback, queue_size=1)
-
+    # Visualization of the force integration
     global force_integral_pub
-    force_integral_pub = rospy.Publisher("force_integral", Vector3, queue_size=1)
-        
+    force_integral_pub = rospy.Publisher("force_integral", Vector3, queue_size=1)    
+
+    rospy.Subscriber("wrench", WrenchStamped, wrenchCallback, queue_size=1)
+
     rospy.spin()
 
 

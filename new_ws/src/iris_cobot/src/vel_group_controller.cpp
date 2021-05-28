@@ -39,7 +39,7 @@ int main(int argc, char **argv)
 
     ros::Rate rate(500);
 
-    while(true)
+    while(ros::ok())
     {
         std::vector<double> joint_speed_avrg = {0, 0, 0, 0, 0, 0};
 
