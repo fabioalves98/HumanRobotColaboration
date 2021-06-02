@@ -159,9 +159,9 @@ int main(int argc, char **argv)
                 translation[0] = linear.x;
                 translation[1] = linear.y;
                 translation[2] = linear.z;
-                rotation[0] = angular.x;
-                rotation[1] = angular.y;
-                rotation[2] = angular.z;
+                rotation[0] = angular.x * 2;
+                rotation[1] = angular.y * 2;
+                rotation[2] = angular.z * 2;
             }
         }
 

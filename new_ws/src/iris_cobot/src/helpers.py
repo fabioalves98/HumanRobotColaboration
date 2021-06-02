@@ -2,20 +2,24 @@
 import rospy, rospkg, pickle
 import numpy as np
 from tf2_geometry_msgs.tf2_geometry_msgs import do_transform_pose
-from ur_msgs.srv import SetSpeedSliderFraction
+from ur_msgs.srv import SetSpeedSliderFraction, SetPayload
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import Vector3, Point, Pose, PoseStamped, Quaternion, Transform, TransformStamped
 from visualization_msgs.msg import Marker
+from controller_manager_msgs.srv import SwitchController
+
+from iris_cobot.srv import WeightUpdate
+from iris_sami.srv import RelativeMove
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
 
-def set_speed_slider(self, speed):
+def set_speed_slider(speed):
     try:
         rospy.wait_for_service('/ur_hardware_interface/set_speed_slider', timeout=2)
         set_speed = rospy.ServiceProxy('/ur_hardware_interface/set_speed_slider', SetSpeedSliderFraction)
         resp = set_speed(speed)
-        print(resp)
+        return resp.success
     except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
         print("Service call failed: %s"%e)
 
@@ -25,7 +29,17 @@ def reset_ft_sensor():
         rospy.wait_for_service('/ur_hardware_interface/zero_ftsensor', timeout=2)
         zero = rospy.ServiceProxy('/ur_hardware_interface/zero_ftsensor', Trigger)
         resp = zero()
-        print(resp)
+        return resp.success
+    except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
+        print("Service call failed: %s"%e)
+
+
+def set_payload(mass, cog):
+    try:
+        rospy.wait_for_service('/ur_hardware_interface/set_payload', timeout=2)
+        set_pay = rospy.ServiceProxy('/ur_hardware_interface/set_payload', SetPayload)
+        resp = set_pay(mass=mass, center_of_gravity=cog)
+        return resp.success
     except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
         print("Service call failed: %s"%e)
 
@@ -97,3 +111,45 @@ def quaternionToList(orientation):
     return ori
 
 
+# Update Weight in Theory Model
+def weightUpdate(weight):
+    try:
+        rospy.wait_for_service('/weight_update', timeout=2)
+        weighUpdateServ = rospy.ServiceProxy('/weight_update', WeightUpdate)
+        resp = weighUpdateServ(weight)
+        return resp.success
+    except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
+        print("Service call failed: %s"%e)
+
+
+# Switch Controllers
+def switchControllers(vel_to_pos):
+    if vel_to_pos:
+        start_cont_list = ['scaled_pos_joint_traj_controller']
+        stop_cont_list = ['joint_group_vel_controller']
+    else:
+        start_cont_list = ['joint_group_vel_controller']
+        stop_cont_list = ['scaled_pos_joint_traj_controller']
+    
+    rospy.wait_for_service('controller_manager/switch_controller')
+    try:
+        switchServ = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
+        resp = switchServ(start_controllers=start_cont_list, 
+                          stop_controllers=stop_cont_list,
+                          strictness=1,
+                          start_asap=False,
+                          timeout=2.0)
+        return resp.ok
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+
+
+# SAMI helpers
+def samiMoveService(move):
+    rospy.wait_for_service('iris_sami/move')
+    try:
+        moveServ = rospy.ServiceProxy('iris_sami/move', RelativeMove)
+        resp = moveServ(*move)
+        return resp.feedback
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)

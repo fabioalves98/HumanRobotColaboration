@@ -11,7 +11,18 @@ from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Pose, Point, Vector3, WrenchStamped, Quaternion, TransformStamped
 from moveit_commander.move_group import MoveGroupCommander
 
+from iris_cobot.srv import WeightUpdate
 from helpers import arrowMarker, quaternionToList, vectorFromQuaternion
+
+GRIPPER_WEIGHT = 1.5
+
+weight = GRIPPER_WEIGHT
+
+
+def weightUpdateServ(data):
+    global weight
+    weight = GRIPPER_WEIGHT + data.weight
+    return True
 
 
 def signal_handler(sig, frame):
@@ -32,9 +43,9 @@ def main():
     # m_z_pub = rospy.Publisher('mz_marker', Marker, queue_size=10)
     m_g_pub = rospy.Publisher('mg_marker', Marker, queue_size=10)
 
-    wrench_pub = rospy.Publisher('wrench_theory', WrenchStamped, queue_size=1)
+    rospy.Service('weight_update', WeightUpdate, weightUpdateServ)
 
-    weight = 1.5
+    wrench_pub = rospy.Publisher('wrench_theory', WrenchStamped, queue_size=1)
 
     x_rot = quaternion_from_euler(0, 0, radians(-90))
     y_rot = quaternion_from_euler(0, radians(90), 0)

@@ -24,6 +24,11 @@ add_message_files(
     JointSpeed.msg
 )
 
+add_service_files(
+    FILES
+    WeightUpdate.srv
+)
+
 generate_messages(
   DEPENDENCIES
   std_msgs

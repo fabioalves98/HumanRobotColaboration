@@ -994,3 +994,6 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Distancia temporal maxima entre toques - 400ms
 - Quando o nó **double_tap** deteta um double tap, chama o serviço de **gripper_toggle**
 
+## 1/06 - IRISLab
+
+## 2/06 - IRISLab

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from rosgraph.names import get_ros_namespace
 import rospy, math
 import numpy as np
 from std_srvs.srv import Trigger
