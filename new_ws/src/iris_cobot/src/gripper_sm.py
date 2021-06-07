@@ -52,8 +52,12 @@ def forceCallback(data):
 def main():
     rospy.init_node('gripper_sm', anonymous=True)
 
-    # global gripper
+    # Global gripper
     gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
+
+    # Gripper LED Controls
+    gripper.set_led_preset(1)
+    gripper.set_led_animation(14)
 
     rospy.Service('gripper_toggle', Trigger, gripperToggleServ)
 

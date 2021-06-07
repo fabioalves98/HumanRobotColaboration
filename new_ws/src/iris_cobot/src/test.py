@@ -5,6 +5,7 @@ import signal, sys, os, time, timeit
 from math import degrees, pi, sin, cos, acos, sqrt, radians
 
 from sami.arm import Arm
+from sami.gripper import Gripper
 import helpers
 
 arm = None
@@ -51,8 +52,16 @@ def main():
 
     global arm
 
-    arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
-    arm.velocity = 1
+    # arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
+    # arm.velocity = 1
+
+    # gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
+        
+    # Gripper Light Controls
+    # gripper.set_led_preset(1)
+    # gripper.set_led_animation(14)
+    # gripper.set_led_color(7)
+    # gripper.set_led_speed(3)
 
     # Rotate wrist_3
     # for i in range(-180, 180, 30):
@@ -63,7 +72,7 @@ def main():
     #     raw_input("Move next? ")
 
     # Move to default pos
-    arm.move_joints([0, radians(-90), 0, radians(0), radians(-90), 0])
+    # arm.move_joints([0, radians(-90), 0, radians(0), radians(-90), 0])
 
     # Reset ft sensor
     # helpers.reset_ft_sensor()

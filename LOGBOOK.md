@@ -996,4 +996,49 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 1/06 - IRISLab
 
+- Review
+
 ## 2/06 - IRISLab
+
+#### Máquina de estados do Gripper
+
+- Modo de interação com o braço em que num estado inicial ele se move consoante as forças sentidas, mas após uma acão de double tap, o gripper fecha-se, o programa calcula o peso do objeto agarrado, compensa esse peso, e permite ao utilizador mover o braço com o objeto acopulado, exercendo as mesmas forças de anteriormente
+- Máquina de estado inicial funcional, no entanto existem solavancos nas transições de estados
+  - Necessidade de uma maquina de estado geral que controla os nós de movimento, para que eles possam ser parados / resumidos entre as transições de estado
+  - Necessidade de compensar os valores de torque
+
+<img src="screenshots/logbook/3.jpg" width=80%>
+
+## 7/06 - IRISLab
+
+#### Teste 56 posições
+
+- Necessidade de gravar os valores de torque para criar modelo de correção análogo ao que corrige os valores de força
+- **Testes TCW -** Valores de força e torque em 57 posições com gripper e payload 0Kg
+- **Testes TCWNG -** Valores de força e torque em 8 posições sem gripper e payload 0Kg
+
+#### Máquina de Estados Global UR10e
+
+##### Inputs
+
+- Double Tap X / Y / Z
+- Finger Position
+
+##### Funcionalidades
+
+- **Working - **Task predefinida pelo utilizador
+- **Reactive Stop - **Em movimento manuais / pre definidos se sentir uma força pára e espera por input
+- **Freedrive - **Robot move-se na direção da força sentida
+  - Para a existencia de um movimento mais preciso, talvez alterar a relação força-velocidade em real time
+- **Fine Control - **Velocidade de operação muito reduzida
+  - Ou criar um modelo que compreenda várias relações de força-velocidade mas que a transição entre elas seja "seemless"
+- **Deliver Object - ** Robot entrega ao utlizador um objeto fazendo-o lagar quando o utilizar exerce força suficnete para suster o objeto
+  - Implementar esta funcionalidade futuramente no controlo do robot através de gestos (mãos) 
+- **Lift and Control - **Levar o gripper até um objeto, dar input para ele o agarrar, fazer com que o braço levante o objeto, compense o seu peso e continue em modo freedrive
+- **Custom Screw - **Colocar o robot numa posição e faze-lo apertar algo (rodando o wrist_3) até notar que está a exercer força suficiente
+- **Modo de Configuração - **?
+
+#### Controlo das Luzes do Gripper
+
+- Definição de funçoes de controlo dos LEDS do gripper no iris_sami
+- Possivel contorlar animação, cor, velocidade e mudança de modos pré-definidos
