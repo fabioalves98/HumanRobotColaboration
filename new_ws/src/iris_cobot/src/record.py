@@ -12,7 +12,7 @@ BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 arm = None
 
 stream = []
-force = np.empty([1, 3])
+wrench = np.empty([1, 6])
 
 
 def signal_handler(sig, frame):
@@ -26,17 +26,22 @@ def wrench_filtered(data):
     f_y = data.wrench.force.y
     f_z = data.wrench.force.z
 
-    global stream, force
+    t_x = data.wrench.torque.x
+    t_y = data.wrench.torque.y
+    t_z = data.wrench.torque.z
+
+    global stream, wrench
 
     stream.append((f_x, f_y, f_z))
-    force = np.append(force, [[f_x, f_y, f_z]], axis=0)
+    wrench = np.append(wrench, [[f_x, f_y, f_z, t_x, t_y, t_z]], axis=0)
+
          
 
 def main():
     rospy.init_node('wrench_record', anonymous=True)
     signal.signal(signal.SIGINT, signal_handler)
 
-    global arm, stream, force
+    global arm, stream, wrench
 
     arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     arm.velocity = 1
@@ -56,9 +61,21 @@ def main():
                 (90, -180),  (90, -135), (90, 135),
                 (135, -180),  (135, 135)]
     idx = 0
-    for w_1 in [-180]:
-        for w_2 in [0]:
+    idx_skip = 0
+
+    for w_1 in angles:
+        for w_2 in angles:
             if (w_1, w_2) not in forbidden:
+                # IDX Skip
+                if idx < idx_skip:
+                    idx += 1
+                    continue
+                
+                # W1 Skip
+                if w_1 not in [0]:
+                    idx += 1
+                    continue
+
                 # Set Arm joints
                 arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(0)])
 
@@ -66,27 +83,30 @@ def main():
                 helpers.reset_ft_sensor()
 
                 # Init temp stream
-                temp_stream = []
+                wrench_sample = []
 
                 # Move wrist 3
                 for i in range(-180, 180):
                     print('%d - %d' % (idx, i))
-                    arm.move_joints([0, radians(-90), 0, radians(w_1), radians(i), radians(0)])
-                    force = np.empty([1, 3])
-                    print('Force RESET - %s' % str(force.shape))
-                    subs = rospy.Subscriber("wrench_theory", WrenchStamped, wrench_filtered)
-                    while force.shape[0] < 5:
+                    arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(i)])
+                    wrench = np.empty([1, 6])
+                    # print('Wrench Reset - %s' % str(wrench.shape))
+                    subs = rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
+                    while wrench.shape[0] < 30:
                         continue
                     subs.unregister()
-                    print('Force Shape - %s' % str(force.shape))
-                    # temp_stream.append((statistics.mean(force[:,0]), statistics.mean(force[:,1]), 
-                    #                     statistics.mean(force[:,2])))
-                    temp_stream.append((force[-1,0], force[-1,1], force[-1,2]))
+                    # print('Wrench Shape - %s' % str(wrench.shape))
+                    wrench_sample.append([(statistics.mean(wrench[:,0]), 
+                                           statistics.mean(wrench[:,1]), 
+                                           statistics.mean(wrench[:,2])),
+                                          (statistics.mean(wrench[:,3]), 
+                                           statistics.mean(wrench[:,4]), 
+                                           statistics.mean(wrench[:,5]))])
 
                 # Save samples of wrench in files
-                with open(BASE_DIR + '/record/TTZ%d_%d_%d_temp.list' % (idx, w_1, w_2), 'w') as f:
-                    print(len(temp_stream))
-                    pickle.dump(temp_stream, f)
+                with open(BASE_DIR + '/record/TCWNG%d_%d_%d.list' % (idx, w_1, w_2), 'w') as f:
+                    print(len(wrench_sample))
+                    pickle.dump(wrench_sample, f)
                 
                 # with open(BASE_DIR + '/record/TZ%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
                 #     print(len(stream))

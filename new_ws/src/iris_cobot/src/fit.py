@@ -798,7 +798,7 @@ def main():
     # gripperTheoreticalTest(plt)
 
     # Test 56 positions in order to correct FT sensor
-    gripperCorrectTest(plt)
+    # gripperCorrectTest(plt)
 
     # Test the difference between theory model and no payload in order to correct theoretical model
     # theoreticalCorrect(plt)
@@ -806,59 +806,37 @@ def main():
     # Test the relativity of the 56 positions
     # gripperRelativeTest(plt)
 
-    return 0
+    # return 0
+    
     # EXPERIMENTAL AREA
-    tests = [
-        '/record/TZ0_0_0_temp.list',
-        '/record/TZ0_0_90_temp.list',
-        '/record/TZ0_-180_0_temp.list',
-        '/record/TZ0_-180_90_temp.list'
-    ]
+    x = np.arange(-180,180,1)
 
-    tests_theory = [
-        '/record/TTZ0_0_0_temp.list',
-        '/record/TTZ0_0_90_temp.list',
-        '/record/TTZ0_-180_0_temp.list',
-        '/record/TTZ0_-180_90_temp.list'
-    ]
+    angles = [-180, -135, -90, -45, 0, 45, 90, 135]
+    forbidden = [(45, -180),  (45, -135),
+                (90, -180),  (90, -135), (90, 135),
+                (135, -180),  (135, 135)]
+    idx = 0
+    for w_1 in angles:
+        for w_2 in angles:
+            if (w_1, w_2) not in forbidden:
 
-    average_correct = []
+                if w_1 not in [0]:
+                    idx += 1
+                    continue
 
-    for i in range(len(tests)):
-        test = openList(tests[i])
-        test_theory = openList(tests_theory[i])
+                test_wrench = openList('/record/TCWNG%d_%d_%d.list' % (idx, w_1, w_2))
 
-        offset = test_theory[180,:]
-        test_theory -= offset
+                print(test_wrench.shape)
+                print(test_wrench[:,0,:].shape)
+                # plotXYZ(plt, x, test_wrench[:,0,:])
+                plotXYZ(plt, x, test_wrench[:,1,:])
 
-        # test_theory[:,2] += test_theory[:,0] * 0.154
-        # test_theory[:,0] = test_theory[:,0] * 0.846
-        # test_theory[:,1] = test_theory[:,1] * 1.115
-        # test_theory[:,2] = test_theory[:,2] * 1.230
+                idx+=1
 
-        test_diff = test_theory - test
-        
-        # Z Correction
-        # a = test
-        # b = test_theory
-        # test_diff = np.divide(a, b, out=np.zeros_like(a), where=b!=0)
+                # plt.show()
 
-        # test_diff[:,0] = 0
-        # test_diff[:,1] = 0
-        # for i in range(len(test_diff[:,2])):
-        #     if test_diff[i,2] < 1 or test_diff[i,2] > 2:
-        #         test_diff[i,2] = 1
-        
-        # average_correct.append(np.mean(test_diff[:,2]))
+    
 
-        plotXYZ(plt, np.arange(-180, 180, 1), test_theory, '', alpha=0.3)
-        plotXYZ(plt, np.arange(-180, 180, 1), test_diff, '', alpha=1)
-        plotXYZ(plt, np.arange(-180, 180, 1), test, '--', alpha=0.5)
-
-        plt.show()
-        plt.cla()
-
-    # print(np.mean(average_correct))
 
     plt.show()
 
