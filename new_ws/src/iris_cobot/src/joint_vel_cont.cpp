@@ -15,7 +15,7 @@ void jointSpeedSub(iris_cobot::JointSpeed msg)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "vel_group_controller");
+    ros::init(argc, argv, "joint_vel_cont");
     ros::NodeHandle nh;
 
     // Velocity Publisher

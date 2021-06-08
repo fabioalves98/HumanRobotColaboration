@@ -6,13 +6,13 @@
     <arg name="moveit" default="true" doc="Use MoveIt for motion planning"/>
     <arg name="rviz"   default="true" doc="Launch RViz with movit planner plugin"/>
 
-    <arg name="robot_ip"    default="10.1.0.2" doc="IP of UR10e located at IRISLab"/>
+    <arg name="robot_ip"    default="192.168.56.101" doc="IP of virtualized UR10e"/>
 
     <include file="$(find iris_ur10e)/launch/ur10e.launch">
         <arg name="sim"         value="false"/>
         <arg name="moveit"      value="$(arg moveit)"/>
         <arg name="rviz"        value="$(arg rviz)"/>
-        <arg name="robot_ip"    value="$(robot_ip)"/>
+        <arg name="robot_ip"    value="$(arg robot_ip)"/>
     </include>
 
 </launch>

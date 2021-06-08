@@ -1,8 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- IRIS UR10e withoit rviz -->
-    <include file="$(find iris_ur10e)/launch/live.launch">
+    <arg name="ursim"   default="false"/>
+
+     <!-- IRIS UR10e without rviz -->
+    <include unless="$(arg ursim)" file="$(find iris_ur10e)/launch/live.launch">
+        <arg name="rviz" value="false"/>
+    </include>
+    <include if="$(arg ursim)" file="$(find iris_ur10e)/launch/ursim.launch">
         <arg name="rviz" value="false"/>
     </include>
 

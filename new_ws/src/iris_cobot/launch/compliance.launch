@@ -1,16 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 
-    <!-- Force to Linear Velocity -->
-    <node name="force_to_linvel" pkg="iris_cobot" type="force_to_linvel.py"/>
-
-    <!-- Torque to Angular Velocity -->
-    <node name="torque_to_angvel" pkg="iris_cobot" type="torque_to_angvel"/>
+    <!-- Force Torque to Angular Velocity -->
+    <node name="ft_to_vel" pkg="iris_cobot" type="ft_to_vel"/>
 
     <!-- Jacobian Conversion -->
     <node name="jacobian" pkg="iris_cobot" type="jacobian"/>
 
     <!-- Joint Velocity Controller -->
-    <node name="vel_group_controller" pkg="iris_cobot" type="vel_group_controller"/>
+    <node name="joint_vel_cont" pkg="iris_cobot" type="joint_vel_cont"/>
 
 </launch>

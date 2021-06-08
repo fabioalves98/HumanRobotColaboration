@@ -48,8 +48,8 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(viewer src/viewer.cpp)
 target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
-add_executable(torque_to_angvel src/torque_to_angvel.cpp)
-target_link_libraries(torque_to_angvel ${catkin_LIBRARIES})
+add_executable(ft_to_vel src/ft_to_vel.cpp)
+target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
 
 add_executable(jacobian src/jacobian.cpp)
 target_link_libraries(jacobian ${catkin_LIBRARIES})
@@ -59,9 +59,9 @@ add_executable(moveit_controller src/moveit_controller.cpp)
 target_link_libraries(moveit_controller ${catkin_LIBRARIES})
 add_dependencies(moveit_controller iris_cobot_generate_messages_cpp)
 
-add_executable(vel_group_controller src/vel_group_controller.cpp)
-target_link_libraries(vel_group_controller ${catkin_LIBRARIES})
-add_dependencies(vel_group_controller iris_cobot_generate_messages_cpp)
+add_executable(joint_vel_cont src/joint_vel_cont.cpp)
+target_link_libraries(joint_vel_cont ${catkin_LIBRARIES})
+add_dependencies(joint_vel_cont iris_cobot_generate_messages_cpp)
 
 
 # Helpers
@@ -71,4 +71,3 @@ target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
 # Other
 add_executable(rtde src/rtde.cpp)
 target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})
-

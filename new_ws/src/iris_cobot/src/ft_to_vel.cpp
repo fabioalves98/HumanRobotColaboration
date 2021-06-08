@@ -10,13 +10,28 @@
 
 moveit::planning_interface::MoveGroupInterface *move_group_ptr;
 tf2_ros::TransformBroadcaster *br_ptr;
+ros::Publisher *force_marker_pub_ptr;
 ros::Publisher *ang_vel_pub_ptr;
+ros::Publisher *lin_vel_pub_ptr;
+
 
 void rotationCalculator(geometry_msgs::WrenchStamped wrench)
 {
+    geometry_msgs::Vector3 force = wrench.wrench.force;
     geometry_msgs::Vector3 torque = wrench.wrench.torque;
 
-    // Temporary limit and contrain torque sensibility
+    // Temporary limit and constrain force sensibility
+    force.x /= 50;
+    force.y /= 50;
+    force.z /= 50;
+    if (force.x > 0.4) force.x = 0.4;
+    if (force.x < -0.4) force.x = -0.4;
+    if (force.y > 0.4) force.y = 0.4;
+    if (force.y < -0.4) force.y = -0.4;
+    if (force.z > 0.4) force.z = 0.4;
+    if (force.z < -0.4) force.z = -0.4;
+
+    // Temporary limit and constrain torque sensibility
     torque.x /= 10;
     torque.y /= 10;
     torque.z /= 10;
@@ -27,6 +42,9 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     if (torque.z > M_PI_4/2) torque.z = M_PI_4/2;
     if (torque.z < -M_PI_4/2) torque.z = -M_PI_4/2;
 
+    // Origin position
+    tf2::Vector3 origin(-0.7, 0.3, 0.5);
+
     // Create FT Sensor Orientation
     geometry_msgs::PoseStamped ee_pose = move_group_ptr->getCurrentPose();
     tf2::Quaternion ee_ori, ft_sensor_rot, ft_sensor_ori;
@@ -34,14 +52,49 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     ft_sensor_rot.setRPY(-M_PI_2, 0, -M_PI_2);
     ft_sensor_ori = ee_ori * ft_sensor_rot;
 
+    // FT Sensor Transform
+    tf2::Stamped<tf2::Transform>  ft_sensor_tf;
+    ft_sensor_tf.setOrigin(origin);
+    ft_sensor_tf.setRotation(ft_sensor_ori);
+
+    // FORCE
+    // Create Force Pose
+    geometry_msgs::Pose force_pose;
+    force_pose.position.x = force.x;
+    force_pose.position.y = force.y;
+    force_pose.position.z = force.z;
+    force_pose.orientation = tf2::toMsg(tf2::Quaternion(0, 0, 0, 1));
+
+    tf2::doTransform(force_pose, force_pose, tf2::toMsg(ft_sensor_tf));
+
+    // Publish Force Pose
+    visualization_msgs::Marker force_marker;
+    force_marker.header.frame_id = "base_link";
+    force_marker.type = force_marker.SPHERE;
+    force_marker.action = force_marker.ADD;
+    force_marker.scale = tf2::toMsg(tf2::Vector3(0.03, 0.03, 0.03));
+    force_marker.pose = force_pose;
+    force_marker.color.r = 1;
+    force_marker.color.g = 1;
+    force_marker.color.b = 1;
+    force_marker.color.a = 1;
+
+    force_marker_pub_ptr->publish(force_marker);
+
+    // Difference between poses
+    geometry_msgs::Vector3 lin_vel;
+    lin_vel.x = force_pose.position.x - origin.getX();
+    lin_vel.y = force_pose.position.y - origin.getY();
+    lin_vel.z = force_pose.position.z - origin.getZ();
+
+    // Publish Difference between poses - linear velocity
+    lin_vel_pub_ptr->publish(lin_vel);
+
+    // TORQUE
     // Create Torque Orientation
     tf2::Quaternion torque_rot, torque_ori;
     torque_rot.setRPY(torque.x, torque.y, torque.z);
     torque_ori = ft_sensor_ori * torque_rot;
-
-    // FT Sensor Transform
-    tf2::Transform ft_sensor_tf;
-    ft_sensor_tf.setRotation(ft_sensor_ori);   
 
     // Torque Transform
     tf2::Transform torque_tf;
@@ -64,7 +117,6 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     double roll, pitch, yaw;
     diff_tf = torque_tf * ft_sensor_tf.inverse();
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
-    // std::cout << roll << " | " << pitch << " | " << yaw << std::endl;
 
     // Publish Difference between transforms - angular velocity
     geometry_msgs::Vector3 angvel;
@@ -76,7 +128,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
 }
 
 int main(int argc, char** argv){
-    ros::init(argc, argv, "torque_to_angvel");
+    ros::init(argc, argv, "ft_to_vel");
 
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2); 
@@ -85,11 +137,17 @@ int main(int argc, char** argv){
     moveit::planning_interface::MoveGroupInterface move_group("manipulator");
     move_group_ptr = &move_group;
 
+    ros::Publisher force_marker_pub = nh.advertise<visualization_msgs::Marker>("f_marker", 1);
+    force_marker_pub_ptr = &force_marker_pub;
+
     tf2_ros::TransformBroadcaster br;
     br_ptr = &br;
 
-    ros::Publisher angvel_pub = nh.advertise<geometry_msgs::Vector3>("angular_velocity", 1);
-    ang_vel_pub_ptr = &angvel_pub;
+    ros::Publisher lin_vel_pub = nh.advertise<geometry_msgs::Vector3>("linear_velocity", 1);
+    lin_vel_pub_ptr = &lin_vel_pub;
+
+    ros::Publisher ang_vel_pub = nh.advertise<geometry_msgs::Vector3>("angular_velocity", 1);
+    ang_vel_pub_ptr = &ang_vel_pub;
 
     ros::Subscriber wrench_sub = nh.subscribe("wrench", 1, rotationCalculator);
 
