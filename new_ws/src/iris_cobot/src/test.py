@@ -56,7 +56,7 @@ def main():
     # arm.velocity = 1
 
     # gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
-        
+    
     # Gripper Light Controls
     # gripper.set_led_preset(1)
     # gripper.set_led_animation(14)

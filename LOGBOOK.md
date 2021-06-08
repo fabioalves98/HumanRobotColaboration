@@ -994,11 +994,11 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Distancia temporal maxima entre toques - 400ms
 - Quando o nó **double_tap** deteta um double tap, chama o serviço de **gripper_toggle**
 
-## 1/06 - IRISLab
+## 01/06 - IRISLab
 
 - Review
 
-## 2/06 - IRISLab
+## 02/06 - IRISLab
 
 #### Máquina de estados do Gripper
 
@@ -1009,7 +1009,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 <img src="screenshots/logbook/3.jpg" width=80%>
 
-## 7/06 - IRISLab
+## 07/06 - IRISLab
 
 #### Teste 56 posições
 
@@ -1042,3 +1042,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Definição de funçoes de controlo dos LEDS do gripper no iris_sami
 - Possivel contorlar animação, cor, velocidade e mudança de modos pré-definidos
+
+## 08/06 - IRISLab
+
+#### Modelo de Correção de Torque

@@ -13,6 +13,11 @@ from iris_sami.srv import RelativeMove
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
+ANGLES = [-180, -135, -90, -45, 0, 45, 90, 135]
+FORBIDDEN = [(45, -180),  (45, -135),
+             (90, -180),  (90, -135), (90, 135),
+             (135, -180), (135, 135)]
+
 
 def set_speed_slider(speed):
     try:

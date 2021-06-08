@@ -15,6 +15,7 @@ from iris_cobot.srv import WeightUpdate
 from helpers import arrowMarker, quaternionToList, vectorFromQuaternion
 
 GRIPPER_WEIGHT = 1.5
+GRIPPER_COG = 0.042
 
 weight = GRIPPER_WEIGHT
 

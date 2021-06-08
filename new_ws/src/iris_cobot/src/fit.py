@@ -664,7 +664,7 @@ def theoreticalCorrect(plt):
                 (90, -180),  (90, -135), (90, 135),
                 (135, -180), (135, 135)]
 
-    id_select = [2, 6, 34, 36] # [2, 6, 34, 38] - Correction curve
+    id_select = [2, 6, 34, 38] # [2, 6, 34, 38] - Correction curve
     plot_step = False
 
     idx=0
@@ -809,34 +809,6 @@ def main():
     # return 0
     
     # EXPERIMENTAL AREA
-    x = np.arange(-180,180,1)
-
-    angles = [-180, -135, -90, -45, 0, 45, 90, 135]
-    forbidden = [(45, -180),  (45, -135),
-                (90, -180),  (90, -135), (90, 135),
-                (135, -180),  (135, 135)]
-    idx = 0
-    for w_1 in angles:
-        for w_2 in angles:
-            if (w_1, w_2) not in forbidden:
-
-                if w_1 not in [0]:
-                    idx += 1
-                    continue
-
-                test_wrench = openList('/record/TCWNG%d_%d_%d.list' % (idx, w_1, w_2))
-
-                print(test_wrench.shape)
-                print(test_wrench[:,0,:].shape)
-                # plotXYZ(plt, x, test_wrench[:,0,:])
-                plotXYZ(plt, x, test_wrench[:,1,:])
-
-                idx+=1
-
-                # plt.show()
-
-    
-
 
     plt.show()
 

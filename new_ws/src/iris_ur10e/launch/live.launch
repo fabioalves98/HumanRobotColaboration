@@ -12,7 +12,7 @@
         <arg name="sim"         value="false"/>
         <arg name="moveit"      value="$(arg moveit)"/>
         <arg name="rviz"        value="$(arg rviz)"/>
-        <arg name="robot_ip"    value="$(robot_ip)"/>
+        <arg name="robot_ip"    value="$(arg robot_ip)"/>
     </include>
 
 </launch>
