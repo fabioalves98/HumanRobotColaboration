@@ -9,12 +9,22 @@
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 
+#include <dynamic_reconfigure/server.h>
+#include <iris_cobot/JacobianConfig.h>
+
 #include <iris_cobot/JointSpeed.h>
 
 bool KEYBOARD = false;
 
 geometry_msgs::Vector3 *linear_velocity_ptr;
 geometry_msgs::Vector3 *angular_velocity_ptr;
+
+double sensibility;
+
+void parameterConfigure(iris_cobot::JacobianConfig &config, uint32_t level) 
+{
+    sensibility = config.sensibility;
+}
 
 
 void linearVelSub(geometry_msgs::Vector3 lin_vel)
@@ -72,6 +82,12 @@ int main(int argc, char **argv)
     std::cout << "Orientation\n" << orientation.vec() << '\n' << orientation.w() << std::endl;
     // Pose obtained directly from move group
     std::cout << move_group.getCurrentPose() << std::endl;
+
+    // Dynamic reconfigure init and callback
+    dynamic_reconfigure::Server<iris_cobot::JacobianConfig> server;
+    dynamic_reconfigure::Server<iris_cobot::JacobianConfig>::CallbackType cobotConfigCallback;
+    cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
+    server.setCallback(cobotConfigCallback);
 
     geometry_msgs::Vector3 linear_velocity;
     linear_velocity_ptr = &linear_velocity;
@@ -153,15 +169,15 @@ int main(int argc, char **argv)
         { 
             geometry_msgs::Vector3 linear = *linear_velocity_ptr;
             geometry_msgs::Vector3 angular = *angular_velocity_ptr;
-            if (abs(linear.x) > 0.15 || abs(linear.y) > 0.15 || abs(linear.z) > 0.15 ||
-                abs(angular.x) > 0.15 || abs(angular.y) > 0.15 || abs(angular.z) > 0.15)
+            if (abs(linear.x) > sensibility || abs(linear.y) > sensibility || abs(linear.z) > sensibility ||
+                abs(angular.x) > sensibility || abs(angular.y) > sensibility || abs(angular.z) > sensibility)
             {
                 translation[0] = linear.x;
                 translation[1] = linear.y;
                 translation[2] = linear.z;
-                rotation[0] = angular.x * 2;
-                rotation[1] = angular.y * 2;
-                rotation[2] = angular.z * 2;
+                rotation[0] = angular.x;
+                rotation[1] = angular.y;
+                rotation[2] = angular.z;
             }
         }
 

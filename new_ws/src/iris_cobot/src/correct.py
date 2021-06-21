@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy, rospkg
 import pickle
+import numpy as np
 from math import degrees
 from geometry_msgs.msg import WrenchStamped
 from sensor_msgs.msg import JointState
@@ -15,13 +16,13 @@ wrench_pub = None
 correction = None
 index = 0
 # Orientational Correction
-theory_values = (0, 0, 0)
-theory_offset = (0, 0, 0)
+theory_values = np.empty([2, 3])
+theory_offset = np.empty([2, 3])
 
 
 def ftResetService(req):
-    global index, correction, theory_offset
-    offset = correction[index,:]
+    global index, correction, theory_offset, theory_values
+    offset = correction[index,:,:]
 
     helpers.reset_ft_sensor()
 
@@ -44,12 +45,16 @@ def jointUpdate(data):
 
 
 def wrenchTheory(data):
-    t_x = data.wrench.force.x
-    t_y = data.wrench.force.y
-    t_z = data.wrench.force.z
+    f_x = data.wrench.force.x
+    f_y = data.wrench.force.y
+    f_z = data.wrench.force.z
+
+    t_x = data.wrench.torque.x
+    t_y = data.wrench.torque.y
+    t_z = data.wrench.torque.z
 
     global theory_values
-    theory_values = (t_x, t_y, t_z)
+    theory_values = [[f_x, f_y, f_z], [t_x, t_y, t_z]]
 
     
 def wrenchCorrect(data):
@@ -57,16 +62,22 @@ def wrenchCorrect(data):
     f_y = data.wrench.force.y
     f_z = data.wrench.force.z
 
+    t_x = data.wrench.torque.x
+    t_y = data.wrench.torque.y
+    t_z = data.wrench.torque.z
+
     global index
-    force = (f_x, f_y, f_z)
 
     corrected = WrenchStamped()
     corrected.header.frame_id = "base_link"
     corrected.header.stamp = rospy.Time()
-    comp = correction[index,:]
-    corrected.wrench.force.x = force[0] - comp[0] - (theory_values[0] - theory_offset[0])
-    corrected.wrench.force.y = force[1] - comp[1] - (theory_values[1] - theory_offset[1])
-    corrected.wrench.force.z = force[2] - comp[2] - (theory_values[2] - theory_offset[2])
+    comp = correction[index,:,:]
+    corrected.wrench.force.x = f_x - comp[0][0] - (theory_values[0][0] - theory_offset[0][0])
+    corrected.wrench.force.y = f_y - comp[0][1] - (theory_values[0][1] - theory_offset[0][1])
+    corrected.wrench.force.z = f_z - comp[0][2] - (theory_values[0][2] - theory_offset[0][2])
+    corrected.wrench.torque.x = t_x - comp[1][0] - (theory_values[1][0] - theory_offset[1][0])
+    corrected.wrench.torque.y = t_y - comp[1][1] - (theory_values[1][1] - theory_offset[1][1])
+    corrected.wrench.torque.z = t_z - comp[1][2] - (theory_values[1][2] - theory_offset[1][2])
 
     wrench_pub.publish(corrected)
     
@@ -76,24 +87,23 @@ def main():
 
     global correction, wrench_pub
 
-    with open(BASE_DIR + '/curves/wrench_correct_56.list') as f:
-        correction = pickle.load(f).transpose()
+    with open(BASE_DIR + '/curves/wrench_correct_final.list') as f:
+        correction = pickle.load(f)
         print(correction.shape)
 
-    rospy.wait_for_message('joint_states', JointState)
     joints_sub = rospy.Subscriber('joint_states', JointState, jointUpdate)
-    rospy.wait_for_message('wrench_theory', WrenchStamped)
+    rospy.wait_for_message('joint_states', JointState)
+
     theory_sub = rospy.Subscriber('wrench_theory', WrenchStamped, wrenchTheory)
     rospy.wait_for_message('wrench_theory', WrenchStamped)
-    
     
     rospy.Service('/iris_cobot/zero_ftsensor', Trigger, ftResetService)
     ftResetService(None)
 
     wrench_pub = rospy.Publisher('wrench_correct', WrenchStamped, queue_size=1)
-    rospy.wait_for_message('wrench_filtered', WrenchStamped)
-    wrench_sub = rospy.Subscriber('wrench_filtered', WrenchStamped, wrenchCorrect)
 
+    wrench_sub = rospy.Subscriber('wrench_filtered', WrenchStamped, wrenchCorrect)
+    rospy.wait_for_message('wrench_filtered', WrenchStamped)
 
     rospy.spin()
 

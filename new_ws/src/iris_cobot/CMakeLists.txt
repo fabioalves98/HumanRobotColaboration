@@ -34,6 +34,11 @@ generate_messages(
   std_msgs
 )
 
+generate_dynamic_reconfigure_options(
+  cfg/FT_to_Vel.cfg
+  cfg/Jacobian.cfg
+)
+
 catkin_package(CATKIN_DEPENDS message_runtime)
 
 find_package(PCL REQUIRED)
@@ -50,18 +55,19 @@ target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 add_executable(ft_to_vel src/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
+add_dependencies(ft_to_vel ${PROJECT_NAME}_gencfg)
 
 add_executable(jacobian src/jacobian.cpp)
 target_link_libraries(jacobian ${catkin_LIBRARIES})
-add_dependencies(jacobian iris_cobot_generate_messages_cpp)
+add_dependencies(jacobian ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
 
 add_executable(moveit_controller src/moveit_controller.cpp)
 target_link_libraries(moveit_controller ${catkin_LIBRARIES})
-add_dependencies(moveit_controller iris_cobot_generate_messages_cpp)
+add_dependencies(moveit_controller ${PROJECT_NAME}_generate_messages_cpp)
 
 add_executable(joint_vel_cont src/joint_vel_cont.cpp)
 target_link_libraries(joint_vel_cont ${catkin_LIBRARIES})
-add_dependencies(joint_vel_cont iris_cobot_generate_messages_cpp)
+add_dependencies(joint_vel_cont ${PROJECT_NAME}_generate_messages_cpp)
 
 
 # Helpers

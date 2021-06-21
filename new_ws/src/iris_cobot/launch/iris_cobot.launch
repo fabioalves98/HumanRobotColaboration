@@ -17,11 +17,14 @@
         <rosparam command="load" file="$(find ur10e_moveit_config)/config/kinematics.yaml"/>
     </node>
 
+    <!-- Dynamic Reconfigure -->
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="configure_params" output="screen" /> 
+
     <!-- IRIS Sami GUI Launcher -->
     <include file="$(find iris_sami)/launch/iris_sami.launch"/>
 
     <!-- Wrench -->
-    <!-- <include file="$(find iris_cobot)/launch/wrench.launch"/> -->
+    <include file="$(find iris_cobot)/launch/wrench.launch"/>
 
     <!-- Plotjuggler -->
     <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 

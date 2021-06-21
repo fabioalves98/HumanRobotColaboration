@@ -5,6 +5,10 @@
 #include <tf2_ros/transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2/LinearMath/Transform.h>
+
+#include <dynamic_reconfigure/server.h>
+#include <iris_cobot/FT_to_VelConfig.h>
+
 #include <moveit/move_group_interface/move_group_interface.h>
 
 
@@ -14,33 +18,29 @@ ros::Publisher *force_marker_pub_ptr;
 ros::Publisher *ang_vel_pub_ptr;
 ros::Publisher *lin_vel_pub_ptr;
 
+double force_div;
+double torque_div;
+
+void parameterConfigure(iris_cobot::FT_to_VelConfig &config, uint32_t level) 
+{
+    force_div = config.force_div;
+    torque_div = config.torque_div;
+}
+
 
 void rotationCalculator(geometry_msgs::WrenchStamped wrench)
 {
     geometry_msgs::Vector3 force = wrench.wrench.force;
     geometry_msgs::Vector3 torque = wrench.wrench.torque;
 
-    // Temporary limit and constrain force sensibility
-    force.x /= 50;
-    force.y /= 50;
-    force.z /= 50;
-    if (force.x > 0.4) force.x = 0.4;
-    if (force.x < -0.4) force.x = -0.4;
-    if (force.y > 0.4) force.y = 0.4;
-    if (force.y < -0.4) force.y = -0.4;
-    if (force.z > 0.4) force.z = 0.4;
-    if (force.z < -0.4) force.z = -0.4;
+    // Divide force and torque values by a user defined constant
+    force.x /= force_div;
+    force.y /= force_div;
+    force.z /= force_div;
 
-    // Temporary limit and constrain torque sensibility
-    torque.x /= 10;
-    torque.y /= 10;
-    torque.z /= 10;
-    if (torque.x > M_PI_4/2) torque.x = M_PI_4/2;
-    if (torque.x < -M_PI_4/2) torque.x = -M_PI_4/2;
-    if (torque.y > M_PI_4/2) torque.y = M_PI_4/2;
-    if (torque.y < -M_PI_4/2) torque.y = -M_PI_4/2;
-    if (torque.z > M_PI_4/2) torque.z = M_PI_4/2;
-    if (torque.z < -M_PI_4/2) torque.z = -M_PI_4/2;
+    torque.x /= torque_div;
+    torque.y /= torque_div;
+    torque.z /= torque_div;
 
     // Origin position
     tf2::Vector3 origin(-0.7, 0.3, 0.5);
@@ -149,7 +149,13 @@ int main(int argc, char** argv){
     ros::Publisher ang_vel_pub = nh.advertise<geometry_msgs::Vector3>("angular_velocity", 1);
     ang_vel_pub_ptr = &ang_vel_pub;
 
-    ros::Subscriber wrench_sub = nh.subscribe("wrench", 1, rotationCalculator);
+    // Dynamic reconfigure init and callback
+    dynamic_reconfigure::Server<iris_cobot::FT_to_VelConfig> server;
+    dynamic_reconfigure::Server<iris_cobot::FT_to_VelConfig>::CallbackType cobotConfigCallback;
+    cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
+    server.setCallback(cobotConfigCallback);
+
+    ros::Subscriber wrench_sub = nh.subscribe("wrench_correct", 1, rotationCalculator);
 
     ros::waitForShutdown();
 

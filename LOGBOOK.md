@@ -1054,9 +1054,26 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 15/06 - IRISLab
 
+#### Modelo Teórico de Correção de Torque
+
+- Adcionar ao ficheiro ft_sensor.py a parte teórica do torque baseado da seguinte fórmula
+
+<img src="screenshots/logbook/4.jpg" width=50%>
+
 - Testes nas 57 posições ao simulador no modelo teórico e gravação dos valores de torque
 - Comparação dos testes reais com os teóricos mostram que o modelo teórico de torque está bem desenhado mas os parametros precisam de ser ajustados
 - Necessidade de criar um modelo que crie os testes ao modelo teórico analiticamente (sem simulação e gravação)
 
 ## 21/06 - IRISLab
 
+#### Modelo de Correção de Torque
+
+- Valores do modelo teórico utilizados na parte de correção dos valores reais
+- Após alguns testes, o modo compliance do robot funciona muito melhor
+- Necessidade de atualizar o valor do centro de gravidade do modelo quando o robot pega em algo
+
+****
+
+- Implementação de constantes de conversão FT -> Velocidade através de parametros do servidro dynamic reconfigure
+  - Constante de divisão de Força e Torque
+  - Sensibilidade
