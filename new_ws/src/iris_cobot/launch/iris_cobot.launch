@@ -21,7 +21,7 @@
     <include file="$(find iris_sami)/launch/iris_sami.launch"/>
 
     <!-- Wrench -->
-    <include file="$(find iris_cobot)/launch/wrench.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/wrench.launch"/> -->
 
     <!-- Plotjuggler -->
     <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 

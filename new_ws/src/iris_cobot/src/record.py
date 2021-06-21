@@ -32,8 +32,12 @@ def wrench_filtered(data):
 
     global stream, wrench
 
-    stream.append((f_x, f_y, f_z))
-    wrench = np.append(wrench, [[f_x, f_y, f_z, t_x, t_y, t_z]], axis=0)
+    # REAL ROBOT RECORD
+    # stream.append((f_x, f_y, f_z))
+    # wrench = np.append(wrench, [[f_x, f_y, f_z, t_x, t_y, t_z]], axis=0)
+
+    # SIM THEORY RECORD
+    wrench = np.array([f_x, f_y, f_z, t_x, t_y, t_z])
 
          
 
@@ -46,7 +50,8 @@ def main():
     arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     arm.velocity = 1
 
-    # rospy.Subscriber("wrench", WrenchStamped, wrench_filtered)
+    # SIM THEORY RECORD
+    rospy.Subscriber("wrench_theory", WrenchStamped, wrench_filtered)
     
     # positions = [
     #     # [0, radians(-90), 0, 0, radians(90), 0],
@@ -72,9 +77,9 @@ def main():
                     continue
                 
                 # W1 Skip
-                if w_1 not in [0]:
-                    idx += 1
-                    continue
+                # if w_1 not in [0]:
+                #     idx += 1
+                #     continue
 
                 # Set Arm joints
                 arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(0)])
@@ -89,28 +94,28 @@ def main():
                 for i in range(-180, 180):
                     print('%d - %d' % (idx, i))
                     arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(i)])
-                    wrench = np.empty([1, 6])
-                    # print('Wrench Reset - %s' % str(wrench.shape))
-                    subs = rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
-                    while wrench.shape[0] < 30:
-                        continue
-                    subs.unregister()
-                    # print('Wrench Shape - %s' % str(wrench.shape))
-                    wrench_sample.append([(statistics.mean(wrench[:,0]), 
-                                           statistics.mean(wrench[:,1]), 
-                                           statistics.mean(wrench[:,2])),
-                                          (statistics.mean(wrench[:,3]), 
-                                           statistics.mean(wrench[:,4]), 
-                                           statistics.mean(wrench[:,5]))])
+                    # REAL ROBOT RECORD
+                    # wrench = np.empty([1, 6])
+                    # subs = rospy.Subscriber("wrench_filtered", WrenchStamped, wrench_filtered)
+                    # while wrench.shape[0] < 30:
+                    #     continue
+                    # subs.unregister()
+                    # wrench_sample.append([(statistics.mean(wrench[:,0]), 
+                    #                        statistics.mean(wrench[:,1]), 
+                    #                        statistics.mean(wrench[:,2])),
+                    #                       (statistics.mean(wrench[:,3]), 
+                    #                        statistics.mean(wrench[:,4]), 
+                    #                        statistics.mean(wrench[:,5]))])
+
+                    # SIM THEORY RECORD
+                    wrench_sample.append([(wrench[0], wrench[1], wrench[2]),
+                                          (wrench[3], wrench[4], wrench[5])])
 
                 # Save samples of wrench in files
-                with open(BASE_DIR + '/record/TCWNG%d_%d_%d.list' % (idx, w_1, w_2), 'w') as f:
+                with open(BASE_DIR + '/record/TCWT%d_%d_%d.list' % (idx, w_1, w_2), 'w') as f:
                     print(len(wrench_sample))
                     pickle.dump(wrench_sample, f)
-                
-                # with open(BASE_DIR + '/record/TZ%d_%d_%d_full.list' % (idx, w_1, w_2), 'w') as f:
-                #     print(len(stream))
-                #     pickle.dump(stream, f)
+
 
                 idx += 1
                 stream = []

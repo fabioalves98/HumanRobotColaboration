@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import sys, signal
+
 import rospy
 import numpy as np
-from math import radians
+from math import degrees, radians, sin,  acos
 from std_msgs.msg import ColorRGBA
 from tf.transformations import quaternion_multiply, quaternion_from_euler
 from tf2_geometry_msgs import do_transform_pose
@@ -18,7 +19,7 @@ GRIPPER_WEIGHT = 1.5
 GRIPPER_COG = 0.042
 
 weight = GRIPPER_WEIGHT
-
+cog = GRIPPER_COG
 
 def weightUpdateServ(data):
     global weight
@@ -53,6 +54,7 @@ def main():
 
     ft_rot = quaternion_from_euler(radians(-90), 0, radians(-90))
 
+    rate = rospy.Rate(500)
 
     while not rospy.is_shutdown():
         ee_ori = moveg.get_current_pose().pose.orientation
@@ -83,7 +85,6 @@ def main():
         tcp_marker.transform.translation = Vector3(*origin)
         tcp_marker.transform.rotation = Quaternion(*ft_ori)
 
-
         br.sendTransform(tcp_marker)
 
         # Gravity
@@ -92,9 +93,6 @@ def main():
         m_g = arrowMarker(g_pose, ColorRGBA(*[1, 0, 0.5, 1]))
 
         # Publishers
-        # m_x_pub.publish(m_x)
-        # m_y_pub.publish(m_y)
-        # m_z_pub.publish(m_z)
         m_g_pub.publish(m_g)
 
         # Vectors
@@ -103,6 +101,7 @@ def main():
         v_z = vectorFromQuaternion(ee_ori)
         v_g = vectorFromQuaternion(g_ori)
 
+        # FORCE
         # Obtain force
         f_x = np.inner(v_x, v_g) * weight * 10
         f_y = np.inner(v_y, v_g) * weight * 10
@@ -113,15 +112,28 @@ def main():
         f_y = f_y * 1.115
         f_z += f_x * 0.154
         f_z = f_z * 1.230
+
+        # TORQUE
+        # Angle with gravity
+        angle_w_g = acos(np.dot(v_z, v_g))
+        
+        # Normal of torque plane
+        torque_plane_normal = np.cross(v_z, v_g)
+
+        # Obtain torque
+        t_x = weight * 10 * cog * sin(angle_w_g) * np.dot(v_x, torque_plane_normal)
+        t_y = weight * 10 * cog * sin(angle_w_g) * np.dot(v_y, torque_plane_normal)
+        t_z = weight * 10 * cog * sin(angle_w_g) * np.dot(v_z, torque_plane_normal)
         
         # Wrench pub
         wrench = WrenchStamped()
         wrench.header.frame_id = "base_link"
         wrench.wrench.force = Vector3(*[f_x, f_y, f_z])
+        wrench.wrench.torque = Vector3(*[t_x, t_y, t_z])
 
         wrench_pub.publish(wrench)
 
-        rospy.sleep(0.002)
+        rate.sleep()
 
 
 if __name__ == "__main__":

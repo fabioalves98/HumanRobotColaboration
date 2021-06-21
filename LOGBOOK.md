@@ -1046,3 +1046,17 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 ## 08/06 - IRISLab
 
 #### Modelo de Correção de Torque
+
+- Testes nas 57 posições com gripper e gravação dos valores de torque
+- Teses em 8 posições sem gripper para efetuar a correção dos valores do sensor consoante a posição do wrist_3
+
+- Criação do programa positional_correction.py que utiliza os 8 testes anteriores e cria 2 arrays (força e torque) para serem utilizados pelos nós de correcção
+
+## 15/06 - IRISLab
+
+- Testes nas 57 posições ao simulador no modelo teórico e gravação dos valores de torque
+- Comparação dos testes reais com os teóricos mostram que o modelo teórico de torque está bem desenhado mas os parametros precisam de ser ajustados
+- Necessidade de criar um modelo que crie os testes ao modelo teórico analiticamente (sem simulação e gravação)
+
+## 21/06 - IRISLab
+
