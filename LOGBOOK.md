@@ -1077,3 +1077,5 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Implementação de constantes de conversão FT -> Velocidade através de parametros do servidro dynamic reconfigure
   - Constante de divisão de Força e Torque
   - Sensibilidade
+
+## 22/06 - IRISLab

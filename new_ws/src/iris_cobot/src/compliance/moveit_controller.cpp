@@ -13,7 +13,7 @@ void jointSpeedSub(iris_cobot::JointSpeed msg)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "moveit_controller");
+    ros::init(argc, argv, "moveit_cont");
     
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2); 

@@ -3,7 +3,7 @@
 
     <node pkg="iris_cobot" type="filter.py" name="filter" output="screen" respawn="true"/>
 
-    <node pkg="iris_cobot" type="ft_sensor.py" name="ft_sensor" output="screen" respawn="true"/>
+    <node pkg="iris_cobot" type="ft_theory.py" name="ft_theory" output="screen" respawn="true"/>
 
     <node pkg="iris_cobot" type="correct.py" name="correct" output="screen" respawn="true"/>
 

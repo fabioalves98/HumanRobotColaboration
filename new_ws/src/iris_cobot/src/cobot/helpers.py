@@ -158,3 +158,13 @@ def samiMoveService(move):
         return resp.feedback
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
+
+
+def samiMoveWorldService(move):
+    rospy.wait_for_service('iris_sami/move_world')
+    try:
+        moveWorldServ = rospy.ServiceProxy('iris_sami/move_world', RelativeMove)
+        resp = moveWorldServ(*move)
+        return resp.feedback
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)

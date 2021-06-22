@@ -7,7 +7,7 @@ from geometry_msgs.msg import WrenchStamped
 from sensor_msgs.msg import JointState
 from std_srvs.srv import Trigger
 
-import helpers
+import cobot.helpers as helpers
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 

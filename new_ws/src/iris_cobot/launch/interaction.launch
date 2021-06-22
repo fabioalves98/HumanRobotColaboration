@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="iris_cobot" type="gripper_sm.py" name="gripper_sm" output="screen" respawn="true"/>
+
+    <node pkg="iris_cobot" type="double_tap.py" name="double_tap" output="screen" respawn="true"/>
+
+</launch>

@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import rospy, math
+import time
 import numpy as np
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import Vector3, WrenchStamped
 from controller_manager_msgs.srv import SwitchController
 
 from sami.gripper import Gripper
-import helpers
+import cobot.helpers as helpers
 
 # States
 RELEASED = 0
@@ -15,7 +16,6 @@ GRIP_EMPTY = 2
 WEIGHT_OBJ = 3
 GRIP_OBJ = 4
 RELEASE_OBJ = 5
-
 
 
 GRIPPER_STANDBY = 500
@@ -125,15 +125,18 @@ def main():
         elif cur_state == WEIGHT_OBJ:
             # TODO: Desligar o FT_2_Vel
             helpers.switchControllers(True)
-            upwards_move = [-0.05, 0, 0, 0, 0, 0]
-            helpers.samiMoveService(upwards_move)
+            upwards_move = [0, 0, 0.05, 0, 0, 0]
+            helpers.samiMoveWorldService(upwards_move)
 
             wrench_msg = rospy.wait_for_message('wrench_correct', WrenchStamped)
             weight = math.sqrt(math.pow(wrench_msg.wrench.force.x, 2) + 
                      math.pow(wrench_msg.wrench.force.y, 2) + 
                      math.pow(wrench_msg.wrench.force.z, 2))
             
+            print('Calculated Weight - ', weight)
+            
             helpers.weightUpdate(weight/10)
+            time.sleep(1)
             helpers.switchControllers(False)
             next_state = GRIP_OBJ
 
@@ -151,6 +154,7 @@ def main():
         elif cur_state == RELEASE_OBJ:
             if gripper_ready < 0:
                 helpers.weightUpdate(0)
+                time.sleep(1)
                 helpers.switchControllers(False)
                 next_state = RELEASED
 
