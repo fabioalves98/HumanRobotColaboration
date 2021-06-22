@@ -1079,3 +1079,16 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Sensibilidade
 
 ## 22/06 - IRISLab
+
+#### Modelo Teórico
+
+- Atualização do centro de gravidade do objeto e calculo do torque teórico baseado nesse valor (PODE NÃO ESTAR FEITO DO MELHOR FORMA)
+  - Calculo feito através da soma do peso do gripper * cog do gripper e peso do objeto * cog do objeto (fingers)
+- Peso do objeto é retirado diretamente dos valores de força medidos pelo sensor
+  - Devido à imprecisão da compoente força do sensor, o peso calculado nem sempre corresponde ao peso real
+  - Neste momento, o peso calculado parece sempre que é superior ao peso real em 1.2x
+- Existe o problema de quanto maior o peso do objeto mais imprecisoes existem nos valores medidos e quanto aos movimentos, o robot irá ter mais dificuladade em executalos visto que até agora, o payload configurado na interface do robot é de 0Kg em vez do peso real
+
+#### Resets Periódicos
+
+- Programa time_series_analysis.py que analisa uma amostra de 100 valores provenientes de wrench_filtered e analisa através do desvio padrão dos dados se existem forças externas a interagir com o robot
