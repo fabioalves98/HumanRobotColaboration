@@ -1,0 +1,12 @@
+[submodule "ros_ws/src/iris_sami"]
+	path = ros_ws/src/iris_sami
+	url = ../iris_sami.git
+[submodule "ros_ws/src/stomp_ros"]
+	path = ros_ws/src/stomp_ros
+	url = ../../ros-industrial/stomp_ros.git
+[submodule "ros_ws/src/universal_robot"]
+	path = ros_ws/src/universal_robot
+	url = ../universal_robot.git
+[submodule "ros_ws/src/Universal_Robots_ROS_Driver"]
+	path = ros_ws/src/Universal_Robots_ROS_Driver
+	url = ../Universal_Robots_ROS_Driver.git
