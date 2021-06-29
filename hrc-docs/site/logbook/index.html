@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        <link rel="canonical" href="https://iris_cobot.ua.pt/logbook/">
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Logbook - Iris Cobot</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Iris Cobot</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../contents/" class="nav-link">Contents</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../intro/" class="nav-link">Introduction</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Development <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../arch/" class="dropdown-item">Architecture</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Extra <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="./" class="dropdown-item active">Logbook</a>
+</li>
+                                    
+<li>
+    <a href="../soa/" class="dropdown-item">State of the Art</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../arch/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../soa/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#logbook" class="nav-link">Logbook</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#1011-pesquisar-papers-bronze" class="nav-link">10/11 - Pesquisar papers (Bronze)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1111-reuniao-irislab" class="nav-link">11/11 - Reunião (IRISlab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1611-pesquisa-posto" class="nav-link">16/11 - Pesquisa (Posto)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1711-teste-irislab" class="nav-link">17/11 - Teste (IRISLab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1811-reuniao-irislab" class="nav-link">18/11 - Reunião (IRISLab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1911-irislab" class="nav-link">19/11 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#212-irislab" class="nav-link">2/12 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#312-irislab" class="nav-link">3/12 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#412-irislab" class="nav-link">4/12 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#712-posto" class="nav-link">7/12 - Posto</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#912-reuniao-irislab" class="nav-link">9/12 - Reunião (IRISLab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1712-teste-irislab" class="nav-link">17/12 - Teste (IRISLab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1812-teste-irislab" class="nav-link">18/12 - Teste (IRISLab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0801-desenvolvimento-bmilhavo" class="nav-link">08/01 - Desenvolvimento (BMIlhavo)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1301-reuniao-irislab" class="nav-link">13/01 - Reunião (IRISLab)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0103-irislab" class="nav-link">01/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0203-irislab" class="nav-link">02/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0303-irislab-reuniao" class="nav-link">03/03 - IRISLab (Reunião)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0503-irislab" class="nav-link">05/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0603-casa" class="nav-link">06/03 - Casa</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0703-casa" class="nav-link">07/03 - Casa</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0803-irislab" class="nav-link">08/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0903-irislab" class="nav-link">09/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1503-irislab" class="nav-link">15/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1603-irislab" class="nav-link">16/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1703-irislab" class="nav-link">17/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1803-irislab" class="nav-link">18/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1903-reuniao" class="nav-link">19/03 - Reunião</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2303-irislab" class="nav-link">23/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2403-irislab" class="nav-link">24/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2503-irislab" class="nav-link">25/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2603-irislab" class="nav-link">26/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3003-irislab" class="nav-link">30/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3103-irislab" class="nav-link">31/03 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0504-irislab" class="nav-link">05/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0604-irislab" class="nav-link">06/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0704-irislab" class="nav-link">07/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1204-irislab" class="nav-link">12/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1304-irislab" class="nav-link">13/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1504-irislab" class="nav-link">15/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1604-reuniao" class="nav-link">16/04 - Reunião</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1904-irislab" class="nav-link">19/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2004-irislab" class="nav-link">20/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2104-irislab" class="nav-link">21/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2204-irislab" class="nav-link">22/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2304-irislab" class="nav-link">23/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2604-irislab" class="nav-link">26/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2704-irislab" class="nav-link">27/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2804-irislab" class="nav-link">28/04 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#3004-reuniao" class="nav-link">30/04 - Reunião</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0505-irislab" class="nav-link">05/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1005-irislab" class="nav-link">10/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1105-irislab" class="nav-link">11/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1305-reuniao" class="nav-link">13/05 - Reunião</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1705-irislab" class="nav-link">17/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1805-irislab" class="nav-link">18/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1905-irislab" class="nav-link">19/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2005-irislab-reuniao" class="nav-link">20/05 - IRISLab / Reunião</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2605-irislab" class="nav-link">26/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2805-irislab" class="nav-link">28/05 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0106-irislab" class="nav-link">01/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0206-irislab" class="nav-link">02/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0706-irislab" class="nav-link">07/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#0806-irislab" class="nav-link">08/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#1506-irislab" class="nav-link">15/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2106-irislab" class="nav-link">21/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#2206-irislab" class="nav-link">22/06 - IRISLab</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="logbook">Logbook</h1>
+<h2 id="1011-pesquisar-papers-bronze">10/11 - Pesquisar papers (Bronze)</h2>
+<ul>
+<li>Encontrei +30 papers sobre interação de robots industriais e humanos. Guardei para futura leitura e resumo</li>
+<li>Sites de papers científicos<ul>
+<li>ResearchGate</li>
+<li>IEEEXplore </li>
+<li>Science Direct </li>
+</ul>
+</li>
+<li>Encontrei 3 sites com recursos interessantes para o tema </li>
+<li>RIA - https://www.robotics.org/</li>
+<li>UR - https://www.universal-robots.com/</li>
+<li>A3 - https://www.a3automate.org/</li>
+</ul>
+<h2 id="1111-reuniao-irislab">11/11 - Reunião (IRISlab)</h2>
+<ul>
+<li>Com o Prof Nuno Lau e Bernardo Cunha</li>
+<li>Apresentação do Projeto Augmanity, composição do sistema, datas e entregáveis</li>
+<li>Escrita da tese fica para o final do desenvolvimento</li>
+<li>Início do logbook</li>
+</ul>
+<h4 id="tarefas"><strong>Tarefas</strong></h4>
+<ul>
+<li>Passagem de objeto do robot para humano</li>
+<li>Utilização de posiçoes pré definidas</li>
+<li>Leitura do sensor de 3 eixos do end-efector para o robot largar o objeto</li>
+</ul>
+<h2 id="1611-pesquisa-posto">16/11 - Pesquisa (Posto)</h2>
+<ul>
+<li>Ao pesquisar sobre o sensor de força do end-efector (TCP), descobri que o driver oficial publica no tópico /wrench os valores que lê do sensor</li>
+</ul>
+<h2 id="1711-teste-irislab">17/11 - Teste (IRISLab)</h2>
+<ul>
+<li>
+<p>Ao iniciar um novo workspace com o repositório do driver oficial, o driver inicia sem problema, e publica no tópico /wrench 3 valores de força e 3 valores de torque.</p>
+</li>
+<li>
+<p>Existe no entanto o problema de não consegui conectar o MoveIt ao robot, com erros variados</p>
+</li>
+<li>
+<p>Um deles estava relacionado com a ausência de um ficheiro de calibração interna, que após o obter, resolvi o problema</p>
+</li>
+<li>
+<p>Ao tentar dar merge do novo driver com o repositório do Eurico, os erros persistiram</p>
+</li>
+<li>
+<p>Ao tentar dar merge novamente em casa, consegui compilar o projeto e executar sem problemas no gazebo. Penso que é esperado visto que os problemas estão maioritariamente no driver do robot real</p>
+</li>
+</ul>
+<h4 id="repositorios-importantes">Repositórios Importantes</h4>
+<ul>
+<li>Eurico -  https://github.com/iris-ua/iris_ur10e</li>
+<li>UR Driver - https://github.com/UniversalRobots/Universal_Robots_ROS_Driver</li>
+<li>UR Description e MoveIt (recomendado) - https://github.com/fmauch/universal_robot/tree/calibration_devel<ul>
+<li>Este possui um branch interessante "moveit" cuja pasta ur10e_moveit_config é mais recente que todas as outras</li>
+</ul>
+</li>
+<li>UR Description e MoveIt (oficial) - https://github.com/ros-industrial/universal_robot</li>
+</ul>
+<hr />
+<ul>
+<li>Criei 3 workspaces diferentes. 1 com o driver do eurico (iris_ws). 1 com o driver oficial (ros_ws). 1 onde vou tentar dar merge dos 2 (merge_ws)</li>
+</ul>
+<h2 id="1811-reuniao-irislab">18/11 - Reunião (IRISLab)</h2>
+<ul>
+<li>Ao tentar adaptar o merge_ws para os parametros do iris_ws (que funciona) reparei numa linha do ur10e_bringup.launch onde, por alguma razao, o force_torque_sensor_controller nao estava incluido na lista de controladores. Ao incluir, o driver já publica os valores do sensor para o tópico /wrench. Vou prosseguir com a utilização do iris_ws, deixando a adaptação do merge_ws para depois.</li>
+<li>Implementação do planeador STOMP no iris_ws</li>
+<li>Adaptação do nó ArmControl ao ambiente (remoção de código relativo ao iris_cork)</li>
+<li>Valores de torque do tópico /wrench são cartesianos e e relativos ao tool0_controller mas os valores iniciais não são claros. O y inicia com um valor demasiado alto e a rotação do end-effector não parece impactuar esses valores.</li>
+<li>Afinal, apos reinicar o robot e ler logo a seguir os valores de /wrench, ficam todos muito próximos de 0</li>
+<li>Após algum tempo a testar, é nítido que a cada reboot do robot, os valores iniciais de força são inicializados a zero. Como era de esperar, diferentes posiçoes do gripper provocam alteração nos valores de força (os valores podem alterar-se até +/- 10) permanecendo nesse estado. Os valores não parecem ser absolutos, mas sim relativos à posição inicial em que o robot é ligado</li>
+<li>Várias reinicializações do driver não provocam alteração nos valores de força</li>
+<li>Muito possivelmente, a melhor forma de utilizar os valores deste sensor, será apenas utilizando a diferença de força com o tempo, pois se o gripper se mantiver estável, os valores variam em +/- 1 sendo que a aplicação de uma força adequada por parte do utilizador ao gripper, provoca variação nos valores em +/- 15 (Newtons?)</li>
+<li>Valores de torque ainda são uma incógnita -&gt; Já não são uma incógnita. Valores de torque representam forças circulares aplicadas ao end efector</li>
+<li>Alterar a orientação do gripper faz com que os valores de força se alterem... Mesmo o robot estando estático</li>
+</ul>
+<h4 id="tarefas_1">Tarefas</h4>
+<ul>
+<li>Recolher valores do sensor tendo em conta a variação de</li>
+<li>Poses de inicialização do robot</li>
+<li>Várias poses do robot</li>
+<li>Várias orientações do gripper</li>
+<li>Com e sem um um objeto</li>
+</ul>
+<hr />
+<ul>
+<li>4 bags gravados (wrench3, wrench10, all3, all10)</li>
+<li>Testes com novo nó tests.py para criar diferentes conjuntos de posições</li>
+</ul>
+<h2 id="1911-irislab">19/11 - IRISLab</h2>
+<ul>
+<li>
+<p>À medida que o tempo passa, o sensor de força vai acumulando erros e, sem mexer no robot, os valores vão-se afastando linearmente de como são inicializados (0,0,0)</p>
+</li>
+<li>
+<p>Programa de testes em que o EE se mexe em XYZ sem alterar orientação provoca forças irrelevantes no sensor</p>
+</li>
+<li>
+<p>Recalibração do TCP</p>
+</li>
+<li>
+<p>Valores actuais - {Payload: 1.77kg, CX: -5.0, CY: 0.0, CZ: 45.0}</p>
+</li>
+<li>Calibração 1 - {Payload: 1.67kg, CX: -3.0, CY: 0.0, CZ: 41.0}</li>
+<li>Calibração 2 - {Payload: 1.84kg, CX: -1.0, CY: 1.0, CZ: 37.0}</li>
+<li>Calibração 3 - {Payload: 1.84kg, CX: -5.0, CY: -5.0, CZ: 38.0}</li>
+<li>Calibração 4 - {Payload: 1.73kg, CX: -3.0, CY: 2.0, CZ: 49.0}</li>
+<li>Calibração 5 - {Payload: 1.69kg, CX: 10.0, CY: 0.0, CZ: 39.0</li>
+<li><strong>Agora com o Gripper Fechado</strong></li>
+<li>Calibração 6 - {Payload: 1.76kg, CX: -1.0, CY: -3.0, CZ: 40.0}</li>
+<li>Calibração 7 - {Payload: 1.67kg, CX: -1.0, CY: 3.0, CZ: 48.0}</li>
+<li>Calibração 8 - {Payload: 1.63kg, CX: 1.0, CY: -5.0, CZ: 47.0}</li>
+<li><strong>Agora Reinicializando o Robot</strong></li>
+<li>Calibração 9 -  {Payload: 1.72kg, CX: -2.0, CY: -8.0, CZ: 40.0}</li>
+<li>Calibração 10 -  {Payload: 1.69kg, CX: -8.0, CY: -2.0, CZ: 40.0}</li>
+<li>Após várias tentativas de calibração, decidi usar os valores atuais mas centrar o TCP em X = 0</li>
+</ul>
+<h2 id="212-irislab">2/12 - IRISLab</h2>
+<ul>
+<li>
+<p>Estudo dos valores de força do sensor, gráficos em screenshots -&gt; wrench</p>
+</li>
+<li>
+<p>Pasta 1-wrench</p>
+</li>
+<li>
+<p>Movimentos simples em XYZ sem aplicar rotação do EE, provocam oscilações quando o robot se está a mover. Valores oscilam entre [-5, 6]</p>
+</li>
+<li>Rotações do EE provocam maiores oscilações e estes valores permanecem alterados, após a rotação. Ver screenshots<ul>
+<li>TESTE - Mover 3 vezes, pi/4 graus - Mover -3*pi/4 graus - Mover 3 vezes, -pi/4 graus - Mover 3*pi/4 graus</li>
+<li>NOTA - Rotações positivas, EE roda no sentido horário</li>
+<li>RESULTADO - A posição do EE influencia a amplitude dos valores e nota-se um padrão constante nas 3 posições experimentadas</li>
+</ul>
+</li>
+<li>Alteração do peso do payload<ul>
+<li>TESTE - Alterar o peso do payload para 1.4kg</li>
+<li>RESULTADO - A amplitude dos valores diminuiu em X mas aumentou em Y</li>
+<li>TESTE - Alterar o peso do payload para 1kg</li>
+<li>RESULTADO - Houve uma alterção nos valores de X (como que uma inversão), e a amplitude de valores em Y aumentou significativamente</li>
+<li>TESTE - Alterar o peso do payload para 2kg</li>
+<li>RESULTADO - Mais uma vez, os valores em X inverteram-se, e a amplitude de valores em Y diminuiu</li>
+<li>NOTA - O problema não parece estar apenas relacionado com peso mas também com o centro de gravidade</li>
+</ul>
+</li>
+<li>Recalibrar o peso e centro de gravidade do TCP<ul>
+<li>Novos valores -  {Payload: 1.71kg, CX: -1.0, CY: 0.0, CZ: 41.0}</li>
+<li>RESULTADO - Exatamente o mesmo do primeiro teste de rotação</li>
+<li>Novos valores - {Payload: 1.79kg, CX: 3.0, CY: 2.0, CZ: 36.0}</li>
+<li>RESULTADO - Exatamente o mesmo do primeiro teste de rotação</li>
+</ul>
+</li>
+<li>Testar os movimentos simples em XYZ após uma rotação revela o esperado, ou seja, inicialmente, os valores alteram-se drasticamente na rotação, no entanto, durante as translações, as oscilações são muito menores</li>
+<li>Alteração do Centro de Gravidade<ul>
+<li>TESTE - Alterar para X = 0, Y = 0, Z = 0</li>
+<li>RESULTADO - Exatamente o mesmo do primeiro teste de rotação</li>
+<li>TESTE - Alterar para X = 50, Y = 50, Z = 50</li>
+<li>RESULTADO - Exatamente o mesmo do primeiro teste de rotação</li>
+</ul>
+</li>
+<li>Alterar o valor do peso do payload ou qualquer componente do centro de gravidade do TCP faz com que o controlador do sensor reinicie os seus valores a zero, por menor que seja a alteração, qualquer que seja, provoca um reset</li>
+</ul>
+<hr />
+<ul>
+<li>Repositório iniciado com o iris_ws -&gt; https://github.com/fabioalves98/HumanRobotColaboration</li>
+<li>Programa wrench.py faz agora display dos valores num gráfico em tempo real no modo live</li>
+</ul>
+<h2 id="312-irislab">3/12 - IRISLab</h2>
+<ul>
+<li>Ver os resultados em tempo real não ajudou a obter novas conclusões</li>
+<li>Os valores de força que o controlador interno do robot publica, são relativos ao eixo da base robot. O nó ur_hardware_interface, antes de publicar para /wrench, multiplica estes valores pelo transform da pose do TCP para obter os valores de força em relação ao TCP</li>
+</ul>
+<h2 id="412-irislab">4/12 - IRISLab</h2>
+<ul>
+<li>Guardados 3 novos bags <ul>
+<li>wrench_pushes.bag - Onde o gripper agarra num pedaço de cortiça e eu puxo em várias direções com diferentes níveis de força</li>
+<li>wrench_taps.bag - Leves toques rápidos nos lados do gripper</li>
+<li>wrench_twists.bag - Onde ao agarra no gripper o tento rodar em várias direções para testar a sensibilidade dos valores de torque</li>
+</ul>
+</li>
+</ul>
+<h2 id="712-posto">7/12 - Posto</h2>
+<ul>
+<li>
+<p>Descobri um serviço que reinicializa o sensor de força e torque (zero_ftsensor) e outro que reenvia um programa URScript ao robot (resend_robot_program), útil para quando o robot entra em protective stop ou emergency stop</p>
+</li>
+<li>
+<p>Encontrei Issues no Github do driver do UR10e muito parecidos com o problema</p>
+<ul>
+<li></li>
+<li></li>
+</ul>
+</li>
+<li>
+<p>Programa wrench integra os valores de /wrench em tempo real para detetar corretamente uma interação com o robot</p>
+</li>
+</ul>
+<h4 id="tarefas_2">Tarefas</h4>
+<ul>
+<li>Filtar os valores de ruído e fazer uma função de integração que detete corretamente forças e toques rápidos<ul>
+<li>Moving Average Filter - https://maker.pro/arduino/tutorial/how-to-clean-up-noisy-sensor-data-with-a-moving-average-filter</li>
+<li>Kalman Filter - ?</li>
+</ul>
+</li>
+</ul>
+<h2 id="912-reuniao-irislab">9/12 - Reunião (IRISLab)</h2>
+<ul>
+<li>Programa wrench avalia os valores de força e consoante a força aplicada em cada eixo, abre ou fecha o gripper. Valor de força é parametrizavel.<ul>
+<li>No eixo X (lateral), uma força em qualquer dor sentidos fecha o gripper</li>
+<li>No eixo Y e Z (frontal, uma força no sentido do utilizador abre o gripper</li>
+</ul>
+</li>
+<li>Continua o mesmo problema em que se o EE rodar, os valores alteram-se<ul>
+<li>O driver obtem os valores de FT atraves de um cliente RTDE que comunica com um servidor presente no controlador interno do UR10e. Esse servidor publica os valores de força que calcula em relação ao eixo do robot, e depois o driver transforma-os para a pose do TCP</li>
+</ul>
+</li>
+<li>Para solucionar, é possível usar a nova função que integra os valores e aplica um filtro de média para controlar o gripper. Desta forma o controlo do gripper nao é afetado pelas sucessivas rotações e movimentos do robot e acumulações de erro do sensor FT</li>
+</ul>
+<h2 id="1712-teste-irislab">17/12 - Teste (IRISLab)</h2>
+<ul>
+<li>
+<p>Nova tentativa de resolver o problema do wrench. Retirar os valores de força em todos os angulos possiveis, por num gráfico, tentar descobrir um padrão a fim de compensar o comportantomento anómalo do controlador</p>
+</li>
+<li>
+<p>Pasta 2-wrench</p>
+</li>
+<li>
+<p>Posiçoes</p>
+</li>
+<li>
+<p>P1 - out_of_camera</p>
+</li>
+<li>P2 - P1 -&gt; rotate 0 -pi/4 0</li>
+<li>P3 - P1 -&gt; rotate 0 -pi/2</li>
+<li>P4 - P1 -&gt; rotate 0 -3/4 0</li>
+<li>P5 - P1 -&gt; rotate 0 pi/4 0</li>
+<li>P6 - P1 -&gt; rotate 0 0 pi/4</li>
+<li>
+<p>P7 - P1 -&gt; rotate 0 0 -pi/4</p>
+</li>
+<li>
+<p>Testes</p>
+</li>
+<li>
+<p>Teste 1 | Posição 1 | zero_ftsensor quando wrist3_joint está a 0       |-180 a 180</p>
+</li>
+<li>
+<p>Teste 2 | Posição 1 | zero_ftsensor quando wrist3_joint está a -180 | -180 a 180</p>
+</li>
+<li>
+<p>Teste 3 | Posição 1 | zero_ftsensor quando wrist3_joint está a 180  | -180 a 180</p>
+</li>
+<li>
+<blockquote>
+<p>Fixar os eixos do gráfico para todos os testes ficarem com os mesmos eixos</p>
+</blockquote>
+</li>
+<li>
+<p>Teste 4   | Posição 1 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Teste 5   | Posição 2 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Teste 6   | Posição 3 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Teste 7   | Posição 4 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Teste 8   | Posição 5 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Teste 9   | Posição 6 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Teste 10 | Posição 7 | zero_ftsensor quando wrist3_joint está a 0       | -180 a 180</p>
+</li>
+<li>
+<p>Inconclusivos</p>
+</li>
+</ul>
+<h2 id="1812-teste-irislab">18/12 - Teste (IRISLab)</h2>
+<ul>
+<li>Nova tentativa de resolver o problema do wrench. Fazer os mesmos testes anteriores mas sem o gripper attached ao robot</li>
+<li>Pasta 3-wrench</li>
+<li>Posições</li>
+<li>P1 - Joints [0, -90, 0, 0, 0, 0] </li>
+<li>P2 - Joints [0, -90, 0, 0, 90, 0]</li>
+<li>P3 - Joints [0, -90, 0, 0, -90, 0]</li>
+<li>P4 - Joints [0, -90, 0, 0, -45, 0]</li>
+<li>P5 - Joints [0, -90, 0, 0, 45, 0]</li>
+<li>P6 - out_of_camera</li>
+<li>P7 - init_calibration</li>
+<li>P8 - desk_pick</li>
+<li>Novo gráfico com valores de torque</li>
+</ul>
+<h2 id="0801-desenvolvimento-bmilhavo">08/01 - Desenvolvimento (BMIlhavo)</h2>
+<ul>
+<li>Programa fit.py que dessenha 3 funções seno, configuradas de maneira diferente de modo a tentar aproximar as curvas obtidas nos programas de teste do wrench.py</li>
+<li>Curvas aparentam ter proximidade com os gráficos do wrench.py</li>
+</ul>
+<h2 id="1301-reuniao-irislab">13/01 - Reunião (IRISLab)</h2>
+<ul>
+<li>Novos testes com persistencia dos resultados em memória, sem gripper</li>
+<li>Pasta F-wrench</li>
+<li>Posições</li>
+<li>P1 -  Joints [0, -90, 0, 0, 90, 0]</li>
+<li>P2 -  Joints [0, -90, 0, 0, 45, 0]</li>
+<li>P3 - Joints [0, -90, 0, 0, 0, 0] </li>
+<li>P4 - Joints [0, -90, 0, 0, -45, 0]</li>
+<li>P5 -  Joints [0, -90, 0, 0, -90, 0</li>
+<li>Média e desvio padrão das diferenças dos resultados</li>
+<li>Mean - [ 0.41535386,  0.4073297 ,  0.48555393]</li>
+<li>Std Dev - [ 0.07199976,  0.07887803,  0.09579287]</li>
+</ul>
+<h4 id="to-do">To Do</h4>
+<ul>
+<li>Verificar repetibilidade dos testes</li>
+<li>Verificar se dar resest em angulos de wrist_3 diferentes provoca os mesmos resultados</li>
+<li>Verificar o drift do sensor, tanto temporal como espacial</li>
+<li>Verificar os valores de TCP Force pelo URScript</li>
+<li>Dar fit de uma função seno nos resultados</li>
+<li>Método dos mínimos quadrados</li>
+<li>Criar modelo que aplique a função para corrigir a variância dos valores de força</li>
+</ul>
+<hr />
+<h2 id="0103-irislab">01/03 - IRISLab</h2>
+<h4 id="repetibilidade">Repetibilidade</h4>
+<ul>
+<li>Repetição dos testes para verificar repetibilidade dos resultados</li>
+<li>Pasta F-wrench (repeat)</li>
+<li>Posições e diferença de valores comparado com os testes anteriores</li>
+<li>P1 - Joints [0, -90, 0, 0, 90, 0] <ul>
+<li>Mean - [ 0.20678017,  0.49250442,  0.29758366]</li>
+<li>Std Dev - [ 0.16025934,  0.125027  ,  0.21015851]</li>
+</ul>
+</li>
+<li>P2 - Joints [0, -90, 0, 0, 45, 0] <ul>
+<li>Mean - [ 0.29473815,  0.69158735,  0.89929321]</li>
+<li>Std Dev - [ 0.17148463,  0.43221503,  0.27771454]</li>
+</ul>
+</li>
+<li>P3 - Joints [0, -90, 0, 0, 0, 0]<ul>
+<li>Mean - [ 0.30978849,  0.37630247,  0.34874062]</li>
+<li>Std Dev - [ 0.18629143,  0.18554891,  0.18170008]</li>
+</ul>
+</li>
+<li>P4 - Joints [0, -90, 0, 0, -45, 0] <ul>
+<li>Mean - [ 0.13864991,  0.2199402 ,  0.5447835]</li>
+<li>Std Dev - [ 0.09905205,  0.16799613,  0.25183081]</li>
+</ul>
+</li>
+<li>P5 -  Joints [0, -90, 0, 0, -90, 0]<ul>
+<li>Mean - [ 0.35275194,  0.41744611,  0.24365676]</li>
+<li>Std Dev - [ 0.21623916,  0.33241225,  0.18720336]</li>
+</ul>
+</li>
+<li>Média e desvio padrão das diferenças dos resultados</li>
+<li>Mean - [ 0.48826575,  0.48218191,  0.70701964]</li>
+<li>Std Dev - [ 0.11487946,  0.14974243,  0.16440651]</li>
+<li><strong>Resultado - </strong>Todos os testes aparentam ser passíveis de ser repetidos e apresentar os mesmos valores</li>
+<li>Média e desvio padrão do conjunto dos 10 testes<ul>
+<li>Mean - [ 0.43229188,  0.47148803,  0.56602416]</li>
+<li>Std Dev - [ 0.07462753,  0.15599019,  0.10256855]</li>
+</ul>
+</li>
+</ul>
+<h4 id="dar-reset-noutro-sitio-e-sobrepor-os-valores">Dar reset noutro sítio e sobrepor os valores</h4>
+<ul>
+<li>Teste T6 - Posição P5 - /zero_ft_sensor chamado com wrist_3 = -75</li>
+<li>Resulta em curvas com o mesmo padrão mas deslocadas verticalmente</li>
+<li>Utilizando o fit.py para dar plot de T5 e T6</li>
+<li><strong>Resultado - </strong>Se compensarmos T6 com o valor de T5 em wrist_3 = 75, obtemos T5 com pouca variabilidade de (&lt; 0.5N)</li>
+</ul>
+<h4 id="drift-temporal">Drift Temporal</h4>
+<ul>
+<li>Teste TD - Posição P2/P3/P4 - /zero_ft_sensor chamado com wrist_3 = 0</li>
+<li>Gravar valores durante 10 minutos sem movimento</li>
+<li><strong>Resultado - </strong>Os valores variam linearmente com o tempo</li>
+</ul>
+<h2 id="0203-irislab">02/03 - IRISLab</h2>
+<ul>
+<li>Peso do Gripper - 1.336 Kg</li>
+<li>Peso do Encaixe do Gripper - 0.178 g</li>
+<li>Peso do Conjunto - 1.514 Kg</li>
+</ul>
+<h4 id="drift-posicional">Drift Posicional</h4>
+<ul>
+<li>Teste TP - Posição P1 - /zero_ft_sensor chamado com wrist_3 = 0</li>
+<li>Mover o braço para uma posição random - "out_of_camera"</li>
+<li>Aplicar 180 graus de rotação no wrist_3</li>
+<li>Voltar para a posição P1</li>
+<li>Correr o teste sem dar reset no inicio do teste</li>
+<li><strong>Resultado - </strong>Comparando com o teste default T1_P1 não há variância notável nos resultados</li>
+<li>Correr o teste mas dar reset no início do teste</li>
+<li><strong>Resultado - </strong>Comparando com o teste default T1_P1 não há variância notável nos resultados</li>
+</ul>
+<h4 id="fit-de-uma-funcao-seno">Fit de uma Função Seno</h4>
+<ul>
+<li>Aplicação da função curve_fit da bilbioteca scipy, com uma função custumizada seno com 4 parametros</li>
+<li>y = p1 * np.sin(np.radians(p2 * (x + p3))) + p4</li>
+<li>Amplitude, frequencia, offset_x, offset_y</li>
+<li>Definição de valores de guess iniciais</li>
+<li><strong>Resultado - </strong> Parametros finais</li>
+<li>x - [3.59403687, 2.16328845, -56.15475734, 2.55574389]</li>
+<li>y - [1.18181371,  2.16484226, 39.16549121, -0.45171281]</li>
+<li>z - [1.96991165,  2.00442201, 41.65549264, -2.1853712 ]</li>
+</ul>
+<h2 id="0303-irislab-reuniao">03/03 - IRISLab (Reunião)</h2>
+<ul>
+<li>Tentativa de corrigir os valores de força vindo do wrench em tempo real</li>
+<li>Problemas no geral. Possíveis causas</li>
+<li>Maneira de obter o valor do wrist_3 do robot</li>
+<li>Problema de velocidade dos tópicos</li>
+<li>Problema em acesso com exclusividade mutua aos valores no wrench.py</li>
+<li><strong>Reunião - To Do</strong></li>
+<li>Dar merge das curvas com gripper e sem gripper</li>
+<li>Fazer modelo teórico de como o gripper se deverá comportar em diferentes orientações<ul>
+<li>Parametros seriam a orientação do gripper, peso e centro de gravidade</li>
+</ul>
+</li>
+<li>Usar esse modelo teórico, repetir os testes e melhorar o modelo com testes</li>
+<li>Vídeos - https://www.youtube.com/c/EnergidTechnologies/videos</li>
+</ul>
+<h2 id="0503-irislab">05/03 - IRISLab</h2>
+<ul>
+<li>Repetição dos teses com o Gripper attatched</li>
+<li>Pasta F-Wrench</li>
+<li>Mesmas 5 posições que anteriormente</li>
+<li>Mais uma Bónus - out_of_camera</li>
+</ul>
+<h4 id="testes-com-valores-diferentes-de-payload-e-cov">Testes com valores diferentes de Payload e COV</h4>
+<ul>
+<li>Diferetes valores de payload alteram drasticamente os valores do sensor</li>
+<li>Diferentes valores de centro de gravidade não alteram os valores do sensor</li>
+</ul>
+<h4 id="merge-das-curvas-com-e-sem-gripper">Merge das Curvas com e sem Gripper</h4>
+<ul>
+<li>Valores de diferença entre curvas originais e com gripper fazem algum sentido, mas não são suficientes para retirar</li>
+<li>Valores de diferença em X, fazem sentido pois a posição wrist_3 = 0 tem o eixo X alinhado verticalmente, ou seja, quando ha o zerto_ft_sensor(), todo o peso do gripper está sobre esse eixo, e há medida que rodamos, esse peso vai passando para o eixo Y, logo é normal que o valor de X aumente</li>
+<li>A parte estranha é que o valor de Y não se altera em todo o teste</li>
+<li>Ainda mais estranho, é que o valor de Z se altera</li>
+<li>Uma possível explicação é que estes 2 testes diferem no valor configurado de payload</li>
+<li>Quando foram medidos sem gripper - Payload era 0Kg</li>
+<li>Quando foram medidos com gripper - Payload era 1.77Kg</li>
+<li><strong>Resultado - </strong>Inconclusivo</li>
+</ul>
+<h2 id="0603-casa">06/03 - Casa</h2>
+<ul>
+<li>Refactor do workspace com os pacotes iris_sami e iris_ur10e</li>
+<li>Refactor de código com helper functions</li>
+</ul>
+<h2 id="0703-casa">07/03 - Casa</h2>
+<ul>
+<li>Paper - Human–robot interaction in industrial collaborative robotics: a literature review of the decade</li>
+</ul>
+<h2 id="0803-irislab">08/03 - IRISLab</h2>
+<h4 id="testes-com-diferentes-valores-de-payload-sem-gripper">Testes com diferentes valores de payload sem Gripper</h4>
+<ul>
+<li>Pasta F-Wrench</li>
+<li>Teste Payload | Posição 1 | Payload de x Kg</li>
+<li>TP1_0Kg</li>
+<li>Igual ao teste default</li>
+<li>TP1_0.2Kg e TP1_1Kg</li>
+<li>Exatamente igual a TP1_0Kg</li>
+<li>TP2_0Kg</li>
+<li>Igual ao teste default</li>
+<li>TP2_0.2kg e TP2_1Kg</li>
+<li>Apresentam diferenças significativas em relação a TP2 que fazem todo o sentido</li>
+<li>Repetição para a P3 com resultados analogos a P1, ou seja, as diferenças foram ainda maiores</li>
+<li><strong>Resutlado -</strong> Após verificação dos resultados corrigidos faz todo o sentido</li>
+<li>Ao adicionarmos valores falsos de payload, eles vão ser retratados nas curvas</li>
+</ul>
+<hr />
+<h4 id="teste-com-payload-0-com-e-sem-gripper-sem-dar-reset-entre-os-testes">Teste com Payload 0 com e sem gripper (sem dar reset entre os testes)</h4>
+<ul>
+<li>Posição B - [0, -90, -90, 0, 0, 0]</li>
+<li>Teste Payload | Posição B | Payload de x Kg</li>
+<li>TPB_0Kg</li>
+<li>Igual ao teste default</li>
+<li>TPBG_0Kg</li>
+<li>Diferenças extremas devido ao acopulamento do gripper, os valores fazen sentido, no geral</li>
+<li>Força com que o gripper é acopulado ao end effector interfere com os valores de Z</li>
+<li><strong>Restulado - </strong>Compensasão dos valores obtidos com a acopulação do gripper demonstram curvas sinosoidais realistas e cujos valores fazem sentido</li>
+<li>Obtenção do peso do gripper fazendo primeiro<ul>
+<li>Compensasão da component Z com a sua média</li>
+<li>A raiz dos quadrados das 3 compoentes</li>
+<li>Obtemos a cada posição de wrist_3 a magnitude do vector forca </li>
+<li>Fazendo a média obteve-se o valor de 15.13 N</li>
+<li>O peso do conjunto é de 1.514 Kg</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h4 id="testes-com-diferentes-valores-de-payload-com-gripper">Testes com diferentes valores de payload com Gripper</h4>
+<ul>
+<li>Obter o melhor valor de peso para inserir no payload</li>
+<li>Posição B - [0, -90, -90, 0, 0, 0]</li>
+<li>Teste Payload | Posição B | Payload de x Kg</li>
+<li>Testados payloads de 1.2kg a 1.8Kg com intervalos de 100g</li>
+<li>Objetivo é ver qual payload é que produz a curva mais aproximada à curva de correção</li>
+<li><strong>Resultado - </strong>Nenhuma curva de aproxima completamente mas as mais próximas em termos de média e desvio padrão são 1.5Kg e 1.6kg que é aproximadamente o peso do gripper</li>
+<li>Os desvios poderão estar a ser causados pelo COG</li>
+</ul>
+<h2 id="0903-irislab">09/03 - IRISLab</h2>
+<h4 id="testes-com-diferentes-valores-de-cog-com-gripper">Testes com diferentes valores de COG com gripper</h4>
+<ul>
+<li>Testar impacto de COG nas curvas obtidas</li>
+<li>Teste COG | Posição [1, 2, 3]</li>
+<li>Center of Gravity com 0mm em todas as componentes</li>
+<li>Center of Gravity com 100mm em todas as componentes</li>
+<li>Center of Gravity com 200mm em todas as componentes</li>
+<li><strong>Resultado - </strong>Parece haver alguma variação mas nem suficientemente grande que necessite de ser corrigida, nem apresenta um padrão definido</li>
+</ul>
+<h4 id="testes-com-gripper-em-diferentes-posicoes-e-payloads">Testes com Gripper em diferentes posições e payloads</h4>
+<ul>
+<li>Testar o efeito de diferentes valores em diferentes posições</li>
+<li>Teste Payload | Posição [1, 2, 3, 4, 5] | Payload [0, 1.5, 3]</li>
+<li><strong>Resultado</strong></li>
+<li>Tanto na posição 1 como 5 as curvas não apresentaram diferenças cosoante a alteração do payload, como era esperado</li>
+<li>Nas posições 2, 3 e 4 as curvas apresntam diferenças nas magnitudes esperadas</li>
+<li>No entanto, quando corrigidas em 1.5kg (peso real do gripper) apresentam algumas oscilações que terão que ser corrigidas</li>
+</ul>
+<h2 id="1503-irislab">15/03 - IRISLab</h2>
+<h4 id="obter-melhor-peso-do-gripper-com-varias-posicoes-e-payloads">Obter melhor peso do Gripper com várias posições e payloads</h4>
+<ul>
+<li>Voltar a tentar testar o melhor valor de payload introduzido no robot para ver se é possível obter uma única curva em várias posições</li>
+<li>A curva do gripper não tem que ser necessariamente igual à curva sem gripper, no entanto, não pode mudar consoante a posição</li>
+<li>Teste Gripper | Posição 1 [1, 2, 3, 4, 5]  | Payloads [1.4, 1.5, 1.6]</li>
+<li><strong>Resultado</strong></li>
+<li>Os testes são repetíveis - caso de exemplo 1.5kg</li>
+<li>Estas diferenças no payload são representadas nos resultados, sendo que 1.5Kg é o valor que mais se aproximo à curva default (sem gripper)</li>
+</ul>
+<h2 id="1603-irislab">16/03 - IRISLab</h2>
+<h4 id="conjunto-extenso-de-poses-de-forma-abrangir-o-maior-numero-de-orientacoes">Conjunto extenso de poses de forma abrangir o maior número de orientações</h4>
+<ul>
+<li>Array de angulos - [-180, -135, -90, -45, 0, 45, 90, 135, 180]</li>
+<li>2 ciclos de iteração por este array e atribução de valor de junta a wrist_1 e wrist_2</li>
+<li>Total de 70 posições</li>
+</ul>
+<h4 id="modelo-teorico-do-comportamento-do-sensor-de-forca-quando-o-gripper-esta-acopulado">Modelo teórico do comportamento do sensor de força quando o gripper está acopulado</h4>
+<ul>
+<li>3 vetores com a orientação do Sensor</li>
+<li>1 vetor com magnitude e orientação da gravidade</li>
+<li>Calcular teoricamente cada componente do vetor gravidade em cada 1 dos 3 eixos do sensor FT</li>
+</ul>
+<h2 id="1703-irislab">17/03 - IRISLab</h2>
+<h4 id="conclusao-do-modelo-teorico-do-sensor">Conclusão do modelo teórico do sensor</h4>
+<ul>
+<li>Utilização do produto interno dos vetores normalizados anteriormente definidos para calculo do valor da força em cada componente</li>
+</ul>
+<h2 id="1803-irislab">18/03 - IRISLab</h2>
+<h4 id="teste-de-cog-no-robot-real">Teste de COG no robot real</h4>
+<ul>
+<li>Com uma tabua de um metro acopulada ao gripper numa posição horizontal, colocar em ambas as extremidades um peso de ~1Kg para ver se a força sentida pelo sensor é a mesma</li>
+<li>Apesar de não ser exatamente a mesma, as diferenças não sao significativas nem apresentam um padrão</li>
+<li>Obviamente o torque sentido pelo sensor é inverso quando colocamos o objeto do lado contrário da tábua</li>
+</ul>
+<h4 id="teste-de-correcao-do-gripper">Teste de Correção do Gripper</h4>
+<ul>
+<li>Em cada 1 das 70 posições de writs_1 e wrist_2 fazer o wrist_3 girar em 360 e obter os resultados obtidos com o modelo teórico</li>
+<li>Nas mesmas 70 posições obter os resultados obter os resultados com o robot real com gripper e um payload de 1.5Kg</li>
+<li>Fazer um merge e criar um modelo de correção, sendo que em cada posição do robot real, o valor de força deve ser 0</li>
+</ul>
+<h2 id="1903-reuniao">19/03 - Reunião</h2>
+<ul>
+<li>Continuar</li>
+</ul>
+<h2 id="2303-irislab">23/03 - IRISLab</h2>
+<h4 id="teste-correcao-do-sensor-ft">Teste Correção do Sensor FT</h4>
+<ul>
+<li>
+<p>Pasta F-Wrench</p>
+</li>
+<li>
+<p>70 posições reduzidas para 57 por causa de duplicados (180 = -180) e posições impossíveis de posicionar o robot (colisões)</p>
+</li>
+<li>Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} </li>
+<li>TCx_w1_w2 </li>
+<li>
+<p>Teste das 57 posições sem gripper e Payload 0kg</p>
+</li>
+<li>
+<p><strong>Resultado - </strong>Maioria destes testes inutilizáveis devido a uma atenuação dos valores das curvas por motivos desconhecidos</p>
+</li>
+<li>Alguns testes com gripper com valores inutilizáveis devido à pressão feita pelo cabo do gripper nas posições mais extremas</li>
+</ul>
+<h2 id="2403-irislab">24/03 - IRISLab</h2>
+<ul>
+<li>A razão pela qual os testes anteriores estavam a apresentar uma atenuação nos valores das curvas devese ao facto da fila que guardava os valores de força estar a aumentar de tamanho, para o sobro a cada teste</li>
+</ul>
+<h4 id="teste-correcao-gripper-repeat">Teste Correção Gripper (Repeat)</h4>
+<ul>
+<li>Pasta F-Wrench</li>
+<li>70 posições reduzidas para 57 por causa de duplicados (180 = -180) e posições impossíveis de posicionar o robot (colisões)</li>
+<li>Teste Correct | Wrist_1 {0 - 135, 45} | Wrist_2 {0 - 135, 45} </li>
+<li>TCx_w1_w2 </li>
+<li>Teste das 57 posições sem gripper e Payload 0kg</li>
+<li>TCG_w1_w1</li>
+<li>Teste das 57 posições com gripper e Payload 1.5kg (sem cabo)</li>
+<li><strong>Resultado</strong></li>
+<li>Testes sem gripper tem divergências muito pequenas entre si, sendo possível extrair uma curva média de todos os testes sendo que o máximo de erro que poderá existir será de 1.5N</li>
+<li>Tests com gripper apresentam divergências entre si muito maiores, sendo que para utilizar estes dados num modelo de correção teríamos que adicionar a orientação do gripper</li>
+</ul>
+<h2 id="2503-irislab">25/03 - IRISLab</h2>
+<h4 id="modelo-de-correcao-do-sensor-ft">Modelo de Correção do Sensor FT</h4>
+<ul>
+<li>Retirar a média dos testes sem gripper</li>
+<li>Corrigir os testes com gripper com a curva média dos testes sem gripper e guardar os valores resultantes numa matriz</li>
+<li>Utilizar esses valores para corrigir o sensor tendo em conta que a orientação do end effector tem que entrar na equação</li>
+</ul>
+<h4 id="bags-de-corecao-com-e-sem-gripper">Bags de Coreção com e sem gripper</h4>
+<ul>
+<li>correct_no_gripper_px.bag - 5 bags sem gripper nas 5 posições deafult</li>
+<li>correct_gripper_px.bag - 5 bags com gripper nas 5 posições default</li>
+<li>Em cada bag o robot posiciona-se na posição indicada e roda o wrist_3 em 360</li>
+<li><strong>Erro - </strong>bags apenas gravaram /wrench e não /joint_states - Inutilizável</li>
+</ul>
+<h4 id="setup-kinect-para-detecao-de-gestos">Setup Kinect para deteção de gestos</h4>
+<ul>
+<li>http://wiki.ros.org/mit-ros-pkg/KinectDemos/HandDetection</li>
+</ul>
+<h2 id="2603-irislab">26/03 - IRISLab</h2>
+<h4 id="pesquisa-relativa-a-controlo-por-gestos">Pesquisa relativa a controlo por gestos</h4>
+<ul>
+<li>Muita utilização de leap motion controllers</li>
+<li>Kinect muito utilizada para gestos com o corpo todo</li>
+</ul>
+<h4 id="melhoramento-da-geracao-de-varias-posicoes-para-o-end-effector">Melhoramento da geração de várias posições para o end effector</h4>
+<ul>
+<li>Cada valor de wrist_1 tem agora uma cor associada para ser mais facil fazer a distinção </li>
+</ul>
+<h4 id="controlo-do-gripper-atraves-de-forca">Controlo do Gripper através de Força</h4>
+<ul>
+<li>Controlo simples por peso - <strong>Funciona</strong></li>
+<li>Controlo por eixo - <strong>Funciona</strong></li>
+<li>Força no X fecha</li>
+<li>Força no Y abre</li>
+<li>Controlo quando lida com objetos - <strong>Funciona +/-</strong></li>
+<li>Variável está a agarrar algo?<ul>
+<li>Pois apenas o controlo por força ns eixos fica desiquilibrado quando o robot está a agarrar algo</li>
+</ul>
+</li>
+<li>Quando está a agarrar algo, a maneira de abrir o gripper tem que ser diferente<ul>
+<li>Quando mede uma força no sentido contrário à orientação do gripper - <strong>Funciona</strong></li>
+<li>Quando mede um peso próximo de zero - <strong>Funciona +/-</strong> (objetos mais pesados)</li>
+<li><strong>Problema</strong> de quando pega em objetos mais leves</li>
+<li><strong>Problema</strong> do utilizador fazer uma força sobre o objeto que não faça o valor de peso passar pelo threshold</li>
+</ul>
+</li>
+<li><strong>Problema</strong> de quando dar reset ao sensor</li>
+<li>Periodicamente quando for observável que nada está a interagir com o robot, e que não tem nenhum objeto agarrado</li>
+</ul>
+<h2 id="3003-irislab">30/03 - IRISLab</h2>
+<h4 id="modelo-de-correcao-do-sensor-ft_1">Modelo de Correção do Sensor FT</h4>
+<ul>
+<li>Necessidade de uma matriz que relacione os valores das várias posições do end effector</li>
+<li>Cada teste apenas dá os valores de correção relativos à posição da junta wrist_3</li>
+<li>Para criar um modelo que possa corrigir os valores em qualquer orientação é preciso algo que relacione as orientações</li>
+<li>TCG_correct</li>
+<li>Teste das 57 posições em que a cada iteração o robot é posicionado numa posição default [0, -90, 0, 0, 0, 0]</li>
+<li>É feito o zero_ft_sensor()</li>
+<li>O robot move-se para a dada posição e o valor de força é medido</li>
+<li><strong>Resultado - </strong>É notável a diferença de valores de força que existe entre a posição default e cada uma das posições, e estas diferenças teram que ser contabilizadas no modelo de correção</li>
+</ul>
+<h2 id="3103-irislab">31/03 - IRISLab</h2>
+<h4 id="controlo-por-gestos">Controlo por gestos</h4>
+<ul>
+<li>Segmentação da point cloud vinda da kinect utilizando primeiro um cropbox, facilitado por uma bounding box, em que apenas se visualiza a mesa</li>
+<li>Utilização de Euclidean Clustering para segmentar a nova cloud, obtendo apenas 2 clusters que correspondem às mãos / braços</li>
+<li>viewer.cpp</li>
+</ul>
+<h2 id="0504-irislab">05/04 - IRISLab</h2>
+<h4 id="modelo-de-correcao-do-sensor-ft_2">Modelo de Correção do Sensor FT</h4>
+<ul>
+<li>Incluir a função de reset</li>
+<li>Utilizar numa fase inicial a média das curvas com gripper</li>
+<li>Criação de um conjunto de vetores correspondentes a cada uma das 56 posições para comparação com a orientação corrente do EE</li>
+</ul>
+<p><strong>VERIFICAR TESTES DAS 56 POSIÇÕES COM GRIPPER E VERIFICAR POSSÍVEIS ERROS</strong></p>
+<ul>
+<li>Divisão do wrench.py em filter.py (filtro de média com janela de 30 valores) e record.py (programa que move o wrist_3 de -180 a 180 e guarda os valores do sensor FT)</li>
+</ul>
+<h2 id="0604-irislab">06/04 - IRISLab</h2>
+<h4 id="testes-nas-56-posicoes-com-gripper-e-payload-0">Testes nas 56 posições com Gripper e Payload 0</h4>
+<ul>
+<li>Comparar com os testes "sem gripper" e "com gripper e payload 1.5" para tentar chegar a uma conclusão</li>
+</ul>
+<hr />
+<ul>
+<li>Melhoramento do programa record.py para garantir que os valores de força são corretamente gravados em cada posição do wrist_3</li>
+</ul>
+<h2 id="0704-irislab">07/04 - IRISLab</h2>
+<h4 id="modelo-de-correcao-do-sensor-ft_3">Modelo de Correção do Sensor FT</h4>
+<ul>
+<li>Seja qual for o payload, pode-se considerar como curvas de correção as curvas obtidas em testes onde o EE está verticalmente alinhado com o ambiente, ou seja, ao rodar o wrist_3, nenhuma força deverá ser exercida sobre os 3 eixos XYZ em qualquer posiçào de wrist_3</li>
+<li>Curva de correção feita através das posições de indices 2, 6, 34 e 38 (Posições onde o EE está verticalmente orientado)</li>
+<li>Gravação de testes com o modelo teórico para comparação com os testes reais</li>
+</ul>
+<h5 id="neste-momento-exitem-4-tipos-de-curvas">Neste momento exitem 4 tipos de curvas</h5>
+<ul>
+<li>Curva de correção posicional do Wrist3  (proveniente da média das curvas das posições de indices 2, 6, 34, 38)</li>
+<li>Curva de teste das 56 posições com gripper e Payload 1.5Kg</li>
+<li>Curva de teste das 56 posições com gripper e Payload 0Kg</li>
+<li>Curva de teste das 56 posições provenientes do modelo teórico</li>
+</ul>
+<hr />
+<ul>
+<li>Implementação da função reset com o modelo de correção</li>
+</ul>
+<h2 id="1204-irislab">12/04 - IRISLab</h2>
+<ul>
+<li>GUI em GTK para os serviços do iris_sami</li>
+</ul>
+<h2 id="1304-irislab">13/04 - IRISLab</h2>
+<h4 id="modelo-de-correccao-do-sensor-ft">Modelo de Correcção do Sensor FT</h4>
+<ul>
+<li>Fazendo a compraração entre as curvas do teste teórico com as curvas com payload 0, vemos que existe um padrão entre as diferenças do 2 testes</li>
+<li>Em X, se <strong>diminuirmos</strong> a amplitude do modelo teórico em +/- 10%, aproximamos os modelo teórico aos valores reais</li>
+<li>Em Y, se <strong>aumentarmos</strong> a amplitude do modelo teórico em +/- 10% aproximamos o model teórico aos valores reais</li>
+<li>Em Z, as diferenças são causadas por outros fatores, pois o modelo teórico, nos testes executados é sempre 0<ul>
+<li>Necessita de outro tipo de correção - também divido à força com que é acopulado o gripper ao EE</li>
+</ul>
+</li>
+<li>Modelo completamente implementado no programa correct.py</li>
+<li>Corrige possicionalemnte com o angulo do wrist_3</li>
+<li>Corrige orientacionalmente com o modelo teórico</li>
+<li>Função de reset implementada nas 2 fases</li>
+</ul>
+<h4 id="correcoes-finais-ao-modelo">Correções finais ao Modelo</h4>
+<ul>
+<li>Corrigir modelo teórico com os resultados obtidos</li>
+<li>Obter um valor (os tais +/- 10%) para corrigir o modelo teórico</li>
+<li>Testes inicias com simples médias das diferenças<ul>
+<li>X = 0.846 e Y = 1.115</li>
+<li>Possibilidade de obter melhores resultados com metodo dos mínimos quadrados</li>
+</ul>
+</li>
+<li>Corrigir o eixo Z </li>
+<li>Fazer um test onde se faça variar o EE em torno de X ou Y de forma a obter os valores reais de Z</li>
+<li>Comparar com o modelo teórico</li>
+<li>Obter o offset criado pela força com que se apertou o gripper</li>
+<li>Obter o desvio de amplitude provavelmente existente (tal como X e Y)</li>
+<li>Corrigir o drift</li>
+</ul>
+<h2 id="1504-irislab">15/04 - IRISLab</h2>
+<h4 id="modelo-de-correcao-do-sensor-ft_4">Modelo de Correção do Sensor FT</h4>
+<ul>
+<li>
+<p>Antes de aplicar os fatores de correção</p>
+</li>
+<li>
+<p>Mean Mean - <strong>[ 1.30804571  1.50272948  1.576232  ]</strong>
+    Mean Std - [ 0.34988912  0.50012359  0.46279643]
+    Mean Max - [ 2.24789183  2.51883549  3.06942575]</p>
+<p>Std Mean - <strong>[ 0.81536524  0.93259604  0.99550626]</strong>
+Std Std - [ 0.2548648   0.31685171  0.33100798]
+Std Max - [ 1.41419107  1.48037816  1.6792048 ]</p>
+<p>Max Mean - <strong>[ 2.92629354  3.01282345  3.47414803]</strong>
+Max Std - [ 0.86005843  0.99741032  0.9491934 ]
+Max Max - [ 4.6716544   4.6230199   5.58771009]</p>
+</li>
+<li>
+<p>Necessário fazer mais testes para corrigir Z</p>
+</li>
+<li>
+<p>Z parece ser afetado diretamente por X</p>
+</li>
+<li>
+<p>Utilizando o mesmo fator de correção que em X ( -0.154 )</p>
+</li>
+<li>
+<p>Após aplicar o fator de correção em XYZ</p>
+</li>
+<li>
+<p>Mean Mean - <strong>[ 0.6251545   0.59968417  0.61334835]</strong>
+    Mean Std  - [ 0.30244126  0.32259647  0.26306484]
+    Mean Max  - [ 1.5099673   1.38590574  1.27972879]</p>
+<p>Std  Mean - <strong>[ 0.33315744  0.24697093  0.32907034]</strong>
+Std  Std  - [ 0.08915038  0.09833696  0.10477162]
+Std  Max  - [ 0.75        0.75        0.67033111]</p>
+<p>Max  Mean - <strong>[ 1.52328022  1.1413761   1.48248086]</strong>
+Max  Std  - [ 0.41916193  0.39568526  0.40593537]
+Max  Max  - [ 2.56008408  2.00279845  2.24928167]</p>
+</li>
+</ul>
+<hr />
+<ul>
+<li>Z também é afetado por um fator proporcional ao</li>
+<li>Nevessário fazer mais testes isoladamente ao eixo Z para o encontrar</li>
+</ul>
+<h2 id="1604-reuniao">16/04 - Reunião</h2>
+<h4 id="modelo-de-corrrecao-do-sensor-ft">Modelo de Corrreção do Sensor FT</h4>
+<ul>
+<li>
+<p>Testes isolados ao eixo Z</p>
+</li>
+<li>
+<p>Fixar o wrist_3 numa posição e fazer rodar o wrist_2 sobre um dos eixos Y ou X</p>
+</li>
+<li>
+<p><strong>Resultado - </strong>Fator de correção de Z = 1.230</p>
+</li>
+<li>
+<p>Todos os fatores têm que ser melhorados com o metodo dos quadrados minimos</p>
+</li>
+<li>
+<p>É necessário criar um conjunto de testes de treino, onde se iram retirar os fatores de correção e um cojunto de testes de validação onde os parametros possam ser testados</p>
+</li>
+<li>
+<p>Os fatores de correção devem ser referentes tanto aos exos isolados como entre eixos (XZ ou YZ)</p>
+</li>
+<li>
+<p>Até agora os fatores de correção obtidos com médias de diferenças retiradas das observações são</p>
+</li>
+<li>
+<p>theory[:,z] += theory[:,x] * 0.154</p>
+<p>theory[:,x] = theory[:,x] * 0.846</p>
+<p>theory[:,y] = theory[:,y] * 1.115</p>
+<p>theory[:,z] = theory[:,z] * 1.230</p>
+</li>
+</ul>
+<h4 id="controlo-do-gripper-atraves-de-forcas">Controlo do Gripper através de Forças</h4>
+<ul>
+<li>Criação do vetor peso para atribuir açoes ao gripper beaseadas nesse vetor</li>
+</ul>
+<h4 id="tarefas_3">Tarefas</h4>
+<ul>
+<li>Controlo do Robot pelos movimentos de força</li>
+<li>Fazer com que quando o robot pegue numa peça, isole o peso dela, para que as forças sentidas sejam utilizadas para controlar o seu movimento</li>
+<li>Real time motion planning</li>
+</ul>
+<h2 id="1904-irislab">19/04 - IRISLab</h2>
+<ul>
+<li>Refactor do modelo teórico</li>
+</ul>
+<h4 id="controlo-do-gripper-atraves-de-forcas_1">Controlo do Gripper através de Forças</h4>
+<ul>
+<li>Utilização do vetor peso para que em conjunto com o vetor gravidade controlar a açao do gripper largar um objeto</li>
+</ul>
+<h2 id="2004-irislab">20/04 - IRISLab</h2>
+<h4 id="controlo-do-robot-atraves-de-forcas">Controlo do Robot através de Forças</h4>
+<ul>
+<li>Direct communication with robot</li>
+<li>RTDE - https://www.universal-robots.com/articles/ur/interface-communication/real-time-data-exchange-rtde-guide/</li>
+<li>URScript through socket - https://www.zacobria.com/universal-robots-zacobria-forum-hints-tips-how-to/script-via-socket-connection/</li>
+<li>ur_rtde - https://sdurobotics.gitlab.io/ur_rtde/</li>
+<li>Inverse Kinematics</li>
+<li>MovIt - http://docs.ros.org/en/melodic/api/moveit_tutorials/html/doc/robot_model_and_robot_state/robot_model_and_robot_state_tutorial.html</li>
+<li>Jacobian - https://www.rosroboticslearning.com/jacobian#:~:text=Jacobian%20is%20Matrix%20in%20robotics,(%20)%20of%20a%20robot%20manipulator.&amp;text=Each%20column%20in%20the%20Jacobian,variation%20in%20each%20joint%20velocity</li>
+<li>Orocos KDL - https://www.orocos.org/wiki/orocos/kdl-wiki.html</li>
+</ul>
+<h2 id="2104-irislab">21/04 - IRISLab</h2>
+<h4 id="jacobian-theory">Jacobian Theory</h4>
+<ul>
+<li>Introduction to jacobian matrix</li>
+<li>Move it robot state, ik and jacobian tutorial made</li>
+<li>Start experimenting with movements in simulated ur10e (gazebo). <strong>Problems</strong></li>
+<li>Gazebo só publica o estado do robot a 50Hz, ou seja, o ciclo de calculo de juntas do robot apenas pode correr num máximo de 50Hz</li>
+<li>Gazebo apenas aceita controlo de movimento através de valores de juntas, ou seja, requer o moveit para enviar valores de juntas -&gt; mais lento<ul>
+<li>Enviar movimento sincronamente faz com que o movimento do robot seja aos solavancos, pois, entre cada movimento há o tempo de calculo do proximo</li>
+<li>Enviar movimentos assincronamente funciona mas é necessário encontrar a frequencia certa/ótima para enviar os movimentos, senao o robot "encrava"</li>
+</ul>
+</li>
+</ul>
+<h2 id="2204-irislab">22/04 - IRISLab</h2>
+<h4 id="jacobian-simulation">Jacobian Simulation</h4>
+<ul>
+<li>Envio de valores de juntas asincronamente ao robot através do moveit</li>
+<li>Maioria dos movimentos são fluídos mas há certas posições onde o robot "falha" em calcular a trajetoria</li>
+<li>Ou por exceder o limite das juntas</li>
+<li>Ou por exceder o limite de alcance</li>
+<li>Ou por nao conseguir mesmo se mover nessa dada direção</li>
+<li>Há a necessidade de controlar as juntas do robot por velocidade em ves de por posição</li>
+</ul>
+<h2 id="2304-irislab">23/04 - IRISLab</h2>
+<h4 id="jacobian-real-ur10e">Jacobian Real UR10e</h4>
+<ul>
+<li>O controlador funciona um pouco melhor pois os valores das juntas são publicados a 500Hz</li>
+<li>Ainda hà alguns solavancos, mas são muito suaves</li>
+<li>Controlador integrado com o peso calculado para que o robot se mova na direção que está a ser empurrado</li>
+<li>Resultados positivos</li>
+<li>Apenas há numa diferença na velocidade com que o EE se move dependendo da força que esta a ser execida e da sua posição<ul>
+<li>Pode ser resolvido efetuando o controlo das juntas por velocidade</li>
+</ul>
+</li>
+</ul>
+<h2 id="2604-irislab">26/04 - IRISLab</h2>
+<h4 id="urscript-and-rtde-interfaces">URScript and RTDE Interfaces</h4>
+<ul>
+<li>Envio de instrucoes em URScript para o Robot através de sockets pela interface Real-Time 30003</li>
+<li>Tentativa de utilização do pacote pip python-urx mas é preferível enviar os comandos manualmente</li>
+<li>Robot recebe e executa bem as intruções</li>
+<li>Falta testar a velocidade com que se consegue interagir com o robot</li>
+<li>Utilização da bilblioteca C++ ur_rtde para interagir com o robot</li>
+<li>Bilbioteca muito completa com muitas funcionalidades</li>
+<li>No entanto o robot apenas suporta uma ligação à porta 30004 simultaneamente o que significa que o driver não pode estar ligado, pois este tambem usa a interface RTDE</li>
+</ul>
+<h2 id="2704-irislab">27/04 - IRISLab</h2>
+<h4 id="urdriver-mais-recente">URDriver mais recente</h4>
+<ul>
+<li>Experimentação da versao mais recente do ur_robot_driver que contem controladores de velocidade</li>
+<li>Tanto controladores poderosos em PID como os de posição, tal como um controlador direto de velocidade das juntas do robot</li>
+</ul>
+<h2 id="2804-irislab">28/04 - IRISLab</h2>
+<h4 id="ursim-em-virtual-machine">URSim em Virtual Machine</h4>
+<ul>
+<li>Simulador oficial do UR10e que providencia todas as interfaces e funcionalidades do robot real (excepto controlos por força)</li>
+<li>Aceita comandos URScript</li>
+<li>Boa plataforma para testes de interação com o robot</li>
+</ul>
+<h2 id="3004-reuniao">30/04 - Reunião</h2>
+<h4 id="jacobian-weight-real-ur10e">Jacobian Weight Real UR10e</h4>
+<ul>
+<li>Testes com vários parametros de controlo assincrono da posição do robot</li>
+<li>Comportamento actual é aceitável na medida em que as trajetorias calculadas são precisas</li>
+<li>No entanto existe delay, a velocidade é muito lenta, e é necessário ser adaptada à força que se faz (quanto mais força, mais rápido)</li>
+<li>Necessário incorporar movimentos rotacionais utilizado o torque</li>
+</ul>
+<h4 id="multiple-control-interfaces">Multiple Control Interfaces</h4>
+<p><img src="screenshots/logbook/1.jpg" width=80%></p>
+<h4 id="reuniao">Reunião</h4>
+<ul>
+<li>Necessidade de implementar controlador com velocidades de juntas</li>
+<li>Implementar movimentos angulares com os valores de torque</li>
+<li>Fazer o robot pegar em algo e depois move-lo com a força</li>
+<li>Dar reset no peso quando o robot pega em algo (dar um X tempo de calibração)</li>
+<li>Implementar double-tap</li>
+<li>Tentar distinguir entre mover o EE e pegar numa peça (relação torque / força)</li>
+</ul>
+<h2 id="0505-irislab">05/05 - IRISLab</h2>
+<h4 id="movimentos-angulares-com-os-valores-de-torque">Movimentos angulares com os valores de torque</h4>
+<ul>
+<li>Tentativa de traduzir valores de torque sentido no sensor FT (tool0) em rotações globais (world)</li>
+<li>Criação de um TF (torque) que traduz uma rotação do tool0 no eixo do torque sentido no sensor</li>
+<li>Obter a diferença de rotação dos 2 transforms e usar essa rotação</li>
+<li><strong>Problema - </strong>Apenas consegui obter a rotação do TF "torque"  em relação ao TF "original"</li>
+</ul>
+<p>https://answers.ros.org/question/42289/difference-between-two-rigid-body-transformations/</p>
+<h2 id="1005-irislab">10/05 - IRISLab</h2>
+<h4 id="movimentos-angulares-com-os-valores-de-torque_1">Movimentos angulares com os valores de torque</h4>
+<ul>
+<li>Consegui obter a rotação global dos 2 TFs</li>
+<li>Foi necessário fazer a multiplicação dos TFs utilizando os seus inversos, para que assim o resultado seja em relação ao world</li>
+<li>Ou seja <ul>
+<li>Rot = Inv(Inv(TFtq)) * Inv(TFft) = TFtq * Inv(TFft)</li>
+<li>Para mais info -&gt; torque_to_angvel.cpp</li>
+</ul>
+</li>
+</ul>
+<h2 id="1105-irislab">11/05 - IRISLab</h2>
+<ul>
+<li>Refactor da disposição de todos os nós</li>
+<li>Criação de nós especificos para velocidades lineares e angulares</li>
+<li>Criação de fatores para traduzir força / torque em velocidade</li>
+</ul>
+<p><img src="screenshots/logbook/2.jpg" width=80%></p>
+<h2 id="1305-reuniao">13/05 - Reunião</h2>
+<ul>
+<li>Continuar</li>
+</ul>
+<h2 id="1705-irislab">17/05 - IRISLab</h2>
+<h4 id="controlar-as-juntas-por-velocidade">Controlar as juntas por Velocidade</h4>
+<ul>
+<li><strong>Comandos URScript por TCP para a porta 30003</strong></li>
+<li>Comando speedj não apresenta bom funcionamento, cada vez que se envia um comando novo, o anterior para abruptamente</li>
+<li><strong>Bilioteca UR_RTDE</strong></li>
+<li>Comandos de velocidade funcionam corretamente e à frequencia de 500Hz</li>
+<li>Não é possível utilizar esta bilbioteca em paralelo com o driver ROS</li>
+<li><strong>Novo driver ROS</strong></li>
+<li>Controlador de velocidade de juntas aparenta funcionar bem</li>
+<li>Apenas testado em URSim</li>
+</ul>
+<h2 id="1805-irislab">18/05 - IRISLab</h2>
+<h4 id="controlar-as-juntar-por-velocidade">Controlar as juntar por Velocidade</h4>
+<ul>
+<li><strong>Comandos URScript por TCP para a porta 30003</strong></li>
+<li>Nenhuma combinação de parametros de speedj funcionou corretamente<ul>
+<li>O problema sendo que a cada novo comando urscript enviado, o anterior para abruptamente</li>
+</ul>
+</li>
+<li>Teste com servoj que seria o comando apropriado para movimentos continuos / RT tambem nao deu resultados<ul>
+<li>O robot claramente movia-se aos solavancos</li>
+</ul>
+</li>
+<li>No entanto a interface real-time pode ser util na prespectiva de read-only para um programa de monitorament<ul>
+<li>A porta 30003 esta ativa e envia informação a 500Hz independentemente do modo de operação do robot</li>
+</ul>
+</li>
+<li><strong>Biblioteca UR_RTDE</strong></li>
+<li>Movimentos suaves e continuos a 500Hz</li>
+<li>Continua a nao haver a possibilidade de utilização em paralelo com o driver</li>
+<li>Possibilidade de utilização em Remote Control ou atravez do urcap de external control<ul>
+<li>Necessidade de ser compilada manualmente para obter a versão mais recente</li>
+</ul>
+</li>
+<li><strong>Novo driver ROS</strong></li>
+<li>Testado no robot real com a utilização "obrigatoria" do external_control.urcap</li>
+<li>Movimentos suaves, no entanto aparentam ausencia de controlador pois o robot, assim que lhe é enviado um comando de velocidade, aparenta ganhar essa velocidade instantaneamente ao inves de progressivamente</li>
+<li><strong>Tarefas</strong></li>
+<li>Comparar UR_RTDE com o novo driver ROS a nível de<ul>
+<li>Suavidade das trajetórias</li>
+<li>Estabilidade</li>
+<li>Delay no envio de comandos</li>
+</ul>
+</li>
+<li>Isolar todo o sistema o mais possível do driver / moveit</li>
+<li>Fechar o sistema mesmo com o controlador em posição utilizando o moveit</li>
+</ul>
+<h2 id="1905-irislab">19/05 - IRISLab</h2>
+<h4 id="sistema-fechado-utilizando-controlo-de-posicao-pelo-moveit">Sistema Fechado utilizando controlo de Posição pelo MoveIt</h4>
+<ul>
+<li>Calculo de velocidades funciona bem (jacobian)</li>
+<li><strong>Controlador posicional moveit</strong> funciona bem se for aplicada uma força constante</li>
+<li>Funciona mal ao parar, pois para abruptmanete devido aos limites superiores e inferiores de força</li>
+<li>Funciona muito mal quando é aplicada uma força baixa e constante, pois estando perto dos limites definidos, o controlo fica a oscilar entre 0 e o limite<ul>
+<li>Outra razão, é que para calcular um novo valor de juntas, é necessário o valor presente, e não há possibilidade de saber a precisão com que esse valor é obtido</li>
+</ul>
+</li>
+<li><strong>Solução</strong><ul>
+<li>Suavizar os comandos de velocidade (controlador a sério ou um filtro de média)</li>
+<li>Controlar o robot diretamente por velocidade</li>
+<li>Ou pela interface RTDE diretamente</li>
+<li>Ou com o driver novo que tem controladores de velocidade</li>
+</ul>
+</li>
+</ul>
+<h4 id="novo-driver">Novo Driver</h4>
+<ul>
+<li>Criação de um ws novo onde dou merge de todas as funcionalidades com a versão mais recente do driver ROS do UR10e que já implementa controladores de velocidade</li>
+<li>Até agora, tanto o moveit, como iris_sami e controlo por velocidade aparenta funcionar</li>
+<li>Falta testar todos o iris_cobot</li>
+</ul>
+<h2 id="2005-irislab-reuniao">20/05 - IRISLab / Reunião</h2>
+<h4 id="controlo-por-velocidade-no-driver-novo">Controlo por Velocidade no Driver novo</h4>
+<ul>
+<li>O controlador scaled_vel_joint_traj_controller nao funciona como esperado</li>
+<li>Ele nao envia um conjunto de velocidades às juntas</li>
+<li>Ele recebe uma trajetoria contendo posicoes e velocidades e assim, controla o robot</li>
+<li>https://forum.universal-robots.com/t/ur5-constant-motion/14305</li>
+<li>Programa scaled_vel_controller que cria trajetorias e as envia para o robot baseado no exemplo do ur_modern_driver<ul>
+<li>https://github.com/ros-industrial/ur_modern_driver/blob/master/test_move.py</li>
+</ul>
+</li>
+<li>
+<p>O mais provável é vir a usar o joint_group_vel_controller</p>
+</li>
+<li>
+<p>Utilização do joint_vel_group_controller para enviar os valores de velocidade às juntas</p>
+</li>
+<li>Utilização de um filtro de média com uma sliding window de 50</li>
+<li>Movimentos lineares muito suaves e requerem pouca força</li>
+<li>Movimetos rotacionais apresentam muitas oscilações e a dada altura o robot gaha um comportamento de feedback em que se nao largarmos o gripper ele aumenta e fica "agressivo"</li>
+<li>Necessidade de tornar este controlador mais complexo (pid ou um filtro diferente)</li>
+</ul>
+<h2 id="2605-irislab">26/05 - IRISLab</h2>
+<h4 id="forks-do-novo-driver-e-descricao">Forks do Novo Driver e Descrição</h4>
+<ul>
+<li><strong>Descrição - </strong>https://github.com/fabioalves98/universal_robot/tree/calibration_devel</li>
+<li><strong>Driver - </strong>https://github.com/fabioalves98/Universal_Robots_ROS_Driver</li>
+<li>Pequenas alterações aos pacotes para utiliza,ão com o UR10e do iries</li>
+</ul>
+<h4 id="teste-de-movimentos-com-objetos-pesados">Teste de movimentos com objetos pesados</h4>
+<ul>
+<li>Testes com pesos de 1Kg e 2Kg e payload 0 Kg definido da dashboard</li>
+<li>Movimentos com o peso de 1Kg funcionam perfeitamente</li>
+<li>Movimentos com o peso de 2Kg funcionam bem, mas alguma trajetórias, apresentam solavancos... Provavelment devido ao calculo dos movimentos feito pelo robot nao acontar com o novo peso</li>
+</ul>
+<h2 id="2805-irislab">28/05 - IRISLab</h2>
+<h4 id="detecao-de-double-tap-no-gripper">Deteção de Double tap no gripper</h4>
+<ul>
+<li>Integração dos valores de força provenientes diretamente do /wrench</li>
+<li>Avaliação dos valores e escolha dos melhores parametros que permitam identificar um toque rápido e distinguir de um toque normal</li>
+<li>Valor de diferenção mínima de 5N</li>
+<li>Distanca temporal minima entre toques - 100ms</li>
+<li>Distancia temporal maxima entre toques - 400ms</li>
+<li>Quando o nó <strong>double_tap</strong> deteta um double tap, chama o serviço de <strong>gripper_toggle</strong></li>
+</ul>
+<h2 id="0106-irislab">01/06 - IRISLab</h2>
+<ul>
+<li>Review</li>
+</ul>
+<h2 id="0206-irislab">02/06 - IRISLab</h2>
+<h4 id="maquina-de-estados-do-gripper">Máquina de estados do Gripper</h4>
+<ul>
+<li>Modo de interação com o braço em que num estado inicial ele se move consoante as forças sentidas, mas após uma acão de double tap, o gripper fecha-se, o programa calcula o peso do objeto agarrado, compensa esse peso, e permite ao utilizador mover o braço com o objeto acopulado, exercendo as mesmas forças de anteriormente</li>
+<li>Máquina de estado inicial funcional, no entanto existem solavancos nas transições de estados</li>
+<li>Necessidade de uma maquina de estado geral que controla os nós de movimento, para que eles possam ser parados / resumidos entre as transições de estado</li>
+<li>Necessidade de compensar os valores de torque</li>
+</ul>
+<p><img src="screenshots/logbook/3.jpg" width=80%></p>
+<h2 id="0706-irislab">07/06 - IRISLab</h2>
+<h4 id="teste-56-posicoes">Teste 56 posições</h4>
+<ul>
+<li>Necessidade de gravar os valores de torque para criar modelo de correção análogo ao que corrige os valores de força</li>
+<li><strong>Testes TCW -</strong> Valores de força e torque em 57 posições com gripper e payload 0Kg</li>
+<li><strong>Testes TCWNG -</strong> Valores de força e torque em 8 posições sem gripper e payload 0Kg</li>
+</ul>
+<h4 id="maquina-de-estados-global-ur10e">Máquina de Estados Global UR10e</h4>
+<h5 id="inputs">Inputs</h5>
+<ul>
+<li>Double Tap X / Y / Z</li>
+<li>Finger Position</li>
+</ul>
+<h5 id="funcionalidades">Funcionalidades</h5>
+<ul>
+<li><strong>Working - </strong>Task predefinida pelo utilizador</li>
+<li><strong>Reactive Stop - </strong>Em movimento manuais / pre definidos se sentir uma força pára e espera por input</li>
+<li><strong>Freedrive - </strong>Robot move-se na direção da força sentida</li>
+<li>Para a existencia de um movimento mais preciso, talvez alterar a relação força-velocidade em real time</li>
+<li><strong>Fine Control - </strong>Velocidade de operação muito reduzida</li>
+<li>Ou criar um modelo que compreenda várias relações de força-velocidade mas que a transição entre elas seja "seemless"</li>
+<li><strong>Deliver Object - </strong> Robot entrega ao utlizador um objeto fazendo-o lagar quando o utilizar exerce força suficnete para suster o objeto</li>
+<li>Implementar esta funcionalidade futuramente no controlo do robot através de gestos (mãos) </li>
+<li><strong>Lift and Control - </strong>Levar o gripper até um objeto, dar input para ele o agarrar, fazer com que o braço levante o objeto, compense o seu peso e continue em modo freedrive</li>
+<li><strong>Custom Screw - </strong>Colocar o robot numa posição e faze-lo apertar algo (rodando o wrist_3) até notar que está a exercer força suficiente</li>
+<li><strong>Modo de Configuração - </strong>?</li>
+</ul>
+<h4 id="controlo-das-luzes-do-gripper">Controlo das Luzes do Gripper</h4>
+<ul>
+<li>Definição de funçoes de controlo dos LEDS do gripper no iris_sami</li>
+<li>Possivel contorlar animação, cor, velocidade e mudança de modos pré-definidos</li>
+</ul>
+<h2 id="0806-irislab">08/06 - IRISLab</h2>
+<h4 id="modelo-de-correcao-de-torque">Modelo de Correção de Torque</h4>
+<ul>
+<li>Testes nas 57 posições com gripper e gravação dos valores de torque</li>
+<li>
+<p>Teses em 8 posições sem gripper para efetuar a correção dos valores do sensor consoante a posição do wrist_3</p>
+</li>
+<li>
+<p>Criação do programa positional_correction.py que utiliza os 8 testes anteriores e cria 2 arrays (força e torque) para serem utilizados pelos nós de correcção</p>
+</li>
+</ul>
+<h2 id="1506-irislab">15/06 - IRISLab</h2>
+<h4 id="modelo-teorico-de-correcao-de-torque">Modelo Teórico de Correção de Torque</h4>
+<ul>
+<li>Adcionar ao ficheiro ft_sensor.py a parte teórica do torque baseado da seguinte fórmula</li>
+</ul>
+<p><img src="screenshots/logbook/4.jpg" width=50%></p>
+<ul>
+<li>Testes nas 57 posições ao simulador no modelo teórico e gravação dos valores de torque</li>
+<li>Comparação dos testes reais com os teóricos mostram que o modelo teórico de torque está bem desenhado mas os parametros precisam de ser ajustados</li>
+<li>Necessidade de criar um modelo que crie os testes ao modelo teórico analiticamente (sem simulação e gravação)</li>
+</ul>
+<h2 id="2106-irislab">21/06 - IRISLab</h2>
+<h4 id="modelo-de-correcao-de-torque_1">Modelo de Correção de Torque</h4>
+<ul>
+<li>Valores do modelo teórico utilizados na parte de correção dos valores reais</li>
+<li>Após alguns testes, o modo compliance do robot funciona muito melhor</li>
+<li>Necessidade de atualizar o valor do centro de gravidade do modelo quando o robot pega em algo</li>
+</ul>
+<hr />
+<ul>
+<li>Implementação de constantes de conversão FT -&gt; Velocidade através de parametros do servidro dynamic reconfigure</li>
+<li>Constante de divisão de Força e Torque</li>
+<li>Sensibilidade</li>
+</ul>
+<h2 id="2206-irislab">22/06 - IRISLab</h2>
+<h4 id="modelo-teorico">Modelo Teórico</h4>
+<ul>
+<li>Atualização do centro de gravidade do objeto e calculo do torque teórico baseado nesse valor (PODE NÃO ESTAR FEITO DO MELHOR FORMA)</li>
+<li>Calculo feito através da soma do peso do gripper * cog do gripper e peso do objeto * cog do objeto (fingers)</li>
+<li>Peso do objeto é retirado diretamente dos valores de força medidos pelo sensor</li>
+<li>Devido à imprecisão da compoente força do sensor, o peso calculado nem sempre corresponde ao peso real</li>
+<li>Neste momento, o peso calculado parece sempre que é superior ao peso real em 1.2x</li>
+<li>Existe o problema de quanto maior o peso do objeto mais imprecisoes existem nos valores medidos e quanto aos movimentos, o robot irá ter mais dificuladade em executalos visto que até agora, o payload configurado na interface do robot é de 0Kg em vez do peso real</li>
+</ul>
+<h4 id="resets-periodicos">Resets Periódicos</h4>
+<ul>
+<li>Programa time_series_analysis.py que analisa uma amostra de 100 valores provenientes de wrench_filtered e analisa através do desvio padrão dos dados se existem forças externas a interagir com o robot</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

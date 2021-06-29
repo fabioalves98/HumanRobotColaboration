@@ -1,0 +1,12 @@
+site_name: Iris Cobot
+site_url: https://iris_cobot.ua.pt/
+
+nav:
+  - Home: 'index.md'
+  - Contents: 'contents.md'
+  - Introduction: 'intro.md'
+  - Development:
+      - 'Architecture': 'arch.md'
+  - Extra:
+      - 'Logbook': 'logbook.md'
+      - 'State of the Art': 'soa.md'
