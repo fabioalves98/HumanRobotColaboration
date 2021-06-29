@@ -847,7 +847,7 @@
 
 
 
-<img src="screenshots/logbook/1.jpg" width=80%>
+<img src="logbook/1.jpg" width=80%>
 
 #### Reunião
 
@@ -885,7 +885,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Criação de nós especificos para velocidades lineares e angulares
 - Criação de fatores para traduzir força / torque em velocidade
 
-<img src="screenshots/logbook/2.jpg" width=80%>
+<img src="logbook/2.jpg" width=80%>
 
 ## 13/05 - Reunião
 
@@ -1008,7 +1008,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Necessidade de uma maquina de estado geral que controla os nós de movimento, para que eles possam ser parados / resumidos entre as transições de estado
   - Necessidade de compensar os valores de torque
 
-<img src="screenshots/logbook/3.jpg" width=80%>
+<img src="logbook/3.jpg" width=80%>
 
 ## 07/06 - IRISLab
 
@@ -1059,7 +1059,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Adcionar ao ficheiro ft_sensor.py a parte teórica do torque baseado da seguinte fórmula
 
-<img src="screenshots/logbook/4.jpg" width=50%>
+<img src="logbook/4.jpg" width=50%>
 
 - Testes nas 57 posições ao simulador no modelo teórico e gravação dos valores de torque
 - Comparação dos testes reais com os teóricos mostram que o modelo teórico de torque está bem desenhado mas os parametros precisam de ser ajustados
@@ -1093,3 +1093,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 #### Resets Periódicos
 
 - Programa time_series_analysis.py que analisa uma amostra de 100 valores provenientes de wrench_filtered e analisa através do desvio padrão dos dados se existem forças externas a interagir com o robot
+
+## 25/06 - Bilbioteca
+
+- Limpar repositório e ter apenas um workspace ROS com o driver atualizado
+- Criação de uma interface rqt para iris sami
+- Criação de um site mkdocs para escrever documentação dos programas
+
+## 29/06 - Biblioteca
+
+- rqt iris sami ready for use
