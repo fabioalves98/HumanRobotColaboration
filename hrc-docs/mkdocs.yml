@@ -1,12 +1,20 @@
 site_name: Iris Cobot
 site_url: https://iris_cobot.ua.pt/
 
+theme:
+    name: readthedocs
+
+markdown_extensions:
+  - attr_list
+
 nav:
-  - Home: 'index.md'
-  - Contents: 'contents.md'
+  - Proposal: 'index.md'
+  - Structure: 'struct.md'
   - Introduction: 'intro.md'
+  - State of The Art: 'soa.md'
   - Development:
       - 'Architecture': 'arch.md'
   - Extra:
       - 'Logbook': 'logbook.md'
-      - 'State of the Art': 'soa.md'
+      - 'State of the Art': 'soa_research.md'
+      - 'Structure': 'struct_research.md'
