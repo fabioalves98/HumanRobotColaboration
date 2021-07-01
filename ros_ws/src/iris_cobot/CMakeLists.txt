@@ -22,6 +22,7 @@ catkin_python_setup()
 add_message_files(
     FILES
     JointSpeed.msg
+    TapAction.msg
 )
 
 add_service_files(

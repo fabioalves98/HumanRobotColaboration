@@ -1107,7 +1107,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 ## 30/06 - Biblioteca
 
 - Pull request iris-ua/iris_sami
-- Thesis Research
+- Pesquisa de estrutura para a tese
 
 ## 1/07 - IRISLab
 
@@ -1117,3 +1117,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
     -   Em X, Y, Z e no sentido positivo e negativo permitindo 6 tipos diferentes de taps
 
 #### UR10e State Machine
+
+-   Implementação de uma maquina de estados semelhante à anterior mas utilizancho a bilbioteca ros smach
+-   Cada estado é uma classe isolada com uma função execute
+-   Integração muito poderosa com ROS
+-   Possibilidade de visualizar o estado corrente da máquina através de smach_viewer
+
+****
+
+-   Fix no interface do gripper onde a chamada repetida das funções get_state e get_pos gerava exceções HTTP
+-   Necessidade de dar fix à maneira como interagir com o gripper

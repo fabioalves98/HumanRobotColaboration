@@ -9,7 +9,7 @@ from visualization_msgs.msg import Marker
 from controller_manager_msgs.srv import SwitchController
 
 from iris_cobot.srv import WeightUpdate
-from iris_sami.srv import RelativeMove
+from iris_sami.srv import RelativeMove, NoArguments
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
@@ -165,6 +165,26 @@ def samiMoveWorldService(move):
     try:
         moveWorldServ = rospy.ServiceProxy('iris_sami/move_world', RelativeMove)
         resp = moveWorldServ(*move)
+        return resp.feedback
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+
+
+def samiGripService():
+    rospy.wait_for_service('iris_sami/grip')
+    try:
+        grip_serv = rospy.ServiceProxy('iris_sami/grip', NoArguments)
+        resp = grip_serv()
+        return resp.feedback
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+
+
+def samiReleaseService():
+    rospy.wait_for_service('iris_sami/release')
+    try:
+        release_serv = rospy.ServiceProxy('iris_sami/release', NoArguments)
+        resp = release_serv()
         return resp.feedback
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
