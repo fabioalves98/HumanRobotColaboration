@@ -1107,3 +1107,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 ## 30/06 - Biblioteca
 
 - Pull request iris-ua/iris_sami
+- Thesis Research
+
+## 1/07 - IRISLab
+
+#### Interaction
+
+-   Componentes X, Y, Z do modulo double tap isoladas para permitir identificar vários tipos de toques no EE
+    -   Em X, Y, Z e no sentido positivo e negativo permitindo 6 tipos diferentes de taps
+
+#### UR10e State Machine

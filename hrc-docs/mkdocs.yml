@@ -8,13 +8,15 @@ markdown_extensions:
   - attr_list
 
 nav:
-  - Proposal: 'index.md'
-  - Structure: 'struct.md'
-  - Introduction: 'intro.md'
-  - State of The Art: 'soa.md'
-  - Development:
-      - 'Architecture': 'arch.md'
+  - Proposal: index.md
+  - Structure: struct.md
+  - Introduction: intro.md
+  - State of The Art: soa.md
+  - Hand Guiding: hand_guide.md
+  - Results and Discussion: results.md
+  - Conclusion and Future Work: conclusion.md
+  
   - Extra:
-      - 'Logbook': 'logbook.md'
-      - 'State of the Art': 'soa_research.md'
-      - 'Structure': 'struct_research.md'
+      - Logbook: logbook.md
+      - State of the Art: soa_research.md
+      - Structure: struct_research.md

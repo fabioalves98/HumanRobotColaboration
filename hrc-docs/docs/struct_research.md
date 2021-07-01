@@ -34,14 +34,54 @@
 ### Setup / Environment / Software
 
 - Especificação do robot / sensores / ambiente
+- Pacotes ROS 
 
 
 
+### ------------------------------------------
 
 
 
+### Touch and Gesture Interaction
+
+-   Interaction with robot through gripper taps in multiple directions
+-   Time series analysis of FT to detect interaction with the robot
+
+### Transfer of Tools Between Human and Robot
+
+-   Robot grips and releases object based on force and torque felt in the EE FT sensor
+
+### Safe Path Planning with Dynamic Obstacles
+
+-   Nope
 
 
+
+### ------------------------------------------
+
+
+
+### Human Robot Interaction
+
+-   rqt_sami - GUI plugin to control de robot from a computer based in iris_sami functionalities
+-   rqt_cobot - GUI plugin to interact with the robot based on the colaborative tasks of iris_cobot
+-   Visual feedback through gripper LEDs
+
+### Hand Guiding
+
+-   FT Sensor correction
+-   Gripper / Objects Weight Compensation
+-   Conversion of Force and Torque at EE level to Velocity at Base level
+-   Conversion of Velocity at Base Level to Robot Joint Velocities
+-   Robot Control
+
+### Robot Internal State Machine / System Architecture
+
+-   Overall fusion of all functionalities
+
+
+
+### ------------------------------------------
 
 
 

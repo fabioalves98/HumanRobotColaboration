@@ -1,5 +1,7 @@
 # Thesis Proposal
 
+## Braço Robótico e Humano Desempenham Tarefas de Forma Colaborativa
+
 ### Enquadramento e Motivação
 
 Os braços robóticos industriais, na sua instalação clássica e não colaborativa, executam as suas tarefas em espaços nos quais está vedada a presença de humanos. Essa vedação pode ser física, através de jaulas, por exemplo, ou virtual. Por questões de segurança, tipicamente, o robô para se alguém entrar dentro do espaço de segurança.
