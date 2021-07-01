@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="canonical" href="https://iris_cobot.ua.pt/soa_research/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>State of the Art - Iris Cobot</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "State of the Art";
+    var mkdocs_page_input_path = "soa_research.md";
+    var mkdocs_page_url = "/soa_research/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Iris Cobot</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Proposal</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../struct/">Structure</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../intro/">Introduction</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../soa/">State of The Art</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../hand_guide/">Hand Guiding</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../results/">Results and Discussion</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../conclusion/">Conclusion and Future Work</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Extra</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../logbook/">Logbook</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">State of the Art</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-2019-humanrobot-interaction-in-industrial-collaborative-robotics-a-literature-review-of-the-decade">1 - 2019 - Human–robot interaction in industrial collaborative robotics: a literature review of the decade</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#criteria-for-hri">Criteria for HRI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#classification-of-hri">Classification of HRI</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#safety-in-industrial-robots">Safety in Industrial Robots</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#cognitive-human-robot-interactions">Cognitive Human Robot Interactions</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#robot-programming-approaches">Robot Programming Approaches</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#human-robot-tasks-allocation">Human Robot Tasks Allocation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#fault-tolerance">Fault Tolerance</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#papers-para-ler">Papers Para Ler</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-2019-humanrobot-collaboration-in-manufacturing-applications-a-review">2 - 2019 - Human–Robot Collaboration in Manufacturing Applications: A Review</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#papers-para-ler_1">Papers Para Ler</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../struct_research/">Structure</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Iris Cobot</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Extra &raquo;</li>
+        
+      
+    
+    <li>State of the Art</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="state-of-the-art-research">State of The Art Research</h1>
+<h2 id="1-2019-humanrobot-interaction-in-industrial-collaborative-robotics-a-literature-review-of-the-decade">1 - 2019 - Human–robot interaction in industrial collaborative robotics: a literature review of the decade</h2>
+<ul>
+<li><strong>HRI -</strong> the process of conveying human intentions and interpreting task descriptions into a sequence of robot motions complying with robot capabilities and working requirements</li>
+</ul>
+<h4 id="criteria-for-hri">Criteria for HRI</h4>
+<ul>
+<li><strong>Workspace:</strong> the overlapping space in the working range of human and robot is described as the common workspace.</li>
+<li><strong>Working time:</strong> it is defined as the time the participant is working inside the workspace.</li>
+<li><strong>Aim:</strong> every entity of the interacting team has an aim to achieve. This aim can match or mismatch with the other one.</li>
+<li><strong>Contact:</strong> since human and robot share the same workspace, they may come into contact with each other either [16] (i) occasionally or by accident if normal operation is intended to be without contact, or (ii) on purpose if the operator is supposed to work in contact with the robot, exchanging forces and cooperating in action upon on the environment.</li>
+</ul>
+<h4 id="classification-of-hri">Classification of HRI</h4>
+<ul>
+<li><strong>Human–Robot Coexistence (HRCx)</strong>, also called coaction, is defined [17] as the capability of sharing the dynamic workspace between humans and robots without a common task (operate on dissimilar tasks) [18,19] or, without requiring mutual contact or coordination of actions [20] and intentions (human and robot may have different aims) [21]. It is generally limited to collisions avoidance.</li>
+<li><strong>Human–Robot Cooperation (HRCp)</strong> acts on a higher level [22] than HRCx. In such a case, humans and robots are working on the same purpose and fulfill the requirements of time and space, simultaneously. The cooperation requires thus advanced technologies such as force-feedback sensing or advanced machine vision [1,17], and far more sensing techniques for collision detection and avoidance.</li>
+<li><strong>Human–Robot Collaboration (HRC)</strong> is the feature of performing a complex task with direct human inter-action in two different modalities [21]: </li>
+<li>(i) Physical collaboration where an explicit and intentional contact with forces exchange exists between human and robot [23]. By measuring or estimating these forces/torques [10], the robot can predict human motion intentions and react accordingly [24,25]. </li>
+<li>(ii) Contactless collaboration where no physical interaction exists. In such a case, actions are coordinated from information exchange which can be achieved via direct communication (speech, gestures, etc.), or indirect communication (intentions recognition, eye gaze direction, facial expressions, etc.) [26,27]. In such scenarios, the operator performs task parts requiring dexterity or decision-making, while the robot realizes parts that are not well suited to direct human involvement (repetitive or high-force applications, chemical deposition, precision placement, etc.)</li>
+</ul>
+<p><img src="papers/1/1.png" width=100%></p>
+<p><img src="papers/1/2.png" width=50%></p>
+<p><img src="papers/1/3.png" width=100%></p>
+<blockquote>
+<p>Boa tabela de comparação de artigos</p>
+</blockquote>
+<h4 id="safety-in-industrial-robots">Safety in Industrial Robots</h4>
+<p><img src="papers/1/4.png" width=100%></p>
+<ul>
+<li>Distributed real-time approach based on a 3D simulation [117]</li>
+<li>121, 122, 123, 304</li>
+<li>Real-time collision avoidance approach based on depth sensor [119]</li>
+<li>Pre-collision algorithms and virtual reality tools [154]</li>
+</ul>
+<p><img src="papers/1/5.png" width=60%></p>
+<blockquote>
+<p>Capítulo com bué conteudo em referências</p>
+</blockquote>
+<h4 id="cognitive-human-robot-interactions">Cognitive Human Robot Interactions</h4>
+<p><img src="papers/1/6.png" width=90%></p>
+<ul>
+<li>Human actions recognition [192-194]</li>
+<li>Gestures recognition [201]</li>
+<li>Control interface to teleoperate robot based on hand gestures using ROS [304]</li>
+<li>Faces Recognition [202]</li>
+<li>Voice Commanding [206]</li>
+<li>Social gaze and social acceptance [195]</li>
+</ul>
+<h4 id="robot-programming-approaches">Robot Programming Approaches</h4>
+<p><img src="papers/1/7.png" width=90%></p>
+<ul>
+<li>Generation of Robotic Skills [216]</li>
+<li>Augmented and Virtual Reality [215]</li>
+<li>On-line Programming [217]</li>
+<li>Programming by Demonstration</li>
+<li>Muitas referências sobre ensinar robots a fazer tarefas apenas por demonstração</li>
+</ul>
+<h4 id="human-robot-tasks-allocation">Human Robot Tasks Allocation</h4>
+<p><img src="papers/1/8.png" width=90%></p>
+<ul>
+<li>Ontology-based Knowledge</li>
+<li>Simplify user interface [93, 222]</li>
+<li>Generic knowledge based system architecture for cobots [40]</li>
+<li>Creating high-level tasks plans</li>
+<li>Behavior Trees [228]</li>
+<li>CoSTAR framework [229]</li>
+<li>Skill Based System software in ROS [304]</li>
+<li>XRob platfoem for HRI [230]</li>
+<li>Architecture for interactive multi-modal industrial HRI [231]</li>
+<li>Tasks Allocation and Scheduling</li>
+<li>Decision-making method that allows human-robot task allocation integrated within ROS [197]</li>
+<li>Allocating tasks to humans and robots for cell manufactoring [235]</li>
+<li>Analytic Hirarchy Process as a decision-making approach and Hierarchical Task Analysis [324]</li>
+</ul>
+<h4 id="fault-tolerance">Fault Tolerance</h4>
+<ul>
+<li>Error Detection</li>
+<li>Error Diagnosis</li>
+<li>Recovery</li>
+</ul>
+<h3 id="papers-para-ler">Papers Para Ler</h3>
+<ul>
+<li>[7] - Human centered assistance applications for the working environment of the future. 2015</li>
+<li>[14] - Evaluation of flexible graphical user interface for intuitive human robot interactions. 2014</li>
+<li>[18] - Integration of active and passive compliance control for safe human-robot coexistence. 2009</li>
+<li>[19] - A design approach for incorporating task coordination for human-robot coexistence within assembly systems. 2015</li>
+<li>[21] - Integrated control for PHRI: collision avoidance, detection, reaction and collaboration. 2012</li>
+<li>[22] - A brief review on safety strategies of physical human-robot interaction. 2019</li>
+<li>[23] - A depth space approach for evaluating distance to objects. 2015</li>
+<li>[24] - Multimodal control for human-robot cooperation. 2013</li>
+<li>[27] - Planning safe and legible hand-over motions for human-robot interaction. 2010</li>
+<li>[28] - Study on application of a human-robot collaborative system using hand-guiding in a production line. 2016</li>
+<li>[44] - Ros based coordination of human robot cooperative assembly tasks. 2015</li>
+<li>[49] - Human-robot physical interaction and collaboration using an industrial robot with a closed control architecture. 2013</li>
+<li>[55] - Optimized assistive human–robot interaction using reinforcement learning. 2016</li>
+<li>[60] - Introducing robots without creating fear of unemployment and high cost in industries. 2018</li>
+<li>[70] - Human-robot collaboration for tooling path guidance. 2016</li>
+<li>[88] - Real-time computation of distance to dynamic obstacles with multiple depth sensors. 2016</li>
+<li>[100] - Working together: a review on safe human-robot collaboration in industrial environments. 2017</li>
+<li>[104] - Toward safe human robot collaboration by using multiple kinects based real-time human tracking. 2014</li>
+<li>[117] - A real time distributed approach to collision avoidance for industrial manipulators. 2014</li>
+<li>[119] - A depth space approach to human-robot collision avoidance. 2012</li>
+<li>[124] - A general procedure for collision detection between an industrial robot and the environment. 2015</li>
+<li>[167] - Cooperative tasks between humans and robots in industrial environments. 2012</li>
+<li>[170] - Safety-aware trajectory scaling for human-robot collaboration with prediction of human occupancy. 2015</li>
+<li>[190] - Design of a collaborative architecture for human-robot assembly tasks. 2017</li>
+<li>[191] - A user-adaptive gesture recognition system applied to human-robot collaboration in factories. 2016</li>
+<li>[192] - Action recognition for human robot interaction in industrial applications. 2015</li>
+<li>[195] - A proposed gesture set for the control of industrial collaborative robots. 2012</li>
+<li>[197] - On a human-robot collaboration in an assembly cell. 2017</li>
+<li>[200] - Dynamic time warping for gesture-based user identification and authentication with kinect. 2013</li>
+<li>[217] - Intuitive and model-based on-line programming of industrial robots: a modular on-line programming environment. 2008</li>
+<li>[218] - Spatial programming for industrial robots through task demonstration. 2013</li>
+<li>[221] - Human–robot interaction review and challenges on task planning and programming. 2016</li>
+<li>[229] - Costar: instructing collaborative robots with behavior trees and vision. 2017</li>
+<li>[288] - How human-robot teamwork will upend manufacturing. 2014</li>
+<li>[293] - Manual guidance for industrial robot programming. 2015</li>
+<li>[310] - On a new generation of torque controlled light-weight robots. 2001</li>
+<li>[319] - Collision-free motion planning for human-robot collaborative safety under cartesian constraint. 2018</li>
+<li>[321] - Survey on human–robot collaboration in industrial settings: safety, intuitive interfaces and applications. 2018</li>
+<li>[325] - Key challenges and open issues of industrial collaborative robotics. 2018</li>
+</ul>
+<h2 id="2-2019-humanrobot-collaboration-in-manufacturing-applications-a-review">2 - 2019 - Human–Robot Collaboration in Manufacturing Applications: A Review</h2>
+<ul>
+<li>Concept of cobots invented in 1996 [2]</li>
+<li>Classification of human robot interaction [7]</li>
+<li><strong>Coexistence - </strong>Human operator and cobot are in the ame environment but do not interact with each other</li>
+<li><strong>Synchronised - </strong>Human operator and cobot work in the same workspace, but at different times</li>
+<li><strong>Cooperation - </strong>Human operator and cobot work in the same workspace at the same time, though focusing on separate tasks</li>
+<li><strong>Collaboration - </strong>Human operator and the cobot must execute a task together, the action of the one has immediate consequences on the other, thaks to special sensors and vision systems</li>
+</ul>
+<p><img src="papers/2/1.png" width=90%></p>
+<ul>
+<li>Other classifications [8-11]</li>
+<li>Safety requirements for cobots</li>
+<li><strong>Safety-rated Monitored Stop (SMS) - </strong>used to cease robot motion in the collabortice workspace before an operator enter the collaborative workspace</li>
+<li><strong>Hand-guiding (HG) - </strong>where an operator uses a hand-operated device, locate at or nead the robot end-effector, to transmit motion commands to the robot</li>
+<li><strong>Speed and separation monitoring (SSM) - </strong>where the robot system and operator may move concurrently in the collaborative workspace. During robot motion, the orbot system never gets closer to the operator than the protective separaton distance</li>
+<li><strong>Power and force limitting (PFL) - </strong>where the robot system shall be designed to adequatly reduce risk to an operator by not exceeding the applicable threshlod limit values</li>
+<li>Defined in [13], cobots should be equipped with additional features such as force and toque sensors, force limits, vision systems (cameras), laser systems, anti-collision systems, recognition of voice commands, and / or system to coordinate the actions of human operators with their motion</li>
+<li>Robot learning from demonstratoin [15] - <strong>IMPORTANTE</strong></li>
+<li>Table comparing humans, cobots and tobots</li>
+<li>Assembly - attatching 2 or more components</li>
+<li>Placement - positiong each part in the proper position</li>
+<li>Handling - manipulation of the picked part</li>
+<li>Picking - tacking from the feeding point</li>
+</ul>
+<p><img src="papers/2/2.png" width=90%></p>
+<ul>
+<li>Collaborative robots are especially advantageous for assembly tasks, particularly if the task is executed with a human operator. They are also suitable for pick and place applications, though the adoption of a traditional robot or a handling system can offer better results in terms of speed, precision, and payload</li>
+<li>Aplications of cobots in this review</li>
+<li>Assembly - when the cobot collaborated with the operator in an assembly process</li>
+<li>Human Assistance - when the cobot acts as an ergonomic support for the operator</li>
+<li>Machine Tending - when the cobot performs loading / unloading operations</li>
+<li>Physical human-robot interaction in 6DOF [28] - <strong>IMPORTANTE</strong></li>
+<li>End-effector precise hand-guiding for collaborative robots [30] - <strong>IMPORTANTE</strong></li>
+<li><strong>Results of the review</strong></li>
+<li>Cobots are being researched more than tobots</li>
+<li>The most used control system is vision</li>
+<li>The most used methodologie was hand guiding but the others were aso used</li>
+<li>The most researched task was assembly, by a large margin</li>
+<li>To increase safety, productivity and task performance, researchers will need to improve planners, environment and task understanding, operator intention understanding and ergonomic cell setups</li>
+<li>To imporve HRI systems, common future work focuses on increasing the robots' and operators' awareness of the task and environment by object redognition and integrating multi-modal sensing in an intuitive manner for the operator</li>
+<li><strong>Trends of Market</strong></li>
+<li>Robot market is going ot grow</li>
+<li>The fall in robot prices has led to a growing market for cobots</li>
+<li>Small and medium sized enterprises could not afford robotic applications due to the high capital costs</li>
+<li>Trust-based compliant robot-human handovers of payloads [29] - <strong>IMPORTANTE</strong></li>
+<li>Table with the reviewed papers</li>
+</ul>
+<h3 id="papers-para-ler_1">Papers Para Ler</h3>
+<ul>
+<li>[15] - Robot learning from demonstration in robotic assembly: A survey. 2018</li>
+<li>[28] - Physical human–robot interaction (pHRI) in 6 DOF with asymmetric cooperation. 2017</li>
+<li>[29] - Trust-based compliant robot-human handovers of payloads in collaborative assembly in flexible manufacturing. 2016</li>
+<li>[30] - End-effector precise hand-guiding for collaborative robots. 2017</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../struct_research/" class="btn btn-neutral float-right" title="Structure">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../logbook/" class="btn btn-neutral" title="Logbook"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../logbook/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../struct_research/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

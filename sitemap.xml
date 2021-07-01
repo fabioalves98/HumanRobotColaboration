@@ -1,8 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://example.com/</loc>
-         <lastmod>2021-06-25</lastmod>
+         <loc>https://iris_cobot.ua.pt/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/conclusion/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/hand_guide/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/intro/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/logbook/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/results/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/soa/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/soa_research/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/struct/</loc>
+         <lastmod>2021-07-01</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://iris_cobot.ua.pt/struct_research/</loc>
+         <lastmod>2021-07-01</lastmod>
          <changefreq>daily</changefreq>
     </url>
 </urlset>
