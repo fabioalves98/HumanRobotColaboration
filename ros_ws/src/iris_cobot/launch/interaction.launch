@@ -3,6 +3,8 @@
 
     <node pkg="iris_cobot" type="ur10e_smach.py" name="ur10e_smach" output="screen" respawn="true"/>
 
+    <node pkg="smach_viewer" type="smach_viewer.py" name="smach_viewer" output="screen" respawn="true"/>
+
     <node pkg="iris_cobot" type="double_tap.py" name="double_tap" output="screen" respawn="true"/>
 
 </launch>

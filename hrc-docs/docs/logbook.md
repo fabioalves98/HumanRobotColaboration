@@ -1127,3 +1127,12 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 -   Fix no interface do gripper onde a chamada repetida das funções get_state e get_pos gerava exceções HTTP
 -   Necessidade de dar fix à maneira como interagir com o gripper
+
+## 7/07 - IRISLab
+
+-   Alteração do serviço /iris_sami/status para 2 tópicos /iris_sami/arm_status (500Hz) e /iris_sami/gripper_status (50Hz)
+-   Criação de 2 instâncias de controlo do gripper dentro do server.py do iris_sami
+-   Criação do nó weight que calcula constantemente a magnitude da força exercida no sensor FT
+
+## 8/07 - IRISLab
+

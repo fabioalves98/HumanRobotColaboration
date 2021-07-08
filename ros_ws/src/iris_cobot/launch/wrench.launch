@@ -7,4 +7,6 @@
 
     <node pkg="iris_cobot" type="correct.py" name="correct" output="screen" respawn="true"/>
 
+    <node pkg="iris_cobot" type="weight.py" name="weight" output="screen" respawn="true"/>
+
 </launch>

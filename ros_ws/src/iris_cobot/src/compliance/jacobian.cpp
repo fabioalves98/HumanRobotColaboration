@@ -169,15 +169,56 @@ int main(int argc, char **argv)
         { 
             geometry_msgs::Vector3 linear = *linear_velocity_ptr;
             geometry_msgs::Vector3 angular = *angular_velocity_ptr;
-            if (abs(linear.x) > sensibility || abs(linear.y) > sensibility || abs(linear.z) > sensibility ||
-                abs(angular.x) > sensibility || abs(angular.y) > sensibility || abs(angular.z) > sensibility)
+
+            // TODO: MUDAR ESTE CÓDIGO DE ESPARGETE
+            if (linear.x > sensibility)
             {
-                translation[0] = linear.x;
-                translation[1] = linear.y;
-                translation[2] = linear.z;
-                rotation[0] = angular.x;
-                rotation[1] = angular.y;
-                rotation[2] = angular.z;
+                translation[0] = linear.x - sensibility;
+            }
+            if (linear.y > sensibility)
+            {
+                translation[1] = linear.y - sensibility;
+            }
+            if (linear.z > sensibility)
+            {
+                translation[2] = linear.z - sensibility;
+            }
+            if (angular.x > sensibility)
+            {
+                rotation[0] = angular.x - sensibility;
+            }
+            if (angular.y > sensibility)
+            {
+                rotation[1] = angular.y - sensibility;
+            }
+            if (angular.z > sensibility)
+            {
+                rotation[2] = angular.z - sensibility;
+            }
+            // 
+            if (linear.x < -sensibility)
+            {
+                translation[0] = linear.x + sensibility;
+            }
+            if (linear.y < -sensibility)
+            {
+                translation[1] = linear.y + sensibility;
+            }
+            if (linear.z < -sensibility)
+            {
+                translation[2] = linear.z + sensibility;
+            }
+            if (angular.x < -sensibility)
+            {
+                rotation[0] = angular.x + sensibility;
+            }
+            if (angular.y < -sensibility)
+            {
+                rotation[1] = angular.y + sensibility;
+            }
+            if (angular.z < -sensibility)
+            {
+                rotation[2] = angular.z + sensibility;
             }
         }
 

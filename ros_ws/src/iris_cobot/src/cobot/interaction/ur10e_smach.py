@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import rospy, time
+from sami.gripper import Gripper
 import smach
 import smach_ros
 
 import cobot.helpers as helpers
 
 from iris_cobot.msg import TapAction
-from iris_sami.srv import Status
+from iris_sami.msg import GripperInfo
 
 
 class UR10eState(smach.State):
@@ -14,11 +15,9 @@ class UR10eState(smach.State):
         smach.State.__init__(self, outcomes=outcomes, input_keys=input_keys, output_keys=output_keys, io_keys=io_keys)
 
 
-    def getStatus(self):
-        rospy.wait_for_service("iris_sami/status")
-        status_serv = rospy.ServiceProxy('iris_sami/status', Status)
-        status = status_serv()
-        return status
+    def getGripperStatus(self):
+        gripper_status = rospy.wait_for_message("iris_sami/gripper_status", GripperInfo)
+        return gripper_status
 
 
     def getAction(self):
@@ -53,7 +52,7 @@ class Gripping(UR10eState):
         helpers.samiGripService()
         
         while not rospy.is_shutdown():
-            status = self.getStatus()
+            status = self.getGripperStatus()
             if status.gripped:
                 if status.has_object:
                     return 'object'
@@ -103,7 +102,7 @@ class Releasing(UR10eState):
         helpers.samiReleaseService()
         
         while not rospy.is_shutdown():
-            status = self.getStatus()
+            status = self.getGripperStatus()
             if not status.gripped:
                 return 'released'
 

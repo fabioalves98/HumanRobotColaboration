@@ -6,7 +6,7 @@ from math import degrees, pi, sin, cos, acos, sqrt, radians
 
 from sami.arm import Arm
 from sami.gripper import Gripper
-import helpers
+import cobot.helpers as helpers
 
 arm = None
 
@@ -47,7 +47,8 @@ def quaternionToAxisAngle():
 
 
 def main():
-    rospy.init_node('test', anonymous=False)
+    print('test' + sys.argv[1])
+    rospy.init_node('test' + sys.argv[1], anonymous=False)
     signal.signal(signal.SIGINT, signal_handler)
 
     global arm
@@ -55,7 +56,18 @@ def main():
     # arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     # arm.velocity = 1
 
-    # gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
+    gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
+
+    gripper.grip()
+
+    time.sleep(3)
+
+    gripper.release()
+
+    rate = rospy.Rate(50)
+    while not rospy.is_shutdown():
+        print('Gripped - %r - %f' % (gripper.get_status() == 8, rospy.get_time()))
+        rate.sleep()
     
     # Gripper Light Controls
     # gripper.set_led_preset(1)
