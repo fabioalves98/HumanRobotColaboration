@@ -4,7 +4,7 @@ import numpy as np
 from math import radians
 from geometry_msgs.msg import WrenchStamped
 
-import helpers
+import cobot.helpers as helpers
 from sami.arm import Arm
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
@@ -68,6 +68,8 @@ def main():
     idx = 0
     idx_skip = 0
 
+    poses = []
+
     for w_1 in angles:
         for w_2 in angles:
             if (w_1, w_2) not in forbidden:
@@ -85,10 +87,12 @@ def main():
                 arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(0)])
 
                 # Reset ft sensor
-                helpers.reset_ft_sensor()
+                # helpers.reset_ft_sensor()
 
                 # Init temp stream
                 wrench_sample = []
+
+                pose_sample = []
 
                 # Move wrist 3
                 for i in range(-180, 180):
@@ -106,20 +110,28 @@ def main():
                     #                       (statistics.mean(wrench[:,3]), 
                     #                        statistics.mean(wrench[:,4]), 
                     #                        statistics.mean(wrench[:,5]))])
+                    pose_sample.append(arm.get_pose())
 
                     # SIM THEORY RECORD
-                    wrench_sample.append([(wrench[0], wrench[1], wrench[2]),
-                                          (wrench[3], wrench[4], wrench[5])])
+                    # wrench_sample.append([(wrench[0], wrench[1], wrench[2]),
+                    #                       (wrench[3], wrench[4], wrench[5])])
 
                 # Save samples of wrench in files
-                with open(BASE_DIR + '/record/TCWT%d_%d_%d.list' % (idx, w_1, w_2), 'w') as f:
-                    print(len(wrench_sample))
-                    pickle.dump(wrench_sample, f)
-
+                # with open(BASE_DIR + '/record/TCWT%d_%d_%d.list' % (idx, w_1, w_2), 'w') as f:
+                #     print(len(wrench_sample))
+                #     pickle.dump(wrench_sample, f)
 
                 idx += 1
                 stream = []
-        
+
+                poses.append(pose_sample)
+                print('\n', len(poses), len(poses[-1]))
+
+    with open(BASE_DIR + '/record/poses.list', 'w') as f:
+        print(len(poses))
+        pickle.dump(poses, f)
+
+
     # rospy.spin()
 
 

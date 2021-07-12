@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from numpy.core.numeric import full
 import rospy, rospkg
 import signal, sys, os, time, timeit
 from math import degrees, pi, sin, cos, acos, sqrt, radians
@@ -47,27 +46,25 @@ def quaternionToAxisAngle():
 
 
 def main():
-    print('test' + sys.argv[1])
-    rospy.init_node('test' + sys.argv[1], anonymous=False)
+    rospy.init_node('test', anonymous=False)
     signal.signal(signal.SIGINT, signal_handler)
 
     global arm
 
-    # arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
+    arm = Arm('ur10e_moveit', group='manipulator', joint_positions_filename="positions.yaml")
     # arm.velocity = 1
 
-    gripper = Gripper('cr200-85', host='10.1.0.2', port=44221)
+    print(arm.get_joints())
+    print(arm.get_pose())
 
-    gripper.grip()
-
-    time.sleep(3)
-
-    gripper.release()
-
-    rate = rospy.Rate(50)
-    while not rospy.is_shutdown():
-        print('Gripped - %r - %f' % (gripper.get_status() == 8, rospy.get_time()))
-        rate.sleep()
+    idx = 0
+    for w_1 in helpers.ANGLES:
+        for w_2 in helpers.ANGLES:
+            if (w_1, w_2) not in helpers.FORBIDDEN:
+                print(idx)
+                arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(0)])
+                raw_input("Keep Going")
+                idx += 1
     
     # Gripper Light Controls
     # gripper.set_led_preset(1)

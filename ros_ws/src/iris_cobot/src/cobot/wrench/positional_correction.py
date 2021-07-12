@@ -2,7 +2,7 @@
 import pickle
 import numpy as np
 
-import helpers
+import cobot.helpers as helpers
 
 def main():
     # Final position of correction file

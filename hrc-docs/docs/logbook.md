@@ -1136,3 +1136,30 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 8/07 - IRISLab
 
+#### Modelo Teórico de Correção de Torque
+
+- Cálculo da segunda parte da equação utilizando para cada eixo um plano perpendicular ao eixo, onde se ira projetar o vetor garvidade
+    - Ao inves de criar o plano utilizando o vetor gravidade e projetar o eixo
+- Calculo do COG utilizando as medidas de força e torque
+    - Quando o gripper esta acopulado, as medidas de força e torque são 0 (ele está compensado)
+    - Inicialmente calcular o COG do gripper com medidas de força e torque -> guardar valores
+    - Depois, dinamicamnete, quando se pega num objeto, calcular peso e cog com medidas de força e torque -> atualizar o modelo
+
+****
+
+-   Divisão dos parametros de sensibilidade em força e torque
+
+## 12/07 - Biblioteca
+
+#### Modelo Teórico de Correção de Torque
+
+-   Geração de poses correspondentes ao conjunto de 58 combinações de juntas para teste do modelo teórico
+    -   Lista de poses guradada em curves/poses_58.list
+-   Alteração do modelo teórico para ser extensível ao calculo de força e torque
+    -   Criação da função theoryFT que dada uma pose, calcula a força e o torque teórica que um objeto com um dado peso e COG teria
+-   Altração do programa plot.py que compara os testes reais com os teóricos onde a cada comparação, um novo teste teórico é corrido, visto que temos conhecimentos das poses que foram utilizadas
+-   Alteração da equação de geração de torques no programa ft_theory.py
+    -   Valores gerados teoricamente estão muito mais próximos dos valroes reais e prontos para ser utilizados
+
+####  
+
