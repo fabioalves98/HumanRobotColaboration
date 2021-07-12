@@ -9,4 +9,6 @@
 
     <node pkg="iris_cobot" type="weight.py" name="weight" output="screen" respawn="true"/>
 
+    <node pkg="iris_cobot" type="time_series_analysis.py" name="time_series_analysis" output="screen" respawn="true"/>
+
 </launch>

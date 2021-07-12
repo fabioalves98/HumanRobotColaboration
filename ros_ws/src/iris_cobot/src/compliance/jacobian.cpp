@@ -19,11 +19,13 @@ bool KEYBOARD = false;
 geometry_msgs::Vector3 *linear_velocity_ptr;
 geometry_msgs::Vector3 *angular_velocity_ptr;
 
-double sensibility;
+double force_sensibility;
+double torque_sensibility;
 
 void parameterConfigure(iris_cobot::JacobianConfig &config, uint32_t level) 
 {
-    sensibility = config.sensibility;
+    force_sensibility = config.force_sensibility;
+    torque_sensibility = config.torque_sensibility;
 }
 
 
@@ -171,54 +173,54 @@ int main(int argc, char **argv)
             geometry_msgs::Vector3 angular = *angular_velocity_ptr;
 
             // TODO: MUDAR ESTE CÓDIGO DE ESPARGETE
-            if (linear.x > sensibility)
+            if (linear.x > force_sensibility)
             {
-                translation[0] = linear.x - sensibility;
+                translation[0] = linear.x - force_sensibility;
             }
-            if (linear.y > sensibility)
+            if (linear.y > force_sensibility)
             {
-                translation[1] = linear.y - sensibility;
+                translation[1] = linear.y - force_sensibility;
             }
-            if (linear.z > sensibility)
+            if (linear.z > force_sensibility)
             {
-                translation[2] = linear.z - sensibility;
+                translation[2] = linear.z - force_sensibility;
             }
-            if (angular.x > sensibility)
+            if (angular.x > torque_sensibility)
             {
-                rotation[0] = angular.x - sensibility;
+                rotation[0] = angular.x - torque_sensibility;
             }
-            if (angular.y > sensibility)
+            if (angular.y > torque_sensibility)
             {
-                rotation[1] = angular.y - sensibility;
+                rotation[1] = angular.y - torque_sensibility;
             }
-            if (angular.z > sensibility)
+            if (angular.z > torque_sensibility)
             {
-                rotation[2] = angular.z - sensibility;
+                rotation[2] = angular.z - torque_sensibility;
             }
             // 
-            if (linear.x < -sensibility)
+            if (linear.x < -force_sensibility)
             {
-                translation[0] = linear.x + sensibility;
+                translation[0] = linear.x + force_sensibility;
             }
-            if (linear.y < -sensibility)
+            if (linear.y < -force_sensibility)
             {
-                translation[1] = linear.y + sensibility;
+                translation[1] = linear.y + force_sensibility;
             }
-            if (linear.z < -sensibility)
+            if (linear.z < -force_sensibility)
             {
-                translation[2] = linear.z + sensibility;
+                translation[2] = linear.z + force_sensibility;
             }
-            if (angular.x < -sensibility)
+            if (angular.x < -torque_sensibility)
             {
-                rotation[0] = angular.x + sensibility;
+                rotation[0] = angular.x + torque_sensibility;
             }
-            if (angular.y < -sensibility)
+            if (angular.y < -torque_sensibility)
             {
-                rotation[1] = angular.y + sensibility;
+                rotation[1] = angular.y + torque_sensibility;
             }
-            if (angular.z < -sensibility)
+            if (angular.z < -torque_sensibility)
             {
-                rotation[2] = angular.z + sensibility;
+                rotation[2] = angular.z + torque_sensibility;
             }
         }
 

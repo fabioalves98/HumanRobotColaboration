@@ -13,5 +13,8 @@
         <arg name="rviz"    value="$(arg rviz)"/>
     </include>
 
+    <!-- Fake weiss gripper -->
+    <node name="fake_gripper" pkg="ur_gazebo" type="fake_wr-cr200-85.py" respawn="true" output="log"/>    
+
 </launch>
 

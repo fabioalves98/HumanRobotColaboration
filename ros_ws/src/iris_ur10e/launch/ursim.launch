@@ -15,5 +15,8 @@
         <arg name="robot_ip"    value="$(arg robot_ip)"/>
     </include>
 
+    <!-- Fake weiss gripper -->
+    <node name="fake_gripper" pkg="ur_gazebo" type="fake_wr-cr200-85.py" respawn="true" output="log"/>    
+
 </launch>
 
