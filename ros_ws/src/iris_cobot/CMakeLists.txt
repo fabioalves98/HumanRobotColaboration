@@ -54,6 +54,9 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(viewer src/visualization/viewer.cpp)
 target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
+add_executable(environment src/environment/environment.cpp)
+target_link_libraries(environment ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
 add_executable(ft_to_vel src/compliance/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
 add_dependencies(ft_to_vel ${PROJECT_NAME}_gencfg)

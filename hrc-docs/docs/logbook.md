@@ -1161,5 +1161,5 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 -   Alteração da equação de geração de torques no programa ft_theory.py
     -   Valores gerados teoricamente estão muito mais próximos dos valroes reais e prontos para ser utilizados
 
-####  
+## 14/07 - Biblioteca
 

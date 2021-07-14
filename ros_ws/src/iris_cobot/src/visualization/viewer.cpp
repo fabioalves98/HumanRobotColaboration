@@ -57,12 +57,8 @@ void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
 
     pcl::fromROSMsg(*input, *cloud);
 
-    std::cout << cloud->size() << std::endl;
-
     // Width - X | Height - Y | Depth - Z
     // Roll - X  | Pitch - Y  | Yaw - Z
-
-    
 
     if (clustering)
     {
@@ -173,8 +169,7 @@ void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
         viewer->updatePointCloud(cloud, "kinectcloud");
     }
     
-
-    viewer->spinOnce (100);
+    viewer->spinOnce(100);
 }
 
 int main (int argc, char** argv)
@@ -183,16 +178,13 @@ int main (int argc, char** argv)
     ros::init (argc, argv, "viewer");
     ros::NodeHandle nh;
 
-    std::cout << argv[1] << std::endl;
-
-    clustering = std::string(argv[1]).compare("clustering") == 0;
-
     // Create a ROS subscriber for the input point cloud
-    ros::Subscriber sub = nh.subscribe ("/camera/depth_registered/points", 1, cloud_cb);
+    std::string cloud_topic_name = "/camera/depth/points";
+    ros::Subscriber sub = nh.subscribe (cloud_topic_name, 1, cloud_cb);
 
     viewer = normalVis("3DViewer");
     setViewerPointcloud(cloud);
 
     // Spin
-    ros::spin ();
+    ros::spin();
 }
