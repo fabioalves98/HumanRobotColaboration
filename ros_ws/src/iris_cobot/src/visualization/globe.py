@@ -94,5 +94,6 @@ def main():
         poses_pub.publish(markers)
         rate.sleep()
 
+
 if __name__ == "__main__":
     main()

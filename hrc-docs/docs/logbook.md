@@ -1163,3 +1163,10 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 14/07 - Biblioteca
 
+-   Adição dos xacros de uma orbec astra ao EE do robot
+-   Programa environment.cpp que guarda uma point cloud global correspondente ao ambiente
+    -   Expoe um serviço que quando chamado, recolhe um asample RGBD, recolhe o TF da camera e adiciona a sample ao ambiente de forma incremental
+-   Programa scan.py coordena os movimentos do robot e a chamada ao serviço de take_sample
+
+## 16/07 - IRISLab
+
