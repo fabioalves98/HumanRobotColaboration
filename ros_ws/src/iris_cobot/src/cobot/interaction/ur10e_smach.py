@@ -1,8 +1,7 @@
 #!/usr/bin/env python
-import rospy, time
-from sami.gripper import Gripper
-import smach
-import smach_ros
+import rospy, time, math
+import smach, smach_ros
+from geometry_msgs.msg import WrenchStamped
 
 import cobot.helpers as helpers
 
@@ -68,6 +67,23 @@ class GripObject(UR10eState):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state GripObject')
+
+        helpers.switchControllers(True)
+        upwards_move = [0, 0, 0.05, 0, 0, 0]
+        helpers.samiMoveWorldService(upwards_move)
+
+        wrench_msg = rospy.wait_for_message('wrench_correct', WrenchStamped)
+        weight = math.sqrt(math.pow(wrench_msg.wrench.force.x, 2) + 
+                math.pow(wrench_msg.wrench.force.y, 2) + 
+                math.pow(wrench_msg.wrench.force.z, 2))
+
+        weight /= 1.2
+
+        print('Calculated Weight - ', weight)
+        
+        helpers.weightUpdate(weight/10)
+        time.sleep(1)
+        helpers.switchControllers(False)
         
         while not rospy.is_shutdown():
             action = self.getAction()
@@ -99,7 +115,11 @@ class Releasing(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state Releasing')
 
+        helpers.switchControllers(True)
         helpers.samiReleaseService()
+        helpers.weightUpdate(0)
+        time.sleep(1)
+        helpers.switchControllers(False)
         
         while not rospy.is_shutdown():
             status = self.getGripperStatus()

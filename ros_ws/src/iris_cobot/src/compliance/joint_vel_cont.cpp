@@ -31,7 +31,7 @@ int main(int argc, char **argv)
     // Joint Speed subscriber
     std::vector<double> joint_speeds = {0, 0, 0, 0, 0, 0};
     joint_speeds_ptr = &joint_speeds;
-    for(int i = 0; i < 100; i++)
+    for(int i = 0; i < 50; i++)
     {
         joint_speed_queue.push_back(joint_speeds);
     }
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
         }
         for (int i = 0; i < 6; i++)
         {
-            joint_speed_avrg[i] /= 100;
+            joint_speed_avrg[i] /= 50;
         }
 
         std_msgs::Float64MultiArray joint_vel_msg;

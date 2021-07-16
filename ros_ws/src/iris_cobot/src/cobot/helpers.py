@@ -39,6 +39,16 @@ def reset_ft_sensor():
         print("Service call failed: %s"%e)
 
 
+def cobot_reset_ft_sensor():
+    try:
+        rospy.wait_for_service('/iris_cobot/zero_ftsensor', timeout=2)
+        zero = rospy.ServiceProxy('/iris_cobot/zero_ftsensor', Trigger)
+        resp = zero()
+        return resp.success
+    except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
+        print("Service call failed: %s"%e)
+
+
 def set_payload(mass, cog):
     try:
         rospy.wait_for_service('/ur_hardware_interface/set_payload', timeout=2)

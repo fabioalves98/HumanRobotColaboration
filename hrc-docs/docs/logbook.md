@@ -1159,7 +1159,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
     -   Criação da função theoryFT que dada uma pose, calcula a força e o torque teórica que um objeto com um dado peso e COG teria
 -   Altração do programa plot.py que compara os testes reais com os teóricos onde a cada comparação, um novo teste teórico é corrido, visto que temos conhecimentos das poses que foram utilizadas
 -   Alteração da equação de geração de torques no programa ft_theory.py
-    -   Valores gerados teoricamente estão muito mais próximos dos valroes reais e prontos para ser utilizados
+    -   Valores gerados teoricamente estão muito mais próximos dos valores reais e prontos para ser utilizados
 
 ## 14/07 - Biblioteca
 
@@ -1170,3 +1170,4 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 16/07 - IRISLab
 
+#### Modelo de Correção de Torque

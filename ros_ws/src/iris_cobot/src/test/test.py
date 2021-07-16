@@ -57,14 +57,11 @@ def main():
     print(arm.get_joints())
     print(arm.get_pose())
 
-    idx = 0
-    for w_1 in helpers.ANGLES:
-        for w_2 in helpers.ANGLES:
-            if (w_1, w_2) not in helpers.FORBIDDEN:
-                print(idx)
-                arm.move_joints([0, radians(-90), 0, radians(w_1), radians(w_2), radians(0)])
-                raw_input("Keep Going")
-                idx += 1
+    helpers.cobot_reset_ft_sensor()
+
+    for i in range(0, 90, 5):
+        arm.move_joints([0, radians(-90), 0, 0, radians(90-i), radians(90)])
+
     
     # Gripper Light Controls
     # gripper.set_led_preset(1)
