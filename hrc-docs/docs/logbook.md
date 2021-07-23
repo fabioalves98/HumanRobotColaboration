@@ -1163,6 +1163,8 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 14/07 - Biblioteca
 
+#### Scan do Ambiente Externo ao Robot
+
 -   Adição dos xacros de uma orbec astra ao EE do robot
 -   Programa environment.cpp que guarda uma point cloud global correspondente ao ambiente
     -   Expoe um serviço que quando chamado, recolhe um asample RGBD, recolhe o TF da camera e adiciona a sample ao ambiente de forma incremental
@@ -1170,4 +1172,8 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 16/07 - IRISLab
 
-#### Modelo de Correção de Torque
+#### Modelo de Compensação de Torque
+
+-   Implementação da atividade de pegar num objeto com a maquina de estado escrita em ros_smach
+-   Calculo do peso do objeto ainda precisa de ser melhorado
+-   Criação de testes para calcular o COG do gripper e posteriormente do objeto
