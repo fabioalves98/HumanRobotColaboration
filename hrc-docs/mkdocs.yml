@@ -11,12 +11,14 @@ nav:
   - Proposal: index.md
   - Structure: struct.md
   - Introduction: intro.md
-  - State of The Art: soa.md
+  - Background and Related Work: soa.md
+  - Collaborative Setup: setup.md
   - Hand Guiding: hand_guide.md
-  - Results and Discussion: results.md
-  - Conclusion and Future Work: conclusion.md
+  - Safe Path Planning: safe_planning.md
+  - Collaborative Tasks: tasks.md
+  - Experiments and Results: results.md
+  - Conclusion: conclusion.md
   
   - Extra:
       - Logbook: logbook.md
-      - State of the Art: soa_research.md
-      - Structure: struct_research.md
+      - Related Work: related_work.md

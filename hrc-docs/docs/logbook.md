@@ -1177,3 +1177,15 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 -   Implementação da atividade de pegar num objeto com a maquina de estado escrita em ros_smach
 -   Calculo do peso do objeto ainda precisa de ser melhorado
 -   Criação de testes para calcular o COG do gripper e posteriormente do objeto
+
+## 21/07 - Reunião
+
+-   Finalização do tema de compensação de força e torque
+-   Discussão do modo de transição de estados da máquina de estados do robot
+-   Discussão da melhor forma de abordar o tema de calculo de trajetórias com obstaculos
+-   Discussão da estrutura do índice da tese
+
+## 23/07 - Bilbioteca
+
+-   Setup do ambiente Latex para a escrita do documento 
+-   Primeira versão provisória do ínidice da tese
