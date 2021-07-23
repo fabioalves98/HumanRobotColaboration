@@ -59,7 +59,11 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../soa/">State of The Art</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../soa/">Background and Related Work</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../setup/">Collaborative Setup</a>
                     </li>
                 </ul>
                 <ul>
@@ -67,11 +71,19 @@
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../results/">Results and Discussion</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../safe_planning/">Safe Path Planning</a>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="../conclusion/">Conclusion and Future Work</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../tasks/">Collaborative Tasks</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../results/">Experiments and Results</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../conclusion/">Conclusion</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Extra</span></p>
@@ -478,11 +490,39 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#707-irislab">7/07 - IRISLab</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#807-irislab">8/07 - IRISLab</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#modelo-teorico-de-correcao-de-torque_1">Modelo Teórico de Correção de Torque</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1207-biblioteca">12/07 - Biblioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#modelo-teorico-de-correcao-de-torque_2">Modelo Teórico de Correção de Torque</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1407-biblioteca">14/07 - Biblioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#scan-do-ambiente-externo-ao-robot">Scan do Ambiente Externo ao Robot</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1607-irislab">16/07 - IRISLab</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#modelo-de-compensacao-de-torque">Modelo de Compensação de Torque</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2107-reuniao">21/07 - Reunião</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2307-bilbioteca">23/07 - Bilbioteca</a>
+    </li>
     </ul>
                     </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../soa_research/">State of the Art</a>
-                    </li>
-                    <li class="toctree-l1"><a class="reference internal" href="../struct_research/">Structure</a>
+                    <li class="toctree-l1"><a class="reference internal" href="../related_work/">Related Work</a>
                     </li>
                 </ul>
       </div>
@@ -1708,7 +1748,7 @@ Max  Max  - [ 2.56008408  2.00279845  2.24928167]</p>
 <h2 id="3006-biblioteca">30/06 - Biblioteca</h2>
 <ul>
 <li>Pull request iris-ua/iris_sami</li>
-<li>Thesis Research</li>
+<li>Pesquisa de estrutura para a tese</li>
 </ul>
 <h2 id="107-irislab">1/07 - IRISLab</h2>
 <h4 id="interaction">Interaction</h4>
@@ -1719,6 +1759,87 @@ Max  Max  - [ 2.56008408  2.00279845  2.24928167]</p>
 </li>
 </ul>
 <h4 id="ur10e-state-machine">UR10e State Machine</h4>
+<ul>
+<li>Implementação de uma maquina de estados semelhante à anterior mas utilizancho a bilbioteca ros smach</li>
+<li>Cada estado é uma classe isolada com uma função execute</li>
+<li>Integração muito poderosa com ROS</li>
+<li>Possibilidade de visualizar o estado corrente da máquina através de smach_viewer</li>
+</ul>
+<hr />
+<ul>
+<li>Fix no interface do gripper onde a chamada repetida das funções get_state e get_pos gerava exceções HTTP</li>
+<li>Necessidade de dar fix à maneira como interagir com o gripper</li>
+</ul>
+<h2 id="707-irislab">7/07 - IRISLab</h2>
+<ul>
+<li>Alteração do serviço /iris_sami/status para 2 tópicos /iris_sami/arm_status (500Hz) e /iris_sami/gripper_status (50Hz)</li>
+<li>Criação de 2 instâncias de controlo do gripper dentro do server.py do iris_sami</li>
+<li>Criação do nó weight que calcula constantemente a magnitude da força exercida no sensor FT</li>
+</ul>
+<h2 id="807-irislab">8/07 - IRISLab</h2>
+<h4 id="modelo-teorico-de-correcao-de-torque_1">Modelo Teórico de Correção de Torque</h4>
+<ul>
+<li>Cálculo da segunda parte da equação utilizando para cada eixo um plano perpendicular ao eixo, onde se ira projetar o vetor garvidade<ul>
+<li>Ao inves de criar o plano utilizando o vetor gravidade e projetar o eixo</li>
+</ul>
+</li>
+<li>Calculo do COG utilizando as medidas de força e torque<ul>
+<li>Quando o gripper esta acopulado, as medidas de força e torque são 0 (ele está compensado)</li>
+<li>Inicialmente calcular o COG do gripper com medidas de força e torque -&gt; guardar valores</li>
+<li>Depois, dinamicamnete, quando se pega num objeto, calcular peso e cog com medidas de força e torque -&gt; atualizar o modelo</li>
+</ul>
+</li>
+</ul>
+<hr />
+<ul>
+<li>Divisão dos parametros de sensibilidade em força e torque</li>
+</ul>
+<h2 id="1207-biblioteca">12/07 - Biblioteca</h2>
+<h4 id="modelo-teorico-de-correcao-de-torque_2">Modelo Teórico de Correção de Torque</h4>
+<ul>
+<li>Geração de poses correspondentes ao conjunto de 58 combinações de juntas para teste do modelo teórico<ul>
+<li>Lista de poses guradada em curves/poses_58.list</li>
+</ul>
+</li>
+<li>Alteração do modelo teórico para ser extensível ao calculo de força e torque<ul>
+<li>Criação da função theoryFT que dada uma pose, calcula a força e o torque teórica que um objeto com um dado peso e COG teria</li>
+</ul>
+</li>
+<li>Altração do programa plot.py que compara os testes reais com os teóricos onde a cada comparação, um novo teste teórico é corrido, visto que temos conhecimentos das poses que foram utilizadas</li>
+<li>Alteração da equação de geração de torques no programa ft_theory.py<ul>
+<li>Valores gerados teoricamente estão muito mais próximos dos valores reais e prontos para ser utilizados</li>
+</ul>
+</li>
+</ul>
+<h2 id="1407-biblioteca">14/07 - Biblioteca</h2>
+<h4 id="scan-do-ambiente-externo-ao-robot">Scan do Ambiente Externo ao Robot</h4>
+<ul>
+<li>Adição dos xacros de uma orbec astra ao EE do robot</li>
+<li>Programa environment.cpp que guarda uma point cloud global correspondente ao ambiente<ul>
+<li>Expoe um serviço que quando chamado, recolhe um asample RGBD, recolhe o TF da camera e adiciona a sample ao ambiente de forma incremental</li>
+</ul>
+</li>
+<li>Programa scan.py coordena os movimentos do robot e a chamada ao serviço de take_sample</li>
+</ul>
+<h2 id="1607-irislab">16/07 - IRISLab</h2>
+<h4 id="modelo-de-compensacao-de-torque">Modelo de Compensação de Torque</h4>
+<ul>
+<li>Implementação da atividade de pegar num objeto com a maquina de estado escrita em ros_smach</li>
+<li>Calculo do peso do objeto ainda precisa de ser melhorado</li>
+<li>Criação de testes para calcular o COG do gripper e posteriormente do objeto</li>
+</ul>
+<h2 id="2107-reuniao">21/07 - Reunião</h2>
+<ul>
+<li>Finalização do tema de compensação de força e torque</li>
+<li>Discussão do modo de transição de estados da máquina de estados do robot</li>
+<li>Discussão da melhor forma de abordar o tema de calculo de trajetórias com obstaculos</li>
+<li>Discussão da estrutura do índice da tese</li>
+</ul>
+<h2 id="2307-bilbioteca">23/07 - Bilbioteca</h2>
+<ul>
+<li>Setup do ambiente Latex para a escrita do documento </li>
+<li>Primeira versão provisória do ínidice da tese</li>
+</ul>
               
             </div>
           </div>
@@ -1726,10 +1847,10 @@ Max  Max  - [ 2.56008408  2.00279845  2.24928167]</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="../soa_research/" class="btn btn-neutral float-right" title="State of the Art">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="../related_work/" class="btn btn-neutral float-right" title="Related Work">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
-        <a href="../conclusion/" class="btn btn-neutral" title="Conclusion and Future Work"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../conclusion/" class="btn btn-neutral" title="Conclusion"><span class="icon icon-circle-arrow-left"></span> Previous</a>
       
     </div>
   
@@ -1758,7 +1879,7 @@ Max  Max  - [ 2.56008408  2.00279845  2.24928167]</p>
       <span><a href="../conclusion/" style="color: #fcfcfc">&laquo; Previous</a></span>
     
     
-      <span><a href="../soa_research/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="../related_work/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
