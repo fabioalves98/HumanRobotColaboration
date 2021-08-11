@@ -38,6 +38,7 @@ generate_messages(
 generate_dynamic_reconfigure_options(
   cfg/FT_to_Vel.cfg
   cfg/Jacobian.cfg
+  cfg/Clustering.cfg
 )
 
 catkin_package(CATKIN_DEPENDS message_runtime)
@@ -56,6 +57,10 @@ target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 add_executable(environment src/environment/environment.cpp)
 target_link_libraries(environment ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(obstacle src/environment/obstacle.cpp)
+target_link_libraries(obstacle ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+add_dependencies(obstacle ${PROJECT_NAME}_gencfg)
 
 add_executable(ft_to_vel src/compliance/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
@@ -78,6 +83,7 @@ add_dependencies(joint_vel_cont ${PROJECT_NAME}_generate_messages_cpp)
 add_executable(fk_ik_jacobian src/test/fk_ik_jacobian.cpp)
 target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
 
-# Other
-add_executable(rtde src/test/rtde.cpp)
-target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})
+# RTDE Test - Currently not working due to debian release not being up to date
+# To make sure it works, build from source
+# add_executable(rtde src/test/rtde.cpp)
+# target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})

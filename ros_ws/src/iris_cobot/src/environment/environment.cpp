@@ -34,8 +34,8 @@ pcl::visualization::PCLVisualizer::Ptr normalVis(std::string name)
 void setViewerPointcloud(pcl::PointCloud<pcl::PointXYZRGB>::ConstPtr cloud)
 {
     pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(cloud);
-    viewer->addPointCloud<pcl::PointXYZRGB> (cloud, rgb, "kinectcloud");
-    viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "kinectcloud");
+    viewer->addPointCloud<pcl::PointXYZRGB> (cloud, rgb, "camera_cloud");
+    viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "camera_cloud");
 }
 
 bool take_sample(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
@@ -78,7 +78,7 @@ bool take_sample(std_srvs::Empty::Request& request, std_srvs::Empty::Response& r
     *environment += *cloud_to_add;
 
     // Visualize Point Cloud
-    viewer->updatePointCloud(environment, "kinectcloud");
+    viewer->updatePointCloud(environment, "camera_cloud");
     viewer->spinOnce(100);
 
     return true;

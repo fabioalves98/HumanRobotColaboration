@@ -1189,3 +1189,6 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 -   Setup do ambiente Latex para a escrita do documento 
 -   Primeira versão provisória do ínidice da tese
+
+## 11/08 - Bilbioteca
+
