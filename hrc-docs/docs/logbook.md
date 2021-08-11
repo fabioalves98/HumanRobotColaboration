@@ -1192,3 +1192,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 11/08 - Bilbioteca
 
+#### Deteção de Obstáculos
+
+- Programa spaw_obstacles.py que cria esferas em variadas posições no ambiente gazebo
+- Programa obstacle.cpp que subscreve à camera no EE do robot e
+  - Faz um dowsample da pointcloud
+  - Faz um clustering com CEC baseado em distancia de pontos e diferença de normais
+  - A cada cluster seleciona 4 pontos aleatórios, verificando que nao são coplanares
+  - Cria um modelo esférico e corre RANSAC dando como input o cluster previamente segmentado
+- Os resultados do programa são favoráveis obtendo centros e raios da esfera muito próximos aos valores utilizados para as criar
+- Tentar utilizar mais cameras dando merge das suas pointclouds

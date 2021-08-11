@@ -10,7 +10,6 @@ void jointSpeedSub(iris_cobot::JointSpeed msg)
 {
     joint_speed_queue_ptr->erase(joint_speed_queue_ptr->begin());
     joint_speed_queue_ptr->push_back(msg.joint_speeds);
-    // std::copy(msg.joint_speeds.begin(), msg.joint_speeds.end(), joint_speeds_ptr->begin());
 }
 
 int main(int argc, char **argv)
