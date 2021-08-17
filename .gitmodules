@@ -10,3 +10,6 @@
 [submodule "ros_ws/src/Universal_Robots_ROS_Driver"]
 	path = ros_ws/src/Universal_Robots_ROS_Driver
 	url = ../Universal_Robots_ROS_Driver.git
+[submodule "ros_ws/src/velodyne_simulator"]
+	path = ros_ws/src/velodyne_simulator
+	url = https://bitbucket.org/DataspeedInc/velodyne_simulator.git

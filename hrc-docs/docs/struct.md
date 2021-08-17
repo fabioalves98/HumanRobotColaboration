@@ -63,9 +63,11 @@
 >   Conhecimento teórico necessário para abordar o tema
 >
 >   - Transformations
+>   - Path Planning
 >   - Robotic manipulators control
 >   - FK, IK, Jacobian conversion
 >   - Controladores, se forem utilizados
+>   - (Ir buscar este conteúdo ao livro da Springer sobre Robótica)
 
 #### Predominant Technologies
 
@@ -97,7 +99,7 @@
 >
 > Usar o UR teach pendant como exemplo, apontar falhas e explicar como o que se segue as pode resolver
 >
-> Bom exemplo de como fazer um capítulo destes na tese da Margarida
+> Bom exemplo de como fazer um capítulo destes na tese dos drones
 
 
 
@@ -123,6 +125,8 @@
 
 
 ## 5 - Safe Path Planing
+
+#### Obstacle Detection
 
 #### ...
 

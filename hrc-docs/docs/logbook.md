@@ -1202,3 +1202,18 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Cria um modelo esférico e corre RANSAC dando como input o cluster previamente segmentado
 - Os resultados do programa são favoráveis obtendo centros e raios da esfera muito próximos aos valores utilizados para as criar
 - Tentar utilizar mais cameras dando merge das suas pointclouds
+
+## 15/08 - Casa
+
+#### Thesis Structure
+
+- Tendo 5 teses como ponto de partida fiz um levantamento da estrutura e do modo como os primeiros 2 capítulos (introdução e estado da arte) costumam ser elaborados
+  - Robot plays board games with human - 2021
+  - Simulated environment for robotic soccer agents - 2010
+  - A mission planning frameowkr for fleets of connected drones - 2021
+  - Machine Learning Agents for Computer Games - 2021
+  - Navigation of Autonomous Mobile Robots - 2017
+- Resultados em struct.md
+
+## 17/08 - Bilbioteca
+
