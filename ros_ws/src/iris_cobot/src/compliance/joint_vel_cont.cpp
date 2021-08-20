@@ -1,10 +1,25 @@
 #include <ros/ros.h>
 #include <std_msgs/Float64MultiArray.h>
+#include <std_srvs/Empty.h>
 
 #include <iris_cobot/JointSpeed.h>
 
 std::vector<double> *joint_speeds_ptr;
 std::vector<std::vector<double>> *joint_speed_queue_ptr;
+
+int mean_size = 50;
+
+bool stop(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
+{
+    for (int i = 0; i < mean_size; i++)
+    {
+        std::vector<double> stopped =  {0, 0, 0, 0, 0, 0};
+        joint_speed_queue_ptr->erase(joint_speed_queue_ptr->begin());
+        joint_speed_queue_ptr->push_back(stopped);
+    }
+
+    return true;
+}
 
 void jointSpeedSub(iris_cobot::JointSpeed msg)
 {
@@ -30,11 +45,14 @@ int main(int argc, char **argv)
     // Joint Speed subscriber
     std::vector<double> joint_speeds = {0, 0, 0, 0, 0, 0};
     joint_speeds_ptr = &joint_speeds;
-    for(int i = 0; i < 50; i++)
+    for(int i = 0; i < mean_size; i++)
     {
         joint_speed_queue.push_back(joint_speeds);
     }
     ros::Subscriber joint_speed_sub = nh.subscribe("joint_speeds", 1, jointSpeedSub);
+
+    // Joint Speed control
+    ros::ServiceServer service = nh.advertiseService("joint_speeds/stop", stop);
 
     ros::Rate rate(500);
 
@@ -51,7 +69,7 @@ int main(int argc, char **argv)
         }
         for (int i = 0; i < 6; i++)
         {
-            joint_speed_avrg[i] /= 50;
+            joint_speed_avrg[i] /= mean_size;
         }
 
         std_msgs::Float64MultiArray joint_vel_msg;

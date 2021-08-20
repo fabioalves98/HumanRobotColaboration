@@ -1215,5 +1215,20 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Navigation of Autonomous Mobile Robots - 2017
 - Resultados em struct.md
 
-## 17/08 - Bilbioteca
+## 17/08 - Biblioteca
 
+#### Deteção de Obstáculos
+
+- Adicionado pacote velodyne_simulator para incorporar sensores velodyne na simulação
+- spawn_obstacles.py agora cria objetos dinamicamente no ambiente e proporciona-lhes movimento
+
+## 20/08 - Biblioteca
+
+#### Potential Fields Method
+
+- Analise de um paper sobre online collision avoidance proveniente da tese de safe collaborative robotics
+- Criação do programa offline.py que gera planos offline recorrendo ao moveit e aos ficheiros de desrição do UR10e
+  - Decompoe o conjunto de waypoints e controla o robot através de comandos de velocidade de juntas
+  - Comparação de vários planeadores (RTT, RTT*, PRM, STOMP)
+  - Programa faz com que o robot siga uma trajetoria previamente definida, apenas utilizando comandos de velocidade
+- Adicionado serviço de "stop" ao controlador de velocidade

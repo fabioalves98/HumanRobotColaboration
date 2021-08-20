@@ -12,31 +12,30 @@
     </include>
 
     <!-- Custom RViz -->
-    <!-- <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
+    <node name="$(anon rviz)" pkg="rviz" type="rviz" respawn="false"
         args="-d $(find iris_cobot)/launch/iris_cobot.rviz" output="screen">
-        <rosparam command="load" file="$(find ur10e_moveit_config)/config/kinematics.yaml"/>
-    </node> -->
-    <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/>
+    </node>
+    <!-- <node name="rqt_gui" pkg="rqt_gui" type="rqt_gui"/> -->
 
     <!-- Dynamic Reconfigure -->
     <!-- <node pkg="rqt_reco/nfigure" type="rqt_reconfigure" name="configure_params" output="screen" />  -->
 
     <!-- IRIS Sami GUI Launcher -->
     <include file="$(find iris_sami)/launch/iris_sami.launch">
-        <arg name="gui" value="false"/>
+        <arg name="gui" value="true"/>
     </include>
 
     <!-- Wrench -->
-    <include file="$(find iris_cobot)/launch/wrench.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/wrench.launch"/> -->
 
     <!-- Compliance -->
-    <include file="$(find iris_cobot)/launch/compliance.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/compliance.launch"/> -->
 
     <!-- Interaction -->
     <!-- <include file="$(find iris_cobot)/launch/interaction.launch"/> -->
 
     <!-- Plotjuggler -->
-    <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
-        args="-l $(find iris_cobot)/curves/pj_layout.xml"/>
+    <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
+        args="-l $(find iris_cobot)/curves/pj_layout.xml"/> -->
 
 </launch>

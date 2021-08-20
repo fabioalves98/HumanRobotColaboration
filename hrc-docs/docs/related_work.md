@@ -127,6 +127,8 @@
 - [321] - Survey on human–robot collaboration in industrial settings: safety, intuitive interfaces and applications. 2018
 - [325] - Key challenges and open issues of industrial collaborative robotics. 2018
 
+
+
 ## 2 - 2019 - Human–Robot Collaboration in Manufacturing Applications: A Review
 
 - Concept of cobots invented in 1996 [2]
@@ -181,4 +183,52 @@
 - [28] - Physical human–robot interaction (pHRI) in 6 DOF with asymmetric cooperation. 2017
 - [29] - Trust-based compliant robot-human handovers of payloads in collaborative assembly in flexible manufacturing. 2016
 - [30] - End-effector precise hand-guiding for collaborative robots. 2017
+- **Faltam alguns**
 
+
+
+## 3 - 2020 - Safe Collaborative Robotic Manipulators
+
+
+
+## 4 - 2019 - On-line collision avoidance for collaborative robot manipulators by adjusting off-line generated paths
+
+- 2012 - A depth space approach to human-robot collision avoidance.
+  - Depth data from a Kinect camera for calculating distances between the human and reference points on the robot
+- 1986 - Real-time obstacle avoidance for manipulators and mobile robots
+  - real-time obstacle avoidance approach based on the classical artificial potential field (PF)
+- [14 - 29] - Multiplos papers sobre collision avoidance em manipuladores robóticos
+
+##### 2 Problemas em Human Robot collision avoidance
+
+- Dificuldade em obter com confiança a pose do humano
+- Dificuldade em criar movimentos suaves e contínuos enquanto se gera trajetórias sem colisões
+
+##### Repulsion
+
+- Utiliza a configuração atual do robot
+- O ponto mais próximo do obstáculo mais próximo
+- Constantes de distâncias
+- A velocidade do obstáculo (irrelevante)
+- Para evitar discotinuidade no movimento quando aparece um obstáculo, é introduzido o concento de coeficiente de alteração do vetor de repulsão, que permite que a magnitude de repulsao possa crescer de zero a um valor estável
+
+##### Attraction
+
+- Utiliza o erro entre a posição do EE e a posição de meta (definida na trajetoria offline)
+
+<img src="papers/2/3.png" width=40%>
+
+- Também utiliza distância mínima ao obstáculo para controlo de velocidade
+
+##### Controlador
+
+- Robot é controlado ao nível da velocidade das juntas
+- Tradução de velocidades de atração/repulão para juntas utilizado o método Damped Least Squares
+  - 2004 - Introduction to inverse kinematics with jacobian transpose, pseudoinverse and damped least squares methods
+- Calculo das velocidades de juntas feito em 2 fases
+  - Devido a repulsão utilizado o vetor repulsão e a Jacobiana do ponto mais próximo
+  - Devido a atração utilizaod o vetor atração e a Jacobiana do EEF
+
+##### Experiments and Results
+
+- Irrelevante

@@ -7,6 +7,10 @@
 #### Motivation
 
 > Mini explicação da necessidade de colaboração humano robot. Especificar que este caso é especifico a manipuladores robóticos
+>
+> - Incorporar Industria 5.0 e diferenças para a 4.0 
+>   - https://www.mastercontrol.com/gxp-lifeline/3-things-you-need-to-know-about-industry-5.0/
+>   - https://ec.europa.eu/info/publications/industry-50_en
 
 > O porque deste tema? O origem / necessidade de criar tarefas colaborativas entre robot e humano. Dar exemplos reais de colaboração (industria, produção, tarefas). Dar enfase na presença do humano no ambiente e em tarefas dinamicas que não sejam hardcoded
 
@@ -64,7 +68,7 @@
 >
 >   - Transformations
 >   - Path Planning
->   - Robotic manipulators control
+>   - Robotic manipulators control (500Hz)
 >   - FK, IK, Jacobian conversion
 >   - Controladores, se forem utilizados
 >   - (Ir buscar este conteúdo ao livro da Springer sobre Robótica)
@@ -133,6 +137,8 @@
 
 
 ## 6 - Collaborative Tasks
+
+> Método de definir tarefas industriais (não colaborativa) baseadas me primitivas (waypoints)
 
 #### Tool Transfer
 
