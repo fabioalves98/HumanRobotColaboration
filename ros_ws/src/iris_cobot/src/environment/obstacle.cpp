@@ -1,9 +1,14 @@
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <tf2/convert.h>
+#include <tf2_eigen/tf2_eigen.h>
+#include <tf2_ros/transform_listener.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 // PCL specific includes
 #include <pcl/point_types.h>
 #include <pcl/io/pcd_io.h>
 #include <pcl/console/time.h>
+#include <pcl/common/transforms.h>
 #include <pcl_conversions/pcl_conversions.h>
 #include <pcl/visualization/pcl_visualizer.h>
 #include <pcl/filters/voxel_grid.h>
@@ -15,6 +20,9 @@
 
 #include <dynamic_reconfigure/server.h>
 #include <iris_cobot/ClusteringConfig.h>
+
+#include <iris_cobot/Obstacles.h>
+
 
 pcl::visualization::PCLVisualizer::Ptr viewer;
 
@@ -29,6 +37,9 @@ typedef pcl::IndicesClustersPtr IdxClustersPtr;
 
 // Global point cloud from camera
 CloudPtr cloud_global (new Cloud);
+
+// Obstacles publisher
+ros::Publisher obstacles_pub;
 
 // Parameters
 double leaf_size;
@@ -137,9 +148,11 @@ bool customRegionGrowing (const PointNormal& point_a, const PointNormal& point_b
 
 void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 {
-    pcl::fromROSMsg (*cloud_msg, *cloud_global);
+    pcl::console::TicToc tt;
+    tt.tic();
 
-    // CLUSTERING
+    // Convert cloud msg to pcl point cloud
+    pcl::fromROSMsg (*cloud_msg, *cloud_global);
 
     // Data containers used
     CloudPtr cloud_out (new Cloud);
@@ -147,29 +160,28 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     IdxClustersPtr clusters (new IdxClusters), small_clusters (new IdxClusters), large_clusters (new IdxClusters);
     
     pcl::search::KdTree<Point>::Ptr search_tree (new pcl::search::KdTree<Point>);
-    pcl::console::TicToc tt;
-
+    
     // Downsample the cloud using a Voxel Grid class
-    std::cerr << "Downsampling...\n", tt.tic ();
+    // std::cerr << "Downsampling...\n", tt.tic ();
     pcl::VoxelGrid<Point> vg;
     vg.setInputCloud (cloud_global);
     vg.setLeafSize (leaf_size, leaf_size, leaf_size);
     vg.setDownsampleAllData (true);
     vg.filter (*cloud_out);
-    std::cerr << ">> Done: " << tt.toc() << " ms, " << cloud_out->size () << " points\n";
+    // std::cerr << ">> Done: " << tt.toc() << " ms, " << cloud_out->size () << " points\n";
 
     // Set up a Normal Estimation class and merge data in cloud_with_normals
-    std::cerr << "Computing normals...\n", tt.tic ();
+    // std::cerr << "Computing normals...\n", tt.tic ();
     pcl::copyPointCloud (*cloud_out, *cloud_with_normals);
     pcl::NormalEstimation<Point, PointNormal> ne;
     ne.setInputCloud (cloud_out);
     ne.setSearchMethod (search_tree);
     ne.setRadiusSearch (radius_search);
     ne.compute (*cloud_with_normals);
-    std::cerr << ">> Done: " << tt.toc() << " ms\n";
+    // std::cerr << ">> Done: " << tt.toc() << " ms\n";
 
     // Set up a Conditional Euclidean Clustering class
-    std::cerr << "Segmenting to clusters...\n", tt.tic ();
+    // std::cerr << "Segmenting to clusters...\n", tt.tic ();
     pcl::ConditionalEuclideanClustering<PointNormal> cec (true);
     cec.setInputCloud (cloud_with_normals);
     cec.setConditionFunction (&customRegionGrowing);
@@ -178,19 +190,25 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     cec.setMaxClusterSize (cloud_with_normals->points.size() * max_cluster_size / 100);
     cec.segment (*clusters);
     cec.getRemovedClusters (small_clusters, large_clusters);
-    std::cerr << ">> Done: " << tt.toc () << " ms\n";
-    std::cout << "Clusters Size: " << clusters->size() << "\n\n";
+    // std::cerr << ">> Done: " << tt.toc () << " ms\n";
+    // std::cout << "Clusters Size: " << clusters->size() << "\n\n";
 
     // Paint Pointclouds
-    paintFullCluster(cloud_out, small_clusters, 255, 0, 0);
-    paintFullCluster(cloud_out, large_clusters, 0, 0, 255);
-    paintRandomCluster(cloud_out, clusters);
+    paintFullCluster(cloud_out, small_clusters, 0, 100, 0);
+    paintFullCluster(cloud_out, large_clusters, 0, 0, 100);
+    paintFullCluster(cloud_out, clusters, 255, 0, 0);
+    // paintRandomCluster(cloud_out, clusters);
 
-    // Select 4 random pointt from each cluster
+    // Obstacles arrays
+    std::vector<geometry_msgs::Point> obstacles_centers;
+    std::vector<double> obstacles_radiuses;
+
+    // Select 4 random points from each cluster
     for (int i = 0; i < clusters->size(); i++)
     {
-        std::cout << "Cluster " << i << "\n";
+        // std::cout << "Cluster " << i << "\n";
 
+        // Selecting 4 random points in the cluster, verify if they have volume (not a plane)
         std::vector<int> random_indices;
         for (int j = 0; j < 4; j++)
         {   
@@ -219,7 +237,9 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
             pm_idx++;
         }
         // Only run RUNSAC for clusters that have volume - det > 0
-        std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
+        // std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
+
+        // TODO: Obtain center and radius using the 4 extracted points
 
         // Extract obstacle from cloud
         CloudPtr obstacle (new Cloud);
@@ -240,15 +260,31 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
         Eigen::VectorXf model_coefficients;
         ransac.getModelCoefficients(model_coefficients);
 
-        std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
-        std::cout << ", Z: " << model_coefficients[2] << ", R: " << model_coefficients[3] << "\n";
-    }
+        // Add obstacle to obstacle array msgs
+        geometry_msgs::Point center;
+        center.x = model_coefficients[0];
+        center.y = model_coefficients[1];
+        center.z = model_coefficients[2];
+        obstacles_centers.push_back(center);
+        obstacles_radiuses.push_back(model_coefficients[3]);
 
+        // std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
+        // std::cout << ", Z: " << model_coefficients[2] << ", R: " << model_coefficients[3] << "\n";
+    }
     std::cout << std::endl;
 
-    viewer->updatePointCloud(cloud_out, "camera_cloud");
+    // Publish obstacles message
+    iris_cobot::Obstacles obstacles_msg;
+    obstacles_msg.size = clusters->size();
+    obstacles_msg.centers = obstacles_centers;
+    obstacles_msg.radiuses = obstacles_radiuses;
+    obstacles_pub.publish(obstacles_msg);
 
-    viewer->spinOnce(100);
+    tt.toc_print();
+
+    // Show obstacles in PCL visualizer
+    viewer->updatePointCloud(cloud_out, "camera_cloud");
+    viewer->spinOnce();
 }
 
 int main (int argc, char** argv)
@@ -268,6 +304,9 @@ int main (int argc, char** argv)
 
     // Camera Subscription service
     ros::Subscriber sub = nh.subscribe("/camera/depth/points", 1, cloud_callback);
+
+    // Obstacles Publisher
+    obstacles_pub = nh.advertise<iris_cobot::Obstacles>("obstacles", 1);
 
     // Setup Viewer
     viewer = normalVis("3DViewer");

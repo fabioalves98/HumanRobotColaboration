@@ -1232,3 +1232,5 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Comparação de vários planeadores (RTT, RTT*, PRM, STOMP)
   - Programa faz com que o robot siga uma trajetoria previamente definida, apenas utilizando comandos de velocidade
 - Adicionado serviço de "stop" ao controlador de velocidade
+
+## 23/08 - Bilbioteca

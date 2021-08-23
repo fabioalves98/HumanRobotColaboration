@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  geometry_msgs
   sensor_msgs
   message_generation
   dynamic_reconfigure
@@ -22,6 +23,7 @@ catkin_python_setup()
 add_message_files(
     FILES
     JointSpeed.msg
+    Obstacles.msg
     TapAction.msg
 )
 
@@ -33,6 +35,7 @@ add_service_files(
 generate_messages(
   DEPENDENCIES
   std_msgs
+  geometry_msgs
 )
 
 generate_dynamic_reconfigure_options(
@@ -60,7 +63,7 @@ target_link_libraries(environment ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 add_executable(obstacle src/environment/obstacle.cpp)
 target_link_libraries(obstacle ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-add_dependencies(obstacle ${PROJECT_NAME}_gencfg)
+add_dependencies(obstacle ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
 
 add_executable(ft_to_vel src/compliance/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})

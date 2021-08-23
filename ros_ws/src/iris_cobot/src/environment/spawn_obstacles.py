@@ -55,8 +55,6 @@ def main():
         else:
             angles = range(700, 200, -1)
 
-        print (switch)
-
         for angle in angles:
             # Sphere 1
             x = radius * cos(radians(angle/10.0))
