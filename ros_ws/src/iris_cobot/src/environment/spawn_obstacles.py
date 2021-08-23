@@ -49,6 +49,8 @@ def main():
     switch = True
     angles = []
 
+    rate = rospy.Rate(100)
+
     while not rospy.is_shutdown():
         if switch:
             angles = range(200, 700)
@@ -78,11 +80,11 @@ def main():
             
             set_model_state_client(model_state)
 
+            rate.sleep()
+
         switch = not switch
 
-
     rospy.spin()
-
 
 if __name__ == "__main__":
     main()

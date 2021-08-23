@@ -1234,3 +1234,16 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Adicionado serviço de "stop" ao controlador de velocidade
 
 ## 23/08 - Bilbioteca
+
+#### Potential Fields Method
+
+- Programa obstacles.cpp publica um array de obstaculos que corresponde às esferas identifiados pelo RANSAC
+  - Certos melhoramentos permitem ao programa ficar significativamente mais rápido
+- Programa repulsion.py recebe esse array e com a posição do EEF e uma constante de distancia minima, cria um vetor repulsao
+  - Seleciona o obstacuo mais próximo
+  - Baseado na posição relativa do objeto e do EEF cria um vetor com sentido contrario ao ponto mais proximo do objeto
+  - Publica o vetor para o tópico de velocidade linear
+- Camera colocada numa posição externa ao robot para ter uma visão abrangente dos obstaculos
+- Problema surge no sentido em que os obstaculos até agora estao a ser gerados no gazebo, e não existe controlados de velocidade para o robot no gazebo
+  - Vou utilizar pora agora o controlador posicional do moveit que tinha criado antes (10Hz)
+  - Poderá haver maneira de fazer merge dos obstaculos no gazebo e o robot no URSim
