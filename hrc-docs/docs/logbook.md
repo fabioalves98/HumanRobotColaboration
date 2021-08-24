@@ -1247,3 +1247,11 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Problema surge no sentido em que os obstaculos até agora estao a ser gerados no gazebo, e não existe controlados de velocidade para o robot no gazebo
   - Vou utilizar pora agora o controlador posicional do moveit que tinha criado antes (10Hz)
   - Poderá haver maneira de fazer merge dos obstaculos no gazebo e o robot no URSim
+
+## 24/08 - Biblioteca
+
+#### Potential Fields Method
+
+- Programa offline.py já nao controla o movimento do robot, mas sim supervisiona em que estado da trajetória o robot se encontra, publicando o ponto objetivo para que o robot se deva mover
+- Programa attraction.cpp utiliza esse ponto e a posição atual do robot para calcular um vetor atração que, na ausencia de obstaculos será para onde o robot se deverá mover
+- Teste da biblioteca robotics-toolbox-python mas foi mais perda de tempo que outra coisa... Está funcional, pode vir a ser utilizada no futuro

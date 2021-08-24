@@ -69,6 +69,9 @@ add_executable(ft_to_vel src/compliance/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
 add_dependencies(ft_to_vel ${PROJECT_NAME}_gencfg)
 
+add_executable(attraction src/environment/attraction.cpp)
+target_link_libraries(attraction ${catkin_LIBRARIES})
+
 add_executable(jacobian src/compliance/jacobian.cpp)
 target_link_libraries(jacobian ${catkin_LIBRARIES})
 add_dependencies(jacobian ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)

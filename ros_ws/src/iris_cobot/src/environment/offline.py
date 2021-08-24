@@ -2,6 +2,7 @@
 import rospy, sys
 from geometry_msgs.msg import PoseStamped
 from std_srvs.srv import Empty
+from trajectory_msgs.msg import JointTrajectoryPoint
 from moveit_msgs.msg import DisplayTrajectory
 import moveit_commander
 
@@ -32,7 +33,7 @@ class TrajectoryExecutioner:
             self.finished = True
             return False
         
-        return self.cur_point, self.has_past_cur_point
+        return self.points[self.cur_point]
 
 
     def get_speed(self):
@@ -59,11 +60,8 @@ def main():
     
     moveit_commander.roscpp_initialize(sys.argv)
     robot = moveit_commander.RobotCommander()
-    # print(robot.get_current_state())
-    # print(robot.get_group_names())
 
     move_group = moveit_commander.MoveGroupCommander("manipulator")
-    # print(move_group.get_end_effector_link())
 
     # RViz trajectory viewer
     display_trajectory_pub = rospy.Publisher('/move_group/display_planned_path', DisplayTrajectory, queue_size=1)
@@ -87,23 +85,14 @@ def main():
     move_group.set_start_state(robot.get_current_state())
     plan = move_group.plan(pose_goal)
 
-    # Dispaly trajectory in custom topic
-    # display_trajectory = DisplayTrajectory()
-    # display_trajectory.trajectory_start = robot.get_current_state()
-    # display_trajectory.trajectory.append(plan)
-
-    # display_trajectory_pub.publish(display_trajectory)
-
     points = plan.joint_trajectory.points
     print('Trajecotry with %d points' % len(points))
 
-    # move_group.execute(plan, False)
+    # Instantiate Trajectory Executioner
     traj_exec = TrajectoryExecutioner(points)
 
     # Joint Speed Control
-    stop_serv = rospy.ServiceProxy('/joint_speeds/stop', Empty)
-    joint_speed_pub = rospy.Publisher('/joint_speeds', JointSpeed, queue_size=1)
-    speed_msg = JointSpeed()
+    traj_point_pub = rospy.Publisher('/trajectory_point', JointTrajectoryPoint, queue_size=1)
 
     # Speed Control Cycle
     rate = rospy.Rate(500)
@@ -112,18 +101,15 @@ def main():
         current_q = move_group.get_current_joint_values()
 
         # Obtain next instruction from trajectory executioner
-        if traj_exec.localize(current_q):
+        current_point = traj_exec.localize(current_q)
+        # print(current_point)
+        # print(type(current_point))
+        if current_point:
             joint_speeds = traj_exec.get_speed()
-            print(list_2_str(joint_speeds))
-            # Send Joint Speed Message
-            speed_msg.joint_speeds = joint_speeds
-            joint_speed_pub.publish(speed_msg)
+            # print(list_2_str(joint_speeds))
+            traj_point_pub.publish(current_point)
         
         rate.sleep()
-            
-    # Stop Movement    
-    stop_serv()
-    print("Trajectory Finished")   
 
         
 if __name__ == "__main__":
