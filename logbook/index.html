@@ -520,6 +520,48 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#2307-bilbioteca">23/07 - Bilbioteca</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1108-bilbioteca">11/08 - Bilbioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#detecao-de-obstaculos">Deteção de Obstáculos</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1508-casa">15/08 - Casa</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#thesis-structure">Thesis Structure</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#1708-biblioteca">17/08 - Biblioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#detecao-de-obstaculos_1">Deteção de Obstáculos</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2008-biblioteca">20/08 - Biblioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#potential-fields-method">Potential Fields Method</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2308-bilbioteca">23/08 - Bilbioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#potential-fields-method_1">Potential Fields Method</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2408-biblioteca">24/08 - Biblioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#potential-fields-method_2">Potential Fields Method</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2708-biblioteca">27/08 - Biblioteca</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#potential-field-method">Potential Field Method</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                     <li class="toctree-l1"><a class="reference internal" href="../related_work/">Related Work</a>
@@ -1839,6 +1881,75 @@ Max  Max  - [ 2.56008408  2.00279845  2.24928167]</p>
 <ul>
 <li>Setup do ambiente Latex para a escrita do documento </li>
 <li>Primeira versão provisória do ínidice da tese</li>
+</ul>
+<h2 id="1108-bilbioteca">11/08 - Bilbioteca</h2>
+<h4 id="detecao-de-obstaculos">Deteção de Obstáculos</h4>
+<ul>
+<li>Programa spaw_obstacles.py que cria esferas em variadas posições no ambiente gazebo</li>
+<li>Programa obstacle.cpp que subscreve à camera no EE do robot e</li>
+<li>Faz um dowsample da pointcloud</li>
+<li>Faz um clustering com CEC baseado em distancia de pontos e diferença de normais</li>
+<li>A cada cluster seleciona 4 pontos aleatórios, verificando que nao são coplanares</li>
+<li>Cria um modelo esférico e corre RANSAC dando como input o cluster previamente segmentado</li>
+<li>Os resultados do programa são favoráveis obtendo centros e raios da esfera muito próximos aos valores utilizados para as criar</li>
+<li>Tentar utilizar mais cameras dando merge das suas pointclouds</li>
+</ul>
+<h2 id="1508-casa">15/08 - Casa</h2>
+<h4 id="thesis-structure">Thesis Structure</h4>
+<ul>
+<li>Tendo 5 teses como ponto de partida fiz um levantamento da estrutura e do modo como os primeiros 2 capítulos (introdução e estado da arte) costumam ser elaborados</li>
+<li>Robot plays board games with human - 2021</li>
+<li>Simulated environment for robotic soccer agents - 2010</li>
+<li>A mission planning frameowkr for fleets of connected drones - 2021</li>
+<li>Machine Learning Agents for Computer Games - 2021</li>
+<li>Navigation of Autonomous Mobile Robots - 2017</li>
+<li>Resultados em struct.md</li>
+</ul>
+<h2 id="1708-biblioteca">17/08 - Biblioteca</h2>
+<h4 id="detecao-de-obstaculos_1">Deteção de Obstáculos</h4>
+<ul>
+<li>Adicionado pacote velodyne_simulator para incorporar sensores velodyne na simulação</li>
+<li>spawn_obstacles.py agora cria objetos dinamicamente no ambiente e proporciona-lhes movimento</li>
+</ul>
+<h2 id="2008-biblioteca">20/08 - Biblioteca</h2>
+<h4 id="potential-fields-method">Potential Fields Method</h4>
+<ul>
+<li>Analise de um paper sobre online collision avoidance proveniente da tese de safe collaborative robotics</li>
+<li>Criação do programa offline.py que gera planos offline recorrendo ao moveit e aos ficheiros de desrição do UR10e</li>
+<li>Decompoe o conjunto de waypoints e controla o robot através de comandos de velocidade de juntas</li>
+<li>Comparação de vários planeadores (RTT, RTT*, PRM, STOMP)</li>
+<li>Programa faz com que o robot siga uma trajetoria previamente definida, apenas utilizando comandos de velocidade</li>
+<li>Adicionado serviço de "stop" ao controlador de velocidade</li>
+</ul>
+<h2 id="2308-bilbioteca">23/08 - Bilbioteca</h2>
+<h4 id="potential-fields-method_1">Potential Fields Method</h4>
+<ul>
+<li>Programa obstacles.cpp publica um array de obstaculos que corresponde às esferas identifiados pelo RANSAC</li>
+<li>Certos melhoramentos permitem ao programa ficar significativamente mais rápido</li>
+<li>Programa repulsion.py recebe esse array e com a posição do EEF e uma constante de distancia minima, cria um vetor repulsao</li>
+<li>Seleciona o obstacuo mais próximo</li>
+<li>Baseado na posição relativa do objeto e do EEF cria um vetor com sentido contrario ao ponto mais proximo do objeto</li>
+<li>Publica o vetor para o tópico de velocidade linear</li>
+<li>Camera colocada numa posição externa ao robot para ter uma visão abrangente dos obstaculos</li>
+<li>Problema surge no sentido em que os obstaculos até agora estao a ser gerados no gazebo, e não existe controlados de velocidade para o robot no gazebo</li>
+<li>Vou utilizar pora agora o controlador posicional do moveit que tinha criado antes (10Hz)</li>
+<li>Poderá haver maneira de fazer merge dos obstaculos no gazebo e o robot no URSim</li>
+</ul>
+<h2 id="2408-biblioteca">24/08 - Biblioteca</h2>
+<h4 id="potential-fields-method_2">Potential Fields Method</h4>
+<ul>
+<li>Programa offline.py já nao controla o movimento do robot, mas sim supervisiona em que estado da trajetória o robot se encontra, publicando o ponto objetivo para que o robot se deva mover</li>
+<li>Programa attraction.cpp utiliza esse ponto e a posição atual do robot para calcular um vetor atração que, na ausencia de obstaculos será para onde o robot se deverá mover</li>
+<li>Teste da biblioteca robotics-toolbox-python mas foi mais perda de tempo que outra coisa... Está funcional, pode vir a ser utilizada no futuro</li>
+</ul>
+<h2 id="2708-biblioteca">27/08 - Biblioteca</h2>
+<h4 id="potential-field-method">Potential Field Method</h4>
+<ul>
+<li>Programa pf_controller.cpp subscreve aos vectores atração e repulsao e publica um valor finao de velocidade linear e angular</li>
+<li>Baseado na expressão vel = (1- ||Rv||) * Av + Rv</li>
+<li>Vetor Rv é normalizado e inversamente proporcional a distancia do obstaculo mais proximo</li>
+<li>Logo o resultado irá ser sempre uma soma dos dois, no entanto, quando mais perto um objeto menos peso terá o vetor atração</li>
+<li>Resultados favoraveis em simulação, o robot segue sempre a trajetoria evitando as esferas circundantes</li>
 </ul>
               
             </div>

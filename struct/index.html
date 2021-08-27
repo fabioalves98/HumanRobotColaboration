@@ -63,13 +63,15 @@
     </li>
         </ul>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#2-background-and-related-work">2 - Background and Related Work</a>
+    <li class="toctree-l2"><a class="reference internal" href="#2-collaborative-robotics">2 - Collaborative Robotics</a>
         <ul>
-    <li class="toctree-l3"><a class="reference internal" href="#colaborative-robotics">Colaborative Robotics</a>
+    <li class="toctree-l3"><a class="reference internal" href="#collaborative-robotics">Collaborative Robotics</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#predominant-technologies">Predominant Technologies</a>
     </li>
     <li class="toctree-l3"><a class="reference internal" href="#existing-approaches">Existing Approaches</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#discussion">Discussion ?</a>
     </li>
         </ul>
     </li>
@@ -95,6 +97,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#5-safe-path-planing">5 - Safe Path Planing</a>
         <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#obstacle-detection">Obstacle Detection</a>
+    </li>
     <li class="toctree-l3"><a class="reference internal" href="#_1">...</a>
     </li>
         </ul>
@@ -114,6 +118,8 @@
     <li class="toctree-l2"><a class="reference internal" href="#8-conclusion">8 - Conclusion</a>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#material-developed">Material Developed</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#extra">Extra</a>
     </li>
     </ul>
                     </li>
@@ -192,22 +198,90 @@
               
                 <h1 id="structure">Structure</h1>
 <h2 id="1-introduction">1 - Introduction</h2>
+<blockquote>
+<p>Introdução do capítulo? E nos próximos capítulos?</p>
+</blockquote>
 <h4 id="motivation">Motivation</h4>
+<blockquote>
+<p>Mini explicação da necessidade de colaboração humano robot. Especificar que este caso é especifico a manipuladores robóticos</p>
+<ul>
+<li>Incorporar Industria 5.0 e diferenças para a 4.0 </li>
+<li>https://www.mastercontrol.com/gxp-lifeline/3-things-you-need-to-know-about-industry-5.0/</li>
+<li>https://ec.europa.eu/info/publications/industry-50_en</li>
+</ul>
+<p>O porque deste tema? O origem / necessidade de criar tarefas colaborativas entre robot e humano. Dar exemplos reais de colaboração (industria, produção, tarefas). Dar enfase na presença do humano no ambiente e em tarefas dinamicas que não sejam hardcoded</p>
+<p>Vantagens de criar métodos que facilitem a criação e execução de tarefas colaborativas entre robot e humano. Explicar que as frameworks existentes são especificas para cada robot / marca e que há necesisdade de criar um ambiente genérico e "platform agnostic"</p>
+<p>Incluir o papel do IRIS no trabalho?</p>
+<p>Explicar sucintamente o que esta dissertação irá resolver / contribuir para o tema (explicar que é mais uma dissertação sobre cirar ferramentas para a criação de tarefas humano robot e não apenas sobre as tarefas em si)</p>
+</blockquote>
 <h4 id="objectives">Objectives</h4>
+<blockquote>
+<p>Explicar especificamente os objetivos desta dissertação, tendo em conta a proposta e o trabalho que foi realizado. Explicar que mais do que criar tarefas, foram criadas ferramentas que promovem a colaboração humano robot</p>
+<p>Listar objetivos? Provavelmente sim...</p>
+<p>Após listar os objetivos (ferramentas), listar as tarefas que foram alcançadas com essas ferramentas</p>
+<p>Falar também sobre rqt_sami e rqt_cobot</p>
+<p>Se for feito, explicar inclusão dos trabalhos desta dissetação com iris_cork</p>
+<p>Se for feito, explicar que seram ralizados testes com pessoas e com o robot</p>
+</blockquote>
 <h4 id="outline">Outline</h4>
-<h2 id="2-background-and-related-work">2 - Background and Related Work</h2>
-<h4 id="colaborative-robotics">Colaborative Robotics</h4>
+<blockquote>
+<p>Explicar o que vai ser dito em cada capítulo. Fazer uma descrição mais detalhada, um paragrafo para cada capitulo</p>
+</blockquote>
+<h2 id="2-collaborative-robotics">2 - Collaborative Robotics</h2>
+<blockquote>
+<p>Introdução do capítulo?</p>
+</blockquote>
+<h4 id="collaborative-robotics">Collaborative Robotics</h4>
 <blockquote>
 <p>O que é? Como? Onde?</p>
-<p>Conhecimento teórico necessário para abrodar o tema</p>
+<ul>
+<li>Definir a área</li>
+<li>Definir o que é um robot colaborativo e para que são utilizados<ul>
+<li>Dar exemplos utilizando notícias, estatisticas e papers do paper de review</li>
+</ul>
+</li>
+<li>Definir ambientes colaborativos e a sua percepção</li>
+</ul>
+<p>Subcategorizar as várias componentes de colaboração humano robot</p>
+<ul>
+<li>Hardware</li>
+<li>Segurança</li>
+<li>Programação e controlo de robots</li>
+<li>Interação Humano Robot</li>
+</ul>
+<p>Possivelmente referir teses antigas feitas no IRIS que utilizam braços robóticos</p>
+<p>Explicar que esta tese foca-se em real time colaborative robotics e não apenas em planeamento estático com MoveIt</p>
+<p>Conhecimento teórico necessário para abordar o tema</p>
+<ul>
+<li>Transformations</li>
+<li>Path Planning</li>
+<li>Robotic manipulators control (500Hz)</li>
+<li>FK, IK, Jacobian conversion</li>
+<li>Controladores, se forem utilizados</li>
+<li>(Ir buscar este conteúdo ao livro da Springer sobre Robótica)</li>
+</ul>
 </blockquote>
 <h4 id="predominant-technologies">Predominant Technologies</h4>
 <blockquote>
 <p>Tecnologias (software) frequentemente utilizado</p>
+<p>Falar que as plataformas de controlos dos robots são diferentes para cada robot e geralmete closed source</p>
+<p>Talvez falar sobre o UR Teach Pendant e modos de controlo do UR10e (paper)</p>
+<p>Comparar os modos de controlo (URScript, ur_rtde, ROS Driver)</p>
+<p>ROS - Senso uma das tecnologias principais, dar alguma enfase e explicar a escolha de ROS 1 em vez de ROS 2 </p>
+<p>UR_Driver, MoveIt, ur_rtde, RViz, dynamic_reconfigure, rqt_plugins, ros_smach, plotjuggler</p>
+<p>PCL, Euclidean Clustering, RANSAC</p>
 </blockquote>
 <h4 id="existing-approaches">Existing Approaches</h4>
 <blockquote>
-<p>Trabalhos realizados no tema</p>
+<p>Trabalhos realizados no tema - Pesquisar mais</p>
+<p>KUKA Sunrise Toolbox</p>
+</blockquote>
+<h4 id="discussion">Discussion ?</h4>
+<blockquote>
+<p>Tendo em conta o que foi dito anteriormente retirar conclusoes que justifiquem o trabalho que foi feito</p>
+<p>Mais uma vez, dar enfase nas restrições que existem em software proprietario e na falta de algoritmos e metodologias abrangentes e open source para a criação de tarefas colaborativas</p>
+<p>Usar o UR teach pendant como exemplo, apontar falhas e explicar como o que se segue as pode resolver</p>
+<p>Bom exemplo de como fazer um capítulo destes na tese dos drones</p>
 </blockquote>
 <h2 id="3-collaborative-setup">3 - Collaborative Setup</h2>
 <h4 id="robotic-manipulator">Robotic Manipulator</h4>
@@ -218,8 +292,12 @@
 <h4 id="end-effector-weight-compensation">End Effector Weight Compensation</h4>
 <h4 id="force-torque-to-robot-motion">Force / Torque to Robot Motion</h4>
 <h2 id="5-safe-path-planing">5 - Safe Path Planing</h2>
+<h4 id="obstacle-detection">Obstacle Detection</h4>
 <h4 id="_1">...</h4>
 <h2 id="6-collaborative-tasks">6 - Collaborative Tasks</h2>
+<blockquote>
+<p>Método de definir tarefas industriais (não colaborativa) baseadas me primitivas (waypoints)</p>
+</blockquote>
 <h4 id="tool-transfer">Tool Transfer</h4>
 <h4 id="object-lifting-assistant">Object Lifting Assistant</h4>
 <h4 id="_2">...</h4>
@@ -238,6 +316,10 @@
 <li>Visual feedback through gripper LEDs</li>
 <li>Plotjuggler integration</li>
 <li>ros_smach global state machine</li>
+</ul>
+<h2 id="extra">Extra</h2>
+<ul>
+<li>Links de notícias / páginas em footnote, e não nas referências</li>
 </ul>
               
             </div>

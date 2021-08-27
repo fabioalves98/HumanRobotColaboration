@@ -118,6 +118,22 @@
     </li>
         </ul>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-2020-safe-collaborative-robotic-manipulators">3 - 2020 - Safe Collaborative Robotic Manipulators</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-2019-on-line-collision-avoidance-for-collaborative-robot-manipulators-by-adjusting-off-line-generated-paths">4 - 2019 - On-line collision avoidance for collaborative robot manipulators by adjusting off-line generated paths</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#2-problemas-em-human-robot-collision-avoidance">2 Problemas em Human Robot collision avoidance</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#repulsion">Repulsion</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#attraction">Attraction</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#controlador">Controlador</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#experiments-and-results">Experiments and Results</a>
+    </li>
+        </ul>
+    </li>
     </ul>
                     </li>
                 </ul>
@@ -334,6 +350,50 @@
 <li>[28] - Physical human–robot interaction (pHRI) in 6 DOF with asymmetric cooperation. 2017</li>
 <li>[29] - Trust-based compliant robot-human handovers of payloads in collaborative assembly in flexible manufacturing. 2016</li>
 <li>[30] - End-effector precise hand-guiding for collaborative robots. 2017</li>
+<li><strong>Faltam alguns</strong></li>
+</ul>
+<h2 id="3-2020-safe-collaborative-robotic-manipulators">3 - 2020 - Safe Collaborative Robotic Manipulators</h2>
+<h2 id="4-2019-on-line-collision-avoidance-for-collaborative-robot-manipulators-by-adjusting-off-line-generated-paths">4 - 2019 - On-line collision avoidance for collaborative robot manipulators by adjusting off-line generated paths</h2>
+<ul>
+<li>2012 - A depth space approach to human-robot collision avoidance.</li>
+<li>Depth data from a Kinect camera for calculating distances between the human and reference points on the robot</li>
+<li>1986 - Real-time obstacle avoidance for manipulators and mobile robots</li>
+<li>real-time obstacle avoidance approach based on the classical artificial potential field (PF)</li>
+<li>[14 - 29] - Multiplos papers sobre collision avoidance em manipuladores robóticos</li>
+</ul>
+<h5 id="2-problemas-em-human-robot-collision-avoidance">2 Problemas em Human Robot collision avoidance</h5>
+<ul>
+<li>Dificuldade em obter com confiança a pose do humano</li>
+<li>Dificuldade em criar movimentos suaves e contínuos enquanto se gera trajetórias sem colisões</li>
+</ul>
+<h5 id="repulsion">Repulsion</h5>
+<ul>
+<li>Utiliza a configuração atual do robot</li>
+<li>O ponto mais próximo do obstáculo mais próximo</li>
+<li>Constantes de distâncias</li>
+<li>A velocidade do obstáculo (irrelevante)</li>
+<li>Para evitar discotinuidade no movimento quando aparece um obstáculo, é introduzido o concento de coeficiente de alteração do vetor de repulsão, que permite que a magnitude de repulsao possa crescer de zero a um valor estável</li>
+</ul>
+<h5 id="attraction">Attraction</h5>
+<ul>
+<li>Utiliza o erro entre a posição do EE e a posição de meta (definida na trajetoria offline)</li>
+</ul>
+<p><img src="papers/2/3.png" width=40%></p>
+<ul>
+<li>Também utiliza distância mínima ao obstáculo para controlo de velocidade</li>
+</ul>
+<h5 id="controlador">Controlador</h5>
+<ul>
+<li>Robot é controlado ao nível da velocidade das juntas</li>
+<li>Tradução de velocidades de atração/repulão para juntas utilizado o método Damped Least Squares</li>
+<li>2004 - Introduction to inverse kinematics with jacobian transpose, pseudoinverse and damped least squares methods</li>
+<li>Calculo das velocidades de juntas feito em 2 fases</li>
+<li>Devido a repulsão utilizado o vetor repulsão e a Jacobiana do ponto mais próximo</li>
+<li>Devido a atração utilizaod o vetor atração e a Jacobiana do EEF</li>
+</ul>
+<h5 id="experiments-and-results">Experiments and Results</h5>
+<ul>
+<li>Irrelevante</li>
 </ul>
               
             </div>
