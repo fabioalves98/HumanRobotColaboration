@@ -46,21 +46,25 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     tf2::Transform diff_tf;
     diff_tf = goal_tf * ee_tf.inverse();
 
-    geometry_msgs::Vector3 lin_vel;
-    lin_vel.x = goal_tf.getOrigin().getX() - ee_tf.getOrigin().getX();
-    lin_vel.y = goal_tf.getOrigin().getY() - ee_tf.getOrigin().getY();
-    lin_vel.z = goal_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+    Eigen::Vector3d lin_vel;
+    lin_vel << goal_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
+               goal_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
+               goal_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+    lin_vel = lin_vel.normalized();
 
-    geometry_msgs::Vector3 ang_vel;
+    geometry_msgs::Vector3 lin_vel_msg;
+    tf2::toMsg(lin_vel, lin_vel_msg);
+    
+    geometry_msgs::Vector3 ang_vel_msg;
     double roll, pitch, yaw;
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
-    ang_vel.x = roll;
-    ang_vel.y = pitch;
-    ang_vel.z = yaw;
+    ang_vel_msg.x = roll;
+    ang_vel_msg.y = pitch;
+    ang_vel_msg.z = yaw;
 
     iris_cobot::PFVector attraction;
-    attraction.linear_velocity = lin_vel;
-    attraction.angular_velocity = ang_vel;
+    attraction.linear_velocity = lin_vel_msg;
+    attraction.angular_velocity = ang_vel_msg;
 
     attraction_pub_ptr->publish(attraction);
 }

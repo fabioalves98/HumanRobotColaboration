@@ -186,7 +186,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     cec.setInputCloud (cloud_with_normals);
     cec.setConditionFunction (&customRegionGrowing);
     cec.setClusterTolerance (cluster_tolerance);
-    cec.setMinClusterSize (cloud_with_normals->points.size() * min_cluster_size / 100);
+    cec.setMinClusterSize (10);
     cec.setMaxClusterSize (cloud_with_normals->points.size() * max_cluster_size / 100);
     cec.segment (*clusters);
     cec.getRemovedClusters (small_clusters, large_clusters);
@@ -206,7 +206,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     // Select 4 random points from each cluster
     for (int i = 0; i < clusters->size(); i++)
     {
-        // std::cout << "Cluster " << i << "\n";
+        std::cout << "Cluster " << i << "\n";
 
         // Selecting 4 random points in the cluster, verify if they have volume (not a plane)
         std::vector<int> random_indices;
@@ -237,7 +237,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
             pm_idx++;
         }
         // Only run RUNSAC for clusters that have volume - det > 0
-        // std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
+        std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
 
         // TODO: Obtain center and radius using the 4 extracted points
 
@@ -260,22 +260,26 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
         Eigen::VectorXf model_coefficients;
         ransac.getModelCoefficients(model_coefficients);
 
-        // Add obstacle to obstacle array msgs
-        geometry_msgs::Point center;
-        center.x = model_coefficients[0];
-        center.y = model_coefficients[1];
-        center.z = model_coefficients[2];
-        obstacles_centers.push_back(center);
-        obstacles_radiuses.push_back(model_coefficients[3]);
+        // TODO: CHANGE THIS - Fastest way to determine if it's a sphere obstacle or not
+        if (model_coefficients[3] < 0.06)
+        {
+            // Add obstacle to obstacle array msgs
+            geometry_msgs::Point center;
+            center.x = model_coefficients[0];
+            center.y = model_coefficients[1];
+            center.z = model_coefficients[2];
+            obstacles_centers.push_back(center);
+            obstacles_radiuses.push_back(model_coefficients[3]);
 
-        // std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
-        // std::cout << ", Z: " << model_coefficients[2] << ", R: " << model_coefficients[3] << "\n";
+            std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
+            std::cout << ", Z: " << model_coefficients[2] << ", R: " << model_coefficients[3] << "\n";
+        }
     }
     std::cout << std::endl;
 
     // Publish obstacles message
     iris_cobot::Obstacles obstacles_msg;
-    obstacles_msg.size = clusters->size();
+    obstacles_msg.size = obstacles_centers.size();
     obstacles_msg.centers = obstacles_centers;
     obstacles_msg.radiuses = obstacles_radiuses;
     obstacles_pub.publish(obstacles_msg);

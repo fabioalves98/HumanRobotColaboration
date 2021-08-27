@@ -15,8 +15,8 @@ def main():
     model = URDF.from_xml_file(BASE_DIR + '/urdf/sphere.urdf')
     init_spawn = 10
     spheres = [
-        ('sphere_1', 0.1 , (0, 0, init_spawn)),
-        ('sphere_2', 0.1,  (0, 0, init_spawn)),
+        ('sphere_1', 0.05 , (0, 0, init_spawn)),
+        ('sphere_2', 0.05,  (0, 0, init_spawn)),
         ('sphere_3', 0.1,  (1, 1, 0.1))
     ]
 
@@ -43,7 +43,7 @@ def main():
         )
 
     set_model_state_client = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
-    radius = 1
+    radius = 0.9
 
     # Change models pose
     switch = True
@@ -65,7 +65,7 @@ def main():
             model_state = ModelState()
             model_state.model_name = 'sphere_1'
             model_state.reference_frame = 'world'
-            model_state.pose = Pose(Point(*[x, y, 0.3 - init_spawn]), Quaternion(*[0, 0, 0, 1]))
+            model_state.pose = Pose(Point(*[x, y, 0.4 - init_spawn]), Quaternion(*[0, 0, 0, 1]))
             
             set_model_state_client(model_state)
 
@@ -76,7 +76,7 @@ def main():
             model_state = ModelState()
             model_state.model_name = 'sphere_2'
             model_state.reference_frame = 'world'
-            model_state.pose = Pose(Point(*[x, y, 0.6 - init_spawn]), Quaternion(*[0, 0, 0, 1]))
+            model_state.pose = Pose(Point(*[x, y, 0.8 - init_spawn]), Quaternion(*[0, 0, 0, 1]))
             
             set_model_state_client(model_state)
 

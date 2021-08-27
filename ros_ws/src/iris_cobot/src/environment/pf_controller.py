@@ -39,8 +39,7 @@ linear/angular velocity")
 
     rate = rospy.Rate(500)
 
-    while not rospy.is_shutdown():
-        
+    while not rospy.is_shutdown():        
         repulsion = np.array([repulsion_vel.linear_velocity.x, repulsion_vel.linear_velocity.y,
                               repulsion_vel.linear_velocity.z, 0, 0, 0])
         repulsion_mgn = np.linalg.norm(repulsion)

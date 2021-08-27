@@ -6,6 +6,7 @@ import tf2_ros
 from tf2_geometry_msgs import do_transform_point
 from math import pow, sqrt
 import moveit_commander
+from moveit_commander.move_group import MoveGroupCommander
 
 import cobot.helpers as helpers
 from iris_cobot.msg import Obstacles, PFVector
@@ -28,7 +29,7 @@ def repulsion(obstacles_msg):
         obs_radius = obstacles_msg.radiuses[obs_idx]
         distance = sqrt(pow(ee_center.x - obs_center.x, 2) + pow(ee_center.y - obs_center.y, 2) + 
                         pow(ee_center.z - obs_center.z, 2)) - obs_radius
-        if distance < 0.25:
+        if distance < 0.2:
             obstacle = helpers.pointToList(obs_center)
             obstacle.append(obs_radius)
             obstacle.append(distance)
@@ -45,7 +46,7 @@ def repulsion(obstacles_msg):
         rep_vector = rep_vector/np.linalg.norm(rep_vector)
         
         distance = obstacles[min_obs_idx][4] # Distance should be limited to 10 - 30
-        rep_factor = (0.15 - (distance - 0.1)) * 10/2
+        rep_factor = (0.1 - (distance - 0.1)) * 10/2
         rep_vector = rep_vector * rep_factor
 
         # print(min_obs_idx, obstacles[min_obs_idx], rep_vector)
@@ -61,7 +62,8 @@ def main():
     
     moveit_commander.roscpp_initialize(sys.argv)
     global ur10e_mg
-    ur10e_mg = moveit_commander.MoveGroupCommander("manipulator")
+    ur10e_mg = MoveGroupCommander("manipulator")
+    ur10e_mg.set_end_effector_link("gripper_link")
 
     # Obtain camera tf
     global camera_tf

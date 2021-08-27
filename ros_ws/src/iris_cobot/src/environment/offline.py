@@ -3,8 +3,10 @@ import rospy, sys
 from math import radians
 from geometry_msgs.msg import PoseStamped, Quaternion
 from trajectory_msgs.msg import JointTrajectoryPoint
-from moveit_msgs.msg import DisplayTrajectory
+from moveit_msgs.msg import DisplayTrajectory, RobotState
 import moveit_commander
+from moveit_commander.move_group import MoveGroupCommander
+from moveit_commander.robot import RobotCommander
 from tf.transformations import quaternion_from_euler
 
 
@@ -28,10 +30,10 @@ class TrajectoryExecutioner:
         self.cur_point = cp_idx
         self.has_past_cur_point = cp_2_idx > cp_idx
 
-        # Finish trajectory
+        # Finish trajectory - Invert for now
         if self.cur_point == len(self.points) - 1:
-            self.finished = True
-            return self.points[self.cur_point]
+            self.points.reverse()
+            return self.points[0]
         
         return self.points[self.cur_point + 1]
 
@@ -51,40 +53,45 @@ class TrajectoryExecutioner:
         return self.finished
 
 
-def list_2_str(list):
-    return str([round(elem, 3) for elem in list])
-
-
 def main():
     rospy.init_node('offline', anonymous=False)
     
     moveit_commander.roscpp_initialize(sys.argv)
-    robot = moveit_commander.RobotCommander()
+    robot = RobotCommander()
 
-    move_group = moveit_commander.MoveGroupCommander("manipulator")
+    move_group = MoveGroupCommander("manipulator")
 
     # RViz trajectory viewer
     display_trajectory_pub = rospy.Publisher('/move_group/display_planned_path', DisplayTrajectory, queue_size=1)
 
-    # print(move_group.get_planning_time())
-    # print("Available Planners")
-    # for planner in move_group.get_interface_description().planner_ids:
-    #     print(planner)   
+    print(move_group.get_planning_time())
+    print("Available Planners")
+    for planner in move_group.get_interface_description().planner_ids:
+        print(planner)   
     
     # RRTConnect - Faster
     # RRTStar - Optimal version of RRT, Slower
-    # print(move_group.set_planner_id('manipulator[RRTstar]'))
-    # print(move_group.get_planner_id())
+    print(move_group.set_planner_id('manipulator[RRTstar]'))
+    print(move_group.get_planner_id())
 
     # Define a pose wich is 20cm lower than the current pose
     pose_goal = PoseStamped()
-    pose_goal.pose.position.x = 0.7
-    pose_goal.pose.position.y = 0.7
-    pose_goal.pose.position.z = 0.5
-    pose_goal.pose.orientation = Quaternion(*quaternion_from_euler(0, radians(45), radians(45)))
+    pose_goal.pose.position.x = 0.5
+    pose_goal.pose.position.y = 0.5
+    pose_goal.pose.position.z = 0.2
+    pose_goal.pose.orientation = Quaternion(*quaternion_from_euler(0, 0, radians(45)))
 
-    move_group.set_start_state(robot.get_current_state())
+    robot_state = robot.get_current_state()
+    robot_state.joint_state.position = [0.48711, -1.57165, 1.41912, -2.98844, -1.27704, -0.00034, 0, 0]
+
+    move_group.set_start_state(robot_state)
     plan = move_group.plan(pose_goal)
+
+    # Display Trajectory in RViz
+    display_trajectory = DisplayTrajectory()
+    display_trajectory.trajectory_start = robot.get_current_state()
+    display_trajectory.trajectory.append(plan)
+    display_trajectory_pub.publish(display_trajectory)
 
     points = plan.joint_trajectory.points
     print('Trajecotry with %d points' % len(points))
