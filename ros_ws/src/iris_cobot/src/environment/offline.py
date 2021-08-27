@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 import rospy, sys
-from geometry_msgs.msg import PoseStamped
-from std_srvs.srv import Empty
+from math import radians
+from geometry_msgs.msg import PoseStamped, Quaternion
 from trajectory_msgs.msg import JointTrajectoryPoint
 from moveit_msgs.msg import DisplayTrajectory
 import moveit_commander
+from tf.transformations import quaternion_from_euler
 
-from iris_cobot.msg import JointSpeed
 
 # TODO: Entire class needs restructure and better way to check current point and finish trajectory
 class TrajectoryExecutioner:
@@ -31,9 +31,9 @@ class TrajectoryExecutioner:
         # Finish trajectory
         if self.cur_point == len(self.points) - 1:
             self.finished = True
-            return False
+            return self.points[self.cur_point]
         
-        return self.points[self.cur_point]
+        return self.points[self.cur_point + 1]
 
 
     def get_speed(self):
@@ -78,9 +78,10 @@ def main():
 
     # Define a pose wich is 20cm lower than the current pose
     pose_goal = PoseStamped()
-    pose_goal.pose.position.x = 0.5
-    pose_goal.pose.position.y = 0.5
+    pose_goal.pose.position.x = 0.7
+    pose_goal.pose.position.y = 0.7
     pose_goal.pose.position.z = 0.5
+    pose_goal.pose.orientation = Quaternion(*quaternion_from_euler(0, radians(45), radians(45)))
 
     move_group.set_start_state(robot.get_current_state())
     plan = move_group.plan(pose_goal)
@@ -96,7 +97,7 @@ def main():
 
     # Speed Control Cycle
     rate = rospy.Rate(500)
-    while not traj_exec.is_finished():
+    while not rospy.is_shutdown():
         # Get current pose 
         current_q = move_group.get_current_joint_values()
 
@@ -105,7 +106,7 @@ def main():
         # print(current_point)
         # print(type(current_point))
         if current_point:
-            joint_speeds = traj_exec.get_speed()
+            # joint_speeds = traj_exec.get_speed()
             # print(list_2_str(joint_speeds))
             traj_point_pub.publish(current_point)
         

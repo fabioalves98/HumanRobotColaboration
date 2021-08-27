@@ -24,6 +24,7 @@ add_message_files(
     FILES
     JointSpeed.msg
     Obstacles.msg
+    PFVector.msg
     TapAction.msg
 )
 

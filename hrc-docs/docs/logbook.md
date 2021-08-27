@@ -1255,3 +1255,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Programa offline.py já nao controla o movimento do robot, mas sim supervisiona em que estado da trajetória o robot se encontra, publicando o ponto objetivo para que o robot se deva mover
 - Programa attraction.cpp utiliza esse ponto e a posição atual do robot para calcular um vetor atração que, na ausencia de obstaculos será para onde o robot se deverá mover
 - Teste da biblioteca robotics-toolbox-python mas foi mais perda de tempo que outra coisa... Está funcional, pode vir a ser utilizada no futuro
+
+## 27/08 - Biblioteca
+
+#### Potential Field Method
+
+- Programa pf_controller.cpp subscreve aos vectores atração e repulsao e publica um valor finao de velocidade linear e angular
+  - Baseado na expressão vel = (1- ||Rv||) * Av + Rv
+  - Vetor Rv é normalizado e inversamente proporcional a distancia do obstaculo mais proximo
+  - Logo o resultado irá ser sempre uma soma dos dois, no entanto, quando mais perto um objeto menos peso terá o vetor atração
+  - Resultados favoraveis em simulação, o robot segue sempre a trajetoria evitando as esferas circundantes

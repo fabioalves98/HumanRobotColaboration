@@ -7,12 +7,14 @@
 #include <tf2/convert.h>
 #include <tf2_eigen/tf2_eigen.h>
 
-
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
 #include <moveit/robot_model/robot_model.h>
 #include <moveit/robot_state/robot_state.h>
 
+#include <iris_cobot/PFVector.h>
+
+ros::Publisher *attraction_pub_ptr;
 
 robot_state::RobotStatePtr kinematic_state;
 const robot_state::JointModelGroup* joint_model_group;
@@ -25,7 +27,7 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
 
     // Current pose
     geometry_msgs::PoseStamped ee_pose = move_group_ptr->getCurrentPose();
-    std::cout << ee_pose << std::endl;
+    // std::cout << ee_pose << std::endl;
 
     tf2::Transform ee_tf;
     ee_tf.setOrigin(tf2::Vector3(ee_pose.pose.position.x, ee_pose.pose.position.y, ee_pose.pose.position.z));
@@ -33,7 +35,6 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     tf2::convert(ee_pose.pose.orientation, ee_rot);
     ee_tf.setRotation(ee_rot);
 
-    
     // Target Pose
     kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
     const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("flange");
@@ -41,19 +42,27 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     geometry_msgs::TransformStamped goal_tf_msg = tf2::eigenToTransform(end_effector_state);
     tf2::fromMsg(goal_tf_msg, goal_tf);
 
-
     // Difference from goal pose to target pose
     tf2::Transform diff_tf;
     diff_tf = goal_tf * ee_tf.inverse();
 
-    std::cout << diff_tf.getOrigin().getX() << ", "
-              << diff_tf.getOrigin().getY() << ", "
-              << diff_tf.getOrigin().getZ() << std::endl;
+    geometry_msgs::Vector3 lin_vel;
+    lin_vel.x = goal_tf.getOrigin().getX() - ee_tf.getOrigin().getX();
+    lin_vel.y = goal_tf.getOrigin().getY() - ee_tf.getOrigin().getY();
+    lin_vel.z = goal_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
 
-    std::cout << diff_tf.getRotation().getX() << ", "
-              << diff_tf.getRotation().getY() << ", "
-              << diff_tf.getRotation().getZ() << ", "
-              << diff_tf.getRotation().getW() << std::endl;
+    geometry_msgs::Vector3 ang_vel;
+    double roll, pitch, yaw;
+    tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
+    ang_vel.x = roll;
+    ang_vel.y = pitch;
+    ang_vel.z = yaw;
+
+    iris_cobot::PFVector attraction;
+    attraction.linear_velocity = lin_vel;
+    attraction.angular_velocity = ang_vel;
+
+    attraction_pub_ptr->publish(attraction);
 }
 
 
@@ -73,10 +82,13 @@ int main(int argc, char **argv)
     joint_model_group = kinematic_model->getJointModelGroup("manipulator");
 
     // Attraction Vector Publisher
-
+    ros::Publisher attraction_pub = nh.advertise<iris_cobot::PFVector>("attraction", 1);
+    attraction_pub_ptr = &attraction_pub;
 
     // Goal trajectory point subscriber
     ros::Subscriber sub = nh.subscribe("trajectory_point", 1, attraction);
+
+    ROS_INFO("Atraction node listening to trajectory_point and publishing to attraction");
     
     ros::waitForShutdown();
 

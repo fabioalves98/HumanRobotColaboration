@@ -101,7 +101,7 @@ int main(int argc, char **argv)
 
     ros::Publisher joint_speed_pub = nh.advertise<iris_cobot::JointSpeed>("joint_speeds", 1);
 
-    while(true)
+    while(ros::ok())
     {
         // Goal EE pose
         Eigen::Vector3d translation;
@@ -172,56 +172,59 @@ int main(int argc, char **argv)
             geometry_msgs::Vector3 linear = *linear_velocity_ptr;
             geometry_msgs::Vector3 angular = *angular_velocity_ptr;
 
-            // TODO: MUDAR ESTE CÓDIGO DE ESPARGETE
-            if (linear.x > force_sensibility)
-            {
-                translation[0] = linear.x - force_sensibility;
-            }
-            if (linear.y > force_sensibility)
-            {
-                translation[1] = linear.y - force_sensibility;
-            }
-            if (linear.z > force_sensibility)
-            {
-                translation[2] = linear.z - force_sensibility;
-            }
-            if (angular.x > torque_sensibility)
-            {
-                rotation[0] = angular.x - torque_sensibility;
-            }
-            if (angular.y > torque_sensibility)
-            {
-                rotation[1] = angular.y - torque_sensibility;
-            }
-            if (angular.z > torque_sensibility)
-            {
-                rotation[2] = angular.z - torque_sensibility;
-            }
-            // 
-            if (linear.x < -force_sensibility)
-            {
-                translation[0] = linear.x + force_sensibility;
-            }
-            if (linear.y < -force_sensibility)
-            {
-                translation[1] = linear.y + force_sensibility;
-            }
-            if (linear.z < -force_sensibility)
-            {
-                translation[2] = linear.z + force_sensibility;
-            }
-            if (angular.x < -torque_sensibility)
-            {
-                rotation[0] = angular.x + torque_sensibility;
-            }
-            if (angular.y < -torque_sensibility)
-            {
-                rotation[1] = angular.y + torque_sensibility;
-            }
-            if (angular.z < -torque_sensibility)
-            {
-                rotation[2] = angular.z + torque_sensibility;
-            }
+            translation << linear.x , linear.y , linear.z;
+            rotation << angular.x , angular.y, angular.z;
+
+            // TODO: Mudar os thresholds de força para ft_to_vel.cpp
+            // if (linear.x > force_sensibility)
+            // {
+            //     translation[0] = linear.x - force_sensibility;
+            // }
+            // if (linear.y > force_sensibility)
+            // {
+            //     translation[1] = linear.y - force_sensibility;
+            // }
+            // if (linear.z > force_sensibility)
+            // {
+            //     translation[2] = linear.z - force_sensibility;
+            // }
+            // if (angular.x > torque_sensibility)
+            // {
+            //     rotation[0] = angular.x - torque_sensibility;
+            // }
+            // if (angular.y > torque_sensibility)
+            // {
+            //     rotation[1] = angular.y - torque_sensibility;
+            // }
+            // if (angular.z > torque_sensibility)
+            // {
+            //     rotation[2] = angular.z - torque_sensibility;
+            // }
+            // // 
+            // if (linear.x < -force_sensibility)
+            // {
+            //     translation[0] = linear.x + force_sensibility;
+            // }
+            // if (linear.y < -force_sensibility)
+            // {
+            //     translation[1] = linear.y + force_sensibility;
+            // }
+            // if (linear.z < -force_sensibility)
+            // {
+            //     translation[2] = linear.z + force_sensibility;
+            // }
+            // if (angular.x < -torque_sensibility)
+            // {
+            //     rotation[0] = angular.x + torque_sensibility;
+            // }
+            // if (angular.y < -torque_sensibility)
+            // {
+            //     rotation[1] = angular.y + torque_sensibility;
+            // }
+            // if (angular.z < -torque_sensibility)
+            // {
+            //     rotation[2] = angular.z + torque_sensibility;
+            // }
         }
 
         // Create Kinematic State

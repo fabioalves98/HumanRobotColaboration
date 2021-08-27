@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     ros::Rate rate(10);
 
     // TODO: Revisit to see if changing the rate or checking parameters can help
-    while (true)
+    while (ros::ok())
     {
         std::vector<double> joint_speeds_inc = *joint_speeds_ptr;
 
