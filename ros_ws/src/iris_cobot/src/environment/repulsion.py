@@ -16,20 +16,30 @@ ur10e_mg = None
 camera_tf = None
 repulsion_pub = None
 
+MAX_DIST = 0.3
 
-def repulsion(obstacles_msg):
+
+def repulsion(obstacles_msg, real):
     ee_center = ur10e_mg.get_current_pose().pose.position
 
     # Get distances from obstacles to EEF
     obstacles = np.empty([0, 5])
     for obs_idx in range(obstacles_msg.size):
-        # Transform obstacle coordinates from camera frame to world
-        obs_point = PointStamped(point=obstacles_msg.centers[obs_idx])
-        obs_center = do_transform_point(obs_point, camera_tf).point
+        # Check wheter coordinates com from camera or direct obstacle coordinates
+        if real:
+            # Transform obstacle coordinates from camera frame to world
+            obs_point = PointStamped(point=obstacles_msg.centers[obs_idx])
+            obs_center = do_transform_point(obs_point, camera_tf).point
+        else:
+            # Subtract 10cm because gazebo simulated world differs from robot position in 10cm
+            obs_center = obstacles_msg.centers[obs_idx]
+            obs_center.z -= 0.1
+
         obs_radius = obstacles_msg.radiuses[obs_idx]
+
         distance = sqrt(pow(ee_center.x - obs_center.x, 2) + pow(ee_center.y - obs_center.y, 2) + 
                         pow(ee_center.z - obs_center.z, 2)) - obs_radius
-        if distance < 0.2:
+        if distance < MAX_DIST:
             obstacle = helpers.pointToList(obs_center)
             obstacle.append(obs_radius)
             obstacle.append(distance)
@@ -46,7 +56,13 @@ def repulsion(obstacles_msg):
         rep_vector = rep_vector/np.linalg.norm(rep_vector)
         
         distance = obstacles[min_obs_idx][4] # Distance should be limited to 10 - 30
-        rep_factor = (0.1 - (distance - 0.1)) * 10/2
+
+        print(distance)
+
+        rep_factor = (MAX_DIST - distance) * 1 / MAX_DIST
+
+        print(rep_factor)
+        print()
         rep_vector = rep_vector * rep_factor
 
         # print(min_obs_idx, obstacles[min_obs_idx], rep_vector)
@@ -80,7 +96,8 @@ def main():
     global repulsion_pub
     repulsion_pub = rospy.Publisher('repulsion', PFVector, queue_size=1)
 
-    rospy.Subscriber('obstacles', Obstacles, repulsion)
+    rospy.Subscriber('obstacles', Obstacles, repulsion, True)
+    rospy.Subscriber('obstacles_fake', Obstacles, repulsion, False)
 
     rospy.loginfo('Repulsion node listening to obstacles and publishing to repulsion')
 

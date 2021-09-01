@@ -46,44 +46,16 @@ void angularVelSub(geometry_msgs::Vector3 ang_vel)
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "jacobian");
-    
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2); 
     spinner.start();
 
-    // Cucrrent Joint Values    
+    // Moveit controller and Kinematic state  
     moveit::planning_interface::MoveGroupInterface move_group("manipulator");
-    std::vector<double> current_joint_values = move_group.getCurrentJointValues();
-
-    std::cout << "Current Joint Values - " << current_joint_values.size() << std::endl;
-    for (auto i : current_joint_values)
-        std::cout << i << '\n';
-    std::cout << std::endl;
     
-    // Current EE pose
-    robot_model_loader::RobotModelLoader robot_model_loader("robot_description");
-    robot_model::RobotModelPtr kinematic_model = robot_model_loader.getModel();
-    robot_state::RobotStatePtr kinematic_state(new robot_state::RobotState(kinematic_model));
-
-    const robot_state::JointModelGroup* joint_model_group = 
-        move_group.getCurrentState()->getJointModelGroup("manipulator");
-    kinematic_state->setJointGroupPositions(joint_model_group, current_joint_values);
-
-    const std::vector<std::string>& joint_names = joint_model_group->getVariableNames();
-    std::vector<double> joint_values;
-    kinematic_state->copyJointGroupPositions(joint_model_group, joint_values);
-    for (std::size_t i = 0; i < joint_names.size(); ++i)
-    {
-        std::cout << "Joint " << joint_names[i].c_str() << " - " << joint_values[i] << std::endl;
-    }
-    // Pose obtained with robot state - FK
-    const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("flange");
-    Eigen::Vector3d position = end_effector_state.translation();
-    std::cout << "Position\n" << position << std::endl;
-    Eigen::Quaterniond orientation(end_effector_state.rotation());
-    std::cout << "Orientation\n" << orientation.vec() << '\n' << orientation.w() << std::endl;
-    // Pose obtained directly from move group
-    std::cout << move_group.getCurrentPose() << std::endl;
+    robot_model::RobotModelConstPtr kinematic_model = move_group.getRobotModel();
+    robot_state::RobotStatePtr kinematic_state = move_group.getCurrentState();
+    const robot_state::JointModelGroup* joint_model_group = kinematic_model->getJointModelGroup("manipulator");
 
     // Dynamic reconfigure init and callback
     dynamic_reconfigure::Server<iris_cobot::JacobianConfig> server;
@@ -101,6 +73,9 @@ int main(int argc, char **argv)
 
     ros::Publisher joint_speed_pub = nh.advertise<iris_cobot::JointSpeed>("joint_speeds", 1);
 
+    ROS_INFO("Jacobian node listening to linear/angular and publishing to joint_speeds");
+
+    ros::Rate rate(500);
     while(ros::ok())
     {
         // Goal EE pose
@@ -228,8 +203,7 @@ int main(int argc, char **argv)
         }
 
         // Create Kinematic State
-        current_joint_values = move_group.getCurrentJointValues();
-        kinematic_state->setJointGroupPositions(joint_model_group, current_joint_values);
+        kinematic_state->setJointGroupPositions(joint_model_group, move_group.getCurrentJointValues());
 
         // Jacobian Matrix
         Eigen::Vector3d reference_point_position(0.0, 0.0, 0.0);
@@ -255,6 +229,8 @@ int main(int argc, char **argv)
         }
 
         joint_speed_pub.publish(joint_speed_msg);
+
+        rate.sleep();
     }
     
     ros::shutdown();

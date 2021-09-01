@@ -27,8 +27,9 @@ int main(int argc, char **argv)
     // Move it controller
     moveit::planning_interface::MoveGroupInterface move_group("manipulator");
 
-    ros::Rate rate(10);
+    ROS_INFO("MoveIt controller node listening to joint_speeds and controlling move_group interface");
 
+    ros::Rate rate(10);
     // TODO: Revisit to see if changing the rate or checking parameters can help
     while (ros::ok())
     {

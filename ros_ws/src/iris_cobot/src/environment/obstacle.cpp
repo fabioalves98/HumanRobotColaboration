@@ -206,7 +206,6 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     // Select 4 random points from each cluster
     for (int i = 0; i < clusters->size(); i++)
     {
-        std::cout << "Cluster " << i << "\n";
 
         // Selecting 4 random points in the cluster, verify if they have volume (not a plane)
         std::vector<int> random_indices;
@@ -237,7 +236,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
             pm_idx++;
         }
         // Only run RUNSAC for clusters that have volume - det > 0
-        std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
+        // std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
 
         // TODO: Obtain center and radius using the 4 extracted points
 
@@ -270,6 +269,10 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
             center.z = model_coefficients[2];
             obstacles_centers.push_back(center);
             obstacles_radiuses.push_back(model_coefficients[3]);
+
+            std::cout << "Cluster " << i << "\n";
+
+            std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
 
             std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
             std::cout << ", Z: " << model_coefficients[2] << ", R: " << model_coefficients[3] << "\n";

@@ -1265,3 +1265,5 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Vetor Rv é normalizado e inversamente proporcional a distancia do obstaculo mais proximo
   - Logo o resultado irá ser sempre uma soma dos dois, no entanto, quando mais perto um objeto menos peso terá o vetor atração
   - Resultados favoraveis em simulação, o robot segue sempre a trajetoria evitando as esferas circundantes
+
+## 01/09 - Bilbioteca

@@ -36,17 +36,6 @@ class TrajectoryExecutioner:
             return self.points[0]
         
         return self.points[self.cur_point + 1]
-
-
-    def get_speed(self):
-        if self.has_past_cur_point:
-            speed = [n - c for n, c in zip (self.points[self.cur_point + 1].positions, 
-                                            self.points[self.cur_point].positions)]
-        else:
-            speed = [n - c for n, c in zip (self.points[self.cur_point].positions, 
-                                            self.points[self.cur_point - 1].positions)]
-
-        return speed
     
 
     def is_finished(self):
@@ -64,26 +53,28 @@ def main():
     # RViz trajectory viewer
     display_trajectory_pub = rospy.Publisher('/move_group/display_planned_path', DisplayTrajectory, queue_size=1)
 
-    print(move_group.get_planning_time())
-    print("Available Planners")
-    for planner in move_group.get_interface_description().planner_ids:
-        print(planner)   
+    # print(move_group.get_planning_time())
+    # print("Available Planners")
+    # for planner in move_group.get_interface_description().planner_ids:
+    #     print(planner)   
     
     # RRTConnect - Faster
     # RRTStar - Optimal version of RRT, Slower
-    print(move_group.set_planner_id('manipulator[RRTstar]'))
+    move_group.set_planner_id('manipulator[RRTstar]')
     print(move_group.get_planner_id())
 
-    # Define a pose wich is 20cm lower than the current pose
+    # Define a target pose
     pose_goal = PoseStamped()
     pose_goal.pose.position.x = 0.5
     pose_goal.pose.position.y = 0.5
     pose_goal.pose.position.z = 0.2
     pose_goal.pose.orientation = Quaternion(*quaternion_from_euler(0, 0, radians(45)))
 
+    # Define a start pose 
     robot_state = robot.get_current_state()
     robot_state.joint_state.position = [0.48711, -1.57165, 1.41912, -2.98844, -1.27704, -0.00034, 0, 0]
 
+    # Create plan between the 2 poses
     move_group.set_start_state(robot_state)
     plan = move_group.plan(pose_goal)
 
@@ -110,11 +101,8 @@ def main():
 
         # Obtain next instruction from trajectory executioner
         current_point = traj_exec.localize(current_q)
-        # print(current_point)
-        # print(type(current_point))
+
         if current_point:
-            # joint_speeds = traj_exec.get_speed()
-            # print(list_2_str(joint_speeds))
             traj_point_pub.publish(current_point)
         
         rate.sleep()

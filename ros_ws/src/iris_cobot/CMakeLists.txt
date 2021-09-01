@@ -85,7 +85,6 @@ add_executable(joint_vel_cont src/compliance/joint_vel_cont.cpp)
 target_link_libraries(joint_vel_cont ${catkin_LIBRARIES})
 add_dependencies(joint_vel_cont ${PROJECT_NAME}_generate_messages_cpp)
 
-
 # Helpers
 add_executable(fk_ik_jacobian src/test/fk_ik_jacobian.cpp)
 target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})

@@ -6,18 +6,21 @@ from geometry_msgs.msg import Pose, Point, Quaternion
 from gazebo_msgs.msg import ModelState
 from gazebo_msgs.srv import SpawnModel, SetModelState
 
+from iris_cobot.msg import Obstacles
+
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
 
 def main():
     rospy.init_node('spawn_obstacles', anonymous=False)
 
+    # Obstacles description
     model = URDF.from_xml_file(BASE_DIR + '/urdf/sphere.urdf')
     init_spawn = 10
     spheres = [
         ('sphere_1', 0.05 , (0, 0, init_spawn)),
         ('sphere_2', 0.05,  (0, 0, init_spawn)),
-        ('sphere_3', 0.1,  (1, 1, 0.1))
+        ('sphere_3', 0.1,  (1, 1, 0.5))
     ]
 
     # Spawn Models
@@ -42,44 +45,58 @@ def main():
             reference_frame = 'world'
         )
 
+    # Spawner service
     set_model_state_client = rospy.ServiceProxy('/gazebo/set_model_state', SetModelState)
     radius = 0.9
 
-    # Change models pose
+    # Obstacles publisher for accurate repulsion calculation
+    obstacles_pub = rospy.Publisher('obstacles_fake', Obstacles, queue_size=1)
+    
+    # Switch models movement direction
     switch = True
     angles = []
 
-    rate = rospy.Rate(100)
-
+    rate = rospy.Rate(50)
     while not rospy.is_shutdown():
+
         if switch:
-            angles = range(200, 700)
+            angles = range(200, 700, 2)
         else:
-            angles = range(700, 200, -1)
+            angles = range(700, 200, -2)
 
         for angle in angles:
+            obstacles_centers = []
+            obstacles_radiuses = []
+
             # Sphere 1
             x = radius * cos(radians(angle/10.0))
             y = radius * sin(radians(angle/10.0))
+            z = 0.4
 
             model_state = ModelState()
-            model_state.model_name = 'sphere_1'
+            model_state.model_name = spheres[0][0]
             model_state.reference_frame = 'world'
-            model_state.pose = Pose(Point(*[x, y, 0.4 - init_spawn]), Quaternion(*[0, 0, 0, 1]))
-            
+            model_state.pose = Pose(Point(*[x, y, z - init_spawn]), Quaternion(*[0, 0, 0, 1]))
             set_model_state_client(model_state)
 
+            obstacles_centers.append(Point(*[x, y, z]))
+            obstacles_radiuses.append(spheres[0][1])
+            
             # Sphere 2
             x = radius * cos(radians((900 - angle)/10.0))
             y = radius * sin(radians((900 - angle)/10.0))
+            z =  0.8
 
             model_state = ModelState()
-            model_state.model_name = 'sphere_2'
+            model_state.model_name = spheres[1][0]
             model_state.reference_frame = 'world'
-            model_state.pose = Pose(Point(*[x, y, 0.8 - init_spawn]), Quaternion(*[0, 0, 0, 1]))
-            
+            model_state.pose = Pose(Point(*[x, y, z - init_spawn]), Quaternion(*[0, 0, 0, 1]))
             set_model_state_client(model_state)
 
+            obstacles_centers.append(Point(*[x, y, z]))
+            obstacles_radiuses.append(spheres[1][1])
+            obstacles_pub.publish(Obstacles(size=2, centers=obstacles_centers, radiuses=obstacles_radiuses))
+            
             rate.sleep()
 
         switch = not switch

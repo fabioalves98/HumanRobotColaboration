@@ -11,7 +11,7 @@ repulsion_vel = None
 def attraction_cb(attraction_msg):
     attraction_vel.linear_velocity = attraction_msg.linear_velocity
     attraction_vel.angular_velocity = attraction_msg.angular_velocity
-    
+
 
 def repulsion_cb(repulsion_msg):
     repulsion_vel.linear_velocity = repulsion_msg.linear_velocity
@@ -39,7 +39,7 @@ linear/angular velocity")
 
     rate = rospy.Rate(500)
 
-    while not rospy.is_shutdown():        
+    while not rospy.is_shutdown():    
         repulsion = np.array([repulsion_vel.linear_velocity.x, repulsion_vel.linear_velocity.y,
                               repulsion_vel.linear_velocity.z, 0, 0, 0])
         repulsion_mgn = np.linalg.norm(repulsion)
@@ -54,7 +54,6 @@ linear/angular velocity")
         angular_vel_pub.publish(Vector3(*pf_vel[3:]))
 
         rate.sleep()
-
 
 
 if __name__ == "__main__":
