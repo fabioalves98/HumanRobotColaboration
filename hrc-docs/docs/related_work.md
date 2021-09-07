@@ -232,3 +232,56 @@
 ##### Experiments and Results
 
 - Irrelevante
+
+
+
+## 5 - 2016 - Robot manipulator self-identification for surrounding obstacle detection
+
+- Diferença entre setups eye-in-hand e eye-to-hand juntamente com referencias de outros artigos no capítulo de Introduction
+- Definição de self-identification - process to identify the robot itself in the 3D point cloud
+- Métodos simples de robot self-identification [7, 10, 15, 20]
+- Enfase que este trabalho nao depende do modelo 3D do robot (referir que se calhar é mais lento dessa forma e estamos a tnetar executar em real-time)
+- Boa forma de expor algoritmos (com input, output e o algoritmo em si)
+
+##### Preliminaries
+
+- Bom capítulo para explicar a informação teórica e o hardware utilizado no paper
+- Método simples de calibração em 2.3 com apenas 4 pontos 
+
+##### Collision Prediction
+
+- Criação de uma Region of Interest baseada no esqueleto do robot para apenas utilizar os pontos pertencentes a ela
+- Criação de pontos de interpolação entre cada par de juntas adjacentes
+- A distancia de um ponto ao robot é dada pelo minimo das distancia do ponto aos pontos de interpolação 
+
+- Criação de superpixels baseado no método k-menas clustering 
+- O objetivo do algoritmo de self-identification deles é criar esferas em cada ponto de interpolação e estimar o seu raio com base na point cloud segmentada
+- Utilizam um valor de threshlod de distancia minima para calcular que superpixeis pertencem ao robot
+
+##### Robot Control
+
+- Referencia à matriz jacobiana para o calculo da velocidade do EEF
+- 3 equações de calculo de velocidades de collision avoidances baseadas na distancia corrente do obstaculo ao robot e em 2 valores de threshold de distancia
+
+##### Experiments and Results
+
+- Irrelevante
+
+
+
+## 6 - 2015 - Optimizing the Universal Robots ROS Driver
+
+- Relatório que analisa o estado corrente (2015) do driver ROS dos Universal Robots
+- Várias formas de contorlo do robot (informação conhecida)
+- Modo de funcionamento do ur_driver (irrelevante)
+- Explicação de comandos URScript (irrelevante)
+- Explicação de como o novo driver, escrito em C++ interaje com o robot 
+  - Utiliza o comando servoJ internamente para execução de trajetórias
+
+
+
+## 7 - 2017 - Real-Time Control of Robots with ROS
+
+- Boa introdução / síntese sobre ROS e Universal Robots
+- De resto não tem grande informação... Basicamente são melhoramentos ao driver antigo do robot
+

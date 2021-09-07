@@ -132,7 +132,13 @@
 
 #### Obstacle Detection
 
-#### ...
+#### Potential Fields Method
+
+##### Attraction
+
+##### Repulsion
+
+##### Controller
 
 
 
@@ -174,4 +180,5 @@
 ## Extra
 
 - Links de notícias / páginas em footnote, e não nas referências
+- Nomenclature
 

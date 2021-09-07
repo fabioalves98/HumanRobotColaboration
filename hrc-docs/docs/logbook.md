@@ -1267,3 +1267,25 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Resultados favoraveis em simulação, o robot segue sempre a trajetoria evitando as esferas circundantes
 
 ## 01/09 - Bilbioteca
+
+#### Potential Field Method
+
+- Programa spawn_obstacles.py tambem publica a posição real dos obstaculos gerados para melhorar a criação do vetor repulsão
+- Melhoramentos no programa repulsion.py na medida em que alguns erros da função de repulso forma corrigidos
+- Paper sobre robotic manipulator self-identification para que os clusters detetados pela camera que pertencem ao robot nao afetem o algoritmo PF
+  - Robot manipulator self-identification for surrounding obstacle detection
+
+## 7/09 - Biblioteca
+
+- Paper sobre robot manipulator self-identification. Estratégia para remove os clusters pertencentes ao robot desenhada
+- Papers sobre UR ROS Driver, não adiantaram grande coisa
+- Informação importante do modo de funcionamento do driver do robot em 
+  - https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/tree/master/ur_robot_driver
+- Encontrado ficheiro urscript que é carregado para o robot e comunica com o driver ROS
+  - https://github.com/UniversalRobots/Universal_Robots_ROS_Driver/blob/master/ur_robot_driver/resources/ros_control.urscript
+- Resumidamente os comandos de velocidade são traduzidos em speedj internamente no robot
+
+#### Potential Field Method
+
+- Criação de um modelo baseado em esferas e cilindros, do robot no programa obstacle.cpp para remover os clusters de pontos que pertencem ao robot (robotic manipulator self-identification)
+  - Utilizando os vários tranforms que descrevem a estrutura do robot

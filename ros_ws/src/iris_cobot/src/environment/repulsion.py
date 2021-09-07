@@ -55,14 +55,8 @@ def repulsion(obstacles_msg, real):
         rep_vector = np.subtract(ee_center_arr, obs_center_arr)
         rep_vector = rep_vector/np.linalg.norm(rep_vector)
         
-        distance = obstacles[min_obs_idx][4] # Distance should be limited to 10 - 30
-
-        print(distance)
-
+        distance = obstacles[min_obs_idx][4]
         rep_factor = (MAX_DIST - distance) * 1 / MAX_DIST
-
-        print(rep_factor)
-        print()
         rep_vector = rep_vector * rep_factor
 
         # print(min_obs_idx, obstacles[min_obs_idx], rep_vector)

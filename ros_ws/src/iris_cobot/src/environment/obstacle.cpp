@@ -38,6 +38,12 @@ typedef pcl::IndicesClustersPtr IdxClustersPtr;
 // Global point cloud from camera
 CloudPtr cloud_global (new Cloud);
 
+// Transform listener buffer
+tf2_ros::Buffer tfBuffer;
+
+// Camera fixed tf
+tf2::Stamped<tf2::Transform> camera_tf;
+
 // Obstacles publisher
 ros::Publisher obstacles_pub;
 
@@ -78,17 +84,30 @@ void setViewerPointcloud(pcl::PointCloud<Point>::ConstPtr cloud)
     viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "camera_cloud");
 }
 
-void paintFullCluster(CloudPtr cloud, IdxClustersPtr clusters, int r, int g, int b)
+void paintFullCluster(int index, CloudPtr cloud, IdxClustersPtr clusters, int r, int g, int b)
 {
-    for (int i = 0; i < clusters->size(); i++)
+    if (index == -1)
     {
-        for (int j = 0; j < (*clusters)[i].indices.size(); j++)
+        for (int i = 0; i < clusters->size(); i++)
         {
-            cloud->points[(*clusters)[i].indices[j]].r = r;
-            cloud->points[(*clusters)[i].indices[j]].g = g;
-            cloud->points[(*clusters)[i].indices[j]].b = b;
+            for (int j = 0; j < (*clusters)[i].indices.size(); j++)
+            {
+                cloud->points[(*clusters)[i].indices[j]].r = r;
+                cloud->points[(*clusters)[i].indices[j]].g = g;
+                cloud->points[(*clusters)[i].indices[j]].b = b;
+            }
         }
     }
+    else
+    {
+        for (int j = 0; j < (*clusters)[index].indices.size(); j++)
+            {
+                cloud->points[(*clusters)[index].indices[j]].r = r;
+                cloud->points[(*clusters)[index].indices[j]].g = g;
+                cloud->points[(*clusters)[index].indices[j]].b = b;
+            }
+    }
+    
 }
 
 void paintRandomCluster(CloudPtr cloud, IdxClustersPtr clusters)
@@ -194,14 +213,16 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     // std::cout << "Clusters Size: " << clusters->size() << "\n\n";
 
     // Paint Pointclouds
-    paintFullCluster(cloud_out, small_clusters, 0, 100, 0);
-    paintFullCluster(cloud_out, large_clusters, 0, 0, 100);
-    paintFullCluster(cloud_out, clusters, 255, 0, 0);
+    paintFullCluster(-1, cloud_out, small_clusters, 0, 100, 0);
+    paintFullCluster(-1, cloud_out, large_clusters, 0, 0, 100);
+    paintFullCluster(-1, cloud_out, clusters, 255, 255, 0);
     // paintRandomCluster(cloud_out, clusters);
 
     // Obstacles arrays
     std::vector<geometry_msgs::Point> obstacles_centers;
     std::vector<double> obstacles_radiuses;
+
+    viewer->removeAllShapes();
 
     // Select 4 random points from each cluster
     for (int i = 0; i < clusters->size(); i++)
@@ -272,6 +293,11 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 
             std::cout << "Cluster " << i << "\n";
 
+
+            paintFullCluster(i, cloud_out, clusters, 255, 0 ,0);
+            viewer->addSphere(pcl::PointXYZ(center.x, center.y, center.z), model_coefficients[3], 
+                                            "sphere" + std::to_string(i));
+
             std::cout << "Determinant - " << determinant4x4(point_matrix) << "\n";
 
             std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
@@ -280,6 +306,55 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     }
     std::cout << std::endl;
 
+    // Construct robot model for self-identification
+    geometry_msgs::TransformStamped sl_tf_msg, ua_tf_msg, fa_tf_msg, w1_tf_msg, w2_tf_msg;
+    try
+    {
+        sl_tf_msg = tfBuffer.lookupTransform("world", "shoulder_link", ros::Time(0));
+        ua_tf_msg = tfBuffer.lookupTransform("world", "upper_arm_link", ros::Time(0));
+        fa_tf_msg = tfBuffer.lookupTransform("world", "forearm_link", ros::Time(0));
+        w1_tf_msg = tfBuffer.lookupTransform("world", "wrist_1_link", ros::Time(0));
+        w2_tf_msg = tfBuffer.lookupTransform("world", "wrist_2_link", ros::Time(0));
+    }
+    catch (tf2::TransformException &ex)
+    {
+        ROS_WARN("%s",ex.what());
+    }
+
+    tf2::Stamped<tf2::Transform> sl_tf, ua_tf, fa_tf, w1_tf, w2_tf;
+    tf2::fromMsg(sl_tf_msg, sl_tf);
+    tf2::fromMsg(ua_tf_msg, ua_tf);
+    tf2::fromMsg(fa_tf_msg, fa_tf);
+    tf2::fromMsg(w1_tf_msg, w1_tf);
+    tf2::fromMsg(w2_tf_msg, w2_tf);
+
+    tf2::Transform offset;
+    tf2::Transform sl_camera_tf = camera_tf.inverse() * sl_tf;
+    offset.setOrigin(tf2::Vector3(0, 0, 0.15));
+    tf2::Transform ua_off_camera_tf = camera_tf.inverse() * (ua_tf * offset);
+    tf2::Transform fa_off_camera_tf = camera_tf.inverse() * (fa_tf * offset);
+    tf2::Transform fa_camera_tf = camera_tf.inverse() * fa_tf;
+    tf2::Transform w1_camera_tf = camera_tf.inverse() * w1_tf;
+    offset.setOrigin(tf2::Vector3(0, 0, -0.15));
+    tf2::Transform w1_off_camera_tf = camera_tf.inverse() * (w1_tf * offset);
+    tf2::Transform w2_camera_tf = camera_tf.inverse() * w2_tf;
+
+    tf2::Vector3 sl_center = sl_camera_tf.getOrigin();
+    tf2::Vector3 ua_off_center = ua_off_camera_tf.getOrigin();
+    tf2::Vector3 fa_off_center = fa_off_camera_tf.getOrigin();
+    tf2::Vector3 fa_center = fa_camera_tf.getOrigin();
+    tf2::Vector3 w1_off_center = w1_off_camera_tf.getOrigin();
+    tf2::Vector3 w1_center = w1_camera_tf.getOrigin();
+    tf2::Vector3 w2_center = w2_camera_tf.getOrigin();
+
+    viewer->addSphere(pcl::PointXYZ(sl_center.x(), sl_center.y(), sl_center.z()), 0.1, "sl");
+    viewer->addSphere(pcl::PointXYZ(ua_off_center.x(), ua_off_center.y(), ua_off_center.z()), 0.05, "ua_off");
+    viewer->addSphere(pcl::PointXYZ(fa_off_center.x(), fa_off_center.y(), fa_off_center.z()), 0.05, "fa_off");
+    viewer->addSphere(pcl::PointXYZ(fa_center.x(), fa_center.y(), fa_center.z()), 0.05, "fa");
+    viewer->addSphere(pcl::PointXYZ(w1_off_center.x(), w1_off_center.y(), w1_off_center.z()), 0.05, "w1_off");
+    viewer->addSphere(pcl::PointXYZ(w1_center.x(), w1_center.y(), w1_center.z()), 0.05, "w1");
+    viewer->addSphere(pcl::PointXYZ(w2_center.x(), w2_center.y(), w2_center.z()), 0.05, "w2");
+    
     // Publish obstacles message
     iris_cobot::Obstacles obstacles_msg;
     obstacles_msg.size = obstacles_centers.size();
@@ -308,6 +383,27 @@ int main (int argc, char** argv)
     dynamic_reconfigure::Server<iris_cobot::ClusteringConfig>::CallbackType cobotConfigCallback;
     cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
     server.setCallback(cobotConfigCallback);
+
+    // Transform listener
+    tf2_ros::TransformListener tfListener(tfBuffer);
+
+    // Obtain camera fixed transform
+    geometry_msgs::TransformStamped camera_tf_msg;
+    while (nh.ok())
+    {
+        try
+        {
+            camera_tf_msg = tfBuffer.lookupTransform("world", "camera_depth_optical_frame", ros::Time(0));
+            break;
+        }
+        catch (tf2::TransformException &ex) {
+            ROS_WARN("%s",ex.what());
+            ros::Duration(0.1).sleep();
+            continue;
+        }
+    }
+    tf2::fromMsg(camera_tf_msg, camera_tf);
+    std::cout << camera_tf_msg << std::endl;
 
     // Camera Subscription service
     ros::Subscriber sub = nh.subscribe("/camera/depth/points", 1, cloud_callback);
