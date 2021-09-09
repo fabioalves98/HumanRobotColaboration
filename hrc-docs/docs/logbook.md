@@ -1109,7 +1109,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Pull request iris-ua/iris_sami
 - Pesquisa de estrutura para a tese
 
-## 1/07 - IRISLab
+## 01/07 - IRISLab
 
 #### Interaction
 
@@ -1128,13 +1128,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 -   Fix no interface do gripper onde a chamada repetida das funções get_state e get_pos gerava exceções HTTP
 -   Necessidade de dar fix à maneira como interagir com o gripper
 
-## 7/07 - IRISLab
+## 07/07 - IRISLab
 
 -   Alteração do serviço /iris_sami/status para 2 tópicos /iris_sami/arm_status (500Hz) e /iris_sami/gripper_status (50Hz)
 -   Criação de 2 instâncias de controlo do gripper dentro do server.py do iris_sami
 -   Criação do nó weight que calcula constantemente a magnitude da força exercida no sensor FT
 
-## 8/07 - IRISLab
+## 08/07 - IRISLab
 
 #### Modelo Teórico de Correção de Torque
 
@@ -1275,7 +1275,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Paper sobre robotic manipulator self-identification para que os clusters detetados pela camera que pertencem ao robot nao afetem o algoritmo PF
   - Robot manipulator self-identification for surrounding obstacle detection
 
-## 7/09 - Biblioteca
+## 07/09 - Biblioteca
 
 - Paper sobre robot manipulator self-identification. Estratégia para remove os clusters pertencentes ao robot desenhada
 - Papers sobre UR ROS Driver, não adiantaram grande coisa
@@ -1289,3 +1289,18 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Criação de um modelo baseado em esferas e cilindros, do robot no programa obstacle.cpp para remover os clusters de pontos que pertencem ao robot (robotic manipulator self-identification)
   - Utilizando os vários tranforms que descrevem a estrutura do robot
+
+## 09/09 - Biblioteca
+
+#### Potential Field Method
+
+- Programa de deteção de obstaculos remove clusters pertencentes ao robot recorrendo a um array de esferas que descrevem o robot
+  - Inicialmente é criado um array com 9 pontos através de 4 TF's que correspondem a juntas do robot
+  - Os pontos desse array são interpolados com espaçamento = 0.05 e em cada novo ponto criado é gerada uma esfera com o raio igual a esse espaçamento. São cirados um total de ~50 esferas
+  - Com estas esferas é possível identificar que pontos da point cloud pertencem ao corpo do robot através da sua distancia às esferas criadas
+  - Cada ponto da point cloud é categorizado em 1 de 3
+    - Robot - Quando está a < 0.1 de alguma das esferas
+    - Regiao de Interesse - Quando está a 0.1 - 0.3 de alguma das esferas
+    - Ignorado - Quando está a > 0.3 de alguma das esferas
+- Programa obstale.cpp consegue agora identificar obstaculos com precisão, a uma frequenia de 50Hz (Thinkpad)
+- Conjunto de programas que implementam o algoritmo de campos potenciais funcionam de forma correta, em simulação

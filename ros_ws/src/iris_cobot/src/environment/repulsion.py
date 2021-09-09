@@ -91,7 +91,7 @@ def main():
     repulsion_pub = rospy.Publisher('repulsion', PFVector, queue_size=1)
 
     rospy.Subscriber('obstacles', Obstacles, repulsion, True)
-    rospy.Subscriber('obstacles_fake', Obstacles, repulsion, False)
+    # rospy.Subscriber('obstacles_fake', Obstacles, repulsion, False)
 
     rospy.loginfo('Repulsion node listening to obstacles and publishing to repulsion')
 
