@@ -1,0 +1,20 @@
+<library path="src">
+  <class name="Cobot Plugin" type="rqt_cobot.plugin.CobotPlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Plugin that enables iris_cobot functions as a GUI application
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>Cobot</label>
+      <icon type="theme">system-help</icon>
+      <statustip>A Python GUI plugin to interact with the iris_cobot ROS package.</statustip>
+    </qtgui>
+  </class>
+</library>

@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  rqt_gui
+  rqt_gui_py
   std_msgs
   geometry_msgs
   sensor_msgs
@@ -93,3 +95,17 @@ target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
 # To make sure it works, build from source
 # add_executable(rtde src/test/rtde.cpp)
 # target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})
+
+install(PROGRAMS scripts/rqt_cobot
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
+install(DIRECTORY
+  resource
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+
+install(FILES
+  plugin.xml
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
