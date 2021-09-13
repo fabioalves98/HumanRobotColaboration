@@ -128,7 +128,7 @@
 
 
 
-## 5 - Safe Path Planing
+## 5 - Safe Path Planning
 
 #### Obstacle Detection
 

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Force Torque to Angular Velocity -->
+    <node pkg="iris_cobot" type="ft_to_vel" name="ft_to_vel" output="screen" respawn="true"/>
+
+    <!-- Jacobian Conversion -->
+    <node pkg="iris_cobot" type="jacobian" name="jacobian" output="screen" respawn="true"/>
+
+    <!-- Joint Velocity Controller -->
+    <node pkg="iris_cobot" type="joint_vel_cont" name="joint_vel_cont" output="screen" respawn="true"/>
+
+</launch>

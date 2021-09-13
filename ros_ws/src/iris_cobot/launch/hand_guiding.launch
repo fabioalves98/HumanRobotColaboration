@@ -1,14 +1,19 @@
 <?xml version="1.0"?>
 <launch>
 
+    <!-- Mean filter for the raw value of wrench -->
     <node pkg="iris_cobot" type="filter.py" name="filter" output="screen" respawn="true"/>
 
+    <!-- FT Theory Model -->
     <node pkg="iris_cobot" type="ft_theory.py" name="ft_theory" output="screen" respawn="true"/>
 
+    <!-- Correction of raw values with theory model and off-line correction -->
     <node pkg="iris_cobot" type="correct.py" name="correct" output="screen" respawn="true"/>
 
-    <!-- <node pkg="iris_cobot" type="weight.py" name="weight" output="screen" respawn="true"/> -->
+    <!-- Weigh calculator -->
+    <node pkg="iris_cobot" type="weight.py" name="weight" output="screen" respawn="true"/>
 
+    <!-- Analysis of wrench based on time -->
     <node pkg="iris_cobot" type="time_series_analysis.py" name="time_series_analysis" output="screen" respawn="true"/>
 
 </launch>

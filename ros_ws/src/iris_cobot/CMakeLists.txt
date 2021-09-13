@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   dynamic_reconfigure
   pcl_ros
   pcl_conversions
+  eigen_conversions
   moveit_core
   moveit_ros_planning_interface
 )
@@ -43,7 +44,6 @@ generate_messages(
 
 generate_dynamic_reconfigure_options(
   cfg/FT_to_Vel.cfg
-  cfg/Jacobian.cfg
   cfg/Clustering.cfg
 )
 
@@ -61,29 +61,29 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(viewer src/visualization/viewer.cpp)
 target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
-add_executable(environment src/environment/environment.cpp)
+add_executable(environment src/test/environment.cpp)
 target_link_libraries(environment ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
-add_executable(obstacle src/environment/obstacle.cpp)
-target_link_libraries(obstacle ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-add_dependencies(obstacle ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
+add_executable(obstacles src/obstacle_avoidance/obstacles.cpp)
+target_link_libraries(obstacles ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+add_dependencies(obstacles ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(ft_to_vel src/compliance/ft_to_vel.cpp)
+add_executable(ft_to_vel src/control/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
 add_dependencies(ft_to_vel ${PROJECT_NAME}_gencfg)
 
-add_executable(attraction src/environment/attraction.cpp)
+add_executable(attraction src/obstacle_avoidance/attraction.cpp)
 target_link_libraries(attraction ${catkin_LIBRARIES})
 
-add_executable(jacobian src/compliance/jacobian.cpp)
+add_executable(jacobian src/control/jacobian.cpp)
 target_link_libraries(jacobian ${catkin_LIBRARIES})
-add_dependencies(jacobian ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
+add_dependencies(jacobian ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(moveit_controller src/compliance/moveit_controller.cpp)
+add_executable(moveit_controller src/control/moveit_controller.cpp)
 target_link_libraries(moveit_controller ${catkin_LIBRARIES})
 add_dependencies(moveit_controller ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(joint_vel_cont src/compliance/joint_vel_cont.cpp)
+add_executable(joint_vel_cont src/control/joint_vel_cont.cpp)
 target_link_libraries(joint_vel_cont ${catkin_LIBRARIES})
 add_dependencies(joint_vel_cont ${PROJECT_NAME}_generate_messages_cpp)
 

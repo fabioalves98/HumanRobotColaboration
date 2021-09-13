@@ -1304,3 +1304,4 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
     - Ignorado - Quando está a > 0.3 de alguma das esferas
 - Programa obstale.cpp consegue agora identificar obstaculos com precisão, a uma frequenia de 50Hz (Thinkpad)
 - Conjunto de programas que implementam o algoritmo de campos potenciais funcionam de forma correta, em simulação
+

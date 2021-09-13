@@ -173,7 +173,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     pcl::fromROSMsg (*cloud_msg, *cloud_global);
 
     // Clean viewers
-    viewer_viz->removeAllShapes();
+    // viewer_viz->removeAllShapes();
     // viewer_cec->removeAllShapes();
 
     // Construct robot model for self-identification
@@ -246,8 +246,8 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 
     for (int i = 0; i < total_points.size(); i++)
     {
-        viewer_viz->addSphere(pcl::PointXYZ(total_points[i].x(), total_points[i].y(), 
-            total_points[i].z()), 0.05, std::to_string(i));
+        // viewer_viz->addSphere(pcl::PointXYZ(total_points[i].x(), total_points[i].y(), 
+        //     total_points[i].z()), 0.05, std::to_string(i));
     }
 
     // Data containers used
@@ -377,8 +377,8 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
         obstacles_centers.push_back(center);
         obstacles_radiuses.push_back(model_coefficients[3]);
 
-        viewer_viz->addSphere(pcl::PointXYZ(center.x, center.y, center.z), model_coefficients[3], 
-                                        255, 0, 0, "sphere" + std::to_string(i));
+        // viewer_viz->addSphere(pcl::PointXYZ(center.x, center.y, center.z), model_coefficients[3], 
+        //                                 255, 0, 0, "sphere" + std::to_string(i));
 
         std::cout << "Cluster " << i << "\n";
         std::cout << "Coeficients - X: " << model_coefficients[0] << ", Y: " << model_coefficients[2];
@@ -406,7 +406,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 int main (int argc, char** argv)
 {
     // Initialize ROS
-    ros::init (argc, argv, "obstacle_detection");
+    ros::init (argc, argv, "obstacles");
     ros::NodeHandle nh;
 
     // Random seed generator
@@ -451,11 +451,3 @@ int main (int argc, char** argv)
     // Spin
     ros::spin();
 }
-
-
-
-
-
-
-
-

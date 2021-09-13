@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- Off-line trajectory -->
+    <node pkg="iris_cobot" type="offline.py" name="offline" output="screen" respawn="true"/>
+
+    <!-- Attraction Vector -->
+    <node pkg="iris_cobot" type="attraction" name="attraction" output="screen" respawn="true"/>
+
+    <!-- Obstacle Spawner (only in gazebo) -->
+    <node pkg="iris_cobot" type="spawn_obstacles.py" name="spawn_obstacles" output="screen" respawn="true"/>
+
+    <!-- Obstacle Detection -->
+    <node pkg="iris_cobot" type="obstacles" name="obstacles" output="screen" respawn="true"/>
+
+    <!-- Repulsion Vector -->
+    <node pkg="iris_cobot" type="repulsion" name="repulsion" output="screen" respawn="true"/>
+
+    <!-- Potential Field Controller -->
+    <node pkg="iris_cobot" type="pf_controller.py" name="pf_controller" output="screen" respawn="true"/>
+
+</launch>

@@ -1,5 +1,9 @@
 #include <math.h>
 
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+#include <eigen_conversions/eigen_msg.h>
+
 #include <ros/ros.h>
 #include <geometry_msgs/WrenchStamped.h>
 #include <tf2_ros/transform_broadcaster.h>
@@ -11,7 +15,6 @@
 
 #include <moveit/move_group_interface/move_group_interface.h>
 
-
 moveit::planning_interface::MoveGroupInterface *move_group_ptr;
 tf2_ros::TransformBroadcaster *br_ptr;
 ros::Publisher *force_marker_pub_ptr;
@@ -20,28 +23,58 @@ ros::Publisher *lin_vel_pub_ptr;
 
 double force_div;
 double torque_div;
+double force_sensibility;
+double torque_sensibility;
 
 void parameterConfigure(iris_cobot::FT_to_VelConfig &config, uint32_t level) 
 {
     force_div = config.force_div;
     torque_div = config.torque_div;
-}
 
+    force_sensibility = config.force_sensibility;
+    torque_sensibility = config.torque_sensibility;
+}
 
 void rotationCalculator(geometry_msgs::WrenchStamped wrench)
 {
-    geometry_msgs::Vector3 force = wrench.wrench.force;
-    geometry_msgs::Vector3 torque = wrench.wrench.torque;
+    // Obtain values from msg
+    geometry_msgs::Vector3 force_msg = wrench.wrench.force;
+    geometry_msgs::Vector3 torque_msg = wrench.wrench.torque;
+    Eigen::Vector3d force;
+    Eigen::Vector3d torque;
+    tf::vectorMsgToEigen(force_msg, force);
+    tf::vectorMsgToEigen(torque_msg, torque);
 
     // Divide force and torque values by a user defined constant
-    force.x /= force_div;
-    force.y /= force_div;
-    force.z /= force_div;
+    force /= force_div;
+    torque /= torque_div;
 
-    torque.x /= torque_div;
-    torque.y /= torque_div;
-    torque.z /= torque_div;
+    // Limit force and torque sensibility by a defined threshold
+    std::vector<std::pair<Eigen::Vector3d*, double>> wrench_map = {{&force, force_sensibility}, 
+                                                                   {&torque, torque_sensibility}};
 
+    for (auto &pair : wrench_map)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            if ((*pair.first)[i] > pair.second)
+            {
+                (*pair.first)[i] -= pair.second;
+            }
+            else if ((*pair.first)[i] < -pair.second)
+            {
+                (*pair.first)[i] += pair.second;
+            }
+            else
+            {
+                (*pair.first)[i] = 0;
+            }
+        }
+    }
+
+    std::cout << "Force - " << force << std::endl;
+    std::cout << "Torque - " << torque << std::endl;
+    
     // Origin position
     tf2::Vector3 origin(-0.7, 0.3, 0.5);
 
@@ -60,9 +93,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     // FORCE
     // Create Force Pose
     geometry_msgs::Pose force_pose;
-    force_pose.position.x = force.x;
-    force_pose.position.y = force.y;
-    force_pose.position.z = force.z;
+    tf::pointEigenToMsg(force, force_pose.position);
     force_pose.orientation = tf2::toMsg(tf2::Quaternion(0, 0, 0, 1));
 
     tf2::doTransform(force_pose, force_pose, tf2::toMsg(ft_sensor_tf));
@@ -93,7 +124,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     // TORQUE
     // Create Torque Orientation
     tf2::Quaternion torque_rot, torque_ori;
-    torque_rot.setRPY(torque.x, torque.y, torque.z);
+    torque_rot.setRPY(torque[0], torque[1], torque[2]);
     torque_ori = ft_sensor_ori * torque_rot;
 
     // Torque Transform

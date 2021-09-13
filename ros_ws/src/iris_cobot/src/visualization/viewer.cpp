@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include <chrono>
 // PCL specific includes
 #include <sensor_msgs/PointCloud2.h>
 #include <pcl/point_cloud.h>
@@ -18,6 +19,9 @@ typedef Cloud::Ptr CloudPtr;
 pcl::visualization::PCLVisualizer::Ptr viewer;
 
 CloudPtr cloud (new Cloud);
+
+std::chrono::steady_clock::time_point previous;
+std::chrono::steady_clock::time_point current;
 
 bool clustering = false;
 
@@ -53,12 +57,18 @@ float radians(int degrees)
 
 void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
 {
+    current = std::chrono::steady_clock::now();
+    std::cout << "Frequency = " << 1.0 / ((double)std::chrono::duration_cast<std::chrono::milliseconds>(current - previous).count() * 0.001) << "Hz" << std::endl;
+    previous = current;
+
     CloudPtr cloud (new Cloud);
 
     pcl::fromROSMsg(*input, *cloud);
 
     // Width - X | Height - Y | Depth - Z
     // Roll - X  | Pitch - Y  | Yaw - Z
+
+    ROS_INFO_STREAM("Size - " << cloud->size() << "\n");
 
     if (clustering)
     {
@@ -169,7 +179,7 @@ void cloud_cb (const sensor_msgs::PointCloud2ConstPtr& input)
         viewer->updatePointCloud(cloud, "kinectcloud");
     }
     
-    viewer->spinOnce(100);
+    viewer->spinOnce();
 }
 
 int main (int argc, char** argv)
@@ -178,8 +188,12 @@ int main (int argc, char** argv)
     ros::init (argc, argv, "viewer");
     ros::NodeHandle nh;
 
+
+    previous = std::chrono::steady_clock::now();
+
+
     // Create a ROS subscriber for the input point cloud
-    std::string cloud_topic_name = "/camera/depth/points";
+    std::string cloud_topic_name = "/camera/depth_registered/points";
     ros::Subscriber sub = nh.subscribe (cloud_topic_name, 1, cloud_cb);
 
     viewer = normalVis("3DViewer");
