@@ -1305,3 +1305,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Programa obstale.cpp consegue agora identificar obstaculos com precisão, a uma frequenia de 50Hz (Thinkpad)
 - Conjunto de programas que implementam o algoritmo de campos potenciais funcionam de forma correta, em simulação
 
+## 13/09 - IRISLab
+
+- Restruturação do nó ft_to_vel.cpp para incorporar as alterações feitas em jacobian.cpp
+  - Parametros de sensibilidade à força sentida
+- Nos testes realizados de hand-guiding os movimentos nas componentes Y e Z eram bem executados
+  - Movimentos na componente X apresenta muito ruído e comportamento de feedback (em que o robot começa a oscilar violentamente)
+  - Causa aparenta estar no movimento da junta shoulder_pan que parece não ser efetuado de forma suave
+  - Seram necessários mais testes especificamente ao movimento dessa junta
+- Criação de um setup para gravar vídeos das tarefas
+- Incorporação no setup do pacote easy_hadeye para calibração robot-camera

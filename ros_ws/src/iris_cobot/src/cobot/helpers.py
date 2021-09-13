@@ -9,7 +9,7 @@ from visualization_msgs.msg import Marker
 from controller_manager_msgs.srv import SwitchController
 
 from iris_cobot.srv import WeightUpdate
-from iris_sami.srv import JointGoal, RelativeMove, PoseGoal, NoArguments
+from iris_sami.srv import JointGoalName, JointGoal, RelativeMove, PoseGoal, NoArguments
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
@@ -160,6 +160,16 @@ def switchControllers(vel_to_pos):
 
 
 # SAMI helpers
+def samiAliasService(alias):
+    rospy.wait_for_service('iris_sami/alias', JointGoalName)
+    try:
+        aliasServ = rospy.ServiceProxy('iris_sami/alias', JointGoalName)
+        resp = aliasServ(alias)
+        return resp.feedback
+    except rospy.ServiceException as e:
+        print("Service call failed: %s"%e)
+
+
 def samiJointService(joints):
     rospy.wait_for_service('iris_sami/joints')
     try:
