@@ -56,7 +56,7 @@ def repulsion(obstacles_msg, real):
         rep_vector = rep_vector/np.linalg.norm(rep_vector)
         
         distance = obstacles[min_obs_idx][4]
-        rep_factor = (MAX_DIST - distance) * 1 / MAX_DIST
+        rep_factor = (MAX_DIST - (distance - 0.1)) * 1 / MAX_DIST
         rep_vector = rep_vector * rep_factor
 
         # print(min_obs_idx, obstacles[min_obs_idx], rep_vector)
@@ -82,7 +82,7 @@ def main():
     
     while True:
         try:
-            camera_tf = tfBuffer.lookup_transform('world', 'camera_depth_optical_frame', rospy.Time())
+            camera_tf = tfBuffer.lookup_transform('base_link', 'camera_depth_optical_frame', rospy.Time())
             break
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             continue

@@ -1315,3 +1315,6 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Seram necessários mais testes especificamente ao movimento dessa junta
 - Criação de um setup para gravar vídeos das tarefas
 - Incorporação no setup do pacote easy_hadeye para calibração robot-camera
+
+## 14/09 - IRISLab
+

@@ -3,7 +3,7 @@ import os, shutil
 import rospy, rospkg
 from math import pi
 from std_srvs.srv import Empty
-from easy_handeye.srv import TakeSample, ComputeCalibration
+from easy_handeye_msgs.srv import TakeSample, ComputeCalibration
 
 import cobot.helpers as helpers
 
@@ -60,15 +60,29 @@ def main():
     rospy.init_node('calibration', anonymous=True)
 
     # Send to default position
-    position = 'workspace'
+    position = 'task_calibration'
     helpers.samiAliasService(position)
 
     # Make a set of movements and take samples
+    move = [0, 0, 0]
     for rotation in rotations:
         for i in range(2):
-            helpers.samiMoveService([0, 0, 0].append(rotation))
+            print(helpers.samiMoveService(move + rotation))
             take_sample()
-        helpers.samiAliasService(position)
+        
+        print(helpers.samiAliasService(position))
+
+    for i in range(2):
+        print(helpers.samiMoveService([0, 0, -0.1, 0, 0, 0]))
+        take_sample()
+    
+    print(helpers.samiAliasService(position))
+
+    for i in range(2):
+        print(helpers.samiMoveService([0, 0, 0.1, 0, 0, 0]))
+        take_sample()
+    
+    print(helpers.samiAliasService(position))
 
     # Compute calibration and save
     compute_calibration()

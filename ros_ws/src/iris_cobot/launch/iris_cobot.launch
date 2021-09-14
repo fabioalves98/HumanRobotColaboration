@@ -24,7 +24,7 @@
         args="-l $(find iris_cobot)/curves/pj_layout.xml"/> -->
 
     <!-- Dynamic Reconfigure -->
-    <!-- <node pkg="rqt_reco/nfigure" type="rqt_reconfigure" name="configure_params" output="screen" />  -->
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="configure_params" output="screen" /> 
 
     <!-- IRIS Sami GUI Launcher -->
     <include file="$(find iris_sami)/launch/iris_sami.launch">

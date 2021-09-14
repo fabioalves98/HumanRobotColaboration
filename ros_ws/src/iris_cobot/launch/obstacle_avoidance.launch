@@ -1,14 +1,26 @@
 <?xml version="1.0"?>
 <launch>
 
+    <arg name="real"   default="true"/>
+
     <!-- Off-line trajectory -->
     <node pkg="iris_cobot" type="offline.py" name="offline" output="screen" respawn="true"/>
 
     <!-- Attraction Vector -->
     <node pkg="iris_cobot" type="attraction" name="attraction" output="screen" respawn="true"/>
 
+    <!-- Turn on real camera and calibration (only in real scenario) -->
+    <group if="$(arg real)">
+        <include file="$(find openni_launch)/launch/openni.launch">
+            <arg name="depth_registration"  value="true"/>
+        </include>
+        <include file="$(find iris_cobot)/launch/handeye_publish.launch"/>
+    </group>
+
     <!-- Obstacle Spawner (only in gazebo) -->
-    <node pkg="iris_cobot" type="spawn_obstacles.py" name="spawn_obstacles" output="screen" respawn="true"/>
+    <group unless="$(arg real)">
+        <node pkg="iris_cobot" type="spawn_obstacles.py" name="spawn_obstacles" output="screen" respawn="true"/>
+    </group>
 
     <!-- Obstacle Detection -->
     <node pkg="iris_cobot" type="obstacles" name="obstacles" output="screen" respawn="true"/>

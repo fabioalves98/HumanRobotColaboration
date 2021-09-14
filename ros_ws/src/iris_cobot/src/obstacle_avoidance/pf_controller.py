@@ -50,7 +50,7 @@ linear/angular velocity")
         
         # Potential feilds equation
         pf_vel = np.add((1 - repulsion_mgn) * attraction, repulsion)
-
+        
         linear_vel_pub.publish(Vector3(*pf_vel[:3]))
         angular_vel_pub.publish(Vector3(*pf_vel[3:]))
 

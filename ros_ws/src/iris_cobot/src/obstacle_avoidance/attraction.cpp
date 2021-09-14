@@ -50,7 +50,15 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     lin_vel << goal_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
                goal_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
                goal_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
-    lin_vel = lin_vel.normalized();
+
+    if (lin_vel.norm() < 0.01)
+    {
+        lin_vel << 0, 0, 0;
+    }
+    else if (lin_vel.norm() > 0.1)
+    {
+        lin_vel = lin_vel.normalized();
+    }
 
     geometry_msgs::Vector3 lin_vel_msg;
     tf2::toMsg(lin_vel, lin_vel_msg);
@@ -58,9 +66,19 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     geometry_msgs::Vector3 ang_vel_msg;
     double roll, pitch, yaw;
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
-    ang_vel_msg.x = roll;
-    ang_vel_msg.y = pitch;
-    ang_vel_msg.z = yaw;
+
+    if (roll > 0.05 || pitch > 0.05 || yaw > 0.05)
+    {
+        ang_vel_msg.x = roll;
+        ang_vel_msg.y = pitch;
+        ang_vel_msg.z = yaw;
+    }
+    else
+    {
+        ang_vel_msg.x = 0;
+        ang_vel_msg.y = 0;
+        ang_vel_msg.z = 0;
+    }
 
     iris_cobot::PFVector attraction;
     attraction.linear_velocity = lin_vel_msg;

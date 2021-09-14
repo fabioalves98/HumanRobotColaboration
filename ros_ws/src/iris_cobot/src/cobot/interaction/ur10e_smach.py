@@ -68,7 +68,7 @@ class GripObject(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state GripObject')
 
-        helpers.switchControllers(True)
+        # helpers.switchControllers(True)
         upwards_move = [0, 0, 0.05, 0, 0, 0]
         helpers.samiMoveWorldService(upwards_move)
 
@@ -83,7 +83,7 @@ class GripObject(UR10eState):
         
         helpers.weightUpdate(weight/10)
         time.sleep(1)
-        helpers.switchControllers(False)
+        # helpers.switchControllers(False)
         
         while not rospy.is_shutdown():
             action = self.getAction()
@@ -115,11 +115,11 @@ class Releasing(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state Releasing')
 
-        helpers.switchControllers(True)
+        # helpers.switchControllers(True)
         helpers.samiReleaseService()
         helpers.weightUpdate(0)
         time.sleep(1)
-        helpers.switchControllers(False)
+        # helpers.switchControllers(False)
         
         while not rospy.is_shutdown():
             status = self.getGripperStatus()

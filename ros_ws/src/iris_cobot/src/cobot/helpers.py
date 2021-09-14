@@ -6,7 +6,7 @@ from ur_msgs.srv import SetSpeedSliderFraction, SetPayload
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import Vector3, Point, Pose, PoseStamped, Quaternion, Transform, TransformStamped
 from visualization_msgs.msg import Marker
-from controller_manager_msgs.srv import SwitchController
+from controller_manager_msgs.srv import ListControllers, SwitchController
 
 from iris_cobot.srv import WeightUpdate
 from iris_sami.srv import JointGoalName, JointGoal, RelativeMove, PoseGoal, NoArguments
@@ -138,30 +138,43 @@ def weightUpdate(weight):
 
 
 # Switch Controllers
-def switchControllers(vel_to_pos):
-    if vel_to_pos:
-        start_cont_list = ['scaled_pos_joint_traj_controller']
-        stop_cont_list = ['joint_group_vel_controller']
-    else:
-        start_cont_list = ['joint_group_vel_controller']
-        stop_cont_list = ['scaled_pos_joint_traj_controller']
-    
-    rospy.wait_for_service('controller_manager/switch_controller')
+def switchControllers():
+    controllers = ['joint_group_vel_controller', 'scaled_pos_joint_traj_controller']
+
+    # Get active controller
+    active_controller = ''
+    rospy.wait_for_service('controller_manager/list_controllers')
     try:
-        switchServ = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
-        resp = switchServ(start_controllers=start_cont_list, 
-                          stop_controllers=stop_cont_list,
-                          strictness=1,
-                          start_asap=False,
-                          timeout=2.0)
-        return resp.ok
+        listServ = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
+        resp = listServ()
+        for controller in resp.controller:
+            if controller.name in controllers and controller.state == "running":
+                active_controller = controller.name
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
+
+    # Switch Controllers
+    if active_controller:
+        controllers.remove(active_controller)
+
+        rospy.wait_for_service('controller_manager/switch_controller')
+        try:
+            switchServ = rospy.ServiceProxy('controller_manager/switch_controller', SwitchController)
+            resp = switchServ(start_controllers=controllers,
+                            stop_controllers=[active_controller],
+                            strictness=1,
+                            start_asap=False,
+                            timeout=2.0)
+            return resp.ok
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+    else:
+        print('NO CONTROLLERS TO SWITCH')
 
 
 # SAMI helpers
 def samiAliasService(alias):
-    rospy.wait_for_service('iris_sami/alias', JointGoalName)
+    rospy.wait_for_service('iris_sami/alias')
     try:
         aliasServ = rospy.ServiceProxy('iris_sami/alias', JointGoalName)
         resp = aliasServ(alias)

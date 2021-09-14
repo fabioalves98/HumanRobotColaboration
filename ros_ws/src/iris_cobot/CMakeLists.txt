@@ -44,7 +44,7 @@ generate_messages(
 
 generate_dynamic_reconfigure_options(
   cfg/FT_to_Vel.cfg
-  cfg/Clustering.cfg
+  cfg/Obstacles.cfg
 )
 
 catkin_package(CATKIN_DEPENDS message_runtime)

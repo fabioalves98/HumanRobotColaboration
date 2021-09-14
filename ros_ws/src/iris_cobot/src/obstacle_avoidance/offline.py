@@ -87,6 +87,9 @@ def main():
     points = plan.joint_trajectory.points
     print('Trajecotry with %d points' % len(points))
 
+    # Create a single trajecotry point for debung
+    traj_point = JointTrajectoryPoint(positions=[-3.56459, -1.45647, -2.34757, 0.05356, 1.26850, 0.20732])
+
     # Instantiate Trajectory Executioner
     traj_exec = TrajectoryExecutioner(points)
 
@@ -96,14 +99,16 @@ def main():
     # Speed Control Cycle
     rate = rospy.Rate(500)
     while not rospy.is_shutdown():
-        # Get current pose 
-        current_q = move_group.get_current_joint_values()
+        # # Get current pose 
+        # current_q = move_group.get_current_joint_values()
+        
+        # # Obtain next instruction from trajectory executioner
+        # current_point = traj_exec.localize(current_q)
 
-        # Obtain next instruction from trajectory executioner
-        current_point = traj_exec.localize(current_q)
+        # if current_point:
+        #     traj_point_pub.publish(current_point)
 
-        if current_point:
-            traj_point_pub.publish(current_point)
+        traj_point_pub.publish(traj_point)
         
         rate.sleep()
 

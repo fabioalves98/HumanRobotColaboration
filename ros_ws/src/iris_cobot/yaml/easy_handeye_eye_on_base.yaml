@@ -1,0 +1,18 @@
+parameters:
+  eye_on_hand: false
+  freehand_robot_movement: true
+  move_group: manipulator
+  move_group_namespace: /
+  namespace: /easy_handeye_eye_on_base/
+  robot_base_frame: base_link
+  robot_effector_frame: flange
+  tracking_base_frame: camera_link
+  tracking_marker_frame: camera_marker
+transformation:
+  qw: 0.3700781111736106
+  qx: 0.3160883188811968
+  qy: 0.12765448380317246
+  qz: -0.8641959841737157
+  x: 1.0068734950382288
+  y: 0.10337745502760931
+  z: 0.9202155481034919
