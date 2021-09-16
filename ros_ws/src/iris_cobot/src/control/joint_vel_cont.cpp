@@ -4,14 +4,14 @@
 
 #include <iris_cobot/JointSpeed.h>
 
+#define MEAN_SIZE 100
+
 std::vector<double> *joint_speeds_ptr;
 std::vector<std::vector<double>> *joint_speed_queue_ptr;
 
-int mean_size = 50;
-
 bool stop(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
 {
-    for (int i = 0; i < mean_size; i++)
+    for (int i = 0; i < MEAN_SIZE; i++)
     {
         std::vector<double> stopped =  {0, 0, 0, 0, 0, 0};
         joint_speed_queue_ptr->erase(joint_speed_queue_ptr->begin());
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
     // Joint Speed subscriber
     std::vector<double> joint_speeds = {0, 0, 0, 0, 0, 0};
     joint_speeds_ptr = &joint_speeds;
-    for(int i = 0; i < mean_size; i++)
+    for(int i = 0; i < MEAN_SIZE; i++)
     {
         joint_speed_queue.push_back(joint_speeds);
     }
@@ -68,7 +68,7 @@ int main(int argc, char **argv)
         }
         for (int i = 0; i < 6; i++)
         {
-            joint_speed_avrg[i] /= mean_size;
+            joint_speed_avrg[i] /= MEAN_SIZE;
         }
 
         std_msgs::Float64MultiArray joint_vel_msg;

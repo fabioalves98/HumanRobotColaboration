@@ -68,9 +68,10 @@ class GripObject(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state GripObject')
 
-        # helpers.switchControllers(True)
+        helpers.switchControllers("position")
         upwards_move = [0, 0, 0.05, 0, 0, 0]
         helpers.samiMoveWorldService(upwards_move)
+        time.sleep(0.5)
 
         wrench_msg = rospy.wait_for_message('wrench_correct', WrenchStamped)
         weight = math.sqrt(math.pow(wrench_msg.wrench.force.x, 2) + 
@@ -82,8 +83,8 @@ class GripObject(UR10eState):
         print('Calculated Weight - ', weight)
         
         helpers.weightUpdate(weight/10)
-        time.sleep(1)
-        # helpers.switchControllers(False)
+        time.sleep(0.5)
+        helpers.switchControllers("velocity")
         
         while not rospy.is_shutdown():
             action = self.getAction()
@@ -115,11 +116,11 @@ class Releasing(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state Releasing')
 
-        # helpers.switchControllers(True)
+        helpers.switchControllers("position")
         helpers.samiReleaseService()
         helpers.weightUpdate(0)
         time.sleep(1)
-        # helpers.switchControllers(False)
+        helpers.switchControllers("velocity")
         
         while not rospy.is_shutdown():
             status = self.getGripperStatus()

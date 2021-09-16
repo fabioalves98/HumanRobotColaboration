@@ -1318,3 +1318,18 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 14/09 - IRISLab
 
+#### Obstacle Avoidance
+
+- Programa de calibração automatica calibration.py criado
+  - Consiste em colcoar o robot numa posição custom e ele efetuar um conjunto predefinido de rotações e translações para calibrar a camera em relação ao robot
+- Criação de código no obstacles.cpp de modo a detear obstaculos que não sejam esferas
+  - Ainda há espaço para melhorar esta parte
+- Ajustes nos programas attraction.cpp e repulsion.py a fim de melhorar o comportamento do robot
+  - Aumentar a magnitude do vetor repulsão pois o robot não se estava a afastar o suficiente na presenção de um obstaculo
+  - Fazer com que a magnitude do vetor atração seja dinamica consoante a distancia ao goal
+- Código que executa uma trajetória necessita de ser bastante melhorado
+
+## 16/09 - IRISLab
+
+- Testes com Hand Guiding e Objetos no robot real
+- Alguns melhoramentos mas nada significativo

@@ -71,9 +71,6 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
             }
         }
     }
-
-    std::cout << "Force - " << force << std::endl;
-    std::cout << "Torque - " << torque << std::endl;
     
     // Origin position
     tf2::Vector3 origin(-0.7, 0.3, 0.5);

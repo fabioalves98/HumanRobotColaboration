@@ -138,20 +138,27 @@ def weightUpdate(weight):
 
 
 # Switch Controllers
-def switchControllers():
+def switchControllers(controller = None):
     controllers = ['joint_group_vel_controller', 'scaled_pos_joint_traj_controller']
-
-    # Get active controller
     active_controller = ''
-    rospy.wait_for_service('controller_manager/list_controllers')
-    try:
-        listServ = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
-        resp = listServ()
-        for controller in resp.controller:
-            if controller.name in controllers and controller.state == "running":
-                active_controller = controller.name
-    except rospy.ServiceException as e:
-        print("Service call failed: %s"%e)
+
+    if controller == "position":
+        active_controller = controllers[0]
+    elif controller == "velocity":
+        active_controller = controllers[1]
+    elif controller is None:
+        # Get active controller
+        rospy.wait_for_service('controller_manager/list_controllers')
+        try:
+            listServ = rospy.ServiceProxy('controller_manager/list_controllers', ListControllers)
+            resp = listServ()
+            for controller in resp.controller:
+                if controller.name in controllers and controller.state == "running":
+                    active_controller = controller.name
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+    else:
+        print('ERROR IN CONTROLER ARGUMENT PASSING')
 
     # Switch Controllers
     if active_controller:
