@@ -1333,3 +1333,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Testes com Hand Guiding e Objetos no robot real
 - Alguns melhoramentos mas nada significativo
+
+## 20/09 - Reunião
+
+- iris_sami improvements

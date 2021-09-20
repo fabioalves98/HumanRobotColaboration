@@ -134,6 +134,8 @@
 
 ##### Robot Self-Identification
 
+##### Obstacle Identification
+
 #### Potential Fields Method
 
 ##### Attraction
