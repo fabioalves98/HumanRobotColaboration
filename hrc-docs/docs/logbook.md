@@ -1337,3 +1337,17 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 ## 20/09 - Reunião
 
 - iris_sami improvements
+
+## 21/09 - IRISLab
+
+#### Controlo das juntas do UR10e
+
+- Tentativa de melhorar a forma com que os valores de velocidade sao enviados para as juntar
+- Implementação de um low pass filter com a seguinte equação
+  - (1-a) * n~-1~ + a ((n~-1~ + n) / 2)
+- Funciona de forma analoga ao filtro de média, com uma implementação mais simples no entanto apresenta alguns problemas
+  - Para ser tao smooth como um filtro de média necessita de um valor baixo de alpha
+  - Com um valor baixo de alfa o robot matem movimento mesmo depois de deixarem de ser aplicadas forças
+- Necessário mecanismo que incremente / decremente alpha consoante a velocidade do robot
+  - Quanto maior a velocidade, menor o alfa
+

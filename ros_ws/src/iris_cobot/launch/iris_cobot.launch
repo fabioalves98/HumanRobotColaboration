@@ -27,9 +27,9 @@
     <!-- <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="configure_params" output="screen" />  -->
 
     <!-- IRIS Sami GUI Launcher -->
-    <!-- <include file="$(find iris_sami)/launch/iris_sami.launch">
+    <include file="$(find iris_sami)/launch/iris_sami.launch">
         <arg name="gui" value="true"/>
-    </include> -->
+    </include>
 
     <!-- Hand Guiding -->
     <!-- <include file="$(find iris_cobot)/launch/hand_guiding.launch"/> -->

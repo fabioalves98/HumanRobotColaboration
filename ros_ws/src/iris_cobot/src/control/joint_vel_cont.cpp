@@ -54,6 +54,8 @@ int main(int argc, char **argv)
     // Joint Speed control
     ros::ServiceServer service = nh.advertiseService("joint_speeds/stop", stop);
 
+    ROS_INFO("Joint Speed Controller node listening to joint_speeds and publishing to UR Driver");
+
     ros::Rate rate(500);
     while(ros::ok())
     {
