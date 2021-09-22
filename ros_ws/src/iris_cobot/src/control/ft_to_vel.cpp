@@ -73,7 +73,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     }
     
     // Origin position
-    tf2::Vector3 origin(-0.7, 0.3, 0.5);
+    tf2::Vector3 origin(0.8, -0.2, 0.7);
 
     // Create FT Sensor Orientation
     geometry_msgs::PoseStamped ee_pose = move_group_ptr->getCurrentPose();
@@ -133,9 +133,9 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     torque_tf_stamped.header.stamp = ros::Time::now();
     torque_tf_stamped.header.frame_id = "base_link";
     torque_tf_stamped.child_frame_id = "torque";
-    torque_tf_stamped.transform.translation.x = -0.7;
-    torque_tf_stamped.transform.translation.y = 0.3;
-    torque_tf_stamped.transform.translation.z = 0.5;    
+    torque_tf_stamped.transform.translation.x = 0.8;
+    torque_tf_stamped.transform.translation.y = -0.2;
+    torque_tf_stamped.transform.translation.z = 0.7;    
     torque_tf_stamped.transform.rotation = tf2::toMsg(torque_tf.getRotation());
 
     br_ptr->sendTransform(torque_tf_stamped);

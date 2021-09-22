@@ -1351,3 +1351,10 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Necessário mecanismo que incremente / decremente alpha consoante a velocidade do robot
   - Quanto maior a velocidade, menor o alfa
 
+## 22/09
+
+#### Controlo das Juntas do UR10e
+
+- Para 100% de speed scaling factor, 0.01 é um bom alfa, que permite ao robot mover-se rapidamente e fetuar movimento precisos, simultaneamente
+- Para velocidades menores, o alfa pode ser aumentado para aumentar a responsividade
+  - Nunca maior que 0.1

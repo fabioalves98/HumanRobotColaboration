@@ -129,13 +129,13 @@ class Releasing(UR10eState):
 
 
 # define state Fine Control
-class FineControl(UR10eState):
+class Configuration(UR10eState):
     def __init__(self):
         UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+'])
 
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state Fine Control')
+        rospy.loginfo('Executing state Configuration')
         
         while not rospy.is_shutdown():
             action = self.getAction()
@@ -152,7 +152,7 @@ def main():
     
     with sm_ur10e:
         smach.StateMachine.add('FreeDrive', Freedrive(),
-                            transitions={'dTapX-':'FineControl',
+                            transitions={'dTapX-':'Configuration',
                                          'dTapX+':'Gripper'})
 
         # Create the sub Gripper state machine
@@ -173,7 +173,7 @@ def main():
         smach.StateMachine.add('Gripper', sm_gripper, 
                             transitions={'exit_state':'FreeDrive'})
         
-        smach.StateMachine.add('FineControl', FineControl(),
+        smach.StateMachine.add('Configuration', Configuration(),
                             transitions={'dTapX-':'Gripper',
                                          'dTapX+':'FreeDrive'})
     

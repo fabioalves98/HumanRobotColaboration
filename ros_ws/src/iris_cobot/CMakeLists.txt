@@ -45,6 +45,7 @@ generate_messages(
 generate_dynamic_reconfigure_options(
   cfg/FT_to_Vel.cfg
   cfg/Obstacles.cfg
+  cfg/JointFilter.cfg
 )
 
 catkin_package(CATKIN_DEPENDS message_runtime)
@@ -63,6 +64,9 @@ target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 add_executable(environment src/test/environment.cpp)
 target_link_libraries(environment ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+
+add_executable(wrench_filter src/cobot/hand_guiding/wrench_filter.cpp)
+target_link_libraries(wrench_filter ${catkin_LIBRARIES} ${PCL_LIBRARIES})
 
 add_executable(obstacles src/obstacle_avoidance/obstacles.cpp)
 target_link_libraries(obstacles ${catkin_LIBRARIES} ${PCL_LIBRARIES})
@@ -83,13 +87,13 @@ add_executable(moveit_controller src/control/moveit_controller.cpp)
 target_link_libraries(moveit_controller ${catkin_LIBRARIES})
 add_dependencies(moveit_controller ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(joint_vel_cont src/control/joint_vel_cont.cpp)
-target_link_libraries(joint_vel_cont ${catkin_LIBRARIES})
-add_dependencies(joint_vel_cont ${PROJECT_NAME}_generate_messages_cpp)
+add_executable(joint_vel_mean src/control/joint_vel_mean.cpp)
+target_link_libraries(joint_vel_mean ${catkin_LIBRARIES})
+add_dependencies(joint_vel_mean ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(joint_vel_pid src/control/joint_vel_pid.cpp)
-target_link_libraries(joint_vel_pid ${catkin_LIBRARIES})
-add_dependencies(joint_vel_pid ${PROJECT_NAME}_generate_messages_cpp)
+add_executable(joint_vel_filter src/control/joint_vel_filter.cpp)
+target_link_libraries(joint_vel_filter ${catkin_LIBRARIES})
+add_dependencies(joint_vel_filter ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
 
 # Helpers
 add_executable(fk_ik_jacobian src/test/fk_ik_jacobian.cpp)

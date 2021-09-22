@@ -3,6 +3,9 @@
 #include <std_srvs/Empty.h>
 #include <sensor_msgs/JointState.h>
 
+#include <dynamic_reconfigure/server.h>
+#include <iris_cobot/JointFilterConfig.h>
+
 #include <iris_cobot/JointSpeed.h>
 
 #define SCALLING_FACTOR 5
@@ -11,9 +14,16 @@ std::vector<double> *js_cur_p;
 std::vector<double> *js_com_p;
 std::vector<double> *js_final_p;
 
+double alpha;
+
 bool stop(std_srvs::Empty::Request& request, std_srvs::Empty::Response& response)
 {
     js_com_p->clear();
+}
+
+void parameterConfigure(iris_cobot::JointFilterConfig &config, uint32_t level) 
+{
+    alpha = config.alpha;
 }
 
 void jointSpeedCurrent(sensor_msgs::JointState msg)
@@ -48,7 +58,7 @@ void jointSpeedCommand(iris_cobot::JointSpeed msg)
 
 int main(int argc, char **argv)
 {
-    ros::init(argc, argv, "joint_vel_pid");
+    ros::init(argc, argv, "joint_vel_filter");
     ros::NodeHandle nh;
 
     // Velocity Publisher
@@ -67,6 +77,12 @@ int main(int argc, char **argv)
     std::vector<double> joint_speed_current = {0, 0, 0, 0, 0, 0};
     js_cur_p = &joint_speed_current;
 
+    // Dynamic reconfigure init and callback
+    dynamic_reconfigure::Server<iris_cobot::JointFilterConfig> server;
+    dynamic_reconfigure::Server<iris_cobot::JointFilterConfig>::CallbackType cobotConfigCallback;
+    cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
+    server.setCallback(cobotConfigCallback);
+
     ros::Subscriber joint_state_sub = nh.subscribe("joint_states", 1, jointSpeedCurrent);
     ros::Subscriber joint_speed_sub = nh.subscribe("joint_speeds", 1, jointSpeedCommand);
 
@@ -75,8 +91,6 @@ int main(int argc, char **argv)
 
     ROS_INFO("Joint Speed Controller node listening to joint_speeds and publishing to UR Driver");
 
-    double alpha = 0.005;
-
     std::vector<double> prev = {0, 0, 0, 0, 0, 0};
 
     ros::Rate rate(500);
@@ -84,7 +98,7 @@ int main(int argc, char **argv)
     {
         std::vector<double> new_vel = {0, 0, 0 ,0 ,0, 0};
         std::transform(prev.begin(), prev.end(), js_com_p->begin(), new_vel.begin(),
-            [alpha](double p, double c)
+            [](double p, double c)
             { 
                 return (1 - alpha) * p + alpha * ((p + c) / 2);
             }
