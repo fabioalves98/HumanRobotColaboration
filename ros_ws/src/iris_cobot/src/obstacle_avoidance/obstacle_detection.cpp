@@ -21,7 +21,7 @@
 #include <pcl/sample_consensus/sac_model_sphere.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <iris_cobot/ObstaclesConfig.h>
+#include <iris_cobot/ObstacleDetectionConfig.h>
 
 #include <iris_cobot/Obstacles.h>
 
@@ -65,7 +65,7 @@ double max_cluster_size;
 double squared_dist;
 double normal_diff;
 
-void parameterConfigure(iris_cobot::ObstaclesConfig &config, uint32_t level) 
+void parameterConfigure(iris_cobot::ObstacleDetectionConfig &config, uint32_t level) 
 {
     viz_cloud = config.viz_cloud;
     robot_models = config.robot_models;
@@ -503,15 +503,15 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
 int main (int argc, char** argv)
 {
     // Initialize ROS
-    ros::init (argc, argv, "obstacles");
+    ros::init (argc, argv, "obstacle_detection");
     ros::NodeHandle nh;
 
     // Random seed generator
     srand(time(NULL));
 
     // Dynamic reconfigure init and callback
-    dynamic_reconfigure::Server<iris_cobot::ObstaclesConfig> server;
-    dynamic_reconfigure::Server<iris_cobot::ObstaclesConfig>::CallbackType cobotConfigCallback;
+    dynamic_reconfigure::Server<iris_cobot::ObstacleDetectionConfig> server;
+    dynamic_reconfigure::Server<iris_cobot::ObstacleDetectionConfig>::CallbackType cobotConfigCallback;
     cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
     server.setCallback(cobotConfigCallback);
 

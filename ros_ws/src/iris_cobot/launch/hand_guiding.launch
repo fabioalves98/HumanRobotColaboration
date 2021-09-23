@@ -10,6 +10,9 @@
     <!-- Correction of raw values with theory model and off-line correction -->
     <node pkg="iris_cobot" type="correct.py" name="correct" output="screen" respawn="true"/>
 
+    <!-- Force Torque to Velocity -->
+    <node pkg="iris_cobot" type="ft_to_vel" name="ft_to_vel" output="screen" respawn="true"/>
+
     <!-- Weigh calculator -->
     <node pkg="iris_cobot" type="weight.py" name="weight" output="screen" respawn="true"/>
 

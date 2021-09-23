@@ -1,10 +1,18 @@
 #include <ros/ros.h>
 #include <geometry_msgs/WrenchStamped.h>
 
+#include <dynamic_reconfigure/server.h>
+#include <iris_cobot/WrenchFilterConfig.h>
+
 std::vector<double> *wrench_prev;
 ros::Publisher wrench_filtered_pub;
 
-double alpha = 0.05;
+double alpha;
+
+void parameterConfigure(iris_cobot::WrenchFilterConfig &config, uint32_t level) 
+{
+    alpha = config.alpha;
+}
 
 void wrenchFilter(geometry_msgs::WrenchStamped msg)
 {
@@ -46,10 +54,10 @@ int main(int argc, char **argv)
     wrench_filtered_pub = nh.advertise<geometry_msgs::WrenchStamped>("wrench_filtered", 1);
 
     // Dynamic reconfigure init and callback
-    // dynamic_reconfigure::Server<iris_cobot::JointFilterConfig> server;
-    // dynamic_reconfigure::Server<iris_cobot::JointFilterConfig>::CallbackType cobotConfigCallback;
-    // cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
-    // server.setCallback(cobotConfigCallback);
+    dynamic_reconfigure::Server<iris_cobot::WrenchFilterConfig> server;
+    dynamic_reconfigure::Server<iris_cobot::WrenchFilterConfig>::CallbackType cobotConfigCallback;
+    cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
+    server.setCallback(cobotConfigCallback);
 
     wrench_prev = new std::vector<double>();
     wrench_prev->assign(6, 0);

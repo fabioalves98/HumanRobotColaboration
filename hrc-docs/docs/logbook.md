@@ -1351,10 +1351,26 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Necessário mecanismo que incremente / decremente alpha consoante a velocidade do robot
   - Quanto maior a velocidade, menor o alfa
 
-## 22/09
+## 22/09 - IRISLab
 
 #### Controlo das Juntas do UR10e
 
 - Para 100% de speed scaling factor, 0.01 é um bom alfa, que permite ao robot mover-se rapidamente e fetuar movimento precisos, simultaneamente
 - Para velocidades menores, o alfa pode ser aumentado para aumentar a responsividade
   - Nunca maior que 0.1
+
+****
+
+- Novo filtro para os valores de wrench à saída do driver analogo ao implementado para os controlo de juntas
+
+## 23/09 - IRISLab
+
+- Videos gravados. 4 ao todo:
+  - Hand Guiding | Object Manipulation | Collision Avoidance x2
+- Restruturação do nós, limpeza de nós antigos
+- Modificação da forma como a força é traduzida em velocidade (alteração dos parametros)
+  - Sensibilidade é avaliada primeiro e só depois é aplicada a constante de conversão
+- Descoberta de um problema quando é aplicado um torque em Z
+  - O braço deveria apenas rodar o wrist_3 pois apenas estamos a rodar o EE
+  - No entanto, outras rotações parecem ser aplicadas
+  - Possivelmente um erro na criação dos transforms ou no nó que faz a conversão com a matriz jacobiana

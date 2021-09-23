@@ -43,9 +43,10 @@ generate_messages(
 )
 
 generate_dynamic_reconfigure_options(
-  cfg/FT_to_Vel.cfg
-  cfg/Obstacles.cfg
-  cfg/JointFilter.cfg
+  cfg/FTtoVel.cfg
+  cfg/JointSpeedCont.cfg
+  cfg/ObstacleDetection.cfg
+  cfg/WrenchFilter.cfg
 )
 
 catkin_package(CATKIN_DEPENDS message_runtime)
@@ -59,51 +60,37 @@ include_directories(${PCL_INCLUDE_DIRS})
 link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 
-add_executable(viewer src/visualization/viewer.cpp)
-target_link_libraries(viewer ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-
-add_executable(environment src/test/environment.cpp)
-target_link_libraries(environment ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-
+# Hand-Guiding
 add_executable(wrench_filter src/cobot/hand_guiding/wrench_filter.cpp)
-target_link_libraries(wrench_filter ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+target_link_libraries(wrench_filter ${catkin_LIBRARIES})
+add_dependencies(wrench_filter ${PROJECT_NAME}_gencfg)
 
-add_executable(obstacles src/obstacle_avoidance/obstacles.cpp)
-target_link_libraries(obstacles ${catkin_LIBRARIES} ${PCL_LIBRARIES})
-add_dependencies(obstacles ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
-
-add_executable(ft_to_vel src/control/ft_to_vel.cpp)
+add_executable(ft_to_vel src/cobot/hand_guiding/ft_to_vel.cpp)
 target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
 add_dependencies(ft_to_vel ${PROJECT_NAME}_gencfg)
+
+# Obstacle Detection
+add_executable(obstacle_detection src/obstacle_avoidance/obstacle_detection.cpp)
+target_link_libraries(obstacle_detection ${catkin_LIBRARIES} ${PCL_LIBRARIES})
+add_dependencies(obstacle_detection ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
 
 add_executable(attraction src/obstacle_avoidance/attraction.cpp)
 target_link_libraries(attraction ${catkin_LIBRARIES})
 
+# Control
 add_executable(jacobian src/control/jacobian.cpp)
 target_link_libraries(jacobian ${catkin_LIBRARIES})
 add_dependencies(jacobian ${PROJECT_NAME}_generate_messages_cpp)
+
+add_executable(joint_speed_controller src/control/joint_speed_controller.cpp)
+target_link_libraries(joint_speed_controller ${catkin_LIBRARIES})
+add_dependencies(joint_speed_controller ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
 
 add_executable(moveit_controller src/control/moveit_controller.cpp)
 target_link_libraries(moveit_controller ${catkin_LIBRARIES})
 add_dependencies(moveit_controller ${PROJECT_NAME}_generate_messages_cpp)
 
-add_executable(joint_vel_mean src/control/joint_vel_mean.cpp)
-target_link_libraries(joint_vel_mean ${catkin_LIBRARIES})
-add_dependencies(joint_vel_mean ${PROJECT_NAME}_generate_messages_cpp)
-
-add_executable(joint_vel_filter src/control/joint_vel_filter.cpp)
-target_link_libraries(joint_vel_filter ${catkin_LIBRARIES})
-add_dependencies(joint_vel_filter ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_generate_messages_cpp)
-
-# Helpers
-add_executable(fk_ik_jacobian src/test/fk_ik_jacobian.cpp)
-target_link_libraries(fk_ik_jacobian ${catkin_LIBRARIES})
-
-# RTDE Test - Currently not working due to debian release not being up to date
-# To make sure it works, build from source
-# add_executable(rtde src/test/rtde.cpp)
-# target_link_libraries(rtde PRIVATE ur_rtde::rtde ${catkin_LIBRARIES} ${CURSES_LIBRARY})
-
+# rqt_cobot
 install(PROGRAMS scripts/rqt_cobot
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

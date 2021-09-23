@@ -11,7 +11,7 @@
 #include <tf2/LinearMath/Transform.h>
 
 #include <dynamic_reconfigure/server.h>
-#include <iris_cobot/FT_to_VelConfig.h>
+#include <iris_cobot/FTtoVelConfig.h>
 
 #include <moveit/move_group_interface/move_group_interface.h>
 
@@ -26,7 +26,7 @@ double torque_div;
 double force_sensibility;
 double torque_sensibility;
 
-void parameterConfigure(iris_cobot::FT_to_VelConfig &config, uint32_t level) 
+void parameterConfigure(iris_cobot::FTtoVelConfig &config, uint32_t level) 
 {
     force_div = config.force_div;
     torque_div = config.torque_div;
@@ -44,10 +44,6 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     Eigen::Vector3d torque;
     tf::vectorMsgToEigen(force_msg, force);
     tf::vectorMsgToEigen(torque_msg, torque);
-
-    // Divide force and torque values by a user defined constant
-    force /= force_div;
-    torque /= torque_div;
 
     // Limit force and torque sensibility by a defined threshold
     std::vector<std::pair<Eigen::Vector3d*, double>> wrench_map = {{&force, force_sensibility}, 
@@ -71,6 +67,10 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
             }
         }
     }
+
+    // Divide force and torque values by a user defined constant
+    force /= force_div;
+    torque /= torque_div;
     
     // Origin position
     tf2::Vector3 origin(0.8, -0.2, 0.7);
@@ -178,8 +178,8 @@ int main(int argc, char** argv){
     ang_vel_pub_ptr = &ang_vel_pub;
 
     // Dynamic reconfigure init and callback
-    dynamic_reconfigure::Server<iris_cobot::FT_to_VelConfig> server;
-    dynamic_reconfigure::Server<iris_cobot::FT_to_VelConfig>::CallbackType cobotConfigCallback;
+    dynamic_reconfigure::Server<iris_cobot::FTtoVelConfig> server;
+    dynamic_reconfigure::Server<iris_cobot::FTtoVelConfig>::CallbackType cobotConfigCallback;
     cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
     server.setCallback(cobotConfigCallback);
 
