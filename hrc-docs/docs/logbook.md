@@ -1374,3 +1374,50 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - O braço deveria apenas rodar o wrist_3 pois apenas estamos a rodar o EE
   - No entanto, outras rotações parecem ser aplicadas
   - Possivelmente um erro na criação dos transforms ou no nó que faz a conversão com a matriz jacobiana
+
+## 24/09 - IRISLab
+
+#### FT Sensor Correction Final Tests and Recordings - 5 Positions
+
+- Default = [0, -90, -90, -90, -90, w_2, w_3]
+- w_2 = {-90, -45, 0, 45, 90}
+- w_3 = {-360 - 360}
+
+##### 1 - Teste sem Gripper | Payload 0 | COG [0,0,0]
+
+##### 2 - Teste sem Gripper | Payload 1.5 | COG [0,0,0]
+
+##### 3 - Teste sem Gripper | Payload 1.5 | COG [0,0,42]
+
+##### 4 - Teste sem Gripper | Payload 1.5 | COG [0,0,10]
+
+##### Extra - Bag de /wrench gravado logo a seguir a acopolar Gripper na posição Default (w_2 = -90; w_3 = 0)
+
+##### 5 - Teste com Gripper | Payload 0 | COG [0,0,0] (Sem Resets)
+
+##### 6 - Teste com Gripper | Payload 0 | COG [0,0,0]
+
+##### 7 - Teste com Gripper | Payload 1.5Kg | COG [0,0,0]
+
+##### 8 - Teste com Gripper | Payload 1.5Kg | COG [0,0,42]
+
+##### 9 - Teste com Gripper e Peso de 1Kg | Payload 0 | COG [0,0,0]
+
+##### 10 - Teste com Gripper e Peso de 2 Kg | Payload 0 | COG [0,0,0]
+
+#### Z Correction Final Tests and Recordings 5 Positions
+
+- Default =  [0, -90, -90, -90, -90, w_2, w_3]
+- w_2 = {-180, 180}
+- w_3 = [-90, -45, 0, 45, 90]
+
+##### 11 - Teste sem Gripper | Payload 0 | COG [0,0,0]
+
+##### 12 - Teste sem Gripper | Payload 1.5 | COG [0, 0, 42]
+
+##### 13 - Teste com Gripper | Payload 0 | COG [0, 0, 0]
+
+##### 14 - Teste com Gripper | Payload 1.5 | COG [0, 0, 0.42]
+
+##### 15 - Teste com Gripper e Peso de 1kg | Payload 0 | COG [0, 0, 0]
+

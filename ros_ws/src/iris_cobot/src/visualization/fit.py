@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy import optimize
 
-from helpers import openList, plotXYZ
+from cobot.helpers import openList, plotXYZ
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
 
