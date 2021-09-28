@@ -83,7 +83,7 @@ def wrenchCorrect(data):
     
 
 def main():
-    rospy.init_node('correct', anonymous=True)
+    rospy.init_node('wrench_correct', anonymous=True)
 
     global correction, wrench_pub
 

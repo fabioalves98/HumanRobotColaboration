@@ -1421,3 +1421,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ##### 15 - Teste com Gripper e Peso de 1kg | Payload 0 | COG [0, 0, 0]
 
+## 28/09 - IRISLab
+
+- Screenshots e desenhos para o capítulo 3
+

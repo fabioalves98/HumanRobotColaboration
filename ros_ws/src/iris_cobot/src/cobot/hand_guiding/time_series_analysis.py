@@ -5,6 +5,8 @@ from sensor_msgs.msg import JointState
 from geometry_msgs.msg import WrenchStamped
 import numpy as np
 
+import cobot.helpers as helpers
+
 
 WRENCH_WINDOW = 100
 JOINT_WINDOW = 10
@@ -24,6 +26,9 @@ events = []
 
 def jointMonitor(data):
     positions = data.position
+    if len(positions) != 6:
+        return 
+
     global joint_fifo
     joint_fifo = np.append(joint_fifo, [positions], axis=0)
 
@@ -87,12 +92,10 @@ def forceMonitor(data):
 
 
 def zeroFTSensor(event):
-    print('Events %i' % len(events))
-    print('Force Magnitude %f' % force_magnitude)
-
     if len(events) == 0:
         if (force_magnitude > MAX_FORCE_MAGNITUDE):
             print('ZERO FT SENSOR')
+            helpers.cobot_reset_ft_sensor()
 
     events[:] = []
 
@@ -109,7 +112,7 @@ def main():
 
     rospy.Subscriber('joint_states', JointState, jointMonitor)
     rospy.Subscriber("wrench", WrenchStamped, wrenchMonitor)
-    rospy.Subscriber("wrench", WrenchStamped, forceMonitor)
+    rospy.Subscriber("wrench_correct", WrenchStamped, forceMonitor)
 
     rospy.Timer(rospy.Duration(1), zeroFTSensor)
 

@@ -99,7 +99,7 @@ def signal_handler(sig, frame):
 
 
 def main():
-    rospy.init_node('ft_theory', anonymous=False)
+    rospy.init_node('wrench_theory', anonymous=False)
     signal.signal(signal.SIGINT, signal_handler)
 
     moveg = MoveGroupCommander('manipulator')

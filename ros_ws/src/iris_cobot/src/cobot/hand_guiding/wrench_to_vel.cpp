@@ -18,8 +18,7 @@
 moveit::planning_interface::MoveGroupInterface *move_group_ptr;
 tf2_ros::TransformBroadcaster *br_ptr;
 ros::Publisher *force_marker_pub_ptr;
-ros::Publisher *ang_vel_pub_ptr;
-ros::Publisher *lin_vel_pub_ptr;
+ros::Publisher *wrench_vel_pub_ptr;
 
 double force_div;
 double torque_div;
@@ -109,14 +108,13 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
 
     force_marker_pub_ptr->publish(force_marker);
 
-    // Difference between poses
-    geometry_msgs::Vector3 lin_vel;
-    lin_vel.x = force_pose.position.x - origin.getX();
-    lin_vel.y = force_pose.position.y - origin.getY();
-    lin_vel.z = force_pose.position.z - origin.getZ();
+    // Create Wrench Velocity Message
+    geometry_msgs::WrenchStamped wrench_velocity_msg;
 
-    // Publish Difference between poses - linear velocity
-    lin_vel_pub_ptr->publish(lin_vel);
+    // Difference between poses
+    wrench_velocity_msg.wrench.force.x = force_pose.position.x - origin.getX();
+    wrench_velocity_msg.wrench.force.y = force_pose.position.y - origin.getY();
+    wrench_velocity_msg.wrench.force.z = force_pose.position.z - origin.getZ();
 
     // TORQUE
     // Create Torque Orientation
@@ -146,17 +144,16 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     diff_tf = torque_tf * ft_sensor_tf.inverse();
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
 
-    // Publish Difference between transforms - angular velocity
-    geometry_msgs::Vector3 angvel;
-    angvel.x = roll;
-    angvel.y = pitch;
-    angvel.z = yaw;
+    wrench_velocity_msg.wrench.torque.x = roll;
+    wrench_velocity_msg.wrench.torque.y = pitch;
+    wrench_velocity_msg.wrench.torque.z = yaw;
 
-    ang_vel_pub_ptr->publish(angvel);
+    // Publish wrench velocity message
+    wrench_vel_pub_ptr->publish(wrench_velocity_msg);
 }
 
 int main(int argc, char** argv){
-    ros::init(argc, argv, "ft_to_vel");
+    ros::init(argc, argv, "wrench_to_vel");
 
     ros::NodeHandle nh;
     ros::AsyncSpinner spinner(2); 
@@ -171,11 +168,8 @@ int main(int argc, char** argv){
     tf2_ros::TransformBroadcaster br;
     br_ptr = &br;
 
-    ros::Publisher lin_vel_pub = nh.advertise<geometry_msgs::Vector3>("linear_velocity", 1);
-    lin_vel_pub_ptr = &lin_vel_pub;
-
-    ros::Publisher ang_vel_pub = nh.advertise<geometry_msgs::Vector3>("angular_velocity", 1);
-    ang_vel_pub_ptr = &ang_vel_pub;
+    ros::Publisher wrench_vel_pub = nh.advertise<geometry_msgs::WrenchStamped>("wrench_velocity", 1);
+    wrench_vel_pub_ptr = &wrench_vel_pub;
 
     // Dynamic reconfigure init and callback
     dynamic_reconfigure::Server<iris_cobot::FTtoVelConfig> server;

@@ -154,7 +154,7 @@
 
 #### Object Lifting Assistant
 
-#### ...
+...
 
 
 

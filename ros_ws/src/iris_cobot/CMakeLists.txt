@@ -65,9 +65,9 @@ add_executable(wrench_filter src/cobot/hand_guiding/wrench_filter.cpp)
 target_link_libraries(wrench_filter ${catkin_LIBRARIES})
 add_dependencies(wrench_filter ${PROJECT_NAME}_gencfg)
 
-add_executable(ft_to_vel src/cobot/hand_guiding/ft_to_vel.cpp)
-target_link_libraries(ft_to_vel ${catkin_LIBRARIES})
-add_dependencies(ft_to_vel ${PROJECT_NAME}_gencfg)
+add_executable(wrench_to_vel src/cobot/hand_guiding/wrench_to_vel.cpp)
+target_link_libraries(wrench_to_vel ${catkin_LIBRARIES})
+add_dependencies(wrench_to_vel ${PROJECT_NAME}_gencfg)
 
 # Obstacle Detection
 add_executable(obstacle_detection src/obstacle_avoidance/obstacle_detection.cpp)

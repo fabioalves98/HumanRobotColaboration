@@ -2,7 +2,7 @@
 #include <chrono>
 
 #include <ros/ros.h>
-#include <geometry_msgs/Vector3.h>
+#include <geometry_msgs/WrenchStamped.h>
 
 #include <moveit/move_group_interface/move_group_interface.h>
 #include <moveit/robot_model_loader/robot_model_loader.h>
@@ -11,23 +11,12 @@
 
 #include <iris_cobot/JointSpeed.h>
 
-bool KEYBOARD = false;
 
-geometry_msgs::Vector3 *linear_velocity_ptr;
-geometry_msgs::Vector3 *angular_velocity_ptr;
+geometry_msgs::WrenchStamped *wrench_velocity_ptr;
 
-void linearVelSub(geometry_msgs::Vector3 lin_vel)
+void wrenchVelSub(geometry_msgs::WrenchStamped wrench_vel_msg)
 {
-    linear_velocity_ptr->x = lin_vel.x;
-    linear_velocity_ptr->y = lin_vel.y;
-    linear_velocity_ptr->z = lin_vel.z;
-}
-
-void angularVelSub(geometry_msgs::Vector3 ang_vel)
-{
-    angular_velocity_ptr->x = ang_vel.x;
-    angular_velocity_ptr->y = ang_vel.y;
-    angular_velocity_ptr->z = ang_vel.z;
+    *wrench_velocity_ptr = wrench_vel_msg;
 }
 
 int main(int argc, char **argv)
@@ -44,13 +33,9 @@ int main(int argc, char **argv)
     robot_state::RobotStatePtr kinematic_state = move_group.getCurrentState();
     const robot_state::JointModelGroup* joint_model_group = kinematic_model->getJointModelGroup("manipulator");
 
-    geometry_msgs::Vector3 linear_velocity;
-    linear_velocity_ptr = &linear_velocity;
-    ros::Subscriber lin_vel_sub = nh.subscribe("linear_velocity", 1, linearVelSub);
-
-    geometry_msgs::Vector3 angular_velocity;
-    angular_velocity_ptr = &angular_velocity;
-    ros::Subscriber ang_vel_sub = nh.subscribe("angular_velocity", 1, angularVelSub);
+    geometry_msgs::WrenchStamped wrench_velocity;
+    wrench_velocity_ptr = &wrench_velocity;
+    ros::Subscriber lin_vel_sub = nh.subscribe("wrench_velocity", 1, wrenchVelSub);
 
     ros::Publisher joint_speed_pub = nh.advertise<iris_cobot::JointSpeed>("joint_speeds", 1);
 
@@ -63,8 +48,8 @@ int main(int argc, char **argv)
         Eigen::Vector3d translation;
         Eigen::Vector3d rotation;
 
-        geometry_msgs::Vector3 linear = *linear_velocity_ptr;
-        geometry_msgs::Vector3 angular = *angular_velocity_ptr;
+        geometry_msgs::Vector3 linear = wrench_velocity_ptr->wrench.force;
+        geometry_msgs::Vector3 angular = wrench_velocity_ptr->wrench.torque;
 
         translation << linear.x , linear.y , linear.z;
         rotation << angular.x , angular.y, angular.z;
