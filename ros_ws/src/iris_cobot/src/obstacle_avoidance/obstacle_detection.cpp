@@ -542,7 +542,7 @@ int main (int argc, char** argv)
     viewer_viz = normalVis(cloud_global, "3DVizViewer", "viz_cloud");
 
     // Camera Subscription service
-    ros::Subscriber sub = nh.subscribe("/camera/depth_registered/points", 1, cloud_callback);
+    ros::Subscriber sub = nh.subscribe("/camera/depth/points", 1, cloud_callback);
 
     // Spin
     ros::spin();

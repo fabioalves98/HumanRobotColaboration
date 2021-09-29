@@ -114,7 +114,7 @@ def main():
     rospy.Subscriber("wrench", WrenchStamped, wrenchMonitor)
     rospy.Subscriber("wrench_correct", WrenchStamped, forceMonitor)
 
-    rospy.Timer(rospy.Duration(1), zeroFTSensor)
+    rospy.Timer(rospy.Duration(3), zeroFTSensor)
 
     rospy.spin()
 

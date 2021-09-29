@@ -96,11 +96,79 @@ def test1to3noGripper(test_idx):
     plt.show()
 
 
+def test4gripperCouple():
+    samples = open5Tests(4)
+
+    fig, s_plt = plt.subplots(2)
+    x = np.arange(-360, 360, 1)
+
+    # Plot original samples
+    # for sample in samples:
+    # helpers.plotXYZ(s_plt[0], x, samples[2][:,0,:], ':')
+    # helpers.plotXYZ(s_plt[1], x, samples[2][:,1,:], ':')
+
+    # Plot correction curve
+    correction = helpers.openList(correct_w3)
+    # helpers.plotXYZ(s_plt[0], x, correction[:,0,:], '--')
+    # helpers.plotXYZ(s_plt[1], x, correction[:,1,:], '--')
+
+    # # Plot corrected samples
+    # for sample in samples:
+    corrected_sample = samples[2] - correction
+    helpers.plotXYZ(s_plt[0], x, corrected_sample[:,0,:], title='Force')
+    helpers.plotXYZ(s_plt[1], x, corrected_sample[:,1,:], title='Torque')
+
+    plt.show()
+
+
+def test5gripperNoPay():
+    samples = open5Tests(5)
+
+    fig, s_plt = plt.subplots(2)
+    x = np.arange(-360, 360, 1)
+
+    # Plot original samples
+    # for sample in samples:
+    #     helpers.plotXYZ(s_plt[0], x, samples[2][:,0,:], ':')
+    #     helpers.plotXYZ(s_plt[1], x, samples[2][:,1,:], ':')
+
+    # Plot correction curve
+    correction = helpers.openList(correct_w3)
+    # helpers.plotXYZ(s_plt[0], x, correction[:,0,:], '--')
+    # helpers.plotXYZ(s_plt[1], x, correction[:,1,:], '--')
+
+    # # Plot corrected samples
+    for sample in samples:
+        corrected_sample = sample - correction
+        helpers.plotXYZ(s_plt[0], x, corrected_sample[:,0,:], ':', title='Force')
+        helpers.plotXYZ(s_plt[1], x, corrected_sample[:,1,:], ':', title='Torque')
+
+    plt.show()
+
+
+def test12gripperZNoPay():
+    samples = open5Tests(14)
+
+    fig, s_plt = plt.subplots(2)
+    x = np.arange(-180, 180, 1)
+
+    # Plot original samples
+    for sample in samples:
+        helpers.plotXYZ(s_plt[0], x, sample[:,0,:], ':')
+        helpers.plotXYZ(s_plt[1], x, sample[:,1,:], ':')
+
+    plt.show()
+
+
 def main():
     # test0noGripperNoPay()
     # test1to3noGripper(1)
     # test1to3noGripper(2)
-    test1to3noGripper(3)
+    # test1to3noGripper(3)
+    # test4gripperCouple()
+    # test5gripperNoPay()
+    test12gripperZNoPay()
+
 
     
 

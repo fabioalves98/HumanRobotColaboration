@@ -41,7 +41,7 @@ def jointUpdate(data):
         return
     
     global index
-    index = int(degrees(w3_joint)) + 180
+    index = int(degrees(w3_joint)) + 360
 
 
 def wrenchTheory(data):
@@ -87,7 +87,7 @@ def main():
 
     global correction, wrench_pub
 
-    with open(BASE_DIR + '/curves/wrench_correct_final.list') as f:
+    with open(BASE_DIR + '/curves/wrench_correct_final_720.list') as f:
         correction = pickle.load(f)
         print(correction.shape)
 

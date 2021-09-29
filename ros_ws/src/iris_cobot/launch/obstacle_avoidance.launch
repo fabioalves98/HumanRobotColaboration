@@ -23,10 +23,10 @@
     </group>
 
     <!-- Obstacle Detection -->
-    <node pkg="iris_cobot" type="obstacles" name="obstacles" output="screen" respawn="true"/>
+    <node pkg="iris_cobot" type="obstacle_detection" name="obstacle_detection" output="screen" respawn="true"/>
 
     <!-- Repulsion Vector -->
-    <node pkg="iris_cobot" type="repulsion" name="repulsion" output="screen" respawn="true"/>
+    <node pkg="iris_cobot" type="repulsion.py" name="repulsion" output="screen" respawn="true"/>
 
     <!-- Potential Field Controller -->
     <node pkg="iris_cobot" type="pf_controller.py" name="pf_controller" output="screen" respawn="true"/>

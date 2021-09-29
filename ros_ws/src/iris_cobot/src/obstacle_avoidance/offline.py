@@ -100,15 +100,15 @@ def main():
     rate = rospy.Rate(500)
     while not rospy.is_shutdown():
         # # Get current pose 
-        # current_q = move_group.get_current_joint_values()
+        current_q = move_group.get_current_joint_values()
         
-        # # Obtain next instruction from trajectory executioner
-        # current_point = traj_exec.localize(current_q)
+        # Obtain next instruction from trajectory executioner
+        current_point = traj_exec.localize(current_q)
 
-        # if current_point:
-        #     traj_point_pub.publish(current_point)
+        if current_point:
+            traj_point_pub.publish(current_point)
 
-        traj_point_pub.publish(traj_point)
+        # traj_point_pub.publish(traj_point)
         
         rate.sleep()
 

@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 import rospy
 import numpy as np
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import WrenchStamped, Wrench, Vector3
 
 from iris_cobot.msg import PFVector
 
 attraction_vel = None
 repulsion_vel = None
+
 
 def attraction_cb(attraction_msg):
     attraction_vel.linear_velocity = attraction_msg.linear_velocity
@@ -28,9 +29,8 @@ def main():
     rospy.Subscriber('attraction', PFVector, attraction_cb)
     rospy.Subscriber('repulsion', PFVector, repulsion_cb)
 
-    # Linear and angular velocity publisher
-    linear_vel_pub = rospy.Publisher('linear_velocity', Vector3, queue_size=1)
-    angular_vel_pub = rospy.Publisher('angular_velocity', Vector3, queue_size=1)
+    # Wrench velocity publisher
+    wrench_vel_pub = rospy.Publisher('wrench_velocity', WrenchStamped, queue_size=1)
 
     rospy.loginfo("pf_controller node listening to attraction/repulsion and publishing to \
 linear/angular velocity")
@@ -51,8 +51,10 @@ linear/angular velocity")
         # Potential feilds equation
         pf_vel = np.add((1 - repulsion_mgn) * attraction, repulsion)
         
-        linear_vel_pub.publish(Vector3(*pf_vel[:3]))
-        angular_vel_pub.publish(Vector3(*pf_vel[3:]))
+        wrench_vel_msg = WrenchStamped()
+        wrench_vel_msg.wrench.force = Vector3(*pf_vel[:3])
+        wrench_vel_msg.wrench.torque = Vector3(*pf_vel[3:])
+        wrench_vel_pub.publish(wrench_vel_msg)
 
         rate.sleep()
 
