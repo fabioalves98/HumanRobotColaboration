@@ -32,7 +32,7 @@ def open5Tests(test_idx):
     samples = []
 
     # Open all testes inside specific test folder
-    for test_file in os.listdir(helpers.BASE_DIR + tests[test_idx]):
+    for test_file in sorted(os.listdir(helpers.BASE_DIR + tests[test_idx])):
         try:
             sample = helpers.openList(tests[test_idx] + test_file)
             
@@ -138,12 +138,35 @@ def test5gripperNoPay():
     # helpers.plotXYZ(s_plt[1], x, correction[:,1,:], '--')
 
     # # Plot corrected samples
+    for sample in [samples[0], samples[4]]:
+        corrected_sample = sample
+        helpers.plotXYZ(s_plt[0], x, corrected_sample[:,0,:], ':', title='Force')
+        helpers.plotXYZ(s_plt[1], x, corrected_sample[:,1,:], ':', title='Torque')
+
+    plt.show()
+        
+
+
+def test8to9object(test_idx):
+    samples = open5Tests(test_idx)
+
+    fig, s_plt = plt.subplots(2)
+    x = np.arange(-360, 360, 1)
+
+    # Plot correction curve
+    correction = helpers.openList(correct_w3)
+    # helpers.plotXYZ(s_plt[0], x, correction[:,0,:], '--')
+    # helpers.plotXYZ(s_plt[1], x, correction[:,1,:], '--')
+
+    # # Plot corrected samples
     for sample in samples:
         corrected_sample = sample - correction
         helpers.plotXYZ(s_plt[0], x, corrected_sample[:,0,:], ':', title='Force')
         helpers.plotXYZ(s_plt[1], x, corrected_sample[:,1,:], ':', title='Torque')
 
     plt.show()
+
+
 
 
 def test12gripperZNoPay():
@@ -166,11 +189,12 @@ def main():
     # test1to3noGripper(2)
     # test1to3noGripper(3)
     # test4gripperCouple()
-    # test5gripperNoPay()
-    test12gripperZNoPay()
+    test5gripperNoPay()
+    # test8to9object(8)
+    # test8to9object(9)
+    # test12gripperZNoPay()
+    # test14zObject()
 
-
-    
 
 
 if __name__ == "__main__":

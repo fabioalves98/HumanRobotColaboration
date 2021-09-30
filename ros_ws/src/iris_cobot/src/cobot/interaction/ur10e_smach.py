@@ -1,7 +1,9 @@
 #!/usr/bin/env python
-import rospy, time, math
+import time, math
+import rospy
 import smach, smach_ros
-from geometry_msgs.msg import WrenchStamped
+from geometry_msgs.msg import WrenchStamped, Vector3Stamped
+from tf2_geometry_msgs import do_transform_vector3
 
 import cobot.helpers as helpers
 
@@ -27,16 +29,20 @@ class UR10eState(smach.State):
 # define state FreeDrive
 class Freedrive(UR10eState):
     def __init__(self):
-        UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+'])
+        UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+', 'dTapY+', 'dTapY-'])
 
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Freedrive')
+
+        helpers.switchControllers('velocity')
         
         while not rospy.is_shutdown():
             action = self.getAction()
             if action.type == 'double' and action.component == 0:
                 return 'dTapX+' if action.direction else 'dTapX-'
+            if action.type == 'double' and action.component == 1:
+                return 'dTapY+' if action.direction else 'dTapY-'
 
 
 # define state Gripping
@@ -128,10 +134,64 @@ class Releasing(UR10eState):
                 return 'released'
 
 
+# define state Picking
+class Picking(UR10eState):
+    def __init__(self):
+        UR10eState.__init__(self, outcomes=['OK'])
+
+
+    def execute(self, userdata):
+        rospy.loginfo('Executing state Picking')
+        
+        helpers.switchControllers('position')
+        helpers.samiAliasService('pick')
+        helpers.samiMoveService([0.05, 0, 0, 0, 0, 0])
+        
+        return 'OK'
+
+
+# deifne state Grip
+class Grip(UR10eState):
+    def __init__(self):
+        UR10eState.__init__(self, outcomes=['OK'])
+    
+    def execute(self, userdata):
+        rospy.loginfo('Executing state Grip')
+
+        helpers.samiGripService()
+
+        return 'OK'
+
+
+# define state Picking
+class Delivering(UR10eState):
+    def __init__(self):
+        UR10eState.__init__(self, outcomes=['OK'])        
+
+    def execute(self, userdata):
+        rospy.loginfo('Executing state Picking')
+
+        helpers.samiAliasService('deliver')
+
+        weight = rospy.wait_for_message("wrench_correct", WrenchStamped)
+
+        print(weight)
+
+        while not rospy.is_shutdown():
+            wrench_velocity = rospy.wait_for_message('wrench_velocity', WrenchStamped)
+            
+            print(wrench_velocity.wrench.force.z)
+
+            if wrench_velocity.wrench.force.z * 20 > 0:
+                helpers.samiReleaseService()
+                time.sleep(1)
+                return 'OK'
+
+
 # define state Fine Control
 class Configuration(UR10eState):
     def __init__(self):
-        UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+'])
+        UR10eState.__init__(self, outcomes=['dTapY-', 'dTapY+'])
 
 
     def execute(self, userdata):
@@ -139,8 +199,8 @@ class Configuration(UR10eState):
         
         while not rospy.is_shutdown():
             action = self.getAction()
-            if action.type == 'double' and action.component == 0:
-                return 'dTapX+' if action.direction else 'dTapX-'
+            if action.type == 'double' and action.component == 1:
+                return 'dTapY+' if action.direction else 'dTapY-'
 
 
 
@@ -152,8 +212,10 @@ def main():
     
     with sm_ur10e:
         smach.StateMachine.add('FreeDrive', Freedrive(),
-                            transitions={'dTapX-':'Configuration',
-                                         'dTapX+':'Gripper'})
+                            transitions={'dTapX-':'Pick & Deliver',
+                                         'dTapX+':'Gripper',
+                                         'dTapY+':'Configuration',
+                                         'dTapY-':'Configuration'})
 
         # Create the sub Gripper state machine
         sm_gripper = smach.StateMachine(outcomes=['exit_state'])
@@ -168,14 +230,29 @@ def main():
                                 transitions={'dTapY':'Releasing'})
             smach.StateMachine.add('Releasing', Releasing(),
                                 transitions={'released':'exit_state'})
-
-
+        
         smach.StateMachine.add('Gripper', sm_gripper, 
                             transitions={'exit_state':'FreeDrive'})
         
+        # Create the sub Pick and Deliver state machine
+        sm_pick_deliver = smach.StateMachine(outcomes=['exit_state'])
+
+        with sm_pick_deliver:
+            smach.StateMachine.add('Picking', Picking(),
+                                transitions={'OK':'Grip'})
+            smach.StateMachine.add('Grip', Grip(),
+                                transitions={'OK':'Delivering'})
+            smach.StateMachine.add('Delivering', Delivering(),
+                                transitions={'OK':'exit_state'})
+            
+
+        smach.StateMachine.add('Pick & Deliver', sm_pick_deliver, 
+                            transitions={'exit_state':'FreeDrive'})
+    
+        
         smach.StateMachine.add('Configuration', Configuration(),
-                            transitions={'dTapX-':'Gripper',
-                                         'dTapX+':'FreeDrive'})
+                            transitions={'dTapY+':'FreeDrive',
+                                         'dTapY-':'FreeDrive'})
     
     # Create and start the introspection server
     sis = smach_ros.IntrospectionServer('ur10e_smach_server', sm_ur10e, '/SM_UR10e')

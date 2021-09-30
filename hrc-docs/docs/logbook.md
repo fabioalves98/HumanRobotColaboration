@@ -1405,7 +1405,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ##### 10 - Teste com Gripper e Peso de 2 Kg | Payload 0 | COG [0,0,0]
 
-#### Z Correction Final Tests and Recordings 5 Positions
+#### Z Correction Final Tests and Recordings -  5 Positions
 
 - Default =  [0, -90, -90, -90, -90, w_2, w_3]
 - w_2 = {-180, 180}
@@ -1427,5 +1427,16 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 29/09 - IRISLab
 
+#### FT Sensor Weight Measurement
 
+- Peso medido no eixo X ou Y apresenta um valor 1.2~1.3 vezes superior ao peso real
+- Peso medido no eixo Z apresenta um valor **correto**
 
+#### Nova Tarefa de Pick and Place na Máquina de estados
+
+- Robot move-se para a posição do objeto
+- Avança de forma a agarralo
+- Faz grip
+- Vai para uma posição de delivery
+- Espera que o peso sentido seja nulo (o que seignifica que um utilizador esta a suportar o peso do objeto)
+- Faz release, voltando para o estado idle

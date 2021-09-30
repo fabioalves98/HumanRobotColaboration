@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import rospy, rospkg, pickle
 import numpy as np
+import tf2_ros
 from tf2_geometry_msgs.tf2_geometry_msgs import do_transform_pose
 from ur_msgs.srv import SetSpeedSliderFraction, SetPayload
 from std_srvs.srv import Trigger
@@ -17,6 +18,8 @@ ANGLES = [-180, -135, -90, -45, 0, 45, 90, 135]
 FORBIDDEN = [(45, -180),  (45, -135),
              (90, -180),  (90, -135), (90, 135),
              (135, -180), (135, 135)]
+
+G = 9.80665
 
 
 def set_speed_slider(speed):
@@ -134,6 +137,19 @@ def quaternionToList(orientation):
     ori.append(orientation.z)
     ori.append(orientation.w)
     return ori
+
+
+def getTransform(parent, child):
+    tfBuffer = tf2_ros.Buffer()
+    listener = tf2_ros.TransformListener(tfBuffer)
+    
+    while True:
+        try:
+            return tfBuffer.lookup_transform(parent, child, rospy.Time())
+        except (tf2_ros.LookupException, tf2_ros.ConnectivityException, 
+                tf2_ros.ExtrapolationException) as e:
+            print("Could not get Transform: %s" % e)
+            continue
 
 
 # Update Weight in Theory Model
