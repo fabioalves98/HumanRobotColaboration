@@ -16,7 +16,7 @@
     </include>
 
     <!-- Fake weiss gripper -->
-    <node name="fake_gripper" pkg="ur_gazebo" type="fake_wr-cr200-85.py" respawn="true" output="log"/>    
+    <node name="fake_gripper" pkg="ur_gazebo" type="fake_wr-cr200-85.py" respawn="true" output="screen"/>
 
 </launch>
 
