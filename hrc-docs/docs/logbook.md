@@ -1424,8 +1424,14 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 ## 28/09 - IRISLab
 
 - Screenshots e desenhos para o capítulo 3
+- Vídeos de demonstração da parte de hand guiding e object manipulation
 
 ## 29/09 - IRISLab
+
+- Screenshots e desenhos para o capítulo 3
+- Vídeos de demonstração da parte de collision avoidance
+
+## 30/09 - IRISLab
 
 #### FT Sensor Weight Measurement
 
@@ -1440,3 +1446,4 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Vai para uma posição de delivery
 - Espera que o peso sentido seja nulo (o que seignifica que um utilizador esta a suportar o peso do objeto)
 - Faz release, voltando para o estado idle
+
