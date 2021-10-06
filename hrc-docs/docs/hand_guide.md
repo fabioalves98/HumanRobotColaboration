@@ -1,4 +1,4 @@
-# Hand Guiding
+# Force Torque Sensor Compensation
 
 ## Force / Torque Sensor Correction
 
@@ -49,7 +49,7 @@
 
 ##### Test in 5 Positions No Gripper
 
-<img src="photos/3-wrist_3_average.png" width=70%>
+<img src="photos/3-wrist_3_average.png" width=100%>
 
 ##### Test in 5 Positions No Gripper | Payload 1.5kg
 

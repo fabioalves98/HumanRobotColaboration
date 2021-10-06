@@ -49,10 +49,11 @@ linear/angular velocity")
                                attraction_vel.angular_velocity.y, attraction_vel.angular_velocity.z])
         
         # Potential feilds equation
-        pf_vel = np.add((1 - repulsion_mgn) * attraction, repulsion)
+        pf_vel = np.add((1 - repulsion_mgn) * attraction, repulsion_mgn * repulsion)
+        pf_lin_vel = pf_vel[:3] / np.linalg.norm(pf_vel[:3])
         
         wrench_vel_msg = WrenchStamped()
-        wrench_vel_msg.wrench.force = Vector3(*pf_vel[:3])
+        wrench_vel_msg.wrench.force = Vector3(*pf_lin_vel)
         wrench_vel_msg.wrench.torque = Vector3(*pf_vel[3:])
         wrench_vel_pub.publish(wrench_vel_msg)
 

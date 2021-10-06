@@ -16,7 +16,7 @@ ur10e_mg = None
 camera_tf = None
 repulsion_pub = None
 
-MAX_DIST = 0.3
+MAX_DIST = 0.4
 
 
 def repulsion(obstacles_msg, real):
@@ -38,7 +38,7 @@ def repulsion(obstacles_msg, real):
         obs_radius = obstacles_msg.radiuses[obs_idx]
 
         distance = sqrt(pow(ee_center.x - obs_center.x, 2) + pow(ee_center.y - obs_center.y, 2) + 
-                        pow(ee_center.z - obs_center.z, 2)) - obs_radius
+                        pow(ee_center.z - obs_center.z, 2))
         if distance < MAX_DIST:
             obstacle = helpers.pointToList(obs_center)
             obstacle.append(obs_radius)
@@ -56,7 +56,8 @@ def repulsion(obstacles_msg, real):
         rep_vector = rep_vector/np.linalg.norm(rep_vector)
         
         distance = obstacles[min_obs_idx][4]
-        rep_factor = (MAX_DIST - (distance - 0.1)) * 1 / MAX_DIST
+        rep_factor = (MAX_DIST - (distance - 0.1)) * 1 / (MAX_DIST + 0.1)
+        print(distance, rep_factor)
         rep_vector = rep_vector * rep_factor
 
         # print(min_obs_idx, obstacles[min_obs_idx], rep_vector)

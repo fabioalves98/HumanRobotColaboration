@@ -36,7 +36,7 @@ int main(int argc, char **argv)
         std::vector<double> joint_speeds_inc = *joint_speeds_ptr;
 
         std::transform(joint_speeds_inc.begin(), joint_speeds_inc.end(), joint_speeds_inc.begin(), 
-                       [](const double joint) { return joint/10;});
+                       [](const double joint) { return joint/5;});
         
         std::vector<double> next_joint_values;
         std::vector<double> current_joint_values = move_group.getCurrentJointValues();

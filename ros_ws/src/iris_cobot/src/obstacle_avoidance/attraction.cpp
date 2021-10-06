@@ -1,4 +1,5 @@
 #include <iostream>
+#include <numeric>
 #include <ros/ros.h>
 
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
@@ -14,19 +15,104 @@
 
 #include <iris_cobot/PFVector.h>
 
+template<typename T>
+using sVec = std::vector<T>;
+
 ros::Publisher *attraction_pub_ptr;
+ros::Publisher *goal_marker_pub_ptr;
+
+std::vector<std::vector<double>> *trajectory_ptr;
+ros::Publisher *traj_marker_pub_ptr;
+visualization_msgs::MarkerArray *traj_marker_ptr;
 
 robot_state::RobotStatePtr kinematic_state;
 const robot_state::JointModelGroup* joint_model_group;
-moveit::planning_interface::MoveGroupInterface *move_group_ptr;
+moveit::planning_interface::MoveGroupInterface *ur10e_mg_ptr;
 
 
-void attraction(trajectory_msgs::JointTrajectoryPoint point)
+visualization_msgs::Marker sphereMarker(geometry_msgs::TransformStamped marker_tf, 
+    sVec<double> rgbas, int id = 0)
 {
-    std::vector<double> joint_values = point.positions;
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = "base_link";
+    marker.header.stamp = ros::Time();
+    marker.id = id;
+    marker.type = visualization_msgs::Marker::SPHERE;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = marker_tf.transform.translation.x;
+    marker.pose.position.y = marker_tf.transform.translation.y;
+    marker.pose.position.z = marker_tf.transform.translation.z;
+    marker.pose.orientation = marker_tf.transform.rotation;
+    marker.color.r = rgbas[0];
+    marker.color.g = rgbas[1];
+    marker.color.b = rgbas[2];
+    marker.color.a = rgbas[3];
+    marker.scale.x = rgbas[4];
+    marker.scale.y = rgbas[4];
+    marker.scale.z = rgbas[4];
+    return marker;
+}
+
+geometry_msgs::TransformStamped forwardKinematics(std::vector<double> joint_values)
+{
+    kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
+    const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("flange");
+    return tf2::eigenToTransform(end_effector_state);
+}
+
+int findGoalIdx()
+{
+    std::vector<double> cur_joints = ur10e_mg_ptr->getCurrentJointValues();
+    std::vector<double> differences;
+
+    for (auto point : *trajectory_ptr)
+    {
+        std::vector<double> diff;
+        for (int i = 0; i < 6; i++)
+        {
+            diff.push_back(abs(point[i] - cur_joints[i]));
+        }
+        differences.push_back(std::accumulate(diff.begin(), diff.end(), 0.0));
+    }
+
+    std::cout << "Diferences" << std::endl;
+    for (auto elem : differences)
+    {
+        std::cout << elem << ' ';
+    }
+    std::cout << std::endl;
+
+    int min_dist_idx = std::distance(std::begin(differences), 
+        std::min_element(std::begin(differences), std::end(differences)));
+
+    std::cout << "Min Dist Idx = " << min_dist_idx << std::endl;
+    
+    // If it reaches end of trajectory, revert
+    if (min_dist_idx == trajectory_ptr->size() - 1)
+    {
+        std::cout << "REVERSING" << std::endl;
+        std::reverse(trajectory_ptr->begin(), trajectory_ptr->end());
+        min_dist_idx = 0;
+    }
+
+    return min_dist_idx + 1;
+}
+
+
+void attraction(const ros::TimerEvent& event)
+{
+    int point_idx = findGoalIdx();
+    std::vector<double> joint_values = trajectory_ptr->at(point_idx);
+
+    std::cout << point_idx << std::endl;
+    for (auto joint : joint_values)
+    {
+        std::cout << joint << ' ';
+    }
+    std::cout << std::endl;
 
     // Current pose
-    geometry_msgs::PoseStamped ee_pose = move_group_ptr->getCurrentPose();
+    geometry_msgs::PoseStamped ee_pose = ur10e_mg_ptr->getCurrentPose();
     // std::cout << ee_pose << std::endl;
 
     tf2::Transform ee_tf;
@@ -36,11 +122,14 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     ee_tf.setRotation(ee_rot);
 
     // Target Pose
-    kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
-    const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("flange");
     tf2::Stamped<tf2::Transform> goal_tf;
-    geometry_msgs::TransformStamped goal_tf_msg = tf2::eigenToTransform(end_effector_state);
+    geometry_msgs::TransformStamped goal_tf_msg = forwardKinematics(joint_values);
     tf2::fromMsg(goal_tf_msg, goal_tf);
+
+    // Publish Goal TF
+    visualization_msgs::Marker goal_marker = sphereMarker(goal_tf_msg, {0, 1, 0, 1, 0.1}, 0);
+    goal_marker_pub_ptr->publish(goal_marker);
+    traj_marker_pub_ptr->publish(*traj_marker_ptr);
 
     // Difference from goal pose to target pose
     tf2::Transform diff_tf;
@@ -55,7 +144,7 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     {
         lin_vel << 0, 0, 0;
     }
-    else if (lin_vel.norm() > 0.1)
+    else
     {
         lin_vel = lin_vel.normalized();
     }
@@ -67,7 +156,7 @@ void attraction(trajectory_msgs::JointTrajectoryPoint point)
     double roll, pitch, yaw;
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
 
-    if (roll > 0.05 || pitch > 0.05 || yaw > 0.05)
+    if (abs(roll) > 0.05 || abs(pitch) > 0.05 || abs(yaw) > 0.05)
     {
         ang_vel_msg.x = roll;
         ang_vel_msg.y = pitch;
@@ -96,19 +185,73 @@ int main(int argc, char **argv)
     spinner.start();
 
     // Moveit controller and Kinematic state 
-    moveit::planning_interface::MoveGroupInterface move_group("manipulator");
-    move_group_ptr = &move_group;
+    moveit::planning_interface::MoveGroupInterface ur10e_mg("manipulator");
+    ur10e_mg_ptr = &ur10e_mg;
 
-    kinematic_state = move_group.getCurrentState();
-    robot_model::RobotModelConstPtr kinematic_model = move_group.getRobotModel();
+    kinematic_state = ur10e_mg.getCurrentState();
+    robot_model::RobotModelConstPtr kinematic_model = ur10e_mg.getRobotModel();
     joint_model_group = kinematic_model->getJointModelGroup("manipulator");
+
+    // Goal Marker Publisher
+    ros::Publisher goal_marker_pub = nh.advertise<visualization_msgs::Marker>("goal", 1);
+    goal_marker_pub_ptr = &goal_marker_pub;
+
+    // Trajectory Marker Publisher
+    ros::Publisher trajectory_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("trajectory", 1);
+    traj_marker_pub_ptr = &trajectory_marker_pub;
+
+    // Start Position
+    std::vector<double> start_joints = 
+        {1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
+        0.08445851385083003, 2.0642237663269043, -0.4083760420428675};
+    robot_state::RobotStatePtr start_state = ur10e_mg.getCurrentState();
+    start_state->setJointGroupPositions(joint_model_group, start_joints);
+
+    // Goal Position
+    std::vector<double> goal_joints = 
+        {3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
+        0.13671223699536128, 0.9651718139648438, 0.5363349914550781};    
+
+    // Trajectory Creator
+    ur10e_mg.setStartState(*start_state);
+    ur10e_mg.setJointValueTarget(goal_joints);
+    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+    ur10e_mg.plan(my_plan);
+
+    std::cout << "Trajectory with " << my_plan.trajectory_.joint_trajectory.points.size() 
+              << "points" << std::endl;
+    
+    std::vector<std::vector<double>> trajectory;
+    trajectory_ptr = &trajectory;
+
+    visualization_msgs::MarkerArray trajectory_markers;
+    traj_marker_ptr = &trajectory_markers;
+    int marker_id = 0;
+    for (auto point : my_plan.trajectory_.joint_trajectory.points)
+    {   
+        trajectory.push_back(point.positions);
+        trajectory_markers.markers.push_back(sphereMarker(forwardKinematics(point.positions),
+            {1, 0, 0, 0.5, 0.08} , marker_id));
+        marker_id++;
+    }
+
+    // Print Trajectory
+    for (auto point : trajectory)
+    {
+        for (auto joint : point)
+        {
+            std::cout << joint << ' ';
+        }
+        std::cout << std::endl;
+    }
 
     // Attraction Vector Publisher
     ros::Publisher attraction_pub = nh.advertise<iris_cobot::PFVector>("attraction", 1);
     attraction_pub_ptr = &attraction_pub;
 
     // Goal trajectory point subscriber
-    ros::Subscriber sub = nh.subscribe("trajectory_point", 1, attraction);
+    // ros::Subscriber sub = nh.subscribe("trajectory_point", 1, attraction);
+    ros::Timer timer = nh.createTimer(ros::Duration(1/500), attraction);
 
     ROS_INFO("Atraction node listening to trajectory_point and publishing to attraction");
     

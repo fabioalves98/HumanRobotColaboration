@@ -1447,3 +1447,8 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Espera que o peso sentido seja nulo (o que seignifica que um utilizador esta a suportar o peso do objeto)
 - Faz release, voltando para o estado idle
 
+## 01/09 - IRISLab
+
+- Proposta inicial para o capítulo 1
+
+## 02/09 - IRISLab
