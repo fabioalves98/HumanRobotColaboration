@@ -9,7 +9,7 @@ from geometry_msgs.msg import Vector3, Point, Pose, PoseStamped, Quaternion, Tra
 from visualization_msgs.msg import Marker
 from controller_manager_msgs.srv import ListControllers, SwitchController
 
-from iris_cobot.srv import WeightUpdate
+from iris_cobot.srv import WeightUpdate, WrenchControl
 from iris_sami.srv import JointGoalName, JointGoal, RelativeMove, PoseGoal, NoArguments
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
@@ -57,6 +57,26 @@ def cobot_reset_ft_sensor():
         rospy.wait_for_service('/iris_cobot/zero_ftsensor', timeout=2)
         zero = rospy.ServiceProxy('/iris_cobot/zero_ftsensor', Trigger)
         resp = zero()
+        return resp.success
+    except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
+        print("Service call failed: %s"%e)
+
+
+def hgControl(status):
+    try:
+        rospy.wait_for_service('/hg_control', timeout=2)
+        hg = rospy.ServiceProxy('/hg_control', WrenchControl)
+        resp = hg(status)
+        return resp.success
+    except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
+        print("Service call failed: %s"%e)
+
+
+def pfControl(status):
+    try:
+        rospy.wait_for_service('/pf_control', timeout=2)
+        hg = rospy.ServiceProxy('/pf_control', WrenchControl)
+        resp = hg(status)
         return resp.success
     except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
         print("Service call failed: %s"%e)

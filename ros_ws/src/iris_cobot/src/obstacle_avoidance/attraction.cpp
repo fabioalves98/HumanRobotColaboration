@@ -150,7 +150,6 @@ void attraction(const ros::TimerEvent& event)
     // Publish Current Point TF
     visualization_msgs::Marker cur_marker = sphereMarker(cur_tf_msg, {1, 1, 0, 1, 0.1}, 0);
     cur_marker_pub_ptr->publish(cur_marker);
-    traj_marker_pub_ptr->publish(*traj_marker_ptr);
 
     // Goal Point Pose
     tf2::Stamped<tf2::Transform> goal_tf;
@@ -318,6 +317,10 @@ int main(int argc, char **argv)
             trajectory.erase(it);
         }
     }
+
+    // Temporary shortening of trajectory
+    trajectory.erase(trajectory.begin());
+    trajectory.erase(trajectory.end());
 
     // Print Trajectory
     for (auto point : trajectory)

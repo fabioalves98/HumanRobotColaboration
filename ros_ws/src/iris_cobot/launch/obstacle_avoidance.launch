@@ -3,16 +3,13 @@
 
     <arg name="real"   default="true"/>
 
-    <!-- Off-line trajectory -->
-    <node pkg="iris_cobot" type="offline.py" name="offline" output="screen" respawn="true"/>
-
-    <!-- Attraction Vector -->
+    <!-- Off-line trajectory creator and attraction Vector -->
     <node pkg="iris_cobot" type="attraction" name="attraction" output="screen" respawn="true"/>
 
     <!-- Turn on real camera and calibration (only in real scenario) -->
     <group if="$(arg real)">
         <include file="$(find openni_launch)/launch/openni.launch">
-            <arg name="depth_registration"  value="true"/>
+            <arg name="depth_registration"  value="false"/>
         </include>
         <include file="$(find iris_cobot)/launch/handeye_publish.launch"/>
     </group>

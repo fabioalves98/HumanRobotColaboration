@@ -95,7 +95,7 @@ def zeroFTSensor(event):
     if len(events) == 0:
         if (force_magnitude > MAX_FORCE_MAGNITUDE):
             print('ZERO FT SENSOR')
-            helpers.cobot_reset_ft_sensor()
+            # helpers.cobot_reset_ft_sensor()
 
     events[:] = []
 

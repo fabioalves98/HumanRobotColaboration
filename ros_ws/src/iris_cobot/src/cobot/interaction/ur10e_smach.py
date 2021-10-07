@@ -29,12 +29,14 @@ class UR10eState(smach.State):
 # define state FreeDrive
 class Freedrive(UR10eState):
     def __init__(self):
-        UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+', 'dTapY+', 'dTapY-'])
+        UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+', 'dTapY'])
 
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Freedrive')
 
+        helpers.cobot_reset_ft_sensor()
+        helpers.hgControl('play')
         helpers.switchControllers('velocity')
         
         while not rospy.is_shutdown():
@@ -42,7 +44,7 @@ class Freedrive(UR10eState):
             if action.type == 'double' and action.component == 0:
                 return 'dTapX+' if action.direction else 'dTapX-'
             if action.type == 'double' and action.component == 1:
-                return 'dTapY+' if action.direction else 'dTapY-'
+                return 'dTapY'
 
 
 # define state Gripping
@@ -53,6 +55,8 @@ class Gripping(UR10eState):
 
     def execute(self, userdata):
         rospy.loginfo('Executing state Gripping')
+
+        helpers.switchControllers("position")
 
         helpers.samiGripService()
         
@@ -74,7 +78,6 @@ class GripObject(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state GripObject')
 
-        helpers.switchControllers("position")
         upwards_move = [0, 0, 0.05, 0, 0, 0]
         helpers.samiMoveWorldService(upwards_move)
         time.sleep(0.5)
@@ -126,6 +129,7 @@ class Releasing(UR10eState):
         helpers.samiReleaseService()
         helpers.weightUpdate(0)
         time.sleep(1)
+        helpers.cobot_reset_ft_sensor()
         helpers.switchControllers("velocity")
         
         while not rospy.is_shutdown():
@@ -144,7 +148,7 @@ class Picking(UR10eState):
         rospy.loginfo('Executing state Picking')
         
         helpers.switchControllers('position')
-        helpers.samiAliasService('pick')
+        helpers.samiAliasService('colab_pick')
         helpers.samiMoveService([0.05, 0, 0, 0, 0, 0])
         
         return 'OK'
@@ -160,7 +164,13 @@ class Grip(UR10eState):
 
         helpers.samiGripService()
 
-        return 'OK'
+        while not rospy.is_shutdown():
+            status = self.getGripperStatus()
+            if status.gripped:
+                if status.has_object:
+                    return 'OK'
+                else:
+                    continue
 
 
 # define state Picking
@@ -171,7 +181,7 @@ class Delivering(UR10eState):
     def execute(self, userdata):
         rospy.loginfo('Executing state Picking')
 
-        helpers.samiAliasService('deliver')
+        helpers.samiAliasService('colab_main')
 
         weight = rospy.wait_for_message("wrench_correct", WrenchStamped)
 
@@ -185,23 +195,35 @@ class Delivering(UR10eState):
             if wrench_velocity.wrench.force.z * 20 > 0:
                 helpers.samiReleaseService()
                 time.sleep(1)
+                helpers.cobot_reset_ft_sensor()
                 return 'OK'
 
 
-# define state Fine Control
-class Configuration(UR10eState):
+# define state Industrial
+class Industrial(UR10eState):
     def __init__(self):
-        UR10eState.__init__(self, outcomes=['dTapY-', 'dTapY+'])
+        UR10eState.__init__(self, outcomes=['dTap'])
 
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state Configuration')
+        rospy.loginfo('Executing state Industrial')
+
+        # Disable Wrench to Vel
+        helpers.hgControl('pause')
+        time.sleep(0.1)
+        helpers.hgControl('stop')
+        time.sleep(0.1)
+        # Enable PF Controller
+        helpers.pfControl('play')
         
         while not rospy.is_shutdown():
-            action = self.getAction()
-            if action.type == 'double' and action.component == 1:
-                return 'dTapY+' if action.direction else 'dTapY-'
-
+            action = self.getAction()     
+            if action.type == 'double':       
+                helpers.pfControl('pause')
+                time.sleep(0.1)
+                helpers.pfControl('stop')
+                time.sleep(0.1)
+                return 'dTap'
 
 
 def main():
@@ -214,8 +236,7 @@ def main():
         smach.StateMachine.add('FreeDrive', Freedrive(),
                             transitions={'dTapX-':'Pick & Deliver',
                                          'dTapX+':'Gripper',
-                                         'dTapY+':'Configuration',
-                                         'dTapY-':'Configuration'})
+                                         'dTapY':'Industrial'})
 
         # Create the sub Gripper state machine
         sm_gripper = smach.StateMachine(outcomes=['exit_state'])
@@ -250,9 +271,8 @@ def main():
                             transitions={'exit_state':'FreeDrive'})
     
         
-        smach.StateMachine.add('Configuration', Configuration(),
-                            transitions={'dTapY+':'FreeDrive',
-                                         'dTapY-':'FreeDrive'})
+        smach.StateMachine.add('Industrial', Industrial(),
+                            transitions={'dTap':'FreeDrive'})
     
     # Create and start the introspection server
     sis = smach_ros.IntrospectionServer('ur10e_smach_server', sm_ur10e, '/SM_UR10e')

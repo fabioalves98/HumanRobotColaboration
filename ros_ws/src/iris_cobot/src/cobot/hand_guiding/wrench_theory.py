@@ -25,7 +25,7 @@ object_weight = OBJECT_WEIGHT
 object_cog = OBJECT_COG
 
 
-origin = [0.5, 0.5, 1.5]
+origin = [-0.3, -1.0, 0.7]
 x_rot = quaternion_from_euler(0, 0, radians(-90))
 y_rot = quaternion_from_euler(0, radians(90), 0)
 g_ori = quaternion_from_euler(0, radians(90), 0)

@@ -19,28 +19,28 @@
         args="-d $(find iris_cobot)/launch/iris_cobot.rviz" output="screen">
     </node>
 
-    <!-- Plotjuggler -->
-    <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
-        args="-l $(find iris_cobot)/curves/pj_layout.xml"/> -->
-
-    <!-- Dynamic Reconfigure -->
-    <!-- <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="configure_params" output="screen" />  -->
-
     <!-- IRIS Sami GUI Launcher -->
     <include file="$(find iris_sami)/launch/iris_sami.launch">
         <arg name="gui" value="true"/>
     </include>
 
     <!-- Hand Guiding -->
-    <!-- <include file="$(find iris_cobot)/launch/hand_guiding.launch"/> -->
-
-    <!-- Control -->
-    <!-- <include file="$(find iris_cobot)/launch/control.launch"/> -->
-
-    <!-- Obstacle Avoidance -->
-    <!-- <include file="$(find iris_cobot)/launch/obstacle_avoidance.launch"/> -->
+    <include file="$(find iris_cobot)/launch/hand_guiding.launch"/>
 
     <!-- Interaction -->
-    <!-- <include file="$(find iris_cobot)/launch/interaction.launch"/> -->
+    <include file="$(find iris_cobot)/launch/interaction.launch"/>
+
+    <!-- Obstacle Avoidance -->
+    <include file="$(find iris_cobot)/launch/obstacle_avoidance.launch"/>
+
+    <!-- Control -->
+    <include file="$(find iris_cobot)/launch/control.launch"/>
+
+    <!-- Plotjuggler -->
+    <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 
+        args="-l $(find iris_cobot)/curves/pj_layout.xml"/> -->
+
+    <!-- Dynamic Reconfigure -->
+    <node pkg="rqt_reconfigure" type="rqt_reconfigure" name="configure_params" output="screen" respawn="true"/> 
 
 </launch>

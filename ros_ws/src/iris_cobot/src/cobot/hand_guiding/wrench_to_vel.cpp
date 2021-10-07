@@ -12,6 +12,7 @@
 
 #include <dynamic_reconfigure/server.h>
 #include <iris_cobot/FTtoVelConfig.h>
+#include <iris_cobot/WrenchControl.h>
 
 #include <moveit/move_group_interface/move_group_interface.h>
 
@@ -24,6 +25,25 @@ double force_div;
 double torque_div;
 double force_sensibility;
 double torque_sensibility;
+
+std::string status = "stop";
+std::vector<std::string> statuses = {"play", "pause", "stop"};
+
+bool hg_control(iris_cobot::WrenchControl::Request& req, iris_cobot::WrenchControl::Response& res)
+{
+    for (std::string status_s : statuses)
+    {
+        if (status_s == req.control)
+        {
+            status = req.control;
+            res.success = true;
+            return true;
+        }
+    }
+
+    res.success = false;
+    return false;
+}
 
 void parameterConfigure(iris_cobot::FTtoVelConfig &config, uint32_t level) 
 {
@@ -72,7 +92,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     torque /= torque_div;
     
     // Origin position
-    tf2::Vector3 origin(0.5, 0.5, 1.5);
+    tf2::Vector3 origin(-0.3, -1.0, 0.7);
 
     // Create FT Sensor Orientation
     geometry_msgs::PoseStamped ee_pose = move_group_ptr->getCurrentPose();
@@ -131,9 +151,9 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     torque_tf_stamped.header.stamp = ros::Time::now();
     torque_tf_stamped.header.frame_id = "base_link";
     torque_tf_stamped.child_frame_id = "torque";
-    torque_tf_stamped.transform.translation.x = 0.5;
-    torque_tf_stamped.transform.translation.y = 0.5;
-    torque_tf_stamped.transform.translation.z = 1.5;    
+    torque_tf_stamped.transform.translation.x = origin.x();
+    torque_tf_stamped.transform.translation.y = origin.y();
+    torque_tf_stamped.transform.translation.z = origin.z();    
     torque_tf_stamped.transform.rotation = tf2::toMsg(torque_tf.getRotation());
 
     br_ptr->sendTransform(torque_tf_stamped);
@@ -149,7 +169,18 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     wrench_velocity_msg.wrench.torque.z = yaw;
 
     // Publish wrench velocity message
-    wrench_vel_pub_ptr->publish(wrench_velocity_msg);
+    if (status == "play")
+    {
+        wrench_vel_pub_ptr->publish(wrench_velocity_msg);
+    }
+    else if (status == "pause")
+    {
+        wrench_vel_pub_ptr->publish(geometry_msgs::WrenchStamped());
+    }
+    else if (status == "stop")
+    {
+
+    }
 }
 
 int main(int argc, char** argv){
@@ -176,6 +207,9 @@ int main(int argc, char** argv){
     dynamic_reconfigure::Server<iris_cobot::FTtoVelConfig>::CallbackType cobotConfigCallback;
     cobotConfigCallback = boost::bind(&parameterConfigure, _1, _2);
     server.setCallback(cobotConfigCallback);
+
+    // Hand Guiding control service
+    ros::ServiceServer service = nh.advertiseService("hg_control", hg_control);
 
     ros::Subscriber wrench_sub = nh.subscribe("wrench_correct", 1, rotationCalculator);
 
