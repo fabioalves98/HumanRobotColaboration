@@ -19,15 +19,18 @@ template<typename T>
 using sVec = std::vector<T>;
 
 ros::Publisher *attraction_pub_ptr;
+ros::Publisher *cur_marker_pub_ptr;
 ros::Publisher *goal_marker_pub_ptr;
 
-std::vector<std::vector<double>> *trajectory_ptr;
+sVec<sVec<double>> *trajectory_ptr;
 ros::Publisher *traj_marker_pub_ptr;
 visualization_msgs::MarkerArray *traj_marker_ptr;
 
 robot_state::RobotStatePtr kinematic_state;
 const robot_state::JointModelGroup* joint_model_group;
 moveit::planning_interface::MoveGroupInterface *ur10e_mg_ptr;
+
+int previous_idx = 0;
 
 
 visualization_msgs::Marker sphereMarker(geometry_msgs::TransformStamped marker_tf, 
@@ -53,7 +56,7 @@ visualization_msgs::Marker sphereMarker(geometry_msgs::TransformStamped marker_t
     return marker;
 }
 
-geometry_msgs::TransformStamped forwardKinematics(std::vector<double> joint_values)
+geometry_msgs::TransformStamped forwardKinematics(sVec<double> joint_values)
 {
     kinematic_state->setJointGroupPositions(joint_model_group, joint_values);
     const Eigen::Isometry3d& end_effector_state = kinematic_state->getGlobalLinkTransform("flange");
@@ -62,12 +65,12 @@ geometry_msgs::TransformStamped forwardKinematics(std::vector<double> joint_valu
 
 int findGoalIdx()
 {
-    std::vector<double> cur_joints = ur10e_mg_ptr->getCurrentJointValues();
-    std::vector<double> differences;
+    sVec<double> cur_joints = ur10e_mg_ptr->getCurrentJointValues();
+    sVec<double> differences;
 
     for (auto point : *trajectory_ptr)
     {
-        std::vector<double> diff;
+        sVec<double> diff;
         for (int i = 0; i < 6; i++)
         {
             diff.push_back(abs(point[i] - cur_joints[i]));
@@ -75,25 +78,33 @@ int findGoalIdx()
         differences.push_back(std::accumulate(diff.begin(), diff.end(), 0.0));
     }
 
-    std::cout << "Diferences" << std::endl;
-    for (auto elem : differences)
-    {
-        std::cout << elem << ' ';
-    }
-    std::cout << std::endl;
+    // std::cout << "Diferences" << std::endl;
+    // for (auto elem : differences)
+    // {
+    //     std::cout << elem << ' ';
+    // }
+    // std::cout << std::endl;
 
     int min_dist_idx = std::distance(std::begin(differences), 
         std::min_element(std::begin(differences), std::end(differences)));
 
-    std::cout << "Min Dist Idx = " << min_dist_idx << std::endl;
+    // std::cout << "Min Dist Idx = " << min_dist_idx << std::endl;
     
     // If it reaches end of trajectory, revert
     if (min_dist_idx == trajectory_ptr->size() - 1)
     {
-        std::cout << "REVERSING" << std::endl;
+        // std::cout << "REVERSING" << std::endl;
         std::reverse(trajectory_ptr->begin(), trajectory_ptr->end());
         min_dist_idx = 0;
+        previous_idx = 0;
     }
+
+    // Make sure robot keeps the same sirection when following trajectory
+    if (min_dist_idx < previous_idx)
+    {
+        min_dist_idx = previous_idx;
+    }
+    previous_idx = min_dist_idx;
 
     return min_dist_idx + 1;
 }
@@ -101,15 +112,25 @@ int findGoalIdx()
 
 void attraction(const ros::TimerEvent& event)
 {
-    int point_idx = findGoalIdx();
-    std::vector<double> joint_values = trajectory_ptr->at(point_idx);
-
-    std::cout << point_idx << std::endl;
-    for (auto joint : joint_values)
+    int current_idx = findGoalIdx();
+    sVec<double> cur_joint_values = trajectory_ptr->at(current_idx);
+    sVec<double> goal_joint_values;
+    if (current_idx != trajectory_ptr->size() - 1)
     {
-        std::cout << joint << ' ';
+        // goal_joint_values = trajectory_ptr->back();
+        goal_joint_values = trajectory_ptr->at(current_idx + 1);
     }
-    std::cout << std::endl;
+    else
+    {
+        goal_joint_values = cur_joint_values;
+    }
+
+    // std::cout << current_idx << std::endl;
+    // for (auto joint : cur_joint_values)
+    // {
+    //     std::cout << joint << ' ';
+    // }
+    // std::cout << std::endl;
 
     // Current pose
     geometry_msgs::PoseStamped ee_pose = ur10e_mg_ptr->getCurrentPose();
@@ -121,24 +142,35 @@ void attraction(const ros::TimerEvent& event)
     tf2::convert(ee_pose.pose.orientation, ee_rot);
     ee_tf.setRotation(ee_rot);
 
-    // Target Pose
+    // Current Point Pose
+    tf2::Stamped<tf2::Transform> cur_tf;
+    geometry_msgs::TransformStamped cur_tf_msg = forwardKinematics(cur_joint_values);
+    tf2::fromMsg(cur_tf_msg, cur_tf);
+
+    // Publish Current Point TF
+    visualization_msgs::Marker cur_marker = sphereMarker(cur_tf_msg, {1, 1, 0, 1, 0.1}, 0);
+    cur_marker_pub_ptr->publish(cur_marker);
+    traj_marker_pub_ptr->publish(*traj_marker_ptr);
+
+    // Goal Point Pose
     tf2::Stamped<tf2::Transform> goal_tf;
-    geometry_msgs::TransformStamped goal_tf_msg = forwardKinematics(joint_values);
+    geometry_msgs::TransformStamped goal_tf_msg = forwardKinematics(goal_joint_values);
     tf2::fromMsg(goal_tf_msg, goal_tf);
 
-    // Publish Goal TF
+    // Publish Goal Point TF
     visualization_msgs::Marker goal_marker = sphereMarker(goal_tf_msg, {0, 1, 0, 1, 0.1}, 0);
     goal_marker_pub_ptr->publish(goal_marker);
     traj_marker_pub_ptr->publish(*traj_marker_ptr);
 
     // Difference from goal pose to target pose
     tf2::Transform diff_tf;
-    diff_tf = goal_tf * ee_tf.inverse();
+    diff_tf = cur_tf * ee_tf.inverse();
 
+    // Obtain linear velocity using current and goal points position
     Eigen::Vector3d lin_vel;
-    lin_vel << goal_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
-               goal_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
-               goal_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+    lin_vel << (goal_tf.getOrigin().getX()+cur_tf.getOrigin().getX())/2 - ee_tf.getOrigin().getX(),
+               (goal_tf.getOrigin().getY()+cur_tf.getOrigin().getY())/2 - ee_tf.getOrigin().getY(),
+               (goal_tf.getOrigin().getZ()+cur_tf.getOrigin().getZ())/2 - ee_tf.getOrigin().getZ();
 
     if (lin_vel.norm() < 0.01)
     {
@@ -192,6 +224,10 @@ int main(int argc, char **argv)
     robot_model::RobotModelConstPtr kinematic_model = ur10e_mg.getRobotModel();
     joint_model_group = kinematic_model->getJointModelGroup("manipulator");
 
+    // Cur Marker Publisher
+    ros::Publisher cur_marker_pub = nh.advertise<visualization_msgs::Marker>("cur", 1);
+    cur_marker_pub_ptr = &cur_marker_pub;
+
     // Goal Marker Publisher
     ros::Publisher goal_marker_pub = nh.advertise<visualization_msgs::Marker>("goal", 1);
     goal_marker_pub_ptr = &goal_marker_pub;
@@ -200,39 +236,87 @@ int main(int argc, char **argv)
     ros::Publisher trajectory_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("trajectory", 1);
     traj_marker_pub_ptr = &trajectory_marker_pub;
 
-    // Start Position
-    std::vector<double> start_joints = 
-        {1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
-        0.08445851385083003, 2.0642237663269043, -0.4083760420428675};
+    // Obtain Robot current state
     robot_state::RobotStatePtr start_state = ur10e_mg.getCurrentState();
-    start_state->setJointGroupPositions(joint_model_group, start_joints);
 
-    // Goal Position
-    std::vector<double> goal_joints = 
-        {3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
-        0.13671223699536128, 0.9651718139648438, 0.5363349914550781};    
 
-    // Trajectory Creator
-    ur10e_mg.setStartState(*start_state);
-    ur10e_mg.setJointValueTarget(goal_joints);
-    moveit::planning_interface::MoveGroupInterface::Plan my_plan;
-    ur10e_mg.plan(my_plan);
+    // Start Position
+    sVec<double> start_joints = {
+        1.8872361183166504, -2.362852712670797, -1.6420011520385742, 
+        -0.6762150090983887, 1.5861048698425293, -0.45677310625185186
+    };
+    // Waypoint 1
+    sVec<double> waypoint_1 = {
+        1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
+        0.08445851385083003, 2.0642237663269043, -0.4083760420428675
+    };
+    // Waipoint 2
+    sVec<double> waypoint_2 = {
+        3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
+        0.13671223699536128, 0.9651718139648438, 0.5363349914550781
+    };
+    // End Position
+    sVec<double> end_joints = 
+    {
+        2.8675928115844727, -2.211241384545797, -1.9777193069458008, 
+        -0.4927595418742676, 1.553483009338379, 0.5230627059936523
+    };
 
-    std::cout << "Trajectory with " << my_plan.trajectory_.joint_trajectory.points.size() 
-              << "points" << std::endl;
-    
-    std::vector<std::vector<double>> trajectory;
+    // Global Trajectory Creator
+    sVec<sVec<double>> trajectory;
     trajectory_ptr = &trajectory;
 
     visualization_msgs::MarkerArray trajectory_markers;
     traj_marker_ptr = &trajectory_markers;
     int marker_id = 0;
-    for (auto point : my_plan.trajectory_.joint_trajectory.points)
-    {   
-        trajectory.push_back(point.positions);
-        trajectory_markers.markers.push_back(sphereMarker(forwardKinematics(point.positions),
-            {1, 0, 0, 0.5, 0.08} , marker_id));
-        marker_id++;
+
+    sVec<sVec<double>> waypoints = {start_joints, waypoint_1, waypoint_2, end_joints};
+
+    for (int i = 0; i < waypoints.size() - 1; i++)
+    {
+        // Set Start State
+        start_state->setJointGroupPositions(joint_model_group, waypoints[i]);
+
+        // Trajectory Creator
+        ur10e_mg.setStartState(*start_state);
+        ur10e_mg.setJointValueTarget(waypoints[i + 1]);
+        moveit::planning_interface::MoveGroupInterface::Plan my_plan;
+        ur10e_mg.plan(my_plan);
+
+        std::cout << "Trajectory with " << my_plan.trajectory_.joint_trajectory.points.size() 
+                << "points" << std::endl;
+        
+        for (auto point : my_plan.trajectory_.joint_trajectory.points)
+        {   
+            trajectory.push_back(point.positions);
+            trajectory_markers.markers.push_back(sphereMarker(forwardKinematics(point.positions),
+                {1, 0, 0, 0.5, 0.08} , marker_id));
+            marker_id++;
+        }
+    }
+
+    // Check for overlaps in trajectory points and remove them
+    sVec<sVec<double>> duplicate_joints;
+    for (int i = 0; i < trajectory.size() - 1; i ++)
+    {
+        sVec<double> diff;
+        for (int j = 0; j < 6; j++)
+        {
+            diff.push_back(abs(trajectory[i][j] - trajectory[i + 1][j]));
+        }
+        double diff_value =  std::accumulate(diff.begin(), diff.end(), 0.0);
+        if (diff_value < 0.1)
+        {
+            duplicate_joints.push_back(trajectory[i]);
+        }
+    }
+    for (sVec<double> point : duplicate_joints)
+    {
+        auto it = std::find(trajectory.begin(),trajectory.end(), point);
+        if (it != trajectory.end()) 
+        {
+            trajectory.erase(it);
+        }
     }
 
     // Print Trajectory
@@ -244,6 +328,7 @@ int main(int argc, char **argv)
         }
         std::cout << std::endl;
     }
+    std::cout << "Global Trajectory with " << trajectory.size() << " points" << std::endl;
 
     // Attraction Vector Publisher
     ros::Publisher attraction_pub = nh.advertise<iris_cobot::PFVector>("attraction", 1);

@@ -12,9 +12,9 @@ import cobot.helpers as helpers
 from iris_cobot.msg import Obstacles, PFVector
 
 
-ur10e_mg = None
+ur10e_mg = None # type: MoveGroupCommander
 camera_tf = None
-repulsion_pub = None
+repulsion_pub = None # type: rospy.Publisher
 
 MAX_DIST = 0.4
 
@@ -57,7 +57,7 @@ def repulsion(obstacles_msg, real):
         
         distance = obstacles[min_obs_idx][4]
         rep_factor = (MAX_DIST - (distance - 0.1)) * 1 / (MAX_DIST + 0.1)
-        print(distance, rep_factor)
+        # print(distance, rep_factor)
         rep_vector = rep_vector * rep_factor
 
         # print(min_obs_idx, obstacles[min_obs_idx], rep_vector)
@@ -65,7 +65,12 @@ def repulsion(obstacles_msg, real):
     else:
         repulsion_msg.linear_velocity = Vector3(0, 0, 0)
 
-    repulsion_pub.publish(repulsion_msg)
+    if (ee_center.z > 0.2):
+        print('ATIVATED')
+        repulsion_pub.publish(repulsion_msg)
+    else:
+        print('DEACTIVATED')
+        repulsion_pub.publish(PFVector(Vector3(0, 0 ,0), Vector3(0, 0, 0)))
 
 
 def main():
