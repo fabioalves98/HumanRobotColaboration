@@ -1497,5 +1497,9 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 09/10 - Bilbioteca
 
+- Capítulo 2 da tese
+  - Fim da colaboração humano robot
+  - Predominant technologies
+
 
 

@@ -67,48 +67,142 @@ HRI can be divided in several sub-categories based on the following four criteri
     \item \textbf{Human-Robot Collaboration} (all four criteria): The final stage of HRI, where humans and robots, who simultaneously share the same workspace, work together to perform a complex task interacting physically with one another. With force/torque sensing hardware a robot can interpret human motion and intention, and react accordingly. 
 \end{itemize}
 
+% ADD: Boa descrição de HRC
+% Human–robot collaboration allows the combination of
+% typical strengths of robots with some of the numer-
+% ous strengths of humans. Typical strengths of industrial
+% robots are high stamina, high payload capacity, pre-
+% cision, and repeatability. Strengths of human workers
+% that are unmatched by any machinery comprise flexibil-
+% ity for new production tasks, creative problem-solving
+% skills, and the ability to react to unforeseen situations.
+
 \par With HRC defined and identified inside the broader field of HRI, some of its requirements and characteristics are going to be drawn in order to proceed with a full understanding of its context.
 % FIX: Dizer que os próximos aspectos são focados em cobots
 
 
 \subsection{Hardware and Design}
 
-\par The design and composition of a cobotic system can be one of the most challenging problems in this field. Industrial cobots generally operate in complex working conditions and must be able to carry motion effectively, sometimes in crowded environments, while facing unexpected events such as obstacles. This is one of the reasons that cobots are usually designed with 6 to 7 degrees of freedom (DoF[\textbf{acron}]). Another is that higher DoF provide the cobot with increased flexibility and dexterity in complex manipulation tasks. 
+\par The design and composition of a cobotic system can be one of the most challenging problems in this field. Industrial cobots generally operate in complex working conditions and must be able to carry motion effectively, sometimes in crowded environments, while facing unexpected events such as obstacles. This is one of the reasons that cobots are usually designed with 6 to 7 degrees of freedom (DoF[\textbf{acron}]). Another is that higher DoF provide the cobot with increased flexibility and dexterity in complex manipulation tasks.
+% info proveniente do 3.1 e 3.1.1 do paper 1
+% Source (+/-) - Coordination mechanism for integrated design of human-robot interaction scenarios
+\par Because cobots are meant to work alongside humans, reduced weight of the moving parts is one of the main factors in cobot design. Even so, in environments where collisions are inevitable, the risk of interaction with cobots can be reduced due to their increased sensorial apparatus, such as the use of proximity-sensitive skins or force/torque sensors to detect collisions, the increased energy absorbing properties of protective layers, the limits of robot velocity and maximum strength and force, and in some scenarios the placement of airbags around the robot.
+% info proveniente do 3.2.1 do paper 1
+% Source (+/-) - Springer Hand Book of robotics chp. 54.5 p. 1405
+%              - On a new generation of torque controlled light-weight robots, 2001
+%              - Design and modeling of a compliant link for inherently safe cobots, 2017
+%              - End-effector airbags to accelerate human-robot collaboration. 2017
 
-% 3.2.1 do paper 1 com info boa
+\par According to recent reviews, research is still being develop on numerous different ways to improve the design of cobots in order to make them reliable, dependable and most importantly safer.
+% Source - Human–robot interaction in industrial collaborative robotics: a literature review
+%        - ultima parte do 3.2.1 do paper 1
+
+% ADD: Falar sobre celulas roboticas
+
 
 \subsection{Safety}
 
-% Standard ISO do paper 2
+% LER: Design Considerations for Safe Human-robot Collaborative Workplace, 2015
+
+\par The general design and composition of a cobot has been shown, but is not enough to guarantee safe HRC. According to ISO 10218:2011 "Robots and equipment for robots - Safety requirements for industrial robots", and later more widely explained in ISO/TS 15066:2016 "Robots and robotic devices — Collaborative robots", specific requirements for cobotic system need to be met for them to be considered safe. These standards define four classes of safety requirements for industrial robots in collaborative environments:
+
+% Source FT - https://www.iso.org/standard/51330.html
+%           - https://www.iso.org/standard/62996.html
+
+% Further Details at - https://www.robotics.org/userAssets/riaUploads/file/12-TR15066Overview-SafetyforCollaborativeApplications-RobertaNelsonShea.pdf
+
+\begin{itemize}
+    \item \textbf{Safety-rated monitored stop: }The robot is stopped upon access of the human to the collaborative workspace. Most robot manufacturers offer a safety controller that assure the standstill of the robot. The robot can then resume the task once the human has left the collaborative workspace. This mode is mostly used when the cobot works alone, but occasionally a human operator can enter its workspace. In a broader view, the robot does not move while the human is present.
+    \item \textbf{Hand-guiding: }The human uses a hand-operated device, usually located at the EEF of the cobot, to transmit motion commands to the robot system. This type of operation implies a direct physical interaction with the robot, where the human must have full control over the robot movement. The position of the human within the collaborative workspace must be defined and a safety controller for delimiting the robot speed is required. Graphic support through through icons or 3D simulation is helpful for intuitive programming of the robot.
+    \item \textbf{Speed and separation monitoring: }There is constant monitoring of the relative speed and distance between robot and human. The robot must maintain a minimum safe distance and speed to the human in order to be able to stop any dangerous motion if contact with the human is imminent. When the separation distance decreases to a value below the minimum, the robot stops. When the human moves away from the robot, the robot can resume motion automatically. External vision sensor data might be needed to achieve this level of monitoring since few manufacturers equip cobots with such capabilities. 
+    \item \textbf{Power and force limiting: }The robot system should be designed to sufficiently reduce risk to a human by allowing direct, physical interaction without an additional safety controller. This is done through the design of the robot system by limiting collision forces so that in the event of a contact between the humans and the robot biomechanical tolerance limites are not exceeded.
+\end{itemize}
+
+% Source - paper de review 2
+%        - Springer handbook of robotics pg. 1407
+
+\par A traditional industrial robot can be adapted to meet this collaborative modes and requirements, however it would need additional safety devices such as laser sensors, vision systems, or controller modifications. For this reason a commercial cobot that has this features built-in requires no further hardware costs and can be a more attractive solution.
 
 \subsection{Programming}
 
+% Industrial robots are hard to program
+\par Industrial robots have the job of carrying out pre-programmed, repetitious tasks in order to promote productivity and efficiency. Their software platform is responsible for enabling HRI and conveying human intention on how certain tasks should be executed. Intuitive robot programming is an important issue that HRI deals with, since traditional approaches are either unintuitive of time-consuming. In the early days of industrial automation, robots could only be programmed by experts in actuators, controllers and hardware programming. Nowadays, most industrial robots are shipped with a teach pendants. These are handheld devices containing buttons, switches and in some cases a touchscreen. They are currently the most common programming method as they require little to no training in robotics or programming in general, they display the robots commands in a nontechnical fashion and allow for online editing of such commands. They also allow for walk-through programming where an operator physically moves the robot through a desired task. Although these methods seem intuitive and easy to learn, they are only applicable for certain groups of tasks since they have low accuracy requirements and for complex tasks can become cumbersome to use.
+% Source - https://robotsdoneright.com/Articles/programming-methods-for-industrial-robots.html
+
+\par Finding accurate, intuitive and efficient ways for robot programming is also a problem for HRI. One possible and currently established technique is the generation of robotic skills, which are pre-programmed software packages that only need to be parametrized by the user. A recent study [\textbf{ref}] has introduced a software architecture combining generation of robotic skills, named action blocks, that also allowed for process control, and a set of strategies and approaches for a fast and intuitive parametrization process.
+% Source - Skill Parametrization Approaches and Skill Architecture for Human-Robot Interaction, 2016
+
+\par Further research in this area is constantly looking for better user interfaces for robot programming. A few examples are:
+
+\begin{itemize}
+    \item \textbf{Virtual Reality: }Where tasks are completed intuitively as if the human is present at the remote working environment. It guarantees safe programming and is flexible on the level of workspace constraints or task complexity that may exist. The main problem is that it requires previous knowledge of the working areas to construct the virtual environment and is not suitable for loosely structured working conditions where there may be constant changes to the environment.
+    \item \textbf{Augmented Reality: }Where virtual elements, mainly computer-generated graphics, are projected into the real world so that the user can perceive certain elements of robot programming in real-time. Such elements might include objects, robot motions and trajectories, and  simulated collisions with the real environment. This technique can also help operators determine the best location for the robot before final installation.
+    \item \textbf{Program by Demonstration: }Where a human performs a task manually and in parallel, the robot is observing, following and learning the task in real-time. It allows any user to program a robot by just giving a demonstration of the sequence of operations to be carried out and shifts the the burden of robot programming from robot experts to task experts. It also makes possible to program more than one robot simultaneously. A significant problem with this approach is that jerks and inaccuracies in human demonstrations can lead to unsatisfactory execution of tasks by the robot that is learning them.
+\end{itemize}
+
+
+\par Other approaches on robot programming are also moving forward towards multimodal interfaces with the inclusion of gestures, voice, eye gaze and facial expressions serving as high-level inputs to control and program the robotic system.
+% Source - 3.4 do paper 1
+%        - Robot Programming using Augmented Reality, 2009
 
 
 \subsection{Collaborative Tasks}
 
 
-% -   O que é? Como? Onde?
-%     - Definir a área
-%     - Definir o que é um robot colaborativo e para que são utilizados
-%     - Dar exemplos utilizando notícias, estatisticas e papers do paper de review
-%     - Definir ambientes colaborativos e a sua percepção
+\section{Predominant Technologies}
 
-% -   Subcategorizar as várias componentes de colaboração humano robot
-%     - Hardware
-%     - Segurança
-%     - Programação e controlo de robots
-%     - Interação Humano Robot
+\par In a cobotic system, the interaction between the robot, the user, the external sensors and software modules usually relies on several different technologies, all working together to provide a seamless and efficient experience. Below, divided in various categories is explained which technologies are going to be used in this work and why. 
 
-% -   Conhecimento teórico necessário para abordar o tema
-%     - Transformations
-%     - Path Planning
-%     - Robotic manipulators control (500Hz)
-%     - FK, IK, Jacobian conversion
-%     - Controladores, se forem utilizados
-%     - (Ir buscar este conteúdo ao livro da Springer sobre Robótica)
+\subsection{Robotics Middleware}
 
-\section{Predominant technologies}
+% Definição de middleware
+\par A middleware is a piece of software that enables cohesive, structured communication between different software modules. It is informally described as "software glue". It has been shown that a cobotic system is comprised of different components, that usually are handled by different software modules, known as their drivers. These modules may be written in different programming languages and implement different communication protocols. As such, the job of a middleware is to hide the obvious heterogeneity resultant of a system with these characteristics, and provide functions and services that not only enhance the communication between the entities, but also serve as a flexible, interoperable and central repository of information shared by them.
+% Intro ao ROS
+\par The Robot Operating System (ROS[\textbf{acro}])[\textbf{ref}] is an open-source robotics middleware. With over 3.000 packages in its ecosystem, it is also described as a flexible framework for writing robot software, that comprises a plethora of tools, libraries, and conventions that aim to simplify the task of creating complex and robust robot behavior across a wide variety of robotic platforms. A key component of a cobotic system is its communication infrastructure and ROS, at its lowest level, offers a message passing interface that provides inter-process communication and implements the publisher/subscriber communication model. Each component that performs a certain task is called a ROS node, and multiple nodes communicate between them by exchanging ROS messages through ROS topics. These provide an asynchronous means of communication, since any node can publish or subscribe to any topic at any time, provided it respects its message type. For synchronous communication, ROS offers services which can be seen as remote procedure calls that provide request/response interactions between nodes. The middleware part of ROS also provides a global key-value server where nodes can set/get configuration parameters.
+% Robotic features
+\par When it comes to robot specific features, ROS provides libraries that helps their integration  in its ecosystem through collections of software drivers, that abstracts both the low-level control of hardware components and the treatment of information generated by sensors and other peripherals. A crucial example of such functionality is the Robot Geometry Library which helps keeping track of where different parts of the robot are with respect to each other and the world. Therefore, it allows the user to define both static transforms, such as a camera that is fixed somewhere in the world, and dynamic transforms, such as the pose of the EEF in a manipulator. This way, any positional data can be easily transformed between any pair of coordinate frames in the world.
+% Extra features
+\par Other features that enhance the development of such systems include RViz which provides three-dimensional visualization of robot description models, transforms and many sensor data such as point clouds; an extensive library of built-in plugins based on rqt, which is a Qt-based framework for developing graphical interfaces that easily integrate with the ROS ecosystem; a set of command-line tools that allow the user to fully control all ROS core functionality without a GUI, useful for controlling the cobotic system remotely.
+% Source - https://www.ros.org/core-components/
+%        - ROS: an open-source Robot Operating System
+
+\subsection{Universal Robots UR10e}
+
+\par The cobot with which the work of this dissertation will be implemented is an Universal Robots UR10e. It is a 6 DoF collaborative industrial robot equipped with a force/torque sensor in its EEF. Detailed technical specifications are shown in \autoref{tab:ur10e-specs}: 
+
+% Technical specifications table
+\begin{table}[]
+    \centering
+    \begin{tabular}{|l|l|lllll}
+    \cline{1-2}
+    \textbf{UR10e} & \textbf{Value} &  &  &  &  &  \\ \cline{1-2}
+    Reach & 1300 mm &  &  &  &  &  \\ \cline{1-2} \cline{5-7} 
+    Payload & 10 Kg &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{\textbf{F/T Sensor}} & \multicolumn{1}{l|}{\textbf{Force}} & \multicolumn{1}{l|}{\textbf{Torque}} \\ \cline{1-2} \cline{5-7} 
+    DoF & 6 rotating joints &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Range} & \multicolumn{1}{l|}{100 N} & \multicolumn{1}{l|}{10 Nm} \\ \cline{1-2} \cline{5-7} 
+    Pose Repeatability & +/- 0.05 mm &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Resolution} & \multicolumn{1}{l|}{2.0 N} & \multicolumn{1}{l|}{0.02 Nm} \\ \cline{1-2} \cline{5-7} 
+    Joint Working Range & ± 360 ° &  & \multicolumn{1}{l|}{} & \multicolumn{1}{l|}{Accuracy} & \multicolumn{1}{l|}{5.5 N} & \multicolumn{1}{l|}{0.60 Nm} \\ \cline{1-2} \cline{5-7} 
+    Joint Maximum Speed & ± 120 °/Sec. &  &  &  &  &  \\ \cline{1-2}
+    Typical TCP Speed & 1 m/Sec. &  &  &  &  &  \\ \cline{1-2}
+    Footprint & 190 mm &  &  &  &  &  \\ \cline{1-2}
+    Weight & 33.5 Kg &  &  &  &  &  \\ \cline{1-2}
+    \end{tabular}
+    \caption{Universal Robots UR10e technical specifications}
+    \label{tab:ur10e-specs}
+\end{table}
+
+% Methods for controlling the robot, start with tech pendant, then URScript, ur_rtde and then Ros driver with detailed explanation of its features
+% UR10e, UR_Driver, ur_rtde, URScript, Teach pendant
+
+\subsection{Motion Planning}
+
+% Start with general introduction, then robot kinematics (fk, ik, jacobian), them global planners, them real-time motion planning
+% Move It planeadores e afins, se calhar falar aqui dos robot kinematics
+
+\subsection{Perception}
+
+% % -   PCL, Euclidean Clustering, RANSAC, hand eye calibration calibration
+
+
 
 % -   Tecnologias (software) frequentemente utilizado
 % -   Falar que as plataformas de controlos dos robots são diferentes para cada robot e geralmete closed source
@@ -120,8 +214,8 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 \section{Existing approaches}
 
+% - Pegar em 10 papers que tenham relação direta com o trabalho a desenvolver
 % - Possivelmente referir teses antigas feitas no IRIS que utilizam braços robóticos
-% - Trabalhos realizados no tema - Pesquisar mais
 % - KUKA Sunrise Toolbox
 
 \section{Discussion}
