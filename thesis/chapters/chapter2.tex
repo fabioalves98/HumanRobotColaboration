@@ -1,10 +1,134 @@
 \chapter{Collaborative Robotics}
 
-\section{Background}
+% Introdução do capítulo?
+
+\par In this chapter... (\textbf{dar a outline do capítulo})
+
+\section{History}
+% DOUGHT: Or historical background
+
+% Explicar o papel do robot na industria
+\par Since the 1970s, industrial robots and manipulators have been apart of production lines in many sectors of industry. They provide... (\textbf{advantages of industrial robots}). 
+    % LER: Springer Handbook of Robotics - Industrial Robots, p. 1385
+According to the International Federation of Robotics, in the year 2020 there were an estimated 2.7 million industrial robots in operation worldwide. [\textbf{ref}]
+    % Source - World Robotics 2020 Report (Extracts)
+    %        - World Robotics 2020 Report (Executive Summary)
+
+% Explicar a necessidade de colaboração com humanos
+\par This level of automation guarantees uninterrupted and efficient productivity in assembly lines, since robots do not take breaks or get tired, but at the same time they limit its flexibility and adaptability. When a manufacturing process, typically of customized products with smaller lot sizes, prioritizes flexibility and changeability over automation, these machines are useless and there is a need to involve a human worker in the process.
+% 
+An industrial robot is usually hard coded to do one task at a time, has limited abilities for handling complex or limp objects and cannot make decisions, therefore the close linkage of human and robot in these scenarios should result in the best of both sides. This colaborative approach can have several advantages compared to full automation, particurarly when a robot can be guided by a human and simulataneously provide power assintance to him.
+
+    % Source - Cooperation of human and machines in assembly lines, 2009
+
+% Razao para a existencia de cobots
+\par Traditional industrial robots have heavy structures with fixed installation, only interact with humans during programming and are otherwise separated from them through perimeter safegurading, stopping their motion if any obstacle breaches it. These characteristics prevent them to be used in colaboration or even coexist with human workers. Given this restrictions and needs from the industry, came the concept of Collaborative Robot (Cobot[\textbf{acro}]), firstly coined in 1996 by J. Edward Colgate and Michael Peshkin [\textbf{ref}] as '\textit{a robotic device which manipulates objects in collaboration with a human operator'}. In their work, it was a simple device with a single joint that assited the human operator by setting up virtual surfaces which could be used to constrain and guide motion.
+
+    % Source - COBOTS: ROBOTS FOR COLLABORATION WITH HUMAN OPERATORS, 1996
+
+\par Year later, companies like KUKA and Universal Robots made commercially available the first industry ready cobots, denoted as industrial collaborative robots. They were light-weight, flexibly relocated and easy to teach and program, even by non-experts. Most importantly, they were equipped with power, force and speed sensors and limiters, allowing safe execution of tasks near humans, thereore allowing a shared collaborative environment. 
+% 
+Nowadays, cobots have evolved in such a way that they are replacing industrial robots in assembly lines, or from another perspective, industrial robots are being designed with collaboration in mind.
+
+% TODO: Explicar a necessidade da industria de focar em Human robot collaboration
+\par This technological evolution and shift has as its main reason industry needs and requirements and right now, they ask for colaboration between human and robot (\textbf{industria 5.0})
+% LER: https://ec.europa.eu/info/publications/industry-50_en
+%      https://www.mastercontrol.com/gxp-lifeline/3-things-you-need-to-know-about-industry-5.0/
+%      https://medium.com/@marcellvollmer/what-is-industry-5-0-a363041a6f0a
+%      https://www.i-scoop.eu/industry-4-0/industry-5-0/
+
+
+% Isto tudo gera enfase para a emergencia da area de human robot collaboration
+
+\section{Human-Robot Collaboration}
+
+\par Now that the historical background is set, the scientific area in question is ready to be presented... (\textbf{melhorar intro à secção})
+
+% Começar por explicar Human Robot Interaction
+\par HRC is a subsection of the general field of study called Human-Robot Interaction (HRI[\textbf{acro}]) which according to [\textbf{ref}] is defined as '\textit{a general term for all form of interaction between humans and robots}' or '\textit{the process of conveying human intentions and interpreting task descriptions into a sequence of robot motions complying with robot capabilities and working requirements}'. It is an umbrella term used to describe a multidisciplinary field that includes knowledge and understanding from human-computer interaction, robotics, artificial intelligence, design and psychology. 
+    % Source - Human–robot interaction in industrial collaborative robotics: a literature review
+    %        - Human–Robot Collaboration in Manufacturing Applications: A Review
+    %        - Human Centered Assistance Applications for the working environment of the future 
+% FIX: There are many categorizations and views of HRI and HRC (cite many sources) but a general consensus revolving this subject...
+HRI can be divided in several sub-categories based on the following four criteria:
+
+\begin{itemize}
+    \item \textbf{Workspace: }It is the overlapping space in the working range of human and robot;
+    \item \textbf{Working Time: }The time the participants are working inside the shared workspace;
+    \item \textbf{Aim: }The objective, focus and goal of each participant regarding the task at hand;
+    \item \textbf{Contact: }Meaning intentional physical contact between the participants;
+\end{itemize}
+
+\noindent Using this four criteria, HRI can be divided in:
+
+\begin{itemize}
+    \item \textbf{Human-Robot Coexistence} (workspace and working time): Defined by the capability of simultaneously sharing the workspace between humans and robots, but operating in dissimilar tasks and not interacting with each other. They do not have a common goal and do not share contact therefore do not need to be synchronized. Robot abilities often rely only on collision avoidance.
+    \item \textbf{Human-Robot Cooperation} (workspace, working time and aim): It is an upgrade over the previous category. Now humans and robots also share the same purpose in the given task. Cooperation also requires synchronization, which means that either exists a common language of communication, through instructions, gestures or voice, or machine vision is used for the robot to know when it is its time to act.
+    \item \textbf{Human-Robot Collaboration} (all four criteria): The final stage of HRI, where humans and robots, who simultaneously share the same workspace, work together to perform a complex task interacting physically with one another. With force/torque sensing hardware a robot can interpret human motion and intention, and react accordingly. 
+\end{itemize}
+
+\par With HRC defined and identified inside the broader field of HRI, some of its requirements and characteristics are going to be drawn in order to proceed with a full understanding of its context.
+% FIX: Dizer que os próximos aspectos são focados em cobots
+
+
+\subsection{Hardware and Design}
+
+\par The design and composition of a cobotic system can be one of the most challenging problems in this field. Industrial cobots generally operate in complex working conditions and must be able to carry motion effectively, sometimes in crowded environments, while facing unexpected events such as obstacles. This is one of the reasons that cobots are usually designed with 6 to 7 degrees of freedom (DoF[\textbf{acron}]). Another is that higher DoF provide the cobot with increased flexibility and dexterity in complex manipulation tasks. 
+
+% 3.2.1 do paper 1 com info boa
+
+\subsection{Safety}
+
+% Standard ISO do paper 2
+
+\subsection{Programming}
+
+
+
+\subsection{Collaborative Tasks}
+
+
+% -   O que é? Como? Onde?
+%     - Definir a área
+%     - Definir o que é um robot colaborativo e para que são utilizados
+%     - Dar exemplos utilizando notícias, estatisticas e papers do paper de review
+%     - Definir ambientes colaborativos e a sua percepção
+
+% -   Subcategorizar as várias componentes de colaboração humano robot
+%     - Hardware
+%     - Segurança
+%     - Programação e controlo de robots
+%     - Interação Humano Robot
+
+% -   Conhecimento teórico necessário para abordar o tema
+%     - Transformations
+%     - Path Planning
+%     - Robotic manipulators control (500Hz)
+%     - FK, IK, Jacobian conversion
+%     - Controladores, se forem utilizados
+%     - (Ir buscar este conteúdo ao livro da Springer sobre Robótica)
 
 \section{Predominant technologies}
 
+% -   Tecnologias (software) frequentemente utilizado
+% -   Falar que as plataformas de controlos dos robots são diferentes para cada robot e geralmete closed source
+% -   Talvez falar sobre o UR Teach Pendant e modos de controlo do UR10e (paper)
+% -   Comparar os modos de controlo (URScript, ur_rtde, ROS Driver)
+% -   ROS - Senso uma das tecnologias principais, dar alguma enfase e explicar a escolha de ROS 1 em vez de ROS 2 
+% -   UR_Driver, MoveIt, ur_rtde, RViz, dynamic_reconfigure, rqt_plugins, ros_smach, plotjuggler
+% -   PCL, Euclidean Clustering, RANSAC
+
 \section{Existing approaches}
 
+% - Possivelmente referir teses antigas feitas no IRIS que utilizam braços robóticos
+% - Trabalhos realizados no tema - Pesquisar mais
+% - KUKA Sunrise Toolbox
+
 \section{Discussion}
+
+% - Tendo em conta o que foi dito anteriormente retirar conclusoes que justifiquem o trabalho que foi feito
+% -   Explicar que esta tese foca-se em real time colaborative robotics e não apenas em planeamento estático com MoveIt
+% - Mais uma vez, dar enfase nas restrições que existem em software proprietario e na falta de algoritmos e metodologias abrangentes e open source para a criação de tarefas colaborativas
+% - Usar o UR teach pendant como exemplo, apontar falhas e explicar como o que se segue as pode resolver
+% - Bom exemplo de como fazer um capítulo destes na tese dos drones
 

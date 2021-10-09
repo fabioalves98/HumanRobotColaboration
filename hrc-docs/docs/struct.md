@@ -23,13 +23,11 @@
 
 
 
-## 3 - Hand Guided Object Manipulation
+## 3 - Force Torque Sensor Compensation
 
 #### Force / Torque Sensor Correction
 
 #### End Effector Weight Compensation
-
-#### Force / Torque to Robot Motion
 
 
 
@@ -54,6 +52,8 @@
 ## 5 - Collaborative Tasks
 
 #### Tool Transfer
+
+#### Hand-Guiding
 
 #### Object Lifting Assistant
 

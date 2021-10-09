@@ -1453,11 +1453,49 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 04/10 - IRISLab
 
-- Reunião
+#### Reunião
 
-- MoveIt Plans Testing for Trajectory Follower
-  - Não deu em nada
+- Discussão da criação da tarefa com collision avoidance e não apenas ter o robot a "fugir" de um obstáculo
+  - Problema das singularidades. Provavelmente vai ficar sem ser resolvido
+- Discussão do capítulo introdutório com algumas correções
+  - Motivação muito breve
+  - Dar mais enfase à parte da correção do sensor de força e torque
+- Fazer uma demo de uma tarefa industrial com collision avoidance para mostrar no primeiro dia de aulas 
+
+#### MoveIt Plans Testing for Trajectory Follower
+
+- Tentativa de ter um planeador global, off-line que recebia poses, criava as devidas trajetórias para depois o nó attraction.cpp as seguir com comandos de velocidade
+  - Levanta-se o problema de que criar trajetórias com base em poses pode levar a movimentos não ótimos ("robot dar uma volta demasiado grande")
+  - Tentaram-se vários planeadores, mesmo fora da OMPL, nunca houve um que tive-se um comportamento linear e efeiciente para as poses testadas
+  - Por agora o problema vai ser resolvido criando trajetórias entre posições de juntas pré-definidas e não poses, deixando o problema de utilizar um planeador global com IK para depois
 
 ## 06/10 - IRISLab
 
-- Industrial Task with Collision Avoidance
+#### Industrial Task with Collision Avoidance
+
+- Alteração do nó attraction.cpp para as trajetórias serem criadas dentro deste e não num programa à parte
+  - Necessidade de aceder à trajetória completa e não apenas a um ponto a "seguir"
+  - Remoção do programa offline.py
+- É tambem capaz de criar uma trajetória global utilizando vários waypoints dados pelo utilizador
+- Cálculo do vetor atração é feito utilizando os 2 próximos pontos da trajetória para que quando há um obstáculo, o robot não ficar preso numa situação em que o vetor atração e repulsão são o inverso um do outro
+
+## 07/10 - IRISLab
+
+#### Industrial Task with Collision Avoidance implementada na Máquina de Estados Global
+
+- Adicionada uma tarefa à máquina de estados global em que a partir do freedrive o robot começa a executar a tarefa definida
+- Criação de serviços de controlo dos programas wrench_to_vel.cpp e pf_controller.py pois ambos publicavam valores de velocidade de juntas para o programa jacobian.cpp, um deles provenientes dos valores de força e o outro dos vetores atração/repulsão
+  - Como agora estes nós estão ambos ligados, é necessário ligar/desligar pois eles não podem trabalhr em simultaneo
+  - Nó ur10e_smach.py que chama os serviços e controla a utilização dos controladores
+- Gravação de um vídeo onde todas as funcionalidades do robot são testadas
+
+## 08/10 - Biblioteca
+
+- Capítulo 2 da tese
+  - Background histórico
+  - Introdução foram à colaboração humano robot
+
+## 09/10 - Bilbioteca
+
+
+
