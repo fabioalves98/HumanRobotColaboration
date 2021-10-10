@@ -17,28 +17,28 @@ According to the International Federation of Robotics, in the year 2020 there we
 % Explicar a necessidade de colaboração com humanos
 \par This level of automation guarantees uninterrupted and efficient productivity in assembly lines, since robots do not take breaks or get tired, but at the same time they limit its flexibility and adaptability. When a manufacturing process, typically of customized products with smaller lot sizes, prioritizes flexibility and changeability over automation, these machines are useless and there is a need to involve a human worker in the process.
 % 
-An industrial robot is usually hard coded to do one task at a time, has limited abilities for handling complex or limp objects and cannot make decisions, therefore the close linkage of human and robot in these scenarios should result in the best of both sides. This colaborative approach can have several advantages compared to full automation, particurarly when a robot can be guided by a human and simulataneously provide power assintance to him.
+An industrial robot is usually hard coded to do one task at a time, has limited abilities for handling complex or limp objects and cannot make decisions, therefore the close linkage of human and robot in these scenarios should result in the best of both sides. This collaborative approach can have several advantages compared to full automation, particularly when a robot can be guided by a human and simultaneously provide power assistance to him.
 
     % Source - Cooperation of human and machines in assembly lines, 2009
 
-% Razao para a existencia de cobots
-\par Traditional industrial robots have heavy structures with fixed installation, only interact with humans during programming and are otherwise separated from them through perimeter safegurading, stopping their motion if any obstacle breaches it. These characteristics prevent them to be used in colaboration or even coexist with human workers. Given this restrictions and needs from the industry, came the concept of Collaborative Robot (Cobot[\textbf{acro}]), firstly coined in 1996 by J. Edward Colgate and Michael Peshkin [\textbf{ref}] as '\textit{a robotic device which manipulates objects in collaboration with a human operator'}. In their work, it was a simple device with a single joint that assited the human operator by setting up virtual surfaces which could be used to constrain and guide motion.
+% Razão para a existência de cobots
+\par Traditional industrial robots have heavy structures with fixed installation, only interact with humans during programming and are otherwise separated from them through perimeter safeguarding, stopping their motion if any obstacle breaches it. These characteristics prevent them to be used in collaboration or even coexist with human workers. Given this restrictions and needs from the industry, came the concept of Collaborative Robot (Cobot[\textbf{acro}]), firstly coined in 1996 by J. Edward Colgate and Michael Peshkin [\textbf{ref}] as '\textit{a robotic device which manipulates objects in collaboration with a human operator'}. In their work, it was a simple device with a single joint that assisted the human operator by setting up virtual surfaces which could be used to constrain and guide motion.
 
     % Source - COBOTS: ROBOTS FOR COLLABORATION WITH HUMAN OPERATORS, 1996
 
-\par Year later, companies like KUKA and Universal Robots made commercially available the first industry ready cobots, denoted as industrial collaborative robots. They were light-weight, flexibly relocated and easy to teach and program, even by non-experts. Most importantly, they were equipped with power, force and speed sensors and limiters, allowing safe execution of tasks near humans, thereore allowing a shared collaborative environment. 
+\par Year later, companies like KUKA and Universal Robots made commercially available the first industry ready cobots, denoted as industrial collaborative robots. They were light-weight, flexibly relocated and easy to teach and program, even by non-experts. Most importantly, they were equipped with power, force and speed sensors and limiters, allowing safe execution of tasks near humans, therefore allowing a shared collaborative environment. 
 % 
 Nowadays, cobots have evolved in such a way that they are replacing industrial robots in assembly lines, or from another perspective, industrial robots are being designed with collaboration in mind.
 
 % TODO: Explicar a necessidade da industria de focar em Human robot collaboration
-\par This technological evolution and shift has as its main reason industry needs and requirements and right now, they ask for colaboration between human and robot (\textbf{industria 5.0})
+\par This technological evolution and shift has as its main reason industry needs and requirements and right now, they ask for collaboration between human and robot (\textbf{industria 5.0})
 % LER: https://ec.europa.eu/info/publications/industry-50_en
 %      https://www.mastercontrol.com/gxp-lifeline/3-things-you-need-to-know-about-industry-5.0/
 %      https://medium.com/@marcellvollmer/what-is-industry-5-0-a363041a6f0a
 %      https://www.i-scoop.eu/industry-4-0/industry-5-0/
 
 
-% Isto tudo gera enfase para a emergencia da area de human robot collaboration
+% Isto tudo gera ênfase para a emergência da area de human robot collaboration
 
 \section{Human-Robot Collaboration}
 
@@ -69,21 +69,21 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 % ADD: Boa descrição de HRC
 % Human–robot collaboration allows the combination of
-% typical strengths of robots with some of the numer-
-% ous strengths of humans. Typical strengths of industrial
-% robots are high stamina, high payload capacity, pre-
-% cision, and repeatability. Strengths of human workers
-% that are unmatched by any machinery comprise flexibil-
-% ity for new production tasks, creative problem-solving
+% typical strengths of robots with some of the numerous 
+% strengths of humans. Typical strengths of industrial
+% robots are high stamina, high payload capacity, precision, 
+% and repeatability. Strengths of human workers
+% that are unmatched by any machinery comprise flexibility 
+% for new production tasks, creative problem-solving
 % skills, and the ability to react to unforeseen situations.
 
 \par With HRC defined and identified inside the broader field of HRI, some of its requirements and characteristics are going to be drawn in order to proceed with a full understanding of its context.
-% FIX: Dizer que os próximos aspectos são focados em cobots
+% FIX: Dizer que os próximos aspetos são focados em cobots
 
 
 \subsection{Hardware and Design}
 
-\par The design and composition of a cobotic system can be one of the most challenging problems in this field. Industrial cobots generally operate in complex working conditions and must be able to carry motion effectively, sometimes in crowded environments, while facing unexpected events such as obstacles. This is one of the reasons that cobots are usually designed with 6 to 7 degrees of freedom (DoF[\textbf{acron}]). Another is that higher DoF provide the cobot with increased flexibility and dexterity in complex manipulation tasks.
+\par The design and composition of a cobotic system can be one of the most challenging problems in this field. Industrial cobots generally operate in complex working conditions and must be able to carry motion effectively, sometimes in crowded environments, while facing unexpected events such as obstacles. This is one of the reasons that cobots are usually designed with 6 to 7 degrees of freedom (DoF[\textbf{acro}]). Another is that higher DoF provide the cobot with increased flexibility and dexterity in complex manipulation tasks.
 % info proveniente do 3.1 e 3.1.1 do paper 1
 % Source (+/-) - Coordination mechanism for integrated design of human-robot interaction scenarios
 \par Because cobots are meant to work alongside humans, reduced weight of the moving parts is one of the main factors in cobot design. Even so, in environments where collisions are inevitable, the risk of interaction with cobots can be reduced due to their increased sensorial apparatus, such as the use of proximity-sensitive skins or force/torque sensors to detect collisions, the increased energy absorbing properties of protective layers, the limits of robot velocity and maximum strength and force, and in some scenarios the placement of airbags around the robot.
@@ -97,7 +97,7 @@ HRI can be divided in several sub-categories based on the following four criteri
 % Source - Human–robot interaction in industrial collaborative robotics: a literature review
 %        - ultima parte do 3.2.1 do paper 1
 
-% ADD: Falar sobre celulas roboticas
+% ADD: Falar sobre células robóticas
 
 
 \subsection{Safety}
@@ -168,7 +168,7 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 \subsection{Universal Robots UR10e}
 
-\par The cobot with which the work of this dissertation will be implemented is an Universal Robots UR10e. It is a 6 DoF collaborative industrial robot equipped with a force/torque sensor in its EEF. Detailed technical specifications are shown in \autoref{tab:ur10e-specs}: 
+\par Although the techniques developed in this dissertation are generic, the cobot with which this work will be implemented is an Universal Robots UR10e. It is a 6 DoF collaborative industrial robot equipped with a force/torque sensor in its EEF. Detailed technical specifications are shown in \autoref{tab:ur10e-specs} and the various ways that it can be controlled will be shown below, as well as the chosen method and why.
 
 % Technical specifications table
 \begin{table}[]
@@ -190,13 +190,67 @@ HRI can be divided in several sub-categories based on the following four criteri
     \label{tab:ur10e-specs}
 \end{table}
 
-% Methods for controlling the robot, start with tech pendant, then URScript, ur_rtde and then Ros driver with detailed explanation of its features
-% UR10e, UR_Driver, ur_rtde, URScript, Teach pendant
+\subsubsection{Teach Pendant}
+
+\par The UR teach pendant is a handheld wired device with an 12 inch touchscreen display that allows the user to fully configure and control the UR10e. It does so using the Polyscope, a graphical user interface that operates the robot arm and control box, creates and executes programs. It terms of operational modes it allows compliant motion with the Freedrive mode, manual motion with arrow buttons and sliders, and automatic motion with the creation of programs using its built-in programming environment, which is seen as a programming tree where the user adds programming nodes. These nodes can be commands telling the robot what to do or generic programming statements (if, loop, event, etc.). Polyscope allows people with little programming experience to program the robot and for most tasks ir is done entirely using the touch panel without typing any cryptic commands. Given its simplicity, it is not ideal for complex tasks or if the user needs low-level control and information access. Besides the programming features, the device is also equipped with a button in the back that enables the Freedrive mode and an emergency stop red button in the front.
+
+% Source - UR10e user manual 
+
+\subsubsection{URScript}
+
+\par Besides the Polyscope interface, UR also provides a script level way of controlling its robots through their own programming language, called URScript. This language includes variables, types, flow control statements and functions that monitor and control both I/O and robot movements. Inside the Control Box of the robot there is a low-level controller called URControl. Programming a robot at the script level is done by writing a client application and connecting to URControl using a TCP/IP socket. When a connection has been established URScript programs are sent on the socket. Compared to the Polyscope interface, URScript gives the user more control over the structure of the programs and makes it easier for an experienced user to take full advantage of the robot. One downside of this approach is the user that is sending commands externally has no access to the current state of the program, since once the program is sent, it is executed immediately without feedback. The only way the user can access the state of the robot is by connecting to another one of the available client interfaces which publish the state of the robot at a fixed rate interval.
+
+% Source - URScript API Reference
+%        - https://www.universal-robots.com/articles/ur/interface-communication/overview-of-client-interfaces/
+
+\subsubsection{Universal Robots RTDE Interface}
+
+
+\par The Real-Time Data Exchange (RTDE) interface provides a way to synchronize external application with the UR controller over a standard TCP/IP connection. This functionality is split in two stages, a setup procedure and a synchronization loop. When this loop is started, the RTDE interface sends the client the requested data in the same order it was requested by the client. On an e-Series UR cobot such as the UR10e the RTDE interface generates output messages at 500Hz. 
+\par Researchers at University of Southern Denmark have developed a C++/Python for controlling and receiving data from a UR robot using the RTDE interface, called ur\_rtde. It makes available three distinct interfaces: 
+
+\begin{itemize}
+    \item \textbf{RTDE Control Interface: }Primarily used for moving the robot and utility functions. It requires a control script to be running on the robot, which is uploaded automatically.
+    \item \textbf{RTDE Receive Interface: }Used for receiving data from the robot.
+    \item \textbf{RTDE IO Interface: }Used for setting digital/analog IO and adjusting hte speed slider of the robot.
+\end{itemize}
+
+\noindent The Control Interface allows for non-blocking commands allowing the flow of the external program to continue while the robot is moving. The separation of Control and IO in different interfaces also allows to change the speed of the robot while it is moving. 
+\par Although is takes programming knowledge and skills, from all the available ways to control a UR cobot, the use of the RTDE interface has proved to be the most advantageous one.
+
+% Source - https://www.universal-robots.com/articles/ur/interface-communication/real-time-data-exchange-rtde-guide/
+%        - https://sdurobotics.gitlab.io/ur_rtde/index.html
+
+\subsubsection{Universal Robots ROS Driver}
+
+\par The goal of this driver is to provide a stable and sustainable interface between UR robots and ROS, that both enhances the control of the robots using ROS paradigms such as its controller interface, and makes available to the ROS environment all data regarding the robot. By using ROS compatible manipulators, perception sensors, peripherals and motion planners the user makes sure all components speak the same language and interoperate regardless of OEM brands or communication protocols. 
+\par In terms of features, this driver uses the RTDE interface for communication; uses the speed-scaling of the robot for slowing down trajectory execution accordingly; serves as a replacement for the teach pendant since it offers ROS services for most of its interactions, such as start, stop and even recover the robot from safety events; uses on-the-robot interpolation for joint-based trajectories, which helps if the application can not meet the real-time requirements of the RTDE interface; and many more extensively documented in the UR github repository.
+\par This driver is currently being updated to both include with new functionality and support new UR software updates. Recent important features include joint velocity-based control that lets the user directly control the speed of each individual joint, which is very helpful for visual servoing, real-time motion planning or other kinds of control that requires speed control rather than position control, and cartesian position-based and twist-based control that let's the user execute trajectories along a cartesian path.
+\par The Universal Robots ROS Driver will be the chosen method of interfacing with the UR10e for the amount of extra functionality it provides and the overall advantages of developing software in the ROS ecosystem.
+
+% Source - https://github.com/UniversalRobots/Universal_Robots_ROS_Driver
+%        - Optimizing the Universal Robots ROS driver, 2015
+%        - Real-time Control of Robots with ROS, 2017
+
 
 \subsection{Motion Planning}
 
+    % LER: Springer Handbook of Robotics - Kinematics, p. 11
+
+    \par Motion planning is a computational problem with the objective of planning motions for complex bodies from a start to a goal position. It breaks down a desired movement task into discrete motions that satisfy movement constraints while avoiding collision with known obstacles. 
+    \par The MoveIt Motion Planning Framework is an easy-to-use open source robotics manipulation platform for developing commercial applications, prototyping designs, and benchmarking algorithms.
+
+    % Source - https://picknik.ai/moveit/
+    %        - David Coleman, Ioan A. Șucan, Sachin Chitta, Nikolaus Correll, Reducing the Barrier to Entry of Complex Robotic Software: a MoveIt! Case Study, Journal of Software Engineering for Robotics, 5(1):3–16, May 2014. doi: 10.6092/JOSER_2014_05_01_p3.
+
+
+
+
+
 % Start with general introduction, then robot kinematics (fk, ik, jacobian), them global planners, them real-time motion planning
-% Move It planeadores e afins, se calhar falar aqui dos robot kinematics
+% Move It planners e afins, se calhar falar aqui dos robot kinematics
+
+
 
 \subsection{Perception}
 
@@ -205,10 +259,10 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 
 % -   Tecnologias (software) frequentemente utilizado
-% -   Falar que as plataformas de controlos dos robots são diferentes para cada robot e geralmete closed source
+% -   Falar que as plataformas de controlos dos robots são diferentes para cada robot e geralmente closed source
 % -   Talvez falar sobre o UR Teach Pendant e modos de controlo do UR10e (paper)
 % -   Comparar os modos de controlo (URScript, ur_rtde, ROS Driver)
-% -   ROS - Senso uma das tecnologias principais, dar alguma enfase e explicar a escolha de ROS 1 em vez de ROS 2 
+% -   ROS - Senso uma das tecnologias principais, dar alguma ênfase e explicar a escolha de ROS 1 em vez de ROS 2 
 % -   UR_Driver, MoveIt, ur_rtde, RViz, dynamic_reconfigure, rqt_plugins, ros_smach, plotjuggler
 % -   PCL, Euclidean Clustering, RANSAC
 
@@ -220,9 +274,9 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 \section{Discussion}
 
-% - Tendo em conta o que foi dito anteriormente retirar conclusoes que justifiquem o trabalho que foi feito
-% -   Explicar que esta tese foca-se em real time colaborative robotics e não apenas em planeamento estático com MoveIt
-% - Mais uma vez, dar enfase nas restrições que existem em software proprietario e na falta de algoritmos e metodologias abrangentes e open source para a criação de tarefas colaborativas
+% - Tendo em conta o que foi dito anteriormente retirar conclusões que justifiquem o trabalho que foi feito
+% -   Explicar que esta tese foca-se em real time collaborative robotics e não apenas em planeamento estático com MoveIt
+% - Mais uma vez, dar ênfase nas restrições que existem em software proprietário e na falta de algoritmos e metodologias abrangentes e open source para a criação de tarefas colaborativas
 % - Usar o UR teach pendant como exemplo, apontar falhas e explicar como o que se segue as pode resolver
 % - Bom exemplo de como fazer um capítulo destes na tese dos drones
 
