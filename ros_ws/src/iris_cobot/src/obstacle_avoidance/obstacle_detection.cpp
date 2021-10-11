@@ -364,7 +364,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     std::vector<double> obstacles_radiuses;
 
     // TODO: Admit other types of obstacles other than spheres (real scenario)'
-    std::cout << clusters->size() << std::endl;
+    // std::cout << clusters->size() << std::endl;
 
     if (random_obstacles)
     {
@@ -476,7 +476,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
             std::cout << ", Z: " << model_coefficients[2] << ", R: " << model_coefficients[3] << "\n";
         }
     }
-    std::cout << std::endl;
+    // std::cout << std::endl;
 
 
     // Publish obstacles message
@@ -486,7 +486,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     obstacles_msg.radiuses = obstacles_radiuses;
     obstacles_pub.publish(obstacles_msg);
 
-    tt.toc_print();
+    // tt.toc_print();
 
     // Show obstacles in PCL visualizer
     if (viz_cloud)

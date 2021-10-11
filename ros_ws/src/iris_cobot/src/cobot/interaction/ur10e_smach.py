@@ -218,7 +218,7 @@ class Industrial(UR10eState):
         
         while not rospy.is_shutdown():
             action = self.getAction()     
-            if action.type == 'double':       
+            if action.type == 'double' and action.component == 1:      
                 helpers.pfControl('pause')
                 time.sleep(0.1)
                 helpers.pfControl('stop')

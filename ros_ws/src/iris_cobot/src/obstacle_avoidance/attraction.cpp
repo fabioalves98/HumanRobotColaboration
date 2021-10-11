@@ -319,8 +319,8 @@ int main(int argc, char **argv)
     }
 
     // Temporary shortening of trajectory
-    trajectory.erase(trajectory.begin());
-    trajectory.erase(trajectory.end());
+    // trajectory.erase(trajectory.begin());
+    // trajectory.erase(trajectory.end());
 
     // Print Trajectory
     for (auto point : trajectory)

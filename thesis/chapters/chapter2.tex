@@ -235,24 +235,20 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 \subsection{Motion Planning}
 
-    % LER: Springer Handbook of Robotics - Kinematics, p. 11
+% LER: Springer Handbook of Robotics - Kinematics, p. 11
 
-    \par Motion planning is a computational problem with the objective of planning motions for complex bodies from a start to a goal position. It breaks down a desired movement task into discrete motions that satisfy movement constraints while avoiding collision with known obstacles. 
-    \par The MoveIt Motion Planning Framework is an easy-to-use open source robotics manipulation platform for developing commercial applications, prototyping designs, and benchmarking algorithms.
+\par Motion planning is a computational problem with the objective of planning motions for complex bodies from a start to a goal position. It breaks down a desired movement task into discrete motions that satisfy movement constraints while avoiding collision with known obstacles. 
+\par The MoveIt Motion Planning Framework is an easy-to-use open source robotics manipulation platform for developing commercial applications, prototyping designs, and benchmarking algorithms. Its main strength is the ability to generate high-degree of freedom trajectories trough cluttered environments and avoid local minimums. It also provides robot description and kinematics implementations for multiple robot manipulators. 
+\par In this work, MoveIt will be used mostly for off-line position-based trajectory planning. One of the objectives is to control the robot in real-time, with velocity-based commands sent at high frequency. As of writing, current MoveIt releases do not support such features, having only plans to implement them in future versions.
 
-    % Source - https://picknik.ai/moveit/
-    %        - David Coleman, Ioan A. Șucan, Sachin Chitta, Nikolaus Correll, Reducing the Barrier to Entry of Complex Robotic Software: a MoveIt! Case Study, Journal of Software Engineering for Robotics, 5(1):3–16, May 2014. doi: 10.6092/JOSER_2014_05_01_p3.
+% Source - https://picknik.ai/moveit/
+%        - David Coleman, Ioan A. Șucan, Sachin Chitta, Nikolaus Correll, Reducing the Barrier to Entry of Complex Robotic Software: a MoveIt! Case Study, Journal of Software Engineering for Robotics, 5(1):3–16, May 2014. doi: 10.6092/JOSER_2014_05_01_p3.
 
-
-
-
-
-% Start with general introduction, then robot kinematics (fk, ik, jacobian), them global planners, them real-time motion planning
-% Move It planners e afins, se calhar falar aqui dos robot kinematics
-
-
+% ADD: Robot Kinematics e melhorar no geral
 
 \subsection{Perception}
+
+\par 
 
 % % -   PCL, Euclidean Clustering, RANSAC, hand eye calibration calibration
 

@@ -66,10 +66,10 @@ def repulsion(obstacles_msg, real):
         repulsion_msg.linear_velocity = Vector3(0, 0, 0)
 
     if (ee_center.z > 0.2):
-        print('ATIVATED')
+        # print('ATIVATED')
         repulsion_pub.publish(repulsion_msg)
     else:
-        print('DEACTIVATED')
+        # print('DEACTIVATED')
         repulsion_pub.publish(PFVector(Vector3(0, 0 ,0), Vector3(0, 0, 0)))
 
 
