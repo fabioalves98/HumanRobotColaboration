@@ -1501,5 +1501,11 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Fim da colaboração humano robot
   - Predominant technologies
 
+## 10/10 - Biblioteca
 
+- Capítulo 2 da tese
+  - Predominant technologies
 
+## 11/11 - IRISLab
+
+- UR10e demonstrations

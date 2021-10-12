@@ -239,19 +239,30 @@ HRI can be divided in several sub-categories based on the following four criteri
 
 \par Motion planning is a computational problem with the objective of planning motions for complex bodies from a start to a goal position. It breaks down a desired movement task into discrete motions that satisfy movement constraints while avoiding collision with known obstacles. 
 \par The MoveIt Motion Planning Framework is an easy-to-use open source robotics manipulation platform for developing commercial applications, prototyping designs, and benchmarking algorithms. Its main strength is the ability to generate high-degree of freedom trajectories trough cluttered environments and avoid local minimums. It also provides robot description and kinematics implementations for multiple robot manipulators. 
-\par In this work, MoveIt will be used mostly for off-line position-based trajectory planning. One of the objectives is to control the robot in real-time, with velocity-based commands sent at high frequency. As of writing, current MoveIt releases do not support such features, having only plans to implement them in future versions.
+\par In this work, MoveIt will be used mostly for off-line position-based trajectory planning. One of the objectives is to control the robot in real-time, with velocity-based commands sent at high frequency. As of writing, current MoveIt releases do not support such features, having only plans to implement them in future versions. Further details on the solution of this problem will be presented in \autoref{section:pf-method}.
+
+% ADD: Robot Kinematics e melhorar no geral
 
 % Source - https://picknik.ai/moveit/
 %        - David Coleman, Ioan A. Șucan, Sachin Chitta, Nikolaus Correll, Reducing the Barrier to Entry of Complex Robotic Software: a MoveIt! Case Study, Journal of Software Engineering for Robotics, 5(1):3–16, May 2014. doi: 10.6092/JOSER_2014_05_01_p3.
 
-% ADD: Robot Kinematics e melhorar no geral
 
 \subsection{Perception}
 
-\par 
-
+\par To fully achieve collaboration in a shared environment, the cobot must be able to perceive its surroundings. Between the various ways to give the cobot this ability, the majority of them rely on external sensors, such as stereo or depth cameras, and lidar sensors. All of them give the system a 3D representation of their field of view through the generation of point clouds.
+% PCL
+\par The Point Cloud Library (PCL) is a standalone, large scale, open project for 2D/3D image and point cloud processing. It is split into a series of modular libraries ranging from filters, recognition, segmentation and visualization. It will be extensively used in this work to achieve the obstacle avoidance task which will be further explained in \autoref{section:obstacle-detection}.
+% Source - @InProceedings{Rusu_ICRA2011_PCL,
+% 	author    = {Radu Bogdan Rusu and Steve Cousins},
+% 	title     = {{3D is here: Point Cloud Library (PCL)}},
+% 	booktitle = {{IEEE International Conference on Robotics and Automation (ICRA)}},
+% 	month     = {May 9-13},
+% 	year      = {2011},
+% 	address   = {Shanghai, China}
+% }
+% Calibration
+\par To be able to identify obstacles in relation to the cobot, a process known as camera extrinsic calibration needs to be performed. It consists on identifying in the cartesian space where the perception sensor is in relation to the robot. Only this way, can the obstacles identified by the sensor be spatially placed in the shared environment. The \textit{easy\_handeye} ROS package is an implementation of the highly cited work of R. Y. Tsai and R. K. Lenz [\textbf{ref}] where a fully autonomous and efficient technique for 3D robotics hand eye calibration is developed. In the scenario that will be implemented in this dissertation, where the sensor is fixed in the world, this package allows the user to obtain a static transform form the world frame to the sensor by capturing images of a fiducial marker attached to the EEF of the robot. Then using the Tsai-Lenz algorithm implemented present in the OpenCV library computes the result and stores it in the ROS environment.
 % % -   PCL, Euclidean Clustering, RANSAC, hand eye calibration calibration
-
 
 
 % -   Tecnologias (software) frequentemente utilizado
@@ -265,8 +276,47 @@ HRI can be divided in several sub-categories based on the following four criteri
 \section{Existing approaches}
 
 % - Pegar em 10 papers que tenham relação direta com o trabalho a desenvolver
+
+% Dizer que nao ha soluções full-featured
+\par In the topic of collaborative tasks between a human and a cobot, there is no record of  commercially available, full-featured frameworks or systems, that could allow the accomplishment of the objectives proposed in this dissertation. Even though manufacturers ship their cobots and accessories with extensible and flexible software, that allow the creation of such tasks, there is much work left for the user to design, program and implement the system architectures that aggregate the collaborative tasks and deliver a cohesive, seamless experience. Furthermore, there is no limit on the amount of collaboration that can exist, or on how the available tools can be used together in their final working environments.
+% Dizer que ha muitos esforços na literatura
+Despite these facts, extensive research efforts have, and are currently being made \cite{paper.review.1, paper.review.2} to enhance this field with structured architectures and frameworks that seamlessly allow multifaceted collaboration between human and cobot. This section serves as a survey on such proposals, and will firstly enumerate and detail general approaches to HRC and collaborative tasks. Then, it will shift to other solutions that directly correlate to specific problems faced in this dissertation, and that also served as inspiration to the solutions implemented. 
+% Source - paper de review 1
+%        - paper de review 2
+
+\subsection{Proposals on HRC and Collaborative Tasks}
+
+\par The work in [\textbf{ref}] proposes a collaborative framework for robotic task specification, where the authors start by stating that the lack of effective sensing and task variability creates too much uncertainty to reliably hard-code a robotic cell. The developed framework blends automated task specification with the experience and cognition of a human operator to provide a more accurate task specification. This work was implemented with ROS and was mainly focused on surface finishing tasks.
+% - Source - A Collaborative Framework for Robotic Task Specification, 2018
+\par The authors in [\textbf{ref}] deal with the problem of developing a collaborative coating cell. They start by teaching the robot its trajectory with a programming by demonstration technique, using a multicolored LED marker attached to the coating tool. Then, a 3D perception system was developed to perform initial point cloud alignment and 6 DoF pose estimation. Finally, to increase safe HRC, a zone monitoring system was employed to track the position of the operator inside the cell.
+% - Source - On the development of a collaborative robotic system for industrial coating cells, 2020
+\par A coordination system for assembly tasks where HRC is required was presented in [\textbf{ref}], where the authors developed ROS based framework that intertwined a sequence of tasks modeled in a neutral XML format language with the ability for human and a robot to coexist in a fenceless cell, where safety was guaranteed by a 3D industrial safety camera.
+% Source - ROS based coordination of human robot cooperative assembly tasks, 2015
+\par Regarding a polishing task, authors in [\textbf{ref}] proposed and demonstrated the use of a robotic manipulator with an FT sensor in its EEF, whose task was to keep a workpiece in a prescribed sequence of poses while a human operator, equipped with an abrasive tool, proceeded to polish the workpiece. They also allowed the operator to change the orientation of the workpiece mounted on the robot, by physically pushing or pulling the robot body. They achieved this behavior with a control algorithm that was able to distinguish polishing forces applied at the EEF level, from the external torques acting on the robot joints due to the intentional physical interaction engaged by the human.
+% Source - A model-based residual approach for human-robot collaboration during manual polishing operations, 2018
+\par Research in [\textbf{ref}] resulted in the development of a cobotic framework applied to solve a screwing task in collaboration with a human operator, using a skill-based approach. The ROS-based system used a software called Skill Based System, which treats tasks as a set of skills, which then are composed of sequences of motion primitives. The human operator was then able to execute programmed tasks or create new ones using the available skills.
+% Source - A Skill-based Robot Co-worker for Industrial Maintenance Tasks, 2017
+\par A framework for the execution of collaborative tasks in hybrid assembly cells was developed in [\textbf{ref}], where the focus was given to the human-robot coexistence for the execution of sequential tasks in order for the automation level in assembly lines to be increased. Even though not strictly dealing with human-robot physical interaction, this work is relevant in the sense that the authors also developed a gesture based communication protocol between the human and the robot, and proved that the introduction of human-robot task allocation and execution benefitted the efficiency of the assembly process in question.
+% Source - On a human-robot collaboration in an assembly cell, 2016
+\par A system for end-user creation of robust task plans was developed in [\textbf{ref}], where a Behavior Tree-based task editor integrates high-level information from known object segmentation, pose estimation with spatial reasoning, and robot actions to create robust task plans. The system was implemented on multiple cobots and performed a wide variety of tasks such as collaborative assembly, wire bending, sanding and polishing.
+% Source - CoSTAR: Instructing Collaborative Robots with Behavior Trees and Vision, 2017
+\par A multimodal HRI framework is presented in [\textbf{ref}] where the authors used speech, hand gesture recognition, text programming, and interaction capabilities to allow the user to intuitively program the robot and take over its control at any given time. 
+% Source - Designing a Multimodal Human-Robot Interaction Interface for an Industrial Robot, 2016
+
+\subsection{Solutions to Specific HRI Problems}
+
+\par A method for precision hand-guiding of a cobot at the EEF level is presented in [\textbf{ref}]. In this work, the authors are able to obtain hand-guiding force/torque (HGFT [\textbf{acro}]) from the EEF FT measurements. Then, a control scheme to govern the linear/angular motion of the EEF is described and implemented. The implementation of the hand-guiding task in this dissertation has many similarities with this approach since it was heavily inspired by it.
+% Source - End-effector precise hand-guiding for collaborative robots, 2017
+\par The work in [\textbf{ref}] describes a tool compensation technique to ease and simplify the process of trajectory learning in common industrial setups. It allows the user to directly use the real tool attached to the EEF while hand-guiding the robot. It was crucial to understand the effects of coupled weight in the robot EEF and create the compensation model implemented in this dissertation for the object manipulation task.
+% Source - Tool Compensation in Walk-Through Programming for Admittance-Controlled  Robots, 2016
+\par A state of the art on-line collision avoidance framework is proposed in [\textbf{ref}], where the authors represent in space the human and the robot as capsules, and calculate their minimum distance and relative velocity. With this values, a repulsion vector is created. On the other hand, with a pre-established path generated offline, an attraction vector is computed and forces the robot into following the defined trajectory. With these two components, the implemented control algorithm is able to adjust the robots trajectory in real time, so that it is able to avoid collision with the human and simultaneously fulfill the task.
+% Source - On-line collision avoidance for collaborative robot manipulators by adjusting off-line generated paths, 2019
+\par 
+% Source - Robot manipulator self-identification for surrounding obstacle detection, 2015
+\par 
+% Source - KUKA Sunrise Toolbox: Interfacing Collaborative Robots with MATLAB, 2019
+
 % - Possivelmente referir teses antigas feitas no IRIS que utilizam braços robóticos
-% - KUKA Sunrise Toolbox
 
 \section{Discussion}
 

@@ -39,8 +39,36 @@
 
 ## Existing Approaches
 
-- Trabalhos realizados no tema - Pesquisar mais
-- KUKA Sunrise Toolbox
+##### General Approaches
+
+- A Collaborative Framework for Robotic Task Specification, 2018
+- On the development of a collaborative robotic system for industrial coating cells, 2020
+- ROS Based Coordination of Human Robot Cooperative Assembly Tasks-An Industrial Case Study, 2015
+- A model-based residual approach for human-robot collaboration during manual polishing operations, 2018
+
+- A Skill-based Robot Co-worker for Industrial Maintenance Tasks, 2017
+- On a human-robot collaboration in an assembly cell, 2016
+- CoSTAR: Instructing Collaborative Robots with Behavior Trees and Vision, 2017
+- Designing a Multimodal Human-Robot Interaction Interface for an Industrial Robot, 2016
+
+##### Specific Approaches
+
+- Tool Compensation in Walk-Through Programming for Admittance-Controlled  Robots, 2016
+
+- End-effector precise hand-guiding for collaborative robots, 2017
+- On-line collision avoidance for collaborative robot manipulators by adjusting off-line generated paths: An industrial use case, 2019
+- Robot manipulator self-identification for surrounding obstacle detection, 2015
+- KUKA Sunrise Toolbox: Interfacing Collaborative Robots with MATLAB
+
+##### Future Work
+
+- Key challenges and open issues of industrial collaborative robotics, 2018
+
+
+
+
+
+
 
 ## Discussion ?
 
