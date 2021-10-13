@@ -1506,6 +1506,11 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Capítulo 2 da tese
   - Predominant technologies
 
-## 11/11 - IRISLab
+## 11/10 - IRISLab
 
 - UR10e demonstrations
+
+## 12/10 - Biblioteca
+
+- Capítulo 2 da tese
+  - Existing approaches

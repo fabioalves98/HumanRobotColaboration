@@ -278,10 +278,3 @@
 - Explicação de como o novo driver, escrito em C++ interaje com o robot 
   - Utiliza o comando servoJ internamente para execução de trajetórias
 
-
-
-## 7 - 2017 - Real-Time Control of Robots with ROS
-
-- Boa introdução / síntese sobre ROS e Universal Robots
-- De resto não tem grande informação... Basicamente são melhoramentos ao driver antigo do robot
-
