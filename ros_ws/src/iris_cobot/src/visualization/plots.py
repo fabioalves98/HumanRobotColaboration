@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import cobot.helpers as helpers
-from cobot.hand_guiding.ft_theory import theoryFT
+from cobot.hand_guiding.wrench_theory import theoryFT
 
 
 def correct(sample):

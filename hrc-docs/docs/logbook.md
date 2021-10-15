@@ -1379,7 +1379,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 #### FT Sensor Correction Final Tests and Recordings - 5 Positions
 
-- Default = [0, -90, -90, -90, -90, w_2, w_3]
+- Default = [0, -90, -90, -90, w_2, w_3]
 - w_2 = {-90, -45, 0, 45, 90}
 - w_3 = {-360 - 360}
 
@@ -1389,7 +1389,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ##### 3 - Teste sem Gripper | Payload 1.5 | COG [0,0,42]
 
-##### 4 - Teste sem Gripper | Payload 1.5 | COG [0,0,10]
+##### 4 - Teste sem Gripper | Payload 1.5 | COG [0,0,100]
 
 ##### Extra - Bag de /wrench gravado logo a seguir a acopolar Gripper na posição Default (w_2 = -90; w_3 = 0)
 
@@ -1514,3 +1514,13 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Capítulo 2 da tese
   - Existing approaches
+
+## 13/10 - Reunião
+
+- Capítulo 2 da tese
+  - Porposta inicial enviada
+
+## 14/10 - Bilbioteca 
+
+- Capítulo 3 da tese
+  - Conteúdos iniciais e estrutura

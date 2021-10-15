@@ -14,10 +14,11 @@ from moveit_commander.move_group import MoveGroupCommander
 from iris_cobot.srv import WeightUpdate
 from cobot.helpers import arrowMarker, quaternionToList, vectorFromQuaternion
 
-GRIPPER_WEIGHT = 1.5
-GRIPPER_COG = 0.042
+GRIPPER_WEIGHT = 0
+GRIPPER_COG = 0
 OBJECT_WEIGHT = 0
 OBJECT_COG = 0.165
+ACC_GRAV = 9.81
 
 gripper_weight = GRIPPER_WEIGHT
 gripper_cog = GRIPPER_COG
@@ -56,28 +57,28 @@ def theoryFT(orientation):
     # FORCE
     # Obtain force
     total_weight = gripper_weight + object_weight
-    f_x = np.inner(v_x, v_g) * total_weight * 10
-    f_y = np.inner(v_y, v_g) * total_weight * 10
-    f_z = np.inner(v_z, v_g) * total_weight * 10 
-
-    # Correction Factors
-    f_x = f_x * 0.846
-    f_y = f_y * 1.115
-    f_z += f_x * 0.154
-    f_z = f_z * 1.230
+    f_x = np.inner(v_x, v_g) * total_weight * ACC_GRAV
+    f_y = np.inner(v_y, v_g) * total_weight * ACC_GRAV
+    f_z = np.inner(v_z, v_g) * total_weight * ACC_GRAV 
 
     # TORQUE
-    # Angle with gravity
-    angle_w_g = acos(np.dot(v_z, v_g))
+    # Angle with gravity (not used anymore)
+    # angle_w_g = acos(np.dot(v_z, v_g))
     
     # Normal of torque plane
     torque_plane_normal = np.cross(v_z, v_g)
 
     # Obtain torque
     total_force = gripper_weight * gripper_cog + object_weight * object_cog
-    t_x = total_force * 10 * np.inner(v_x, torque_plane_normal)
-    t_y = total_force * 10 * np.inner(v_y, torque_plane_normal)
-    t_z = total_force * 10 * np.inner(v_z, torque_plane_normal)
+    t_x = total_force * ACC_GRAV * np.inner(v_x, torque_plane_normal)
+    t_y = total_force * ACC_GRAV * np.inner(v_y, torque_plane_normal)
+    t_z = total_force * ACC_GRAV * np.inner(v_z, torque_plane_normal)
+
+    # Hardcoded Correction Factors
+    f_x = f_x * 0.956
+    f_y = f_y * 1.115
+    f_z += f_x * 0.154
+    f_z = f_z * 1.230
     
     # Wrench pub
     wrench = Wrench()

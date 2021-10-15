@@ -1,15 +1,17 @@
 #!/usr/bin/env python
 import rospy, rospkg, pickle
 import numpy as np
+import matplotlib.pyplot, matplotlib.axes._subplots
 import tf2_ros
 from tf2_geometry_msgs.tf2_geometry_msgs import do_transform_pose
 from ur_msgs.srv import SetSpeedSliderFraction, SetPayload
 from std_srvs.srv import Trigger
 from geometry_msgs.msg import Vector3, Point, Pose, PoseStamped, Quaternion, Transform, TransformStamped
+from sensor_msgs.msg import JointState
 from visualization_msgs.msg import Marker
 from controller_manager_msgs.srv import ListControllers, SwitchController
 
-from iris_cobot.srv import WeightUpdate, WrenchControl
+from iris_cobot.srv import WeightUpdate, WrenchControl, ForwardKinematics
 from iris_sami.srv import JointGoalName, JointGoal, RelativeMove, PoseGoal, NoArguments
 
 BASE_DIR = rospkg.RosPack().get_path('iris_cobot')
@@ -82,6 +84,16 @@ def pfControl(status):
         print("Service call failed: %s"%e)
 
 
+def fkService(joints):
+    try:
+        rospy.wait_for_service('/forward_kinematics', timeout=2)
+        fk = rospy.ServiceProxy('/forward_kinematics', ForwardKinematics)
+        resp = fk(JointState(position=joints))
+        return resp.pose
+    except (rospy.ServiceException,rospy.exceptions.ROSException) as e:
+        print("Service call failed: %s"%e)
+
+
 def set_payload(mass, cog):
     try:
         rospy.wait_for_service('/ur_hardware_interface/set_payload', timeout=2)
@@ -97,18 +109,32 @@ def openList(filename):
         return np.array(pickle.load(f))
 
 
-def plotXYZ(plt, x, array, line='', alpha=1, title=''):
+def plotXYZ(plt, x, array, line='', alpha=1, title='', xlabel='', ylabel='', legend=['', '', '']):
     array = np.array(array)
 
+    # TODO: Remove this check (no longer needed)
     if array.shape == (3, 360):
         array = array.transpose()
 
-    plt.plot(x, [t[0] for t in array], 'r' + line, alpha=alpha)
-    plt.plot(x, [t[1] for t in array], 'g' + line, alpha=alpha)
-    plt.plot(x, [t[2] for t in array], 'b' + line, alpha=alpha)
-    
-    if title:
+    # Plot XYZ curves
+    plt.plot(x, [t[0] for t in array], 'r' + line, alpha=alpha, label=legend[0])
+    plt.plot(x, [t[1] for t in array], 'g' + line, alpha=alpha, label=legend[1])
+    plt.plot(x, [t[2] for t in array], 'b' + line, alpha=alpha, label=legend[2])
+
+    # Set legend location
+    if '' not in legend:
+        plt.legend(loc="upper left")
+
+    # First try to plot in normal plot, otherwise plot in subplot
+    try:
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.title(title, loc='center')
+    except AttributeError:
+        plt.set_xlabel(xlabel)
+        plt.set_ylabel(ylabel)
         plt.set_title(title, loc='center')
+
 
 
 def arrowMarker(pose, color):

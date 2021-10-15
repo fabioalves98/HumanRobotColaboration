@@ -218,22 +218,21 @@ def resetTest(plt):
 def temporalDriftTest(plt):
     tests = [
         '/record/2-01_03/TD_P2_temp.list',
-        '/record/2-01_03/TD_P3_temp.list',
-        '/record/2-01_03/TD_P4_temp.list'
+        # '/record/2-01_03/TD_P3_temp.list',
+        # '/record/2-01_03/TD_P4_temp.list'
     ]
 
     x = np.arange(0, 3000,1)
-    fig, sub_plots = plt.subplots(3)
+    legend = ['x', 'y', 'z']
 
-    for plt in sub_plots:
-        plt.set(ylim=(-1, 2))
+    plt.ylim(-1, 2)
 
     for i in range(len(tests)):
         stream = []
         with open(BASE_DIR + tests[i]) as f:
             stream = pickle.load(f)
 
-        plotXYZ(sub_plots[i], x, stream, ':')
+        plotXYZ(plt, x, stream, '', title='', xlabel='Time(t)', ylabel='Force(N)', legend=legend)
 
 
 def positionalDriftTest(plt):
@@ -655,7 +654,6 @@ def gripperCorrectTest(plt):
         print('Max  Max  - %s' % np.max(stat_max, axis=0))
 
 
-
 def theoreticalCorrect(plt):
     x = np.arange(-180,180,1)
 
@@ -731,6 +729,7 @@ def theoreticalCorrect(plt):
     # Extract values to correct theory model
     print('Final Average - %s' % str(np.mean(average_correct, axis = 0)))
 
+
 def gripperRelativeTest(plt):
     x = range(57)
 
@@ -745,7 +744,7 @@ def signal_handler(sig, frame):
 
 
 def main():
-    rospy.init_node("fit", anonymous = False)
+    # rospy.init_node("fit", anonymous = False)
     signal.signal(signal.SIGINT, signal_handler)
     
     # plt.ylim([-10, 15.0])
@@ -760,7 +759,7 @@ def main():
     # resetTest(plt)
 
     # Temporal drift test
-    # temporalDriftTest(plt)
+    temporalDriftTest(plt)
 
     # Positional drift test
     # positionalDriftTest(plt)

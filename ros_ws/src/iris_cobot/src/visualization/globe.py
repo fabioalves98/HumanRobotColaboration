@@ -85,8 +85,11 @@ def main():
 
     # Load markers and do stuff
     markers = loadMarkers()
+    i = 1
     for marker in markers:
-        marker.pose.position = Point(*[-1, 0, 1.5])
+        print(i)
+        i += 1
+        # marker.pose.position = Point(*[-1, 0, 1.5])
         marker.header.stamp = rospy.Time()
 
     rate = rospy.Rate(10) # 10hz

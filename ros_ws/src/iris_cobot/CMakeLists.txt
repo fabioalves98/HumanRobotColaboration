@@ -33,6 +33,7 @@ add_message_files(
 
 add_service_files(
     FILES
+    ForwardKinematics.srv
     WeightUpdate.srv
     WrenchControl.srv
 )
@@ -41,6 +42,7 @@ generate_messages(
   DEPENDENCIES
   std_msgs
   geometry_msgs
+  sensor_msgs
 )
 
 generate_dynamic_reconfigure_options(
@@ -105,3 +107,8 @@ install(FILES
   plugin.xml
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )
+
+# Tools
+add_executable(kinematics src/cobot/kinematics.cpp)
+target_link_libraries(kinematics ${catkin_LIBRARIES})
+add_dependencies(kinematics ${PROJECT_NAME}_gencpp)
