@@ -71,11 +71,14 @@
 \usepackage{hyperref}
 
 %Optional: Redefine section names
-%\def\sectionautorefname{Section}
-%\def\chapterautorefname{Chapter}
-%\def\figureautorefname{Figure}
-%\def\listingautorefname{Listing}
-%\def\tableautorefname{Table}
+\def\chapterautorefname{Chapter}%
+\def\sectionautorefname{Section}%
+\def\subsectionautorefname{Subsection}%
+\def\subsubsectionautorefname{Subsubsection}%
+\def\paragraphautorefname{Paragraph}%
+\def\tableautorefname{Table}%
+\def\equationautorefname{Equation}%
+\def\listingautorefname{Algorithm}%
 
 %For PDF Comments
 \usepackage{comment}
@@ -105,7 +108,7 @@
 {\usepackage[outputdir=build]{minted}}
 {\usepackage{minted}}%
 
-\renewcommand\listingscaption{Código}
+\renewcommand\listingscaption{Algorithm}
 \fvset{fontsize=\footnotesize} % Make Code blocks smaller than text
 \usepackage{csquotes}
 
@@ -313,7 +316,7 @@
 \include{chapters/chapter5}
 \include{chapters/chapter6}
 \include{chapters/chapter7}
-% \include{chapters/example}
+\include{chapters/example}
 
 
 
