@@ -33,7 +33,7 @@ Nowadays, cobots have evolved in such a way that they are replacing industrial r
 
 % ADD: Isto tudo gera ênfase para a emergência da area de human robot collaboration
 
-\section{Human-Robot Collaboration}
+\section{Human Robot Collaboration}
 
 % ADD: Melhorar intro à secção
 % \par Now that the historical background is set, the scientific area in question is ready to be presented... (\textbf{melhorar intro à secção})
@@ -242,9 +242,9 @@ Despite these facts, extensive research efforts have, and are currently being ma
 
 \subsection{Solutions to Specific \acs{hri} Problems}
 
-\par A method for precision hand-guiding of a cobot at the \ac{eef} level is presented in \cite{spec.handguide}. In this work, the authors are able to obtain \ac{hgft} from the \ac{eef} \ac{ft} measurements. Then, a control scheme to govern the linear/angular motion of the \ac{eef} is described and implemented. The characteristics of the hand-guiding task in this Dissertation has many similarities with this approach, since the former was heavily inspired by the latter.
+\par A method for precision \ac{hg} of a cobot at the \ac{eef} level is presented in \cite{spec.handguide}. In this work, the authors are able to obtain \ac{hgft} from the \ac{eef} \ac{ft} measurements. Then, a control scheme to govern the linear/angular motion of the \ac{eef} is described and implemented. The characteristics of the \ac{hg} task in this Dissertation has many similarities with this approach, since the former was heavily inspired by the latter.
 
-\par The work in \cite{spec.compensation} describes a tool compensation technique to ease and simplify the process of trajectory learning in common industrial setups. It allows the user to directly use the real tool attached to the \ac{eef} while hand-guiding the robot. It was crucial to understand the effects of coupled weight in the robot \ac{eef} and create the compensation model implemented in this Dissertation for the object manipulation task.
+\par The work in \cite{spec.compensation} describes a tool compensation technique to ease and simplify the process of trajectory learning in common industrial setups. It allows the user to directly use the real tool attached to the \ac{eef} while \ac{hg} the robot. It was crucial to understand the effects of coupled weight in the robot \ac{eef} and create the compensation model implemented in this Dissertation for the object manipulation task.
 
 \par A state of the art on-line collision avoidance framework is proposed in \cite{spec.collision}, where the authors represent in space the human and the robot as capsules, and calculate their minimum distance and relative velocity. With this values, a repulsion vector is created. On the other hand, with a pre-established path generated offline, an attraction vector is computed and forces the robot into following the defined trajectory. With these two components, the implemented control algorithm is able to adjust the robots trajectory in real time, so that it is able to avoid collision with the human and simultaneously fulfill the task.
 

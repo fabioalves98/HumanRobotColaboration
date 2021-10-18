@@ -70,16 +70,6 @@
 % Or use the default
 \usepackage{hyperref}
 
-%Optional: Redefine section names
-\def\chapterautorefname{Chapter}%
-\def\sectionautorefname{Section}%
-\def\subsectionautorefname{Subsection}%
-\def\subsubsectionautorefname{Subsubsection}%
-\def\paragraphautorefname{Paragraph}%
-\def\tableautorefname{Table}%
-\def\equationautorefname{Equation}%
-\def\listingautorefname{Algorithm}%
-
 %For PDF Comments
 \usepackage{comment}
 \ifthenelse{\equal{\useoverleaf}{0}}
@@ -255,6 +245,16 @@
 %Exclude sub figures from List of Figures
 %\captionsetup[subfloat]{list=no}
 
+%Optional: Redefine section names
+\def\chapterautorefname{Chapter}%
+\def\sectionautorefname{Section}%
+\def\subsectionautorefname{Subsection}%
+\def\subsubsectionautorefname{Subsubsection}%
+\def\paragraphautorefname{Paragraph}%
+\def\tableautorefname{Table}%
+\def\equationautorefname{Equation}%
+\def\listingautorefname{Algorithm}%
+
 
 % Texts
 \newenvironment{introduction}
@@ -283,6 +283,7 @@
 
 \cleardoublepage
 
+
 %Table of contents
 {\small\tableofcontents}
 \cleardoublepage
@@ -303,7 +304,8 @@
 %
 \mainmatter
 
-
+% Reset acronyms
+\acresetall
 
 % Start of Thesis text ----------------------------------------------------------
 %Line spacing: 1.5 pt
@@ -316,7 +318,7 @@
 \include{chapters/chapter5}
 \include{chapters/chapter6}
 \include{chapters/chapter7}
-\include{chapters/example}
+% \include{chapters/example}
 
 
 
