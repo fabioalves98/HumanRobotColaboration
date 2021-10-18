@@ -307,15 +307,15 @@
     \label{fig:ft_sensor_theory_adjust_hist}
 \end{figure}
 
-\subsection{Real Time Correction and Compensation of \ac{ft}}
+\section{Real Time Correction and Compensation of \ac{ft}}
 
-\par In order to obtain the corrected and compensated \ac{ft} measurements in real time, a group of \ac{ros} nodes were developed. Some of them were already previously explained such as the Driver, Filter and Correct nodes. These nodes were arranged together according to the architecture described in \autoref{fig:ft_ros_arch}.
+\par In order to obtain the corrected and compensated \ac{ft} measurements in real time, a group of \ac{ros} nodes were developed. Some of them were already previously explained such as the Driver, Filter and Correct nodes. These nodes were arranged together according to the architecture described in \autoref{fig:ros_ft_arch}.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=\linewidth]{figs/chp3/ft_comp_ros_arch.pdf}
-    \caption{ROS architecture of the compensation of \ac{ft} in real time}
-    \label{fig:ft_ros_arch}
+    \includegraphics[width=\linewidth]{figs/chp3/ros_ft_comp_arch.pdf}
+    \caption{\ac{ros} architecture of the compensation of \ac{ft} in real time}
+    \label{fig:ros_ft_arch}
 \end{figure}
 
 \par The Theoretical FT node implements the algorithms explained in \autoref{ssec:ft_model}. It subscribes to the state of the \ac{ur10e} in order to obtain the \ac{eef} pose. Then calculates the theoretical \ac{ft} values and publishes them to the \textbackslash\textit{wrench\_theory} topic. This node has 2 internal parameters, "weight" and "cog" that can be updated both from the dynamic reconfigure \ac{ros} tool and from a \ac{ros} service named \textbackslash\textit{cobot}\textbackslash\textit{payload\_update}.
