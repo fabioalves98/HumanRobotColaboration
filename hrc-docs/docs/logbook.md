@@ -1524,3 +1524,60 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Capítulo 3 da tese
   - Conteúdos iniciais e estrutura
+
+## 15/10 - Biblioteca
+
+- Capítulo 3 da tese
+  - Conteúdos e estrutura completos
+
+## 16/10 - Biblioteca
+
+- Capitulo 3 da tese
+  - Primeira secção completa
+
+## 18/10 - Biblioteca
+
+- Capítulo 3 da tese completo
+- Capitulo 4, 5 e 6
+  - Estrutura 
+
+## 19/10 - IRISLab
+
+#### Testes de interação com o Robot
+
+##### Teste Double Tap
+
+- Para cada eixo de double tap, associar uma cor do gripper e mudar o gripper para essa cor
+- Contar o numero de ações - 300
+- Contar o numero de falhas - 16
+- Razao das falhas
+  - Miss double tap, ou seja, o utilizador efetua o double tap com pouca força
+  - A direção do doubel tap é detetada erradamente, eaocntece muito com Z, tambem porque o utilizador nao efetua o toque como deve ser
+
+#### Hand Guiding Test
+
+- Mostrar o teste em que o robot roda dobre ele próprio e a accuracy nao muda muito
+- Mostrar um teste em que o robot é hand guided de um sitio para o outro (accuratly)
+- Tabela com varios valores de accuracy e resultados
+
+#### Object Manipulation Test
+
+- Criar uma tarefa em que o robot pega num objeto, e que o manipula com precisão
+- Mostrar o teste em que o robot roda dobre ele próprio com um objeto pegado e a accuracy nao muda muito
+
+- Testar a tarefa 10 vezes com vários graus de accuracy 1-5
+- Tabela que com varios valores de accuracy e resultados
+
+****
+
+- Capítulo 6 da tese
+  - Testes e conteúdos
+
+## 20/10 - IRISLab
+
+#### Dynamic Obstacle Avoidance Test
+
+- Fazer o robot executar uma trajetória, colocar um obstaculo a frente
+- Fazer um plot das duas trajetórias (normal e com obstaculo)
+  - Em simulador
+

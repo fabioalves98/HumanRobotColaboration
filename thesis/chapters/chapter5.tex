@@ -23,7 +23,7 @@
 \par Explain the execution of this task... explain the importance of a parametrized skill because the user can define the pick and deliver place and the task works every time
 \par explain the intrinsic details of the deliver method
 
-\section{Object Lifting Assistance}
+\section{Object Manipulation}
 
 \par This task is more complex, since after gripping a lot of things happen, the controllers are switched, the robot is moved 5 cm upwards to make the user not interact with the gripper beacuse it will calibrate the weight, after the weight is calibrated the hand guide feature is back online with the new calibrated weight on the ft theory model... the robot will continue in hand guide until a double tap on y is perform, making the robot release the object and set the weight to zero... when the robot releases the weight it will also zero de ft sensor because as said previously, interactiong with the sensor can cause deveiations on the measurements
 
@@ -36,10 +36,31 @@
 \par explain the intrinsic detail of the state machine
 \par good for overall system architecture and description of the state machine
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figs/chp5/ros_ur10e_smach.pdf}
+    \caption{\ac{ros} architecture of the compensation of \ac{ft} in real time}
+    \label{fig:ros_smach}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figs/chp5/ros_cobot_arch.pdf}
+    \caption{\ac{ros} architecture of the compensation of \ac{ft} in real time}
+    \label{fig:ros_cobot_arch}
+\end{figure}
+
 
 \subsection{State Transitions}
 
 \par explain here the double tap interaction
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figs/chp5/taps.png}
+    \caption{Result of the compensation architecture applied in a real time test}
+    \label{fig:taps}
+\end{figure}
 
 \subsection{Visual Feedback}
 

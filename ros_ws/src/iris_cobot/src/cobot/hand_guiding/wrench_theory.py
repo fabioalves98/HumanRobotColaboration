@@ -14,10 +14,10 @@ from moveit_commander.move_group import MoveGroupCommander
 from iris_cobot.srv import WeightUpdate
 from cobot.helpers import arrowMarker, quaternionToList, vectorFromQuaternion
 
-GRIPPER_WEIGHT = 0
-GRIPPER_COG = 0
-OBJECT_WEIGHT = 0
-OBJECT_COG = 0.165
+GRIPPER_WEIGHT = 1.5
+GRIPPER_COG = 0.042
+OBJECT_WEIGHT = 1
+OBJECT_COG = 0.15
 ACC_GRAV = 9.81
 
 gripper_weight = GRIPPER_WEIGHT

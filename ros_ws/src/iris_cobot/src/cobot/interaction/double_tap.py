@@ -7,7 +7,7 @@ from iris_cobot.msg import TapAction
 
 
 DTAP_STANDBY = 500
-INT_FORCE = 5
+DER_FORCE = 5
 
 f_prev = (0, 0, 0)
 t_prev = (0, 0, 0)
@@ -19,8 +19,8 @@ tap = False
 tap_counter = 0
 
 tap_action_pub = None
-force_integral_pub = None
-torque_integral_pub = None
+force_derivative_pub = None
+torque_derivative_pub = None
 gripper = None
 
 
@@ -66,11 +66,11 @@ def wrenchCallback(data):
     dtap_ready -= 1
 
     # Tap Control
-    int_forces = [f_x_int, f_y_int, f_z_int]
-    for f in int_forces:
-        if abs(f) > INT_FORCE and not s_tap:
+    der_forces = [f_x_int, f_y_int, f_z_int]
+    for f in der_forces:
+        if abs(f) > DER_FORCE and not s_tap:
             s_tap = True
-            component = int_forces.index(f)
+            component = der_forces.index(f)
             direction = f > 0
             print("Single - %s - %s" % (component, 'Positive' if direction else 'Negative'))
 
@@ -84,10 +84,10 @@ def wrenchCallback(data):
                 s_tap = False
             
             if s_tap_counter > 50*3 and s_tap_counter < 200*3:
-                for f in int_forces:
-                    if abs(f) > INT_FORCE:
+                for f in der_forces:
+                    if abs(f) > DER_FORCE:
                         if dtap_ready < 1:
-                            component = int_forces.index(f)
+                            component = der_forces.index(f)
                             direction = f > 0
                             print("Double - %s - %s" % (component, 'Positive' if direction else 'Negative'))
                             # triggerToggle()
@@ -95,9 +95,8 @@ def wrenchCallback(data):
 
                             dtap_ready = DTAP_STANDBY
 
-
-    force_integral_pub.publish(Vector3(*[f_x_int, f_y_int, f_z_int]))
-    torque_integral_pub.publish(Vector3(*[t_x_int, t_y_int, t_z_int]))
+    force_derivative_pub.publish(Vector3(*[f_x_int, f_y_int, f_z_int]))
+    torque_derivative_pub.publish(Vector3(*[t_x_int, t_y_int, t_z_int]))
 
 
 
@@ -105,10 +104,10 @@ def main():
     rospy.init_node('double_tap', anonymous=True)
     signal.signal(signal.SIGINT, signal_handler)
 
-    # Visualization of the force integration
-    global force_integral_pub, torque_integral_pub
-    force_integral_pub = rospy.Publisher("force_integral", Vector3, queue_size=1)    
-    torque_integral_pub = rospy.Publisher("torque_integral", Vector3, queue_size=1) 
+    # Visualization of the force derivation
+    global force_derivative_pub, torque_derivative_pub
+    force_derivative_pub = rospy.Publisher("force_derivative", Vector3, queue_size=1)    
+    torque_derivative_pub = rospy.Publisher("torque_derivative", Vector3, queue_size=1) 
 
     global tap_action_pub
     tap_action_pub = rospy.Publisher("tap_action", TapAction, queue_size=1)

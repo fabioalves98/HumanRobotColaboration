@@ -31,10 +31,10 @@
     <include file="$(find iris_cobot)/launch/interaction.launch"/>
 
     <!-- Obstacle Avoidance -->
-    <include file="$(find iris_cobot)/launch/obstacle_avoidance.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/obstacle_avoidance.launch"/> -->
 
     <!-- Control -->
-    <include file="$(find iris_cobot)/launch/control.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/control.launch"/> -->
 
     <!-- Plotjuggler -->
     <!-- <node name="plotjuggler" pkg="plotjuggler" type="plotjuggler" 

@@ -26,14 +26,14 @@ class UR10eState(smach.State):
         return tap_action
 
 
-# define state FreeDrive
-class Freedrive(UR10eState):
+# define state HandGuiding
+class HandGuiding(UR10eState):
     def __init__(self):
         UR10eState.__init__(self, outcomes=['dTapX-', 'dTapX+', 'dTapY'])
 
 
     def execute(self, userdata):
-        rospy.loginfo('Executing state Freedrive')
+        rospy.loginfo('Executing state Hand Guiding')
 
         helpers.cobot_reset_ft_sensor()
         helpers.hgControl('play')
@@ -233,15 +233,15 @@ def main():
     sm_ur10e = smach.StateMachine(outcomes=['exit_state'])
     
     with sm_ur10e:
-        smach.StateMachine.add('FreeDrive', Freedrive(),
+        smach.StateMachine.add('Hand Guiding', HandGuiding(),
                             transitions={'dTapX-':'Pick & Deliver',
-                                         'dTapX+':'Gripper',
-                                         'dTapY':'Industrial'})
+                                         'dTapX+':'Object Manipulation',
+                                         'dTapY':'Industrial Task'})
 
         # Create the sub Gripper state machine
-        sm_gripper = smach.StateMachine(outcomes=['exit_state'])
+        sm_object = smach.StateMachine(outcomes=['exit_state'])
 
-        with sm_gripper:
+        with sm_object:
             smach.StateMachine.add('Gripping', Gripping(),
                                 transitions={'object':'GripObject',
                                              'no_object':'GripEmpty'})
@@ -252,8 +252,8 @@ def main():
             smach.StateMachine.add('Releasing', Releasing(),
                                 transitions={'released':'exit_state'})
         
-        smach.StateMachine.add('Gripper', sm_gripper, 
-                            transitions={'exit_state':'FreeDrive'})
+        smach.StateMachine.add('Object Manipulation', sm_object, 
+                            transitions={'exit_state':'Hand Guiding'})
         
         # Create the sub Pick and Deliver state machine
         sm_pick_deliver = smach.StateMachine(outcomes=['exit_state'])
@@ -268,11 +268,11 @@ def main():
             
 
         smach.StateMachine.add('Pick & Deliver', sm_pick_deliver, 
-                            transitions={'exit_state':'FreeDrive'})
+                            transitions={'exit_state':'Hand Guiding'})
     
         
-        smach.StateMachine.add('Industrial', Industrial(),
-                            transitions={'dTap':'FreeDrive'})
+        smach.StateMachine.add('Industrial Task', Industrial(),
+                            transitions={'dTap':'Hand Guiding'})
     
     # Create and start the introspection server
     sis = smach_ros.IntrospectionServer('ur10e_smach_server', sm_ur10e, '/SM_UR10e')
