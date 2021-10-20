@@ -16,7 +16,7 @@ from cobot.helpers import arrowMarker, quaternionToList, vectorFromQuaternion
 
 GRIPPER_WEIGHT = 1.5
 GRIPPER_COG = 0.042
-OBJECT_WEIGHT = 1
+OBJECT_WEIGHT = 0
 OBJECT_COG = 0.15
 ACC_GRAV = 9.81
 
@@ -75,10 +75,10 @@ def theoryFT(orientation):
     t_z = total_force * ACC_GRAV * np.inner(v_z, torque_plane_normal)
 
     # Hardcoded Correction Factors
-    f_x = f_x * 0.956
-    f_y = f_y * 1.115
-    f_z += f_x * 0.154
-    f_z = f_z * 1.230
+    # f_x = f_x * 0.956
+    # f_y = f_y * 1.115
+    # f_z += f_x * 0.154
+    # f_z = f_z * 1.230
     
     # Wrench pub
     wrench = Wrench()

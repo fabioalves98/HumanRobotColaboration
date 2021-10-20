@@ -25,10 +25,10 @@
     </include>
 
     <!-- Hand Guiding -->
-    <include file="$(find iris_cobot)/launch/hand_guiding.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/hand_guiding.launch"/> -->
 
     <!-- Interaction -->
-    <include file="$(find iris_cobot)/launch/interaction.launch"/>
+    <!-- <include file="$(find iris_cobot)/launch/interaction.launch"/> -->
 
     <!-- Obstacle Avoidance -->
     <!-- <include file="$(find iris_cobot)/launch/obstacle_avoidance.launch"/> -->

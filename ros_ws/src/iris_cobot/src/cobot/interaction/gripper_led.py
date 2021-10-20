@@ -52,9 +52,18 @@ def main():
     gripper.set_led_animation(14)
     gripper.set_led_speed(4)
 
-    rospy.Subscriber("tap_action", TapAction, gripperLed, queue_size=1)
+    # rospy.Subscriber("tap_action", TapAction, gripperLed, queue_size=1)
+    # rospy.spin()
 
-    rospy.spin()
+    # Set the gripper LEDs to 5 different colors
+    
+    for color in [1, 7, 3, 2]:
+        print('Color?')
+        x = raw_input()
+        gripper.set_led_animation(2)
+        gripper.set_led_color(color)
+
+
 
 
 if __name__ == '__main__':

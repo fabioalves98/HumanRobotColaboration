@@ -1558,13 +1558,20 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Mostrar o teste em que o robot roda dobre ele próprio e a accuracy nao muda muito
 - Mostrar um teste em que o robot é hand guided de um sitio para o outro (accuratly)
+  - 1 - Robot hang guided numa posição inicial
+  - 2 - Levar o ro
+  - 3 - Levalo para baixo
+  - 4 - Orientalo com o objeto
 - Tabela com varios valores de accuracy e resultados
 
 #### Object Manipulation Test
 
-- Criar uma tarefa em que o robot pega num objeto, e que o manipula com precisão
 - Mostrar o teste em que o robot roda dobre ele próprio com um objeto pegado e a accuracy nao muda muito
-
+- Mostrar um teste em que o robot pega num objeto, e que o manipula com precisão
+  - 1 - Robot Hang guided numa posiçao inicial
+  - 2 - Levar o robot ao objeto
+  - 3 - Trazer o robot com o objeto ao meio
+  - 4 - Largar o objeto no ambiente
 - Testar a tarefa 10 vezes com vários graus de accuracy 1-5
 - Tabela que com varios valores de accuracy e resultados
 
@@ -1575,9 +1582,6 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 20/10 - IRISLab
 
-#### Dynamic Obstacle Avoidance Test
-
-- Fazer o robot executar uma trajetória, colocar um obstaculo a frente
-- Fazer um plot das duas trajetórias (normal e com obstaculo)
-  - Em simulador
+- Tests as ecmpreiments photos and screenshots
+- Weight tests
 
