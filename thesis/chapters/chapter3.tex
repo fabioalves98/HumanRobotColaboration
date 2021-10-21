@@ -205,7 +205,7 @@
 \par Results show a direct compensation of the configured parameters. In terms of accuracy, the \ac{ft} sensor was tared when the position of Wrist3 joint was \ang{0} and once it rotated to \ang{180}, the force measurement on the X-Axis was $-30\si{N}$, which appears to be correct given the configured mass. Despite this fact, there is no knowledge on the implementation of this compensation mechanism and other tests revealed some inaccuracies on its behavior. Furthermore, the use of this parameter would required its constant update when manipulating objects. The \ac{ros} Driver enables this feature through a service, but every time the Payload parameter is updated, the sensor is tared. 
 \par For this reasons, and for the fact that this Payload parameter might not exist in other cobotic platforms or sensors, the chosen values of Payload in this Dissertation are 0, and a theoretical compensation model will be developed with the same objective, but enabling the user to have more control over the use of the \ac{ft} measurements.
 
-\subsection{\acs{ft} Theoretical Model}
+\subsection{Force Theoretical Model}
 \label{ssec:ft_model}
 
 \par The objective of this model is to generate the values of \ac{ft} that a given object or tool would cause on a perfect sensor. This way, when manipulating objects with the cobot, this generated values can be subtracted from the reported sensor measurements and easily obtain the \ac{hgft}. This model is generalized and can be used in any cobot or sensor. As inputs, it requires the orientation of the frame of the \ac{ft} sensor, and the mass and \ac{cog} of the object attached to the \ac{eef}.

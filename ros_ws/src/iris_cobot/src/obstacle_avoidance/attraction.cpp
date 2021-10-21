@@ -148,7 +148,7 @@ void attraction(const ros::TimerEvent& event)
     tf2::fromMsg(cur_tf_msg, cur_tf);
 
     // Publish Current Point TF
-    visualization_msgs::Marker cur_marker = sphereMarker(cur_tf_msg, {1, 1, 0, 1, 0.1}, 0);
+    visualization_msgs::Marker cur_marker = sphereMarker(cur_tf_msg, {0, 1, 0, 1, 0.1}, 0);
     cur_marker_pub_ptr->publish(cur_marker);
 
     // Goal Point Pose
@@ -157,7 +157,7 @@ void attraction(const ros::TimerEvent& event)
     tf2::fromMsg(goal_tf_msg, goal_tf);
 
     // Publish Goal Point TF
-    visualization_msgs::Marker goal_marker = sphereMarker(goal_tf_msg, {0, 1, 0, 1, 0.1}, 0);
+    visualization_msgs::Marker goal_marker = sphereMarker(goal_tf_msg, {1, 1, 0, 1, 0.1}, 0);
     goal_marker_pub_ptr->publish(goal_marker);
     traj_marker_pub_ptr->publish(*traj_marker_ptr);
 
@@ -304,7 +304,7 @@ int main(int argc, char **argv)
             diff.push_back(abs(trajectory[i][j] - trajectory[i + 1][j]));
         }
         double diff_value =  std::accumulate(diff.begin(), diff.end(), 0.0);
-        if (diff_value < 0.1)
+        if (diff_value < 0.01)
         {
             duplicate_joints.push_back(trajectory[i]);
         }

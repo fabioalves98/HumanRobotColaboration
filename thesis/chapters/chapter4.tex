@@ -4,44 +4,154 @@
 \section{Obstacle Detection}
 \label{section:obstacle-detection}
 
-\par Explain what is obstacle detection
-
-\par what is needed for obstacle detection
-
-\par the setup, both simulated and real 
+\par In order for a robot to avoid obstacles while in motion, an external vision sensor will be used to capture the shared workspace and send information to the system about the robot surroundings. In this Dissertation, an \acs{rgbd} camera will be used for this purpose. It gives the system depth information on its \ac{fov}, referenced to itself. The first step in this endeavour is to spatially and dynamically reference the camera to the robot through hand eye calibration. 
 
 \subsection{Hand Eye Calibration}
 
-\par explicar o hand eye calibration
+\par This process is able to generate an accurate transform from the robot base frame to the sensor frame. In this proposal, a fiducial marker based on the Aruco library \cite{aruco} is fixed on the robot \ac{eef}. Then, using the \textit{easy\_handeye} \ac{ros} package, a set of translations and rotations are performed at the \ac{eef} level. In each movement, a sample composed of the \ac{eef} pose and the Aruco pose identified by the sensor is captured. A total of 3 translations and 6 rotations are performed in each axis, making a total of 27 samples. When the sampling is finished, the compute service is called and the result is obtained, a static transform, which is both locally saved and published in the \ac{ros} environment.
 
-\subsection{Robot Self-Identification}
+% ADD: 2 fotos aqui, uma real, outra do RViz
 
-\par In a point cloud in order to detect obstacles, the points from the robot need to be identified and excluded form the point cloud
+\subsection{Robot Self Identification}
 
-\par código de robot self identification
+\par Since the camera will be sensing the shared workspace, there will be multiple scenarios where the robot will enter its \ac{fov}. Robot self identification consist on a method to identify which points of the point cloud belong to the robot structure, in order to differentiate obstacles from the robot when both of them are in the sensor \ac{fov}.
+\par The technique developed in this work starts by building a skeleton model of the robot starting from the transforms of its links. The position of this links, defined in the robot \ac{urdf} present in its \ac{ros} driver, does not match the real position of the robot arms and wrists, therefore, from this links a set of points are created representing the start and end of each real link. Using this set of points and a minimum distance constant, the skeleton model is created based on \autoref{code:robot_skeleton}. The difference between the links defined in the robot \ac{urdf} and the points created can be seen in \autoref{fig:links_to_points}.
 
-\par imagem das esferas a identificar o robot
+% FIX: Aproveitar e explicar melhor porque é que este processo é necessário, que os links nao descrevem a estrutura do robot
 
-\par imagem dos resultados
+\begin{listing}[h]
+    \centering
+    \begin{minted}{python}
 
-\subsection{Obstacle Identification}
+    MIN_DISTANCE = 0.05
+    links = ROS.TransformLibrary.getLinks()
+    points = obtainPoints(links)
+    skeleton = []
 
-\par now that the robot is identified and removed from the point cloud, the remaining points need to be processed
+    for point in points:  
+        skeleton.append(point)
+        distance = point.distance(point.next())
+        num_skeleton_points = distance / MIN_DISTANCE
+        increment = (point - point.next()) / num_skeleton_points
 
-\par creation of a region of interest surrounding the robot with an X amount of distance
+        for i in range(num_skeleton_points):
+            skeleton.append(point + i * increment)
 
-\par inside that region of interest, describe de 2 obstacle identification scenarios, one with simulated sphere obstacles, the other with real random obstacles
+    
+    \end{minted}
+\caption{Creation of a point based skeleton model of the robot}
+\label{code:robot_skeleton}
+\end{listing}
 
-\par ros node that listens to camera, joints states, and publishes an array of obstacles
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.33\linewidth}
+      \centering
+      \includegraphics[width=.95\linewidth]{figs/chp4/self_ident_links.png}
+    \end{subfigure}%
+    \begin{subfigure}{.33\linewidth}
+      \centering
+      \includegraphics[width=.95\linewidth]{figs/chp4/self_ident_points.png}
+    \end{subfigure}%
+    \begin{subfigure}{.33\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp4/self_ident_skeleton.png}
+    \end{subfigure}
+    \caption{Visual representation of the conversion from transform links to robot skeleton}
+    \label{fig:links_to_points}
+\end{figure}
 
-\par imagem dos resultados finais
+\par From the resultant skeleton, any point form the point cloud that is closer to it than a predefined threshold, is considered belonging to the robot, therefore not accounted for in the obstacle segmentation process. Also not accounted for, are points on the point cloud that are too far away from the robot. Based on a another distance constant, a \ac{roi} is created, and points that are further distant from the skeleton than it, are considered irrelevant. The final result of robot self identification can be observed in \autoref{fig:self_ident_result}.
 
-\section{Potential Fields Method}
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.5\linewidth}
+      \centering
+      \includegraphics[width=.95\linewidth]{figs/chp4/cloud_before.png}
+    \end{subfigure}%
+    \begin{subfigure}{.5\linewidth}
+      \centering
+      \includegraphics[width=.95\linewidth]{figs/chp4/cloud_after.png}
+    \end{subfigure}
+    \caption{Raw point cloud and categorized point cloud with \ac{roi}}
+    \label{fig:self_ident_result}
+\end{figure}
+
+\subsection{Obstacle Segmentation}
+
+\par Starting from the raw point cloud obtained from the \ac{rgbd} camera, each point is categorized. Points belonging to the robot, and points too distant from it are removed. Only points belonging to the \ac{roi}, if there are any, are considered obstacles, therefore, a new point cloud is created with this points.
+\par To this new point cloud, a clustering algorithm is applied in order to represent the point cloud in a set of small clusters, each one to be considered an obstacle. The algorithm applied is the \ac{cec}, which is a region growing algorithm based on the \ac{ece} algorithm. It has the advantage of allowing a customizable merging condition and also classifying clusters as too small or too large based on defined parameters. The parameters of the \ac{cec} implemented in this work can be found in \autoref{tbl:cec_params}.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|}
+    \hline
+    \textbf{Parameter} & \textbf{Value} \\ \hline
+    Leaf Size & 0.3 \\ \hline
+    Radius Search & 0.4 \\ \hline
+    Cluster Tolerance & 0.5 \\ \hline
+    Min Cluster Size & 5 \\ \hline
+    Max Cluster Size & 90 \\ \hline
+    Squared Distance & 0.001 \\ \hline
+    \end{tabular}
+    \caption{Internal parameters of the \textbackslash{}ac\{cec\} algorithm}
+    \label{tbl:cec_params}
+\end{table}
+
+\par The result of this algorithm is a set of clusters and to each cluster, its closets point to the robot is calculated, achieving the obstacle collision point. \autoref{fig:obstacles} illustrates the obstacle detection final result, where 2 obstacles are present in the environment. One of them is outside the \ac{roi}, therefore ignored. The other, which is closer to the robot, is correctly identified.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.5\linewidth}
+      \centering
+      \includegraphics[width=.95\linewidth]{figs/chp4/obstacles_before.png}
+    \end{subfigure}%
+    \begin{subfigure}{.5\linewidth}
+      \centering
+      \includegraphics[width=.95\linewidth]{figs/chp4/obstacles_after.png}
+    \end{subfigure}
+    \caption{Final result of the obstacle segmentation algorithm}
+    \label{fig:obstacles}
+\end{figure}
+
+\section{Artificial Potential Fields}
 \label{section:pf-method}
 
-\par explain what is the potential fields method
+\par A well known method of dealing with real time collision avoidance on robotic manipulators is to treat the robot navigation as if it was a point in a potential field. This potential field is the result of the sum of 2 components. An attraction field, converging on the goal and a repulsion field created from obstacles in the environment. Within the final field, the robot can navigate successfully while avoiding the obstacles. Adapted to the context of robotic manipulators, the robot is in an imaginary vector field and its motion is the result of attraction forces, making the robot follow a pre-defined trajectory, and repulsion forces that repel it away from obstacles.
 
 \subsection{Attraction}
+
+\par The attraction force is what makes the robot move to its goal. In this work, this is done by generating a trajectory offline, and in real time make the robot follow the trajectory with cartesian space velocity commands. 
+\par The first step is to generate an offline trajectory. A trajectory needs a start state and a goal state, and if no static obstacles are declared, the motion planner will generate an optimized trajectory based on those two inputs. Other factors might impact the final result but for the focus of this work, offline motion planning will not be discussed in detail. The trajectories generated with the MoveIt framework are arrays of joint positions, since it is designed to work with joint position controllers. In this work, the attraction and repulsion forces will be declared in cartesian space, therefore after obtaining the trajectory, all trajectory steps are converted to poses in cartesian space. This can be observed in the first subfigure of \autoref{fig:attraction}.
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.2\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figs/chp4/trajectory_0.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{figs/chp4/trajectory_1.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp4/trajectory_2.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp4/trajectory_3.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp4/trajectory_4.png}
+    \end{subfigure}
+    \caption{Trajectory execution with cartesian attraction vector}
+    \label{fig:attraction}
+\end{figure}
+
+\par \textbf{CONTINUAR...}
+
 
 \par Frist an offline trajectory is created, from a set of waypoints, then, the closest point to the robot is calculated, then the robtos follows the trajectory selection the 2 next poitns, making a mean out of those and calculating the global eef speed, which is the attraction vector
 

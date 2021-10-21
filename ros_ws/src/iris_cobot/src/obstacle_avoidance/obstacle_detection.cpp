@@ -1,9 +1,11 @@
 #include <math.h> 
 #include <ros/ros.h>
 #include <sensor_msgs/PointCloud2.h>
+#include <visualization_msgs/MarkerArray.h>
 #include <tf2/convert.h>
 #include <tf2_eigen/tf2_eigen.h>
 #include <tf2_ros/transform_listener.h>
+#include <tf2_ros/transform_broadcaster.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 // PCL specific includes
 #include <pcl/point_types.h>
@@ -24,6 +26,9 @@
 #include <iris_cobot/ObstacleDetectionConfig.h>
 
 #include <iris_cobot/Obstacles.h>
+
+template<typename T>
+using sVec = std::vector<T>;
 
 typedef pcl::PointXYZRGB Point;
 typedef pcl::PointXYZRGBNormal PointNormal;
@@ -65,6 +70,8 @@ double max_cluster_size;
 double squared_dist;
 double normal_diff;
 
+ros::Publisher *skeleton_marker_pub_ptr;
+
 void parameterConfigure(iris_cobot::ObstacleDetectionConfig &config, uint32_t level) 
 {
     viz_cloud = config.viz_cloud;
@@ -83,15 +90,38 @@ void parameterConfigure(iris_cobot::ObstacleDetectionConfig &config, uint32_t le
     normal_diff = config.normal_diff;
 }
 
+visualization_msgs::Marker sphereMarker(geometry_msgs::TransformStamped marker_tf, 
+    sVec<double> rgbas, int id = 0)
+{
+    visualization_msgs::Marker marker;
+    marker.header.frame_id = "base_link";
+    marker.header.stamp = ros::Time();
+    marker.id = id;
+    marker.type = visualization_msgs::Marker::SPHERE;
+    marker.action = visualization_msgs::Marker::ADD;
+    marker.pose.position.x = marker_tf.transform.translation.x;
+    marker.pose.position.y = marker_tf.transform.translation.y;
+    marker.pose.position.z = marker_tf.transform.translation.z;
+    marker.pose.orientation = marker_tf.transform.rotation;
+    marker.color.r = rgbas[0];
+    marker.color.g = rgbas[1];
+    marker.color.b = rgbas[2];
+    marker.color.a = rgbas[3];
+    marker.scale.x = rgbas[4];
+    marker.scale.y = rgbas[4];
+    marker.scale.z = rgbas[4];
+    return marker;
+}
+
 pcl::visualization::PCLVisualizer::Ptr normalVis(CloudPtr cloud, std::string name, std::string id)
 {   
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer (name));
-    viewer->setBackgroundColor (0, 0, 0);
-    viewer->addCoordinateSystem (0.2);
-    viewer->initCameraParameters ();
+    viewer->setBackgroundColor(255, 255, 255);
+    // viewer->addCoordinateSystem(0.1);
+    viewer->initCameraParameters();
     pcl::visualization::PointCloudColorHandlerRGBField<Point> rgb(cloud);
-    viewer->addPointCloud<Point> (cloud, rgb, id);
-    viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, id);
+    viewer->addPointCloud<Point>(cloud, rgb, id);
+    viewer->setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, id);
     return viewer;
 }
 
@@ -223,6 +253,23 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     offset.setOrigin(tf2::Vector3(0, 0.3, 0));
     tf2::Transform w3_camera_tf = camera_tf.inverse() * (w2_tf * offset);
 
+    // Only for RViz visualization
+    // tf2::Transform offset;
+    // tf2::Transform world_camera_tf;
+    // tf2::Transform sl_camera_tf = sl_tf;
+    // offset.setOrigin(tf2::Vector3(0, -0.2, 0));
+    // tf2::Transform sl_off_camera_tf = (sl_tf * offset);
+    // offset.setOrigin(tf2::Vector3(0, 0, 0.2));
+    // tf2::Transform fa_off_camera_tf = (fa_tf * offset);
+    // offset.setOrigin(tf2::Vector3(0, 0, 0.05));
+    // tf2::Transform fa_camera_tf = (fa_tf * offset);
+    // tf2::Transform w1_camera_tf = w1_tf;
+    // offset.setOrigin(tf2::Vector3(0, 0, -0.15));
+    // tf2::Transform w1_off_camera_tf = (w1_tf * offset);
+    // tf2::Transform w2_camera_tf = w2_tf;
+    // offset.setOrigin(tf2::Vector3(0, 0.3, 0));
+    // tf2::Transform w3_camera_tf = (w2_tf * offset);    
+
     tf2::Vector3 world_p = world_camera_tf.getOrigin();
     tf2::Vector3 sl_p = sl_camera_tf.getOrigin();
     tf2::Vector3 sl_off_p = sl_off_camera_tf.getOrigin();
@@ -234,11 +281,10 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     tf2::Vector3 w3_p = w3_camera_tf.getOrigin();
 
     double min_dist = 0.05;
-    // std::vector<tf2::Vector3> primary_points {world_p, sl_p, sl_off_p, fa_off_p, fa_p, w1_off_p, w1_p, w2_p, w3_p};
-    std::vector<tf2::Vector3> primary_points {fa_p, w1_off_p, w1_p, w2_p, w3_p};
-
+    std::vector<tf2::Vector3> primary_points {world_p, sl_p, sl_off_p, fa_off_p, fa_p, w1_off_p, w1_p, w2_p, w3_p};
+    // std::vector<tf2::Vector3> primary_points {fa_p, w1_off_p, w1_p, w2_p, w3_p};
+    
     std::vector<tf2::Vector3>::iterator it;
-
     std::vector<tf2::Vector3> total_points;
 
     for (it = primary_points.begin(); it < --primary_points.end(); it++)
@@ -257,6 +303,34 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
         }
     }
 
+    // RVIZ Visualization (need to remove camera_tf.inverse() from tf creation)
+    // std::vector<tf2::Transform> points_transforms = {
+    //     world_camera_tf, sl_camera_tf, sl_off_camera_tf, fa_off_camera_tf, 
+    //     fa_camera_tf, w1_camera_tf, w1_off_camera_tf, w2_camera_tf, w3_camera_tf
+    // };
+    // visualization_msgs::MarkerArray skeleton_markers;
+    // int marker_id = 0;
+    // for (tf2::Transform point : points_transforms)
+    // {
+    //     geometry_msgs::TransformStamped point_tf;
+    //     point.setRotation(point.getRotation().normalize());
+    //     tf2::convert(point, point_tf.transform);
+    //     skeleton_markers.markers.push_back(sphereMarker(point_tf, {1, 0, 0, 1, 0.1}, marker_id));
+    //     marker_id ++;
+    // }
+    // for (tf2::Vector3 point : total_points)
+    // {
+    //     geometry_msgs::TransformStamped point_tf;
+    //     tf2::convert(point, point_tf.transform.translation);
+    //     skeleton_markers.markers.push_back(sphereMarker(point_tf, {1, 1, 0, 1, 0.05}, marker_id));
+    //     marker_id ++;
+    // }
+
+    // skeleton_marker_pub_ptr->publish(skeleton_markers);
+
+
+
+    // Visualize robot spheres
     if (robot_models)
     {
         for (int i = 0; i < total_points.size(); i++)
@@ -495,7 +569,7 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     }
     else
     {
-        viewer_viz->updatePointCloud(cloud_out, "viz_cloud");
+        viewer_viz->updatePointCloud(cloud_global, "viz_cloud");
     }
     viewer_viz->spinOnce();
 }
@@ -534,6 +608,10 @@ int main (int argc, char** argv)
         }
     }
     tf2::fromMsg(camera_tf_msg, camera_tf);
+
+    // Trajectory Marker Publisher
+    ros::Publisher skeleton_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("skeleton", 1);
+    skeleton_marker_pub_ptr = &skeleton_marker_pub;
 
     // Obstacles Publisher
     obstacles_pub = nh.advertise<iris_cobot::Obstacles>("obstacles", 1);
