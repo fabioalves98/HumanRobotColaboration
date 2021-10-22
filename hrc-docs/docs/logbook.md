@@ -1585,3 +1585,9 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Tests as ecmpreiments photos and screenshots
 - Weight tests
 
+## 21/10 - Biblioteca
+
+- Capítulo 4 da tese
+  - Obstacle detection 
+  - Inicio dos potential fields
+

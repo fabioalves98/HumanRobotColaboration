@@ -18,10 +18,12 @@ def main():
     model = URDF.from_xml_file(BASE_DIR + '/urdf/sphere.urdf')
     init_spawn = 10
     spheres = [
-        ('sphere_1', 0.05 , (0, 0, init_spawn)),
-        ('sphere_2', 0.05,  (0, 0, init_spawn)),
-        ('sphere_3', 0.1,  (1, 1, 0.5))
-        # ('sphere_center', 0.1, (0.8, 0.8, 0.2))
+        # ('sphere_1', 0.05 , (0, 0, init_spawn)),
+        # ('sphere_2', 0.05,  (0, 0, init_spawn)),
+        # ('sphere_3', 0.1,  (1, 1, 0.5))
+        ('sphere_right', 0.08, (0.9, 0.6, 0.55)),
+        ('sphere_left', 0.08, (0.6, 0.9, 0.35)),
+        ('sphere_center', 0.1, (0.8, 0.8, 0.2))
 
     ]
 
@@ -59,51 +61,51 @@ def main():
     angles = []
 
     rate = rospy.Rate(50)
-    while not rospy.is_shutdown():
+    # while not rospy.is_shutdown():
 
-        if switch:
-            angles = range(0, 900, 2)
-        else:
-            angles = range(900, 0, -2)
+    #     if switch:
+    #         angles = range(0, 900, 2)
+    #     else:
+    #         angles = range(900, 0, -2)
 
-        for angle in angles:
-            obstacles_centers = []
-            obstacles_radiuses = []
+    #     for angle in angles:
+    #         obstacles_centers = []
+    #         obstacles_radiuses = []
 
-            # Sphere 1
-            x = radius * cos(radians(angle/10.0))
-            y = radius * sin(radians(angle/10.0))
-            z = 0.4
+    #         # Sphere 1
+    #         x = radius * cos(radians(angle/10.0))
+    #         y = radius * sin(radians(angle/10.0))
+    #         z = 0.4
 
-            model_state = ModelState()
-            model_state.model_name = spheres[0][0]
-            model_state.reference_frame = 'world'
-            model_state.pose = Pose(Point(*[x, y, z - init_spawn]), Quaternion(*[0, 0, 0, 1]))
-            set_model_state_client(model_state)
+    #         model_state = ModelState()
+    #         model_state.model_name = spheres[0][0]
+    #         model_state.reference_frame = 'world'
+    #         model_state.pose = Pose(Point(*[x, y, z - init_spawn]), Quaternion(*[0, 0, 0, 1]))
+    #         set_model_state_client(model_state)
 
-            obstacles_centers.append(Point(*[x, y, z]))
-            obstacles_radiuses.append(spheres[0][1])
+    #         obstacles_centers.append(Point(*[x, y, z]))
+    #         obstacles_radiuses.append(spheres[0][1])
             
-            # Sphere 2
-            x = radius * cos(radians((900 - angle)/10.0))
-            y = radius * sin(radians((900 - angle)/10.0))
-            z =  0.8
+    #         # Sphere 2
+    #         x = radius * cos(radians((900 - angle)/10.0))
+    #         y = radius * sin(radians((900 - angle)/10.0))
+    #         z =  0.8
 
-            model_state = ModelState()
-            model_state.model_name = spheres[1][0]
-            model_state.reference_frame = 'world'
-            model_state.pose = Pose(Point(*[x, y, z - init_spawn]), Quaternion(*[0, 0, 0, 1]))
-            set_model_state_client(model_state)
+    #         model_state = ModelState()
+    #         model_state.model_name = spheres[1][0]
+    #         model_state.reference_frame = 'world'
+    #         model_state.pose = Pose(Point(*[x, y, z - init_spawn]), Quaternion(*[0, 0, 0, 1]))
+    #         set_model_state_client(model_state)
 
-            obstacles_centers.append(Point(*[x, y, z]))
-            obstacles_radiuses.append(spheres[1][1])
-            obstacles_pub.publish(Obstacles(size=2, centers=obstacles_centers, radiuses=obstacles_radiuses))
+    #         obstacles_centers.append(Point(*[x, y, z]))
+    #         obstacles_radiuses.append(spheres[1][1])
+    #         obstacles_pub.publish(Obstacles(size=2, centers=obstacles_centers, radiuses=obstacles_radiuses))
             
-            rate.sleep()
+    #         rate.sleep()
 
-        switch = not switch
+    #     switch = not switch
 
-    rospy.spin()
+    # rospy.spin()
 
 if __name__ == "__main__":
     main()

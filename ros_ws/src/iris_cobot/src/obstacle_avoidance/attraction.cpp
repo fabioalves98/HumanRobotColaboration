@@ -32,6 +32,9 @@ moveit::planning_interface::MoveGroupInterface *ur10e_mg_ptr;
 
 int previous_idx = 0;
 
+sVec<sVec<double>> *executed_trajectory_ptr;
+ros::Publisher *exec_traj_marker_pub_ptr;
+
 
 visualization_msgs::Marker sphereMarker(geometry_msgs::TransformStamped marker_tf, 
     sVec<double> rgbas, int id = 0)
@@ -89,11 +92,27 @@ int findGoalIdx()
         std::min_element(std::begin(differences), std::end(differences)));
 
     // std::cout << "Min Dist Idx = " << min_dist_idx << std::endl;
+
+    // Add current point to the executed trajectory list
+    
     
     // If it reaches end of trajectory, revert
     if (min_dist_idx == trajectory_ptr->size() - 1)
     {
-        // std::cout << "REVERSING" << std::endl;
+        // Publishe executed trajecotry
+        visualization_msgs::MarkerArray executed_traj_markers;
+        int marker_id = 0;
+        for (sVec<double> position : *executed_trajectory_ptr)
+        {
+            geometry_msgs::TransformStamped goal_tf_msg = forwardKinematics(position);
+
+            executed_traj_markers.markers.push_back(sphereMarker(goal_tf_msg, {0, 1, 0, 0.8, 0.05}, marker_id));
+            marker_id++;
+        }
+        exec_traj_marker_pub_ptr->publish(executed_traj_markers);
+        executed_trajectory_ptr->clear();
+        executed_trajectory_ptr->push_back(ur10e_mg_ptr->getCurrentJointValues());
+
         std::reverse(trajectory_ptr->begin(), trajectory_ptr->end());
         min_dist_idx = 0;
         previous_idx = 0;
@@ -136,6 +155,19 @@ void attraction(const ros::TimerEvent& event)
     geometry_msgs::PoseStamped ee_pose = ur10e_mg_ptr->getCurrentPose();
     // std::cout << ee_pose << std::endl;
 
+    // Add point to executed trajectory
+    geometry_msgs::Point current = ee_pose.pose.position;
+    Eigen::Vector3f current_point, last_point;
+    current_point << current.x, current.y, current.z;
+    geometry_msgs::Vector3 last = forwardKinematics(executed_trajectory_ptr->back()).transform.translation;
+    last_point << last.x, last.y, last.z;
+    float distance = (current_point - last_point).norm();
+    if (distance > 0.05)
+    {
+        executed_trajectory_ptr->push_back(ur10e_mg_ptr->getCurrentJointValues());
+    }
+
+
     tf2::Transform ee_tf;
     ee_tf.setOrigin(tf2::Vector3(ee_pose.pose.position.x, ee_pose.pose.position.y, ee_pose.pose.position.z));
     tf2::Quaternion ee_rot;
@@ -170,6 +202,12 @@ void attraction(const ros::TimerEvent& event)
     lin_vel << (goal_tf.getOrigin().getX()+cur_tf.getOrigin().getX())/2 - ee_tf.getOrigin().getX(),
                (goal_tf.getOrigin().getY()+cur_tf.getOrigin().getY())/2 - ee_tf.getOrigin().getY(),
                (goal_tf.getOrigin().getZ()+cur_tf.getOrigin().getZ())/2 - ee_tf.getOrigin().getZ();
+    // lin_vel << cur_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
+    //            cur_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
+    //            cur_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+
+    // std::cout << "Difference TF Origin" << diff_tf.getOrigin().getX() << " - " << diff_tf.getOrigin().getY() << " - " << diff_tf.getOrigin().getZ() << std::endl;
+    // std::cout << "Lin Vel " << lin_vel[0] << " - " << lin_vel[1] << " - " << lin_vel[2] << std::endl;
 
     if (lin_vel.norm() < 0.01)
     {
@@ -235,41 +273,66 @@ int main(int argc, char **argv)
     ros::Publisher trajectory_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("trajectory", 1);
     traj_marker_pub_ptr = &trajectory_marker_pub;
 
+    // Executed Trajectory Marker Publisher
+    ros::Publisher executed_trajectory_marker_pub = nh.advertise<visualization_msgs::MarkerArray>("executed_trajectory", 1);
+    exec_traj_marker_pub_ptr = &executed_trajectory_marker_pub;
+
     // Obtain Robot current state
     robot_state::RobotStatePtr start_state = ur10e_mg.getCurrentState();
 
 
+    // Positions in the real environment
+    // Start Position
+    // sVec<double> start_joints = {
+    //     1.8872361183166504, -2.362852712670797, -1.6420011520385742, 
+    //     -0.6762150090983887, 1.5861048698425293, -0.45677310625185186
+    // };
+    // // Waypoint 1
+    // sVec<double> waypoint_1 = {
+    //     1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
+    //     0.08445851385083003, 2.0642237663269043, -0.4083760420428675
+    // };
+    // // Waipoint 2
+    // sVec<double> waypoint_2 = {
+    //     3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
+    //     0.13671223699536128, 0.9651718139648438, 0.5363349914550781
+    // };
+    // // End Position
+    // sVec<double> end_joints = 
+    // {
+    //     2.8675928115844727, -2.211241384545797, -1.9777193069458008, 
+    //     -0.4927595418742676, 1.553483009338379, 0.5230627059936523
+    // };
+
+    // Positions in the gazebo simulated environment
     // Start Position
     sVec<double> start_joints = {
-        1.8872361183166504, -2.362852712670797, -1.6420011520385742, 
-        -0.6762150090983887, 1.5861048698425293, -0.45677310625185186
-    };
-    // Waypoint 1
-    sVec<double> waypoint_1 = {
-        1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
-        0.08445851385083003, 2.0642237663269043, -0.4083760420428675
-    };
-    // Waipoint 2
-    sVec<double> waypoint_2 = {
-        3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
-        0.13671223699536128, 0.9651718139648438, 0.5363349914550781
+        -2.9385049958219014, -2.272357028717571, -1.312998376075341,
+        -0.4159580635132407, 1.9500205901742653, -0.40501343460914807
     };
     // End Position
     sVec<double> end_joints = 
     {
-        2.8675928115844727, -2.211241384545797, -1.9777193069458008, 
-        -0.4927595418742676, 1.553483009338379, 0.5230627059936523
+        -1.4639981907416555, -2.305494986407135, -1.221936453462713,
+        -0.6399023596943474, 0.9668708874523881, 0.7535286047726073
     };
+
+
 
     // Global Trajectory Creator
     sVec<sVec<double>> trajectory;
     trajectory_ptr = &trajectory;
 
+    // Executed Trajecotry Creator 
+    sVec<sVec<double>> executed_trajectory;
+    executed_trajectory_ptr = &executed_trajectory;
+
     visualization_msgs::MarkerArray trajectory_markers;
     traj_marker_ptr = &trajectory_markers;
     int marker_id = 0;
 
-    sVec<sVec<double>> waypoints = {start_joints, waypoint_1, waypoint_2, end_joints};
+    // sVec<sVec<double>> waypoints = {start_joints, waypoint_1, waypoint_2, end_joints};
+    sVec<sVec<double>> waypoints = {start_joints, end_joints};
 
     for (int i = 0; i < waypoints.size() - 1; i++)
     {
@@ -293,6 +356,8 @@ int main(int argc, char **argv)
             marker_id++;
         }
     }
+
+    executed_trajectory.push_back(trajectory[0]);
 
     // Check for overlaps in trajectory points and remove them
     sVec<sVec<double>> duplicate_joints;
