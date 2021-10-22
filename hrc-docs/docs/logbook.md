@@ -1407,7 +1407,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 #### Z Correction Final Tests and Recordings -  5 Positions
 
-- Default =  [0, -90, -90, -90, -90, w_2, w_3]
+- Default =  [0, -90, -90, -90, w_2, w_3]
 - w_2 = {-180, 180}
 - w_3 = [-90, -45, 0, 45, 90]
 
@@ -1582,7 +1582,7 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 ## 20/10 - IRISLab
 
-- Tests as ecmpreiments photos and screenshots
+- Tests and experiments photos and screenshots
 - Weight tests
 
 ## 21/10 - Biblioteca

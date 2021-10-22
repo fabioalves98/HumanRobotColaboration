@@ -80,7 +80,7 @@
     \centering
     \begin{tabular}{|c|c|c|c|}
     \hline
-    \textbf{\begin{tabular}[c]{@{}c@{}}Compensation\\ Threshold\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Accuracy\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Responsiveness\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Qualitative\\ Performance\end{tabular}} \\ \hline
+    \textbf{\begin{tabular}[c]{@{}c@{}}Force\\ Threshold\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Effectiveness\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Responsiveness\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Qualitative\\ Performance\end{tabular}} \\ \hline
     \textbf{1N} & 3/10 & 10/10 & Unusable \\ \hline
     \textbf{2N} & 8/10 & 10/10 & Usable \\ \hline
     \textbf{3N} & 10/10 & 10/10 & Balanced \\ \hline
@@ -97,24 +97,78 @@
 \begin{itemize}
     \item At 1N of force threshold, the system is unusable. The cobot is mostly moving by itself since the force threshold is too low. This result is expected and serves as a demonstration of the consequences of the inaccuracies of the \ac{ft} sensor.
     \item At 2N, the accuracy results are improved, but not entirely satisfactory. Due to physical interaction with the sensor, there were certain motions that would cause deviations on the \ac{ft} measurements. Despite this fact, with this setting the cobot is very responsive, reacting to very low amounts of force and allowing the gripper to be easily placed exactly where the user wants it to be.
-    \item 3N proved to be the best threshold setting. It allowed the correct execution of every test and the loss on responsiveness was not perceptible. With this gripper attachment, 3N will be the default value for force threshold on the \ac{eef} weight compensation model.
+    \item 3N proved to be the best threshold setting. It allowed the correct execution of every test and the loss on responsiveness was not perceptible. With the gripper attachment, 3N will be the default value for force threshold on the \ac{eef} weight compensation model.
     \item 4N and 5N allowed the same accuracy results obtained with 3N but at the cost of motion responsiveness. In short, the user would have to exert higher amounts of force on the \ac{eef} for it to move, causing degradation on its smoothness.
 \end{itemize}
 
 \par In terms of general execution of the \ac{hg} task...
+% ADD: Dar aqui uma visao geral da tarefa de hand guiding
 
 \subsection{Object Manipulation}
 
 \par The object manipulation task requires the dynamic attachment of extra weight to the cobot \ac{eef}. It has been showed previously that the \ac{eef} weight compensation model supports dynamic changing of the weight and \ac{cog} parameter, but the performance of this manipulation task is directly proportional to the accurate measurement of this parameters.
-\par The first test regarding this task should be to find both system and \ac{ft} sensor performance on correctly measuring the weight of the coupled object. In order to do this a 1Kg iron weight will be gripped by the cobot 10 times in 4 different orientations. The first 3 orientations consist on vertically aligning each force axis with gravity in order to obtain the accuracy of each measurement component. The last orientation consist on a set of rotations in order for the weight to be distributed evenly in the 3 axis.
+\par The first test regarding this task should be to find both system and \ac{ft} sensor performance on correctly measuring the weight of the coupled object. In order to do this, a 1Kg iron weight will be gripped by the cobot 10 times in 3 different orientations. These orientations consist on vertically aligning each \ac{ft} axis with gravity in order to obtain the accuracy of each measurement component, and can be seen in \autoref{fig:weight_poses}.
 
-% ADD: Photos of the positions
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.166\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp6/weight_x_pos.png}
+    \end{subfigure}%
+    \begin{subfigure}{.166\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp6/weight_x_neg.png}
+    \end{subfigure}%
+    \begin{subfigure}{.166\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp6/weight_y_pos.png}
+    \end{subfigure}%
+    \begin{subfigure}{.166\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp6/weight_y_neg.png}
+    \end{subfigure}%
+    \begin{subfigure}{.166\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp6/weight_z_pos.png}
+    \end{subfigure}%
+    \begin{subfigure}{.166\linewidth}
+        \centering
+        \includegraphics[width=\linewidth]{figs/chp6/weight_z_neg.png}
+    \end{subfigure}
+    \caption{6 different \ac{eef} weight measurement poses}
+    \label{fig:weight_poses}
+\end{figure}
 
-\par Show weight tests..
+\par The raw results are outlined in \autoref{fig:weight_result}. As it is evidently seen, changing the measuring axis has a significant effect on the reported measured weight.
 
-% ADD: Weight plots
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figs/chp6/weight_measurements.pdf}
+    \caption{Results of the weight measurement test in each position}
+    \label{fig:weight_result}
+\end{figure}
 
-\par Present results form the weight tests... 
+\par \autoref{tbl:weight_results} gives a closer look at the some statistics from the weight measurement tests. All values are to be read as weight in Kg. At first, the raw values are neither precise nor accurate showing a wrong weight average and an arguably high standard deviation. Applying the correction constants obtained from \ac{dls} optimization in \autoref{ssec:ft_theory_model}, it is possible to improve the precision of the measurements, with a significantly lower standard deviation, but the final average weight value is still far from the correct. Applying a scalar correction with the value of 1.2 provides an accurate and precise weight measurement.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+    \multicolumn{1}{|c|}{\textbf{\begin{tabular}[c]{@{}c@{}}Weight Test\end{tabular}}} & \textbf{Raw} & \textbf{\begin{tabular}[c]{@{}c@{}}\ac{dls}\\ Correction\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Scalar \\ Correction\end{tabular}} \\ \hline
+    \textbf{X Positive} & 1.144 & 1.210 & 1.001 \\ \hline
+    \textbf{X Negative} & 1.138 & 1.209 & 1.008 \\ \hline
+    \textbf{Y Positive} & 1.369 & 1.229 & 1.025 \\ \hline
+    \textbf{Y Negative} & 1.311 & 1.176 & 0.982 \\ \hline
+    \textbf{Z Positive} & 0.992 & 1.219 & 1.016 \\ \hline
+    \textbf{Z Negative} & 0.999 & 1.229 & 1.024 \\ \hline \hline
+    \textbf{Average} & 1.159 & 1.213 & 1.011 \\ \hline
+    \textbf{Std Dev} & 0.146 & 0.038 & 0.031 \\ \hline
+    \end{tabular}
+    \caption{Detailed results and statistics from the weight measurement tests}
+    \label{tbl:weight_results}
+\end{table}
+
+% ADD: Fazer uma ultima referencia ao quanto bons estes valores sao
 
 \par Assuming the weight is correctly obtained, a real time test was performed to demonstrate that the \ac{eef} weight compensation model can sustain the same levels of accuracy independent of the weight coupled to the robot. \autoref{fig:object_result} shows a real time test where Wrist1 and Wrist2 joints are rotated causing multiple \ac{eef} orientations. Similar to previous real time tests the \ac{eef} weight is compensated with minimal error.
 
@@ -172,17 +226,17 @@
     \label{fig:om_test}
 \end{figure}
 
-\par For the same reasons as in the \ac{hg} tests, weight compensation error is not enough to validate this task. Furthermore, since extra weight is added, it is suspected that the deviations caused by physical interaction with the \ac{ft} sensor will increase compared to the previous task. This time, the collaborative test consists on \ac{hg} the cobot in order to grab a stationary object in the environment, order it to grip it, wait for it to calibrate its payload and manipulate the object casing both linear and angular movements in order to release it at another location in the environment. The test was also repeated 10 times in each force threshold setting.
+\par For the same reasons as in the \ac{hg} tests, weight compensation error is not enough to validate this task. Furthermore, since extra weight is added, it is suspected that the deviations caused by physical interaction with the \ac{ft} sensor will increase compared to the previous task. This time, the collaborative test consists on \ac{hg} the cobot, aligning it with a stationary object in the environment, give the order to grip it, wait for the system to calibrate its payload and manipulate the object with both linear and angular movements, in order to release it at another location in the environment. The test was also repeated 10 times in each force threshold setting.
 
 \begin{table}[h]
     \centering
     \begin{tabular}{|c|c|c|c|}
     \hline
-    \textbf{\begin{tabular}[c]{@{}c@{}}Compensation\\ Accuracy\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Accuracy\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Responsiveness\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Qualitative\\ Performance\end{tabular}} \\ \hline
+    \textbf{\begin{tabular}[c]{@{}c@{}}Compensation\\ Accuracy\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Effectiveness\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Test\\ Responsiveness\end{tabular}} & \textbf{\begin{tabular}[c]{@{}c@{}}Qualitative\\ Performance\end{tabular}} \\ \hline
     \textbf{1N} & 0/10 & 10/10 & Unusable \\ \hline
     \textbf{2N} & 3/10 & 10/10 & Unusable \\ \hline
     \textbf{3N} & 7/10 & 10/10 & Usable \\ \hline
-    \textbf{4N} & 9/10 & 8/10 & Satisfactory \\ \hline
+    \textbf{4N} & 10/10 & 8/10 & Satisfactory \\ \hline
     \textbf{5N} & 10/10 & 5/10 & Unresponsive \\ \hline
     \end{tabular}
     \caption{Results of the object manipulation performance test}
@@ -191,13 +245,21 @@
 
 \par \autoref{tab:object_manipulation_test} presents the results of the test and similar to the previous task an interpretation of them will follow: 
 \begin{itemize}
-    \item Similar to the \ac{hg} task and for the same reason, 1N of force threshold is unusable.
-    \item \textbf{Continuar...}
+    \item Similar to the \ac{hg} task and for the same reasons, 1N of force threshold is unusable.
+    \item At 2N, the results improve but there is still prone to a lot of deviations, therefore not enough.
+    \item 3N show enough improvements on the results to be considered usable, since the majority of tests are completed. Given this fact, in a real manipulation scenario, the objective would be for the robot to never fail, even if it means sacrificing on responsiveness.
+    \item 4N would be the ideal force threshold value for this task since it allows the completion of all the tests without significant sacrifice on motion responsiveness.
+    \item 5N presents results similar to the \ac{hg} task where all tests are completed at the cost of motion smoothness.
 \end{itemize}
 
-\par explain why responsiveness is bad when incresing weight, cuz robot doenst know the payload and the motions are jerky
+\par In order for these tests to be successfully completed, the value of force threshold of the weight compensation model needed to be increased. This is caused by 2 factors: 
 
-\par explian that by rasing the force threshlod it solves the issue, and threshold should be raised proportionally to the weight, say that is possible maintain a ratio of 1:5 in this scenario but with a more accurate sensor 1:10 is possible
+\begin{itemize}
+    \item Increasing the \ac{eef} coupled weight increases the inaccuracies of the \ac{ft} sensor due to interaction with the user, as explained in \autoref{chapter:ft-sensor-correction}.
+    \item The generation of force values from the theoretical \ac{ft} model is directly impacted by the configured value of object weight, which is measured and set in real time, when the robot grabs the object. Inaccuracies on weight measurement due to incorrect handover, or simply due to the arguably weak force accuracy specification value of 5.5N, can directly impact the performance of the theoretical model, whose ultimate goal is to model the behavior of the real \ac{ft} sensor.
+\end{itemize}
+
+\par The solution to this problem seems to rely on adapting the force threshold value of the theoretical \ac{ft} model according to the current payload weight. With a 1.5Kg gripper tool, 3N of force threshold meant manipulating the tool with a 1:5 force to motion ratio. Gripping a 1Kg iron weight, and increasing the force threshold to 5N allows to maintain the same ratio and be able to successfully and accurately manipulate the joint weight. The loss on responsiveness is an acceptable tradeoff for the fact that, in the end, the tests in question were effectively completed. 
 
 \subsection{Collision Avoidance}
 \label{sec:colision_tests}
