@@ -4,27 +4,27 @@
 
 \section{Collaborative Setup}
 
-\par The experimental setup consists on a \ac{ur10e}, with a Weiss Robotics CRG 200 gripper attachment. The vision sensor is a Microsoft Kinect \acs{rgbd} camera and the shared workspace is a simple table, approximately 50cm distant from the robot. The camera is positioned at 2m of height with a \ang{45} downwards orientation and its \ac{fov} is shown in \autoref{fig:kinect}. The complete composition of the setup is described in \autoref{fig:setup}.
+\par The experimental setup consists on a \ac{ur10e}, with a Weiss Robotics CRG 200 gripper attachment. The vision sensor is a Microsoft Kinect \acs{rgbd} camera and the shared workspace is a simple table, approximately 50cm distant from the robot. The camera is positioned at 2m of height with a \ang{45} downwards orientation and its \ac{fov} is shown in \autoref{fig:kinect}. The complete composition of the setup is shown in \autoref{fig:setup}.
 
 \begin{figure}[h]
     \centering
     \begin{subfigure}{.5\textwidth}
       \centering
       \includegraphics[width=.9\linewidth]{figs/chp6/setup.jpg}
-      \caption{Setup View}
+      \caption{Collaborative Setup}
       \label{fig:setup}
     \end{subfigure}%
     \begin{subfigure}{.5\textwidth}
       \centering
       \includegraphics[width=.9\linewidth]{figs/chp6/kinect.jpg}
-      \caption{Kinect View}
+      \caption{Kinect \ac{fov}}
       \label{fig:kinect}
     \end{subfigure}
     \caption{Views of the experimental shared workspace}
     \label{fig:setup_and_kinect}
     \end{figure}
 
-\section{Execution of the collaborative tasks}
+\section{Collaborative Tasks}
 
 \subsection{Interaction Test}
 
@@ -73,7 +73,8 @@
     \label{fig:hg_test}
 \end{figure}
 
-\par The test consists on rapidly \ac{hg} the cobot from a start position, to a random position in the workspace. This first step serves to test the responsiveness and ease of use of the system. Then, the user must align the gripper fingers with an object that is placed on the table. The system must compensate the \ac{ft} caused by the gripper in every orientation, therefore the cobot must only move due to external forces caused by the user. On the other hand, the user must align the gripper fingers with the object without difficulty. This test was performed 10 times in multiple settings of force thresholds from the compensation model. 
+\par The test consists on  \ac{hg} the cobot with the objective of walking the gripper fingers through an object that is placed on the table. The system must compensate the \ac{ft} caused by the gripper in every orientation, therefore the cobot must only move due to external forces caused by the user. On the other hand, the user must align the gripper fingers with the object without difficulty. To test the system responsiveness, the user must walk the gripper through the object in a linear motion, while the gripper finger are aligned with it. THe succession of steps for this test is shown in \autoref{fig:hg_test}. 
+The metrics for this test are effectiveness and responsiveness. Effective means that the user was able to complete the test, therefore the gripper weight was always correctly compensated and the robot only moved according to the force applied by the user. Responsive means that the robot motion was smooth and specifically in the part that the user must align the gripper fingers with the object on the table, while performing the linear movement, the griper fingers never touched the object. The results should be interpreted as number os successes in the amount of attempts. This test was performed 10 times in multiple settings of force thresholds from the compensation model, and the results are outlined in \autoref{tab:hand_guiding_test}. 
 
 
 \begin{table}[h]
@@ -84,16 +85,14 @@
     \textbf{1N} & 3/10 & 10/10 & Unusable \\ \hline
     \textbf{2N} & 8/10 & 10/10 & Usable \\ \hline
     \textbf{3N} & 10/10 & 10/10 & Balanced \\ \hline
-    \textbf{4N} & 10/10 & 8/10 & Satisfactory \\ \hline
-    \textbf{5N} & 10/10 & 5/10 & Unresponsive \\ \hline
+    \textbf{4N} & 10/10 & 9/10 & Satisfactory \\ \hline
+    \textbf{5N} & 10/10 & 7/10 & Unresponsive \\ \hline
     \end{tabular}
     \caption{Results of the \ac{hg} performance test}
     \label{tab:hand_guiding_test}
 \end{table}
 
-% ADD: Definir bem o que é Accuracy and Responsiveness (se calhar mudar as definições)
-
-\par The results are outlined in \autoref{tab:hand_guiding_test} and below is a detailed description of their meaning:
+\par A closer look at the results and an explanation of the qualitative performance will follow:
 \begin{itemize}
     \item At 1N of force threshold, the system is unusable. The cobot is mostly moving by itself since the force threshold is too low. This result is expected and serves as a demonstration of the consequences of the inaccuracies of the \ac{ft} sensor.
     \item At 2N, the accuracy results are improved, but not entirely satisfactory. Due to physical interaction with the sensor, there were certain motions that would cause deviations on the \ac{ft} measurements. Despite this fact, with this setting the cobot is very responsive, reacting to very low amounts of force and allowing the gripper to be easily placed exactly where the user wants it to be.
@@ -101,13 +100,12 @@
     \item 4N and 5N allowed the same accuracy results obtained with 3N but at the cost of motion responsiveness. In short, the user would have to exert higher amounts of force on the \ac{eef} for it to move, causing degradation on its smoothness.
 \end{itemize}
 
-\par In terms of general execution of the \ac{hg} task...
-% ADD: Dar aqui uma visao geral da tarefa de hand guiding
+\par The general execution and behavior of the \ac{hg} task is a success. The goal of this test was not only to find the best system parameters to obtain the best possible behavior, but also to prove that the orchestration of \ac{ros} nodes and the algorithms they implement, proposed in this dissertation, is well founded and effective.
 
 \subsection{Object Manipulation}
 
-\par The object manipulation task requires the dynamic attachment of extra weight to the cobot \ac{eef}. It has been showed previously that the \ac{eef} weight compensation model supports dynamic changing of the weight and \ac{cog} parameter, but the performance of this manipulation task is directly proportional to the accurate measurement of this parameters.
-\par The first test regarding this task should be to find both system and \ac{ft} sensor performance on correctly measuring the weight of the coupled object. In order to do this, a 1Kg iron weight will be gripped by the cobot 10 times in 3 different orientations. These orientations consist on vertically aligning each \ac{ft} axis with gravity in order to obtain the accuracy of each measurement component, and can be seen in \autoref{fig:weight_poses}.
+\par The object manipulation task requires the dynamic attachment of extra weight to the cobot \ac{eef}. It has been showed previously that the \ac{eef} weight compensation model supports dynamic changing of the weight and \ac{cog} parameters, but the performance of this manipulation task is directly proportional to the accurate measurement of this parameters.
+\par The first test regarding this task should be to find both system and \ac{ft} sensor performance on correctly measuring the weight of the coupled object. In order to do this, a 1Kg iron weight will be gripped by the cobot 10 times in 6 different orientations. These orientations consist on vertically aligning each \ac{ft} axis, in each direction, with gravity, in order to obtain the accuracy of each measurement component, and can be seen in \autoref{fig:weight_poses}.
 
 \begin{figure}[h]
     \centering
@@ -148,7 +146,7 @@
     \label{fig:weight_result}
 \end{figure}
 
-\par \autoref{tbl:weight_results} gives a closer look at the some statistics from the weight measurement tests. All values are to be read as weight in Kg. At first, the raw values are neither precise nor accurate showing a wrong weight average and an arguably high standard deviation. Applying the correction constants obtained from \ac{dls} optimization in \autoref{ssec:ft_theory_model}, it is possible to improve the precision of the measurements, with a significantly lower standard deviation, but the final average weight value is still far from the correct. Applying a scalar correction with the value of 1.2 provides an accurate and precise weight measurement.
+\par \autoref{tbl:weight_results} gives a closer look at the some statistics from the weight measurement tests. All values are to be read as weight in Kg.
 
 \begin{table}[h]
     \centering
@@ -168,7 +166,7 @@
     \label{tbl:weight_results}
 \end{table}
 
-% ADD: Fazer uma ultima referencia ao quanto bons estes valores sao
+\par At first, the raw values are neither precise nor accurate showing a wrong weight average and an arguably high standard deviation. Applying the correction constants obtained from \ac{dls} optimization in \autoref{ssec:ft_theory_model}, it is possible to improve the precision of the measurements, with a significantly lower standard deviation, but the final average weight value is still far from the correct. Applying a scalar correction with the value of 1.2 provides an accurate and precise weight measurement, with an improved and much lower standard deviation, meaning it is expected that in real use scenarios, the weight of a coupled object should only deviate, in the maximum, by this value.
 
 \par Assuming the weight is correctly obtained, a real time test was performed to demonstrate that the \ac{eef} weight compensation model can sustain the same levels of accuracy independent of the weight coupled to the robot. \autoref{fig:object_result} shows a real time test where Wrist1 and Wrist2 joints are rotated causing multiple \ac{eef} orientations. Similar to previous real time tests the \ac{eef} weight is compensated with minimal error.
 
@@ -226,7 +224,7 @@
     \label{fig:om_test}
 \end{figure}
 
-\par For the same reasons as in the \ac{hg} tests, weight compensation error is not enough to validate this task. Furthermore, since extra weight is added, it is suspected that the deviations caused by physical interaction with the \ac{ft} sensor will increase compared to the previous task. This time, the collaborative test consists on \ac{hg} the cobot, aligning it with a stationary object in the environment, give the order to grip it, wait for the system to calibrate its payload and manipulate the object with both linear and angular movements, in order to release it at another location in the environment. The test was also repeated 10 times in each force threshold setting.
+\par For the same reasons as in the \ac{hg} tests, weight compensation error is not enough to validate this task. Furthermore, since extra weight is added, it is suspected that the deviations caused by physical interaction with the \ac{ft} sensor will increase compared to the previous task. This time, the collaborative test consists on \ac{hg} the cobot, aligning it with a stationary object in the environment, give the order to grip it, wait for the system to calibrate its payload and manipulate the object with both linear and angular movements, in order to release it at another location in the environment. \autoref{fig:om_test} shows the succession of steps in this test. The evaluation metrics are the same as in th \ac{hg} test, and it was also repeated 10 times in each force threshold setting.
 
 \begin{table}[h]
     \centering
@@ -243,7 +241,7 @@
     \label{tab:object_manipulation_test}
 \end{table}
 
-\par \autoref{tab:object_manipulation_test} presents the results of the test and similar to the previous task an interpretation of them will follow: 
+\par \autoref{tab:object_manipulation_test} presents the results of the test and similar to the previous task a qualitative interpretation of them will follow: 
 \begin{itemize}
     \item Similar to the \ac{hg} task and for the same reasons, 1N of force threshold is unusable.
     \item At 2N, the results improve but there is still prone to a lot of deviations, therefore not enough.
@@ -259,15 +257,18 @@
     \item The generation of force values from the theoretical \ac{ft} model is directly impacted by the configured value of object weight, which is measured and set in real time, when the robot grabs the object. Inaccuracies on weight measurement due to incorrect handover, or simply due to the arguably weak force accuracy specification value of 5.5N, can directly impact the performance of the theoretical model, whose ultimate goal is to model the behavior of the real \ac{ft} sensor.
 \end{itemize}
 
-\par The solution to this problem seems to rely on adapting the force threshold value of the theoretical \ac{ft} model according to the current payload weight. With a 1.5Kg gripper tool, 3N of force threshold meant manipulating the tool with a 1:5 force to motion ratio. Gripping a 1Kg iron weight, and increasing the force threshold to 5N allows to maintain the same ratio and be able to successfully and accurately manipulate the joint weight. The loss on responsiveness is an acceptable tradeoff for the fact that, in the end, the tests in question were effectively completed. 
+\par The solution to this problem seems to rely on adapting the force threshold value of the theoretical \ac{ft} model according to the current payload weight. With a 1.5Kg gripper tool, 3N of force threshold meant manipulating the tool with a 1:5 force to motion ratio. Gripping a 1Kg iron weight, and increasing the force threshold to 5N allows to maintain the same ratio and be able to successfully and accurately manipulate the conjoint weight. The loss on responsiveness is an acceptable tradeoff for the fact that, in the end, the tests in question were effectively completed. 
 
 \subsection{Collision Avoidance}
 \label{sec:colision_tests}
 
 \par Make a XYZ graph with the predefined trajectory and the collision avoidance trajectory
 \par Make a table with varying number of objects and benchmark completeness
-\par Make a table with the response times of hte object detection (gazebo)
+\par Make a table with the response times of the object detection (gazebo)
 
 \section{System Stability}
 
-\par explain that the robot is always stoping and complaining because payload is not set... explain that payload cannot be set... explain how to solve this issue such has the use of an external sensor
+\par A more general performance metric is the ability for the system to maintain activity for long periods of time. There are several factors that prevent this from happen. During the execution of the previous tests and any other time directly interfacing with the robot, there were some events that injured the overall experience.
+\par For instance, at random instances, when the robot had been correctly functioning for a certain amount of time, e.g. 20 minutes, the system will lose connection with the robot. More specifically, the \ac{ur} \ac{ros} driver looses connection to the \ac{rtde} interface, or in some instances, the client program that is running on the robot, requesting commands to the driver suddenly stops its execution. The cause of this problem was not studied since there was no observable pattern on the instances that is happened. The solution was to call the \textbackslash\textit{resend\_robot\_program} \ac{ros} service made available by the driver and the connection would resume.
+\par Another example is the fact that, because we are dealing with a cobot and the joints are force sensitive, when applying large amounts of force on the \ac{eef}, the cobot will make a protective stop, giving the user a violation alert, explaining that a force or speed limit was exceeded. Other examples of protective stops are prone to happen when the user couples high amounts of weight to the \ac{eef}. This happens because this weight is not reported to the \ac{ur10e} Polyscope interface. It is obvious that the \ac{ur10e} internal controllers need to know the correct value of payload in order to correctly calculate the necessary torques to apply in each joint, but as was explained in \autoref{ssec:ft_internal_comp}, not reporting the payload parameters to the \ac{ur10e} internal system is a necessary tradeoff for obtaining cohesive \ac{ft} measurements on the \ac{eef}.
+\par A final remark on system performance gives light to the fact that all components of this system were tested and implemented on a laptop with an Intel Core i7-8550U and 16Gb of \acs{ram}. 

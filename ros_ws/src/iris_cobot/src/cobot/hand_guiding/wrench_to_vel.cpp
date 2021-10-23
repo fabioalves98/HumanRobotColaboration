@@ -68,6 +68,7 @@ void rotationCalculator(geometry_msgs::WrenchStamped wrench)
     std::vector<std::pair<Eigen::Vector3d*, double>> wrench_map = {{&force, force_sensibility}, 
                                                                    {&torque, torque_sensibility}};
 
+    // TODO: MUDAR ESTA PEDREIRAGEM
     for (auto &pair : wrench_map)
     {
         for (int i = 0; i < 3; i++)

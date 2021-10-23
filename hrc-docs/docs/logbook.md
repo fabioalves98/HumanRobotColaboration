@@ -1591,3 +1591,15 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Obstacle detection 
   - Inicio dos potential fields
 
+## 22/10 - Biblioteca
+
+- Capítulo 4 da tese completo
+- Capitulo 6 da tese
+  - Conteudo do calculo do peso de um objecto
+
+## 23/10 - Biblioteca
+
+- Capítulo 5 da tese
+  - Hand guiding
+- Capiutlo 6 da tese
+  - Capitulo completo, so falta os de colision avoidance

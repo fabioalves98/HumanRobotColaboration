@@ -154,11 +154,11 @@
 \par After obtaining the set of poses, the robot will start executing the trajectory in its first point. For this initial position, the robot is moved with a joint position command. After the initial state, in a 500Hz loop a cartesian attraction vector, which is the difference between the current \ac{eef} position and the next point in the trajectory, is obtained with \autoref{eq:attraction}.
 
 \begin{equation}
-    \vec{\mathbf{Att}}=P_{goal}\cdot {T_b^e}^{-1}
+    \vec{\mathbf{Att}}=P_{goal}\cdot {T_e^b}^{-1}
     \label{eq:attraction}
 \end{equation}
 
-\noindent Where $\mathbf{P_{goal}}$ is the pose of the goal point in the trajectory and $\mathbf{T_b^e}$ a transform from the base frame to the \ac{eef} frame. $\vec{\mathbf{Att}}$ is obtained in the form of a pose object. The position part will be the linear velocity and the orientation part will be the angular velocity. This vector is constantly being calculated based on the monitoring of the \ac{eef} and the calculation of the new goal.
+\noindent Where $\mathbf{P_{goal}}$ is the pose of the goal point in the trajectory and $\mathbf{T_e^b}$ a transformation from the base frame to the \ac{eef} frame. $\vec{\mathbf{Att}}$ is obtained in the form of a pose object. The position part will be the linear velocity and the orientation part will be the angular velocity. This vector is constantly being calculated based on the monitoring of the \ac{eef} and the calculation of the new goal.
 
 \subsection{Repulsion}
 \label{ssec:repulsion}

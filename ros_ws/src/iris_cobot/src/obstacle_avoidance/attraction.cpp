@@ -193,21 +193,35 @@ void attraction(const ros::TimerEvent& event)
     goal_marker_pub_ptr->publish(goal_marker);
     traj_marker_pub_ptr->publish(*traj_marker_ptr);
 
-    // Difference from goal pose to target pose
-    tf2::Transform diff_tf;
-    diff_tf = cur_tf * ee_tf.inverse();
+    
 
-    // Obtain linear velocity using current and goal points position
+    // Correct manner of obtaining the global difference between goal and EEF
+    tf2::Transform lin_tf;
+    tf2::Transform ee_no_ft = ee_tf;
+    ee_no_ft.setOrigin(tf2::Vector3(0, 0, 0));
+    lin_tf = ee_no_ft * (ee_tf.inverse() * cur_tf);
+    std::cout   << "\nGlobal linear diff TF: " 
+                << lin_tf.getOrigin().getX() << " | " 
+                << lin_tf.getOrigin().getY() << " | "
+                << lin_tf.getOrigin().getZ() << std::endl;
+
+    // Trolha manner of obtaining the global difference betwwen goal and EEF
     Eigen::Vector3d lin_vel;
-    lin_vel << (goal_tf.getOrigin().getX()+cur_tf.getOrigin().getX())/2 - ee_tf.getOrigin().getX(),
-               (goal_tf.getOrigin().getY()+cur_tf.getOrigin().getY())/2 - ee_tf.getOrigin().getY(),
-               (goal_tf.getOrigin().getZ()+cur_tf.getOrigin().getZ())/2 - ee_tf.getOrigin().getZ();
-    // lin_vel << cur_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
-    //            cur_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
-    //            cur_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+    lin_vel << cur_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
+               cur_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
+               cur_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+    std::cout   << "Global linear diff: " 
+                << lin_vel[0] << " | " 
+                << lin_vel[1] << " | " 
+                << lin_vel[2] << std::endl;
 
-    // std::cout << "Difference TF Origin" << diff_tf.getOrigin().getX() << " - " << diff_tf.getOrigin().getY() << " - " << diff_tf.getOrigin().getZ() << std::endl;
-    // std::cout << "Lin Vel " << lin_vel[0] << " - " << lin_vel[1] << " - " << lin_vel[2] << std::endl;
+    // Final manner of obtaining the global difference between goal anf EEF
+    // Eigen::Vector3d lin_vel;
+    // lin_vel << 
+    //     (goal_tf.getOrigin().getX()+cur_tf.getOrigin().getX())/2 - ee_tf.getOrigin().getX(),
+    //     (goal_tf.getOrigin().getY()+cur_tf.getOrigin().getY())/2 - ee_tf.getOrigin().getY(),
+    //     (goal_tf.getOrigin().getZ()+cur_tf.getOrigin().getZ())/2 - ee_tf.getOrigin().getZ();
+    
 
     if (lin_vel.norm() < 0.01)
     {
@@ -220,10 +234,25 @@ void attraction(const ros::TimerEvent& event)
 
     geometry_msgs::Vector3 lin_vel_msg;
     tf2::toMsg(lin_vel, lin_vel_msg);
-    
+
     geometry_msgs::Vector3 ang_vel_msg;
+
+    // Tring to find a better way to calculate the difference of pose
+    tf2::Transform ang_tf;
+    ang_tf = ee_tf.inverse() * cur_tf;
+    double groll, gpitch, gyaw;
+    tf2::Matrix3x3(ang_tf.getRotation()).getRPY(groll, gpitch, gyaw);
+    std::cout   << "\nGlobal angular diff TF: "
+                << groll << " | " << gpitch << " | " << gyaw << std::endl;
+
+    // Difference from goal pose to target pose
+    tf2::Transform diff_tf;
+    diff_tf = cur_tf * ee_tf.inverse();
+
     double roll, pitch, yaw;
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
+    std::cout   << "Global angular diff: "
+                << roll << " | " << pitch << " | " << yaw << std::endl;
 
     if (abs(roll) > 0.05 || abs(pitch) > 0.05 || abs(yaw) > 0.05)
     {
