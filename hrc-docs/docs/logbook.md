@@ -1603,3 +1603,8 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
   - Hand guiding
 - Capiutlo 6 da tese
   - Capitulo completo, so falta os de colision avoidance
+
+## 26/10 - IRISLab
+
+- Capítulo 5 da tese
+  - All tasks + collaborative state machine
