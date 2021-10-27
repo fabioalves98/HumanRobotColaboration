@@ -475,7 +475,11 @@
 % First alternative, with a figure
 
   \TitlePage
-     \HEADER{\BAR} % the \FIG{} is optional
+     \HEADER{\BAR\FIG{
+        \begin{minipage}{60mm} % no more than 120mm
+         \includegraphics[width=60mm]{figs/uaLogoNew.pdf}
+       \end{minipage}
+       }} % the \FIG{} is optional
            {\ciThesisYear}
    \dolistloop{\ciTitle}
 

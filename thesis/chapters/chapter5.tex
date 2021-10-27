@@ -1,7 +1,7 @@
 \chapter{Collaborative Tasks}
 \label{chapter:colab-tasks}
 
-% Descrição geral deste capítulo das collaborative tasks
+% ADD: Descrição geral deste capítulo das collaborative tasks
 
 
 
@@ -41,6 +41,7 @@
 
 \noindent Where $\mathbf{f_i}$ and $\mathbf{t_i}$ are \ac{ft} components, $\mathbf{t_{th}}$ and $\mathbf{f_{th}}$ are \ac{ft} threshold parameters, and $\mathbf{t_{div}}$ and $\mathbf{f_{div}}$ are ratio constants that define the conversion between \ac{ft} and velocity.
 
+
 \subsubsection{Force to Linear Velocity}
 
 \par It is done by creating a pose with the force measurement as the position component, and transforming this pose with the rotation matrix of the \ac{ft} sensor frame. The resulting pose position can be directly used as global velocity. \autoref{eq:force_to_linear_vel} is used to calculate the linear velocity from the \ac{hg} force.
@@ -51,6 +52,7 @@
 \end{equation}
 
 \noindent Where $\mathbf{R^b_e}$ is the rotation matrix of the \ac{eef} frame in relation to the robot base frame, $\mathbf{R^e_s}$ is a constant rotation matrix of the sensor frame in relation to the \ac{eef} frame, and $P_{force}$ is a point with the force measurements as its coordinates. $\vec{\mathbf{V_{lin}}}$ is obtained as a cartesian points which can directly be used as a linear velocity vector in the robot base frame.
+
 
 \subsubsection{Torque to Angular Velocity}
 
@@ -69,6 +71,7 @@
 \label{ssec:eef_to_js}
 
 \par With the previous equations, the \ac{eef} velocity in cartesian space is obtained from the \ac{hgft} on the \ac{ft} sensor. As said before, in this work, the \ac{ur10e} will be controlled in joint space with joint speed commands. To obtain joint speeds from an \ac{eef} velocity, the Jacobian inversion method will be used.
+
 
 \subsubsection{Jacobian Inversion Method}
 
@@ -218,9 +221,10 @@
 \par In the top graph, where raw \ac{ft} values are plotted, a push and a tap are performed in each axis. A push is an amount of force applied slowly, and a tap is the same amount of force, but applied rapidly, like a knock on a door. By looking at the derivative graph on the bottom, it is evident that a tap can be detected just by evaluating the derivative value. 
 
 
+
 \subsection{Visual Feedback}
 
-\par Another means of communication with the system is through the 
+\par A means of visual feedback from the system to the user can be achieved with the gripper \acp{led}. Its consists on a luminous ring with \ac{rgb} lights that can be programed by the user in terms of color, animation and speed. The effects that are possible to reproduce on the luminous ring are diverse, with the user being able to choose from 15 animations, 13 colors and 8 speed settings. \autoref{fig:gripper_leds} shows some examples of these effects.
 
 \begin{figure}[h]
     \centering
@@ -248,10 +252,21 @@
     \label{fig:gripper_leds}
 \end{figure}
 
+\par In this work, 3 colors are used to give the user awareness of the system state:
 
-\section{Software Tools for \ac{hrc}}
-\label{sec:tools-hrc}
+\begin{itemize}
+    \item \textbf{Green: } The user is free to physically interact with the system.
+    \item \textbf{Orange: } The cobot is busy and the user should not interact with it. The system might be executing a predefined trajectory, or calibrating the weight of an object.
+    \item \textbf{Red: } Some component of the system lost connection with the robot and the user should attend to one of the \ac{gui} in order to solve it.
+\end{itemize}
 
-\par iris\_sami
-\par iris\_cobot
-\par other viewers and tools such as plotjuggler integration and smach\_viewer
+\par With this approach, the user can always know when he should interact with the robot.
+
+
+
+% \section{Software Tools for \ac{hrc}}
+% \label{sec:tools-hrc}
+
+% \par iris\_sami
+% \par iris\_cobot
+% \par other viewers and tools such as plotjuggler integration and smach\_viewer

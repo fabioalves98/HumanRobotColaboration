@@ -60,7 +60,7 @@ def main():
     rospy.init_node('calibration', anonymous=True)
 
     # Send to default position
-    position = 'task_calibration'
+    position = 'calibration'
     helpers.samiAliasService(position)
 
     # Make a set of movements and take samples

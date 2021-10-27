@@ -193,34 +193,32 @@ void attraction(const ros::TimerEvent& event)
     goal_marker_pub_ptr->publish(goal_marker);
     traj_marker_pub_ptr->publish(*traj_marker_ptr);
 
-    
-
     // Correct manner of obtaining the global difference between goal and EEF
-    tf2::Transform lin_tf;
-    tf2::Transform ee_no_ft = ee_tf;
-    ee_no_ft.setOrigin(tf2::Vector3(0, 0, 0));
-    lin_tf = ee_no_ft * (ee_tf.inverse() * cur_tf);
-    std::cout   << "\nGlobal linear diff TF: " 
-                << lin_tf.getOrigin().getX() << " | " 
-                << lin_tf.getOrigin().getY() << " | "
-                << lin_tf.getOrigin().getZ() << std::endl;
+    // tf2::Transform lin_tf;
+    // tf2::Transform ee_no_ft = ee_tf;
+    // ee_no_ft.setOrigin(tf2::Vector3(0, 0, 0));
+    // lin_tf = ee_no_ft * (ee_tf.inverse() * cur_tf);
+    // std::cout   << "\nGlobal linear diff TF: " 
+    //             << lin_tf.getOrigin().getX() << " | " 
+    //             << lin_tf.getOrigin().getY() << " | "
+    //             << lin_tf.getOrigin().getZ() << std::endl;
 
-    // Trolha manner of obtaining the global difference betwwen goal and EEF
-    Eigen::Vector3d lin_vel;
-    lin_vel << cur_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
-               cur_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
-               cur_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
-    std::cout   << "Global linear diff: " 
-                << lin_vel[0] << " | " 
-                << lin_vel[1] << " | " 
-                << lin_vel[2] << std::endl;
+    // // Trolha manner of obtaining the global difference betwwen goal and EEF
+    // Eigen::Vector3d lin_vel;
+    // lin_vel << cur_tf.getOrigin().getX() - ee_tf.getOrigin().getX(),
+    //            cur_tf.getOrigin().getY() - ee_tf.getOrigin().getY(),
+    //            cur_tf.getOrigin().getZ() - ee_tf.getOrigin().getZ();
+    // std::cout   << "Global linear diff: " 
+    //             << lin_vel[0] << " | " 
+    //             << lin_vel[1] << " | " 
+    //             << lin_vel[2] << std::endl;
 
     // Final manner of obtaining the global difference between goal anf EEF
-    // Eigen::Vector3d lin_vel;
-    // lin_vel << 
-    //     (goal_tf.getOrigin().getX()+cur_tf.getOrigin().getX())/2 - ee_tf.getOrigin().getX(),
-    //     (goal_tf.getOrigin().getY()+cur_tf.getOrigin().getY())/2 - ee_tf.getOrigin().getY(),
-    //     (goal_tf.getOrigin().getZ()+cur_tf.getOrigin().getZ())/2 - ee_tf.getOrigin().getZ();
+    Eigen::Vector3d lin_vel;
+    lin_vel << 
+        (goal_tf.getOrigin().getX()+cur_tf.getOrigin().getX())/2 - ee_tf.getOrigin().getX(),
+        (goal_tf.getOrigin().getY()+cur_tf.getOrigin().getY())/2 - ee_tf.getOrigin().getY(),
+        (goal_tf.getOrigin().getZ()+cur_tf.getOrigin().getZ())/2 - ee_tf.getOrigin().getZ();
     
 
     if (lin_vel.norm() < 0.01)
@@ -238,12 +236,12 @@ void attraction(const ros::TimerEvent& event)
     geometry_msgs::Vector3 ang_vel_msg;
 
     // Tring to find a better way to calculate the difference of pose
-    tf2::Transform ang_tf;
-    ang_tf = ee_tf.inverse() * cur_tf;
-    double groll, gpitch, gyaw;
-    tf2::Matrix3x3(ang_tf.getRotation()).getRPY(groll, gpitch, gyaw);
-    std::cout   << "\nGlobal angular diff TF: "
-                << groll << " | " << gpitch << " | " << gyaw << std::endl;
+    // tf2::Transform ang_tf;
+    // ang_tf = ee_tf.inverse() * cur_tf;
+    // double groll, gpitch, gyaw;
+    // tf2::Matrix3x3(ang_tf.getRotation()).getRPY(groll, gpitch, gyaw);
+    // std::cout   << "\nGlobal angular diff TF: "
+    //             << groll << " | " << gpitch << " | " << gyaw << std::endl;
 
     // Difference from goal pose to target pose
     tf2::Transform diff_tf;
@@ -251,8 +249,8 @@ void attraction(const ros::TimerEvent& event)
 
     double roll, pitch, yaw;
     tf2::Matrix3x3(diff_tf.getRotation()).getRPY(roll, pitch, yaw);
-    std::cout   << "Global angular diff: "
-                << roll << " | " << pitch << " | " << yaw << std::endl;
+    // std::cout   << "Global angular diff: "
+    //             << roll << " | " << pitch << " | " << yaw << std::endl;
 
     if (abs(roll) > 0.05 || abs(pitch) > 0.05 || abs(yaw) > 0.05)
     {
@@ -312,39 +310,39 @@ int main(int argc, char **argv)
 
     // Positions in the real environment
     // Start Position
-    // sVec<double> start_joints = {
-    //     1.8872361183166504, -2.362852712670797, -1.6420011520385742, 
-    //     -0.6762150090983887, 1.5861048698425293, -0.45677310625185186
-    // };
-    // // Waypoint 1
-    // sVec<double> waypoint_1 = {
-    //     1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
-    //     0.08445851385083003, 2.0642237663269043, -0.4083760420428675
-    // };
-    // // Waipoint 2
-    // sVec<double> waypoint_2 = {
-    //     3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
-    //     0.13671223699536128, 0.9651718139648438, 0.5363349914550781
-    // };
-    // // End Position
-    // sVec<double> end_joints = 
-    // {
-    //     2.8675928115844727, -2.211241384545797, -1.9777193069458008, 
-    //     -0.4927595418742676, 1.553483009338379, 0.5230627059936523
-    // };
-
-    // Positions in the gazebo simulated environment
-    // Start Position
     sVec<double> start_joints = {
-        -2.9385049958219014, -2.272357028717571, -1.312998376075341,
-        -0.4159580635132407, 1.9500205901742653, -0.40501343460914807
+        1.8872361183166504, -2.362852712670797, -1.6420011520385742, 
+        -0.6762150090983887, 1.5861048698425293, -0.45677310625185186
+    };
+    // Waypoint 1
+    sVec<double> waypoint_1 = {
+        1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
+        0.08445851385083003, 2.0642237663269043, -0.4083760420428675
+    };
+    // Waipoint 2
+    sVec<double> waypoint_2 = {
+        3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
+        0.13671223699536128, 0.9651718139648438, 0.5363349914550781
     };
     // End Position
     sVec<double> end_joints = 
     {
-        -1.4639981907416555, -2.305494986407135, -1.221936453462713,
-        -0.6399023596943474, 0.9668708874523881, 0.7535286047726073
+        2.8675928115844727, -2.211241384545797, -1.9777193069458008, 
+        -0.4927595418742676, 1.553483009338379, 0.5230627059936523
     };
+
+    // Positions in the gazebo simulated environment
+    // Start Position
+    // sVec<double> start_joints = {
+    //     -2.9385049958219014, -2.272357028717571, -1.312998376075341,
+    //     -0.4159580635132407, 1.9500205901742653, -0.40501343460914807
+    // };
+    // // End Position
+    // sVec<double> end_joints = 
+    // {
+    //     -1.4639981907416555, -2.305494986407135, -1.221936453462713,
+    //     -0.6399023596943474, 0.9668708874523881, 0.7535286047726073
+    // };
 
 
 
@@ -360,8 +358,8 @@ int main(int argc, char **argv)
     traj_marker_ptr = &trajectory_markers;
     int marker_id = 0;
 
-    // sVec<sVec<double>> waypoints = {start_joints, waypoint_1, waypoint_2, end_joints};
-    sVec<sVec<double>> waypoints = {start_joints, end_joints};
+    sVec<sVec<double>> waypoints = {start_joints, waypoint_1, waypoint_2, end_joints};
+    // sVec<sVec<double>> waypoints = {start_joints, end_joints};
 
     for (int i = 0; i < waypoints.size() - 1; i++)
     {

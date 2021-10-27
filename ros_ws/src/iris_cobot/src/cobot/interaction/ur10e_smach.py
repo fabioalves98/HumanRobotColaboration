@@ -192,7 +192,7 @@ class Delivering(UR10eState):
             
             print(wrench_velocity.wrench.force.z)
 
-            if wrench_velocity.wrench.force.z * 20 > 0:
+            if wrench_velocity.wrench.force.z > 0:
                 helpers.samiReleaseService()
                 time.sleep(1)
                 helpers.cobot_reset_ft_sensor()
