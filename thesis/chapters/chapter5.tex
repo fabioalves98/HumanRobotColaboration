@@ -148,7 +148,7 @@
 \par If the gripper has an object, the system will skip to the Object state where the attached Payload will be measured and injected in the theoretical \ac{ft} model. This state starts by turning of the velocity controller and moving the robot upwards. This motion serves as a signal to the user to not touch the \ac{eef} for a while. Then, the system obtains a \ac{ft} measure and from it, it calculates the object weight and \ac{cog}. With this parameters, it updates the theoretical \ac{ft} model through its \textbackslash\textit{payload\_update} \ac{ros} service. Once the theoretical \ac{ft} model gives confirmation, the velocity controller is turned back on, and with the updated values of payload, the user can accurately \ac{hg} the system knowing that it will compensate the object weight. When the user is done with this task, he executes the same double tap as explained before and the robot skips to the Release state.
 \par Finally, in the Release state, the velocity controller is turned off, the robot releases the object, the theoretical \ac{ft} model is configured with just the gripper tool payload, the \ac{ft} sensor is tared, and just before leaving this state, the the velocity controller is resumed.
 
-% Capacidades deste tipo de task, necessidade de andar sempre a ligar desligar o controlador de velocidade, cuz pesos e merdas
+% ADD: Capacidades deste tipo de task, necessidade de andar sempre a ligar desligar o controlador de velocidade, cuz pesos e merdas
 
 
 
