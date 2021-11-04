@@ -1608,3 +1608,14 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 
 - Capítulo 5 da tese
   - All tasks + collaborative state machine
+
+## 27/10 - Biblioteca
+
+- Capítulo 5 da tese completo
+- Capítulo 7 da tese
+  - Escrita da conclusão
+  - Inicio do future worl
+
+## 28/10 - Biblioteca
+
+- Capítulos completos para entrega provisória

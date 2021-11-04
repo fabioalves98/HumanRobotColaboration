@@ -1,7 +1,8 @@
 \chapter{Collaborative Tasks}
-\label{chapter:colab-tasks}
+\label{chp:5-tasks}
 
-% ADD: Descrição geral deste capítulo das collaborative tasks
+% TODO Add intro to chapter 5
+
 
 
 
@@ -9,6 +10,7 @@
 
 \section{Hand Guiding}
 
+% Introduction on hand guiding and what is needed for it to happen
 \par So far, it has been explained how to obtain a compensated \ac{ft} measurement in order to obtain \acf{hgft}, which is caused by the user. This value is used to move the robot in the direction that it is applied. For this to happen, this values felt on the \ac{ft} reference frame need to be converted to a velocity vector, referenced on the base frame of the robot. 
 
 
@@ -16,6 +18,7 @@
 \subsection{\ac{hgft} to \ac{eef} Velocity}
 \label{ssec:ft_to_eef}
 
+% Use of threshold and division constants to parse HGFT
 \par \ac{hgft} should only converted in robot motion when it reaches a certain threshold, otherwise, it should be zero. It should also exist a way to define the ration of conversion between \ac{ft} and velocity To achieve this behavior, the \ac{hgft} is controlled according to \autoref{eq:f_thresh} and \autoref{eq:t_thresh}.
 
 \begin{multicols}{2}
@@ -41,9 +44,11 @@
 
 \noindent Where $\mathbf{f_i}$ and $\mathbf{t_i}$ are \ac{ft} components, $\mathbf{t_{th}}$ and $\mathbf{f_{th}}$ are \ac{ft} threshold parameters, and $\mathbf{t_{div}}$ and $\mathbf{f_{div}}$ are ratio constants that define the conversion between \ac{ft} and velocity.
 
-
 \subsubsection{Force to Linear Velocity}
 
+% TODO Change the description of this process, either by saying its a point (instead of pose), or not using an analogy at all
+
+% Conversion of force to linear velocity 
 \par It is done by creating a pose with the force measurement as the position component, and transforming this pose with the rotation matrix of the \ac{ft} sensor frame. The resulting pose position can be directly used as global velocity. \autoref{eq:force_to_linear_vel} is used to calculate the linear velocity from the \ac{hg} force.
 
 \begin{equation}
@@ -53,9 +58,11 @@
 
 \noindent Where $\mathbf{R^b_e}$ is the rotation matrix of the \ac{eef} frame in relation to the robot base frame, $\mathbf{R^e_s}$ is a constant rotation matrix of the sensor frame in relation to the \ac{eef} frame, and $P_{force}$ is a point with the force measurements as its coordinates. $\vec{\mathbf{V_{lin}}}$ is obtained as a cartesian points which can directly be used as a linear velocity vector in the robot base frame.
 
-
 \subsubsection{Torque to Angular Velocity}
 
+% TODO Again, change the analogy used
+
+% Conversion of torque to angular velocity
 \par It is done by creating a pose with the torque measurement as the orientation component, transforming this orientation with the rotation matrix of the \ac{ft} sensor frame, and with this orientation, rotate the inverse rotation of the \ac{ft} sensor frame. \autoref{eq:force_to_linear_vel} is used to calculate the angular velocity from the \ac{hg} torque.
 
 \begin{equation}
@@ -70,11 +77,15 @@
 \subsection{\ac{eef} Velocity to Joint Speed}
 \label{ssec:eef_to_js}
 
+% Conversion of EEF Velocity in to Joint Speed
 \par With the previous equations, the \ac{eef} velocity in cartesian space is obtained from the \ac{hgft} on the \ac{ft} sensor. As said before, in this work, the \ac{ur10e} will be controlled in joint space with joint speed commands. To obtain joint speeds from an \ac{eef} velocity, the Jacobian inversion method will be used.
 
 
 \subsubsection{Jacobian Inversion Method}
 
+% TODO Give theoretical background on Jacobian in Chapter 2
+
+% Jacobian Matrix
 \par The Jacobian matrix is used in robotics to provide a relation between joint speeds and \ac{eef} velocities in a robotic manipulator. This relation is given by \autoref{eq:jacobian}.
 
 \begin{equation}
@@ -84,6 +95,7 @@
 
 \noindent Where $\dot{\mathbf{q}}$ is the robot joint velocities, $\mathbf{q}$ is the robot joint positions, $\mathbf{J}$ is the Jacobian matrix, which is a function of the current robot joint positions. $\dot{\mathbf{X}}$ represents the \ac{eef} velocity and is obtained in the form of a 1 column matrix with 6 elements. The first part represents linear velocity, and the second represent angular velocity. The Jacobian matrix is obtained through forward kinematics equations applied on a given joint state. In this work, the Jacobian matrix is obtained with the MoveIt motion planning framework, using the \ac{ur10e} robot description. 
 
+% Invert jacobian matrix to obtain joint speed from eef speed
 \par In order to obtain joint speeds from the \ac{eef} velocities, the Jacobian matrix is inverted and \autoref{eq:inv_jacobian} is used.
 
 \begin{equation}
@@ -97,6 +109,7 @@
 
 \subsection{\ac{hg} Architecture}
 
+% ROS Architecture for HG
 \par Having the joint speeds calculated, they are sent back to the ROS driver by publishing them into the appropriate topic, at 500Hz. The \ac{ros} architecture for this task is demonstrated in \autoref{fig:ros_hg_arch}.
 
 \begin{figure}[h]
@@ -108,12 +121,17 @@
 
 \par The Wrench2Vel \ac{ros} node implements the algorithms explained in \autoref{ssec:ft_to_eef} and the Jacobian node implements the Jacobian inversion method described in \autoref{ssec:eef_to_js}. The \ac{js} Controller node subscribes to the joint speeds calculated with the Jacobian matrix and publishes them in the appropriate topic made available by the \ac{ur} \ac{ros} driver. This node also implements a filter to smooth the robot acceleration when rapidly changing velocity, and a \ac{ros} service that allows its control with play, pause and stop functions.
 
+% TODO General use of this task, description of use cases
+
 
 
 
 
 \section{Object Transfer}
 
+% TODO Parameterize the task with a YAML file
+
+% Transfer of an object between human and robot
 \par The object transfer collaborative task is an example of a user customizable skill. It is very similar to the general pick and place task with the only difference being that the final destination is not a place position, but rather a deliver position where the robot will wait for user input to release the object. This task has various states, and each state has input parameters and a certain behavior. \autoref{fig:object_transfer} shows the arrangement of the states and their parameters.
 
 \begin{figure}[h]
@@ -123,11 +141,14 @@
     \label{fig:object_transfer}
 \end{figure}
 
+% Explaining the parametrization of the task
 \par The task starts by moving the robot to a picking position, defined in the \textit{pick\_pose}. Since this position is a predefined joint state, the trajectory can planned with the MoveIt framework and the motion of the robot is controlled though its positional controller. This position is preferably a few centimeters distant from the object, so the next step is to move the robot forward according to the \textit{forward\_move} parameter.
+
 \par The robot should reach the next state with its gripper fingers aligned with the object, therefore, the next step is to close the gripper. The \textit{has\_ojbect} flag is a control parameter used to only proceed in the flow of the task if the gripper has gripped anything. This happens if the flag is set to true, otherwise, the task continues ignoring if the gripper has gripped any object.
+
 \par The Delivering state moves the robot to another predefined position. When it reaches that position, it automatically skips to the Release state, where it stops and the system continuously evaluates the \ac{ft} measured. If the \textit{release\_force} parameter is configured, the robot will release the object when a force with magnitude equal to \textit{release\_force} is applied. If this parameter is not set, which is the default behavior, the robot will release the object when its weight has been supported by the user, which programmatically means that the robot will release the object when the \ac{ft} measured in the Z-Axis of the world frame is higher than zero. 
 
-% ADD: Capacidades deste tipo de task, descrição geral
+% TODO General use of this task, description of use cases
 
 
 
@@ -135,6 +156,9 @@
 
 \section{Object Manipulation}
 
+% TODO Refactor this task programmatically to include a Calibration state
+
+% Introduction to the object manipulation task
 \par The object manipulation task has the goal of allowing the user to give the robot an object and be able to \ac{hg} it with precision, while the robot holds the object. \autoref{fig:object_manipulation} shows the composition of this task states.
 
 \begin{figure}[h]
@@ -144,12 +168,15 @@
     \label{fig:object_manipulation}
 \end{figure}
 
+% Explanation of each state of the task
 \par The Grip state has been seen previously, but this time, instead of configuring a parameter to evaluate if the gripper has anything attached, this condition will be used as a way to determine the next state. It the gripper has no object, it will skip to the Empty state which has no internal behavior other that to wait for user input. This input has the form of a double tap on the \ac{eef}, in the Y-Axis direction. Further details on this communication interface with the system will be given in \autoref{ssec:double_tap}.
+
 \par If the gripper has an object, the system will skip to the Object state where the attached Payload will be measured and injected in the theoretical \ac{ft} model. This state starts by turning of the velocity controller and moving the robot upwards. This motion serves as a signal to the user to not touch the \ac{eef} for a while. Then, the system obtains a \ac{ft} measure and from it, it calculates the object weight and \ac{cog}. With this parameters, it updates the theoretical \ac{ft} model through its \textbackslash\textit{payload\_update} \ac{ros} service. Once the theoretical \ac{ft} model gives confirmation, the velocity controller is turned back on, and with the updated values of payload, the user can accurately \ac{hg} the system knowing that it will compensate the object weight. When the user is done with this task, he executes the same double tap as explained before and the robot skips to the Release state.
+
 \par Finally, in the Release state, the velocity controller is turned off, the robot releases the object, the theoretical \ac{ft} model is configured with just the gripper tool payload, the \ac{ft} sensor is tared, and just before leaving this state, the the velocity controller is resumed.
 
-% ADD: Capacidades deste tipo de task, necessidade de andar sempre a ligar desligar o controlador de velocidade, cuz pesos e merdas
-
+% TODO Explain the various ways this task interacts with the rest of the system (controllers, payload services)
+% TODO General use of this task, description of use cases
 
 
 
@@ -157,6 +184,9 @@
 
 \section{Collision Free Execution of an Industrial Task}
 
+% TODO Implement a task with this characteristics separate from the Attraction Node
+
+% Execution of any task with a play, pause stop interface
 \par This system allows for seamless integration of any industrial task given it provides a certain control interface. This control interface requires the existence of play, pause and stop services that will be called depending of user interaction. The structure of the states of this task can be seen in \autoref{fig:industrial_task}.
 
 \begin{figure}[h]
@@ -166,7 +196,8 @@
     \label{fig:industrial_task}
 \end{figure}
 
-\par In this Dissertation, the industrial task implemented is a looped transition between two positions with dynamic collision avoidance. Programmatically, when this state is activated, the behavior described in \autoref{chapter:obstacle} is reproduced in a loop by activating the \ac{apf} Controller node. The trajectory defined in the Planner node will start being executed and any obstacles detected by the Obstacles node will be avoided. While the task is executing, the user can pause it by approaching the \ac{eef}, which will start to slow down, and make a double tap on its X-Axis.
+% Industrial task that loops between two points
+\par In this Dissertation, the industrial task implemented is a looped transition between two positions with dynamic collision avoidance. Programmatically, when this state is activated, the behavior described in \autoref{chp:4-obstacle} is reproduced in a loop by activating the \ac{apf} Controller node. The trajectory defined in the Planner node will start being executed and any obstacles detected by the Obstacles node will be avoided. While the task is executing, the user can pause it by approaching the \ac{eef}, which will start to slow down, and make a double tap on its X-Axis.
 
 
 
@@ -174,6 +205,9 @@
 
 \section{Collaborative State Machine}
 
+% TODO Improve this section with further implementation details
+
+% Global state machine that intertwines the tasks
 \par The tasks explained before are all arranged in a global state machine that treats each task as a submachine. The initial state is the Hand Guiding task which allows free manipulation of the robot. To execute a task, a double tap in a specific direction must be executed on the robot \ac{eef}. The behavior flow of the global state machine is described in \autoref{fig:ros_smach}.
 
 \begin{figure}[h]
@@ -183,6 +217,7 @@
     \label{fig:ros_smach}
 \end{figure}
 
+% UR10e can be controlled by multiple controllers
 \par The integration of this tasks with each other is seamless. They all start from the \ac{hg} state and also return to it when finished. On of the main advantages of an arrangement such as this, is that in the execution of the different tasks the robot can be controlled by multiple entities. For instance, the Object Transfer task uses the MoveIt positional controller, the Object Manipulation uses the Wrench2Vel \ac{ros} node, and the Industrial Task uses the PF2Vel \ac{ros} node. The existence of a structure such as this state machine, allows for a cohesive and seamless change of control entities, without the user ever noticing their existence.
 
 \begin{figure}[h]
@@ -192,6 +227,7 @@
     \label{fig:ros_cobot_arch}
 \end{figure}
 
+% Explanation of the entire ROS Architecture
 \par A complete view of the \ac{ros} architecture of the global state machine, and generally, the work developed in this Dissertation can be seen in \autoref{fig:ros_cobot_arch}. The symbolism on the \ac{ur10e} \ac{sm} means that this node interacts with almost every other node in the system, with both services calls and information collecting through topics.
 
 
@@ -199,6 +235,7 @@
 \subsection{State Transitions}
 \label{ssec:double_tap}
 
+% Taps on EEF are detected by deriving FT
 \par The node that enables the user to interact with the system is the Tap Action node, which listens to the \textbackslash\textit{wrench} topic, evaluates each \ac{ft} component derivative, and according to it publishes TapAction messages. This a custom defined \ac{ros} message that contains 3 fields: 
 
 \begin{itemize}
@@ -209,7 +246,7 @@
 
 \par To generate a message of this type, the Tap Action node, derives each component of \ac{ft} and once this value passes a certain threshold, it publishes a TapAction message. The effects of the derivation of \ac{ft} can be seen in \autoref{fig:taps}.
 
-% ADD: Adicionar aqui o algoritmo usado para detetar tap actions
+% TODO Add algorithm used to detect taps (maybe implement it recursively)
 
 \begin{figure}[h]
     \centering
@@ -224,6 +261,9 @@
 
 \subsection{Visual Feedback}
 
+% TODO Implement lighting feedback on State Machine, and explain it here
+
+% Griper has customizable RGB lights
 \par A means of visual feedback from the system to the user can be achieved with the gripper \acp{led}. Its consists on a luminous ring with \ac{rgb} lights that can be programed by the user in terms of color, animation and speed. The effects that are possible to reproduce on the luminous ring are diverse, with the user being able to choose from 15 animations, 13 colors and 8 speed settings. \autoref{fig:gripper_leds} shows some examples of these effects.
 
 \begin{figure}[h]
@@ -252,6 +292,7 @@
     \label{fig:gripper_leds}
 \end{figure}
 
+% Lights are used to give user feedback
 \par In this work, 3 colors are used to give the user awareness of the system state:
 
 \begin{itemize}
@@ -263,10 +304,11 @@
 \par With this approach, the user can always know when he should interact with the robot.
 
 
+\section{Software Tools for \ac{hrc}}
+\label{sec:tools-hrc}
 
-% \section{Software Tools for \ac{hrc}}
-% \label{sec:tools-hrc}
+% TODO Add section on software tools developed
 
-% \par iris\_sami
-% \par iris\_cobot
-% \par other viewers and tools such as plotjuggler integration and smach\_viewer
+\par iris\_sami
+\par iris\_cobot
+\par other viewers and tools such as plotjuggler integration and smach\_viewer

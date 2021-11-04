@@ -1,23 +1,38 @@
 \chapter{Dynamic Obstacle Avoidance}
-\label{chapter:obstacle}
+\label{chp:4-obstacle}
+
+% TODO Add intro to chapter 4
+
+
+
+
 
 \section{Obstacle Detection}
 \label{section:obstacle-detection}
 
+% Introduction on obstacle detection
 \par In order for a robot to avoid obstacles while in motion, an external vision sensor is used to capture the shared workspace and send information to the system about the robot surroundings. In this Dissertation, an \ac{rgbd} camera will be used for this purpose. It gives the system depth information on its \ac{fov}, referenced to itself. The first step in this endeavour is to spatially and dynamically reference the camera to the robot through hand eye calibration. 
+
+
 
 \subsection{Hand Eye Calibration}
 
+% Application of hand eye calibration 
 \par This process is able to generate an accurate transform from the robot base frame to the sensor frame. In this proposal, a fiducial marker based on the Aruco library \cite{aruco} is fixed on the robot \ac{eef}. Then, using the \textit{easy\_handeye} \ac{ros} package, a set of translations and rotations are performed at the \ac{eef} level. In each movement, a sample composed of the \ac{eef} pose and the Aruco pose, identified by the sensor, is captured. A total of 3 translations and 6 rotations are performed in each axis, making a total of 27 samples. When the sampling is finished, the \textit{easy\_handeye} compute service is called and a static transform is obtained, which is both locally saved and published in the \ac{ros} environment.
 
-% ADD: 2 fotos aqui, uma real, outra do RViz
+% TODO 2 fotos aqui, uma real, outra do RViz
+
+
 
 \subsection{Robot Self Identification}
 
+% Necessity of robot self identification
 \par Since the camera will be sensing the shared workspace, there will be multiple scenarios where the robot will enter its \ac{fov}. Robot self identification consist on a method to identify which points of the point cloud belong to the robot structure, in order to differentiate obstacles from the robot when both of them are in the sensor \ac{fov}.
+
+% Build a skeleton of the robot and identify points belonging to it
 \par The technique developed in this work starts by building a skeleton model of the robot, starting with the location of its links. The position of this links, defined in the robot \ac{urdf} present in its \ac{ros} driver, does not match the real position of the robot arms and wrists, therefore, from this links, a set of points are created representing the start and end of each real link. Using this set of points and a minimum distance constant, the skeleton model is created based on \autoref{code:robot_skeleton}. The difference between the links defined in the robot \ac{urdf} and the points created can be seen in \autoref{fig:links_to_points}.
 
-% FIX: Aproveitar e explicar melhor porque é que este processo é necessário, que os links nao descrevem a estrutura do robot
+% FIXME Aproveitar e explicar melhor porque é que este processo é necessário, e que os links nao descrevem a estrutura do robot
 
 \begin{listing}[h]
     \centering
@@ -61,6 +76,7 @@
     \label{fig:links_to_points}
 \end{figure}
 
+% With the skeleton, the points on the point cloud belonging to the robot can be identified
 \par From the resultant skeleton, any point form the point cloud that is closer to it than a predefined threshold, is considered belonging to the robot, therefore, not accounted for in the obstacle segmentation process. Also not accounted for, are points on the point cloud that are too far away from the robot. Based on a another distance constant, a \ac{roi} is created, and points that are further distant from the skeleton than it, are considered irrelevant. The final result of robot self identification can be observed in \autoref{fig:self_ident_result}.
 
 \begin{figure}[h]
@@ -77,9 +93,14 @@
     \label{fig:self_ident_result}
 \end{figure}
 
+
+
 \subsection{Obstacle Segmentation}
 
+% Categorization of the points with the ROI
 \par Starting from the raw point cloud obtained from the sensor, each point is categorized. Points belonging to the robot, and points too distant from it are removed. Only points belonging to the \ac{roi}, if there are any, are considered obstacles, therefore, a new point cloud is created with this points.
+
+% Application of CEC to the categorized point cloud
 \par To this new point cloud, a clustering algorithm is applied in order to represent the point cloud in a set of small clusters, each one to be considered an obstacle. The algorithm applied is the \ac{cec}, which is a region growing algorithm based on the \ac{ece} algorithm. It has the advantage of allowing a customizable clustering condition and also classifying clusters as too small or too large, based on defined parameters. The parameters for the \ac{cec} implementation,used in this work, can be found in \autoref{tbl:cec_params}.
 
 \begin{table}[h]
@@ -98,6 +119,7 @@
     \label{tbl:cec_params}
 \end{table}
 
+% Results of the application of CEC
 \par The result of this algorithm is a set of clusters and to each cluster, its closets point to the robot is calculated, achieving the obstacle collision point. \autoref{fig:obstacles} illustrates the obstacle detection final result, where 2 obstacles are present in the environment. One of them is outside the \ac{roi}, therefore ignored. The other, which is closer to the robot, is correctly identified.
 
 \begin{figure}[h]
@@ -114,15 +136,27 @@
     \label{fig:obstacles}
 \end{figure}
 
+
+
+
+
 \section{Artificial Potential Fields}
 \label{section:pf-method}
 
+% Introduction on APF
 \par A well known method of dealing with real time collision avoidance on robotic manipulators is to treat the robot navigation as if it was a point in a potential field, and is called \ac{apf}. An \ac{apf} is the result of the sum of 2 fields. An attraction field, converging on the goal and a repulsion field created from obstacles in the environment. Within the final field, the robot can navigate successfully while avoiding the obstacles. Adapted to the context of robotic manipulators, the robot is in an imaginary vector field and its motion is the result of attraction forces, making the robot follow a predefined trajectory, and repulsion forces that repel it away from obstacles.
+
+
 
 \subsection{Attraction}
 \label{ssec:attraction}
 
-\par The attraction force is what makes the robot move to its goal. In this work, this is done by generating a trajectory offline, and in real time make the robot follow the trajectory with cartesian space velocity commands. 
+% TODO Improve the generation and execution of offline trajectories
+
+% Generation of an attraction vector based on an offline trajectory
+\par The attraction force is what makes the robot move to its goal. In this work, this is done by generating a trajectory offline, and in real time make the robot follow the trajectory with cartesian space velocity commands.
+
+% Generation of the offline trajectory
 \par The first step is to generate an offline trajectory. A trajectory needs a start state and a goal state, and if no static obstacles are declared, the motion planner will generate an optimized trajectory based on those two inputs. Other factors might impact the final result but for the focus of this work, offline motion planning will not be discussed in detail. The trajectories generated with the MoveIt framework are arrays of joint positions, since it is designed to work with joint position controllers. In this work, the attraction and repulsion forces will be declared in cartesian space, therefore after obtaining the trajectory, all trajectory steps are converted to poses in cartesian space. This can be observed in the first subfigure of \autoref{fig:attraction}.
 
 \begin{figure}[h]
@@ -151,8 +185,10 @@
     \label{fig:attraction}
 \end{figure}
 
+% Execution of the offline trajectory
 \par After obtaining the set of poses, the robot will start executing the trajectory in its first point. For this initial position, the robot is moved with a joint position command. After the initial state, in a 500Hz loop a cartesian attraction vector, which is the difference between the current \ac{eef} position and the next point in the trajectory, is obtained with \autoref{eq:attraction}.
 
+% TODO Review this equation
 \begin{equation}
     \vec{\mathbf{Att}}=P_{goal}\cdot {T_e^b}^{-1}
     \label{eq:attraction}
@@ -160,9 +196,12 @@
 
 \noindent Where $\mathbf{P_{goal}}$ is the pose of the goal point in the trajectory and $\mathbf{T_e^b}$ a transformation from the base frame to the \ac{eef} frame. $\vec{\mathbf{Att}}$ is obtained in the form of a pose object. The position part will be the linear velocity and the orientation part will be the angular velocity. This vector is constantly being calculated based on the monitoring of the \ac{eef} and the calculation of the new goal.
 
+
+
 \subsection{Repulsion}
 \label{ssec:repulsion}
 
+% Creation of a repulsion vector based on an array of obstacles
 \par The obstacle segmentation algorithm produces an array of obstacles. Each obstacle is defined by its pose. The repulsion vector is calculated using this pose and the \ac{eef} pose, since its the most likely part of the robot to colide with obstacles. Within the array of obstacles, the closest to the \ac{eef} is selected. A repulsion vector is created with this obstacle based on how much distant it is to the \ac{eef} with \autoref{eq:repulsion}.
 
 \begin{equation}
@@ -172,8 +211,11 @@
 
 \noindent Where $\mathbf{P_{eef}}$ is the \ac{eef} pose, $\mathbf{P_{obs}}$ is the obstacle pose, $\mathbf{d}$ is the distance between the \ac{eef} and the obstacle, and $\mathbf{max_d}$ and $\mathbf{min_d}$ are maximum and minimum distance constants, respectively. $\vec{\mathbf{Rep}}$ is obtained in the form of a linear vector since, in the repulsion vector calculation, angular velocity is not accounted for. The first part of this equation represents a unit vector with the direction of the obstacle, and the second part can be seen as a repulsion factor, which is inversely proportional to the distance of the obstacle to the \ac{eef}.
 
+
+
 \subsection{Controller}
 
+% Creation of a final normalized vector to give the robot its motion
 \par The \ac{apf} controller has the goal of summing the forces from the two components. In this work, the chosen approach is to create a final normalized cartesian vector, taking as inputs the two forces previously explained. The final velocity for the robot \ac{eef} is calculated with \autoref{eq:potential_field}.
 
 \begin{equation}
@@ -183,8 +225,15 @@
 
 \par This way, when there are no obstacles, $\mid\mid\vec{\mathbf{Rep}}\mid\mid\mathbf{=0}$, therefore, $\vec{\mathbf{V_{eef}}}=\vec{\mathbf{Att}}$. When obstacles do exist, the controller will give priority to the repulsion vector as is starts to grow, since as seen in \autoref{ssec:repulsion}, the repulsion vector norm increases as the distance to obstacles decreases.
 
+
+
+
+
 \section{Real Time Obstacle Avoidance}
 
+% TODO Improve this section with further implementation details
+
+% ROS Architecture for obstacle avoidance
 \par Similar to the correction and compensation of \ac{ft}, a group of \ac{ros} nodes were developed and orchestrated in order to give the robot the ability to avoid dynamic obstacles while in motion and in real time. \autoref{fig:ros_obstacle_arch} demonstrates how those nodes are arranged.
 
 \begin{figure}[h]
@@ -194,6 +243,7 @@
     \label{fig:ros_obstacle_arch}
 \end{figure}
 
+% Explanation of the various nodes
 \par The attraction component starts at the Planner node, which uses the MoveIt motion planning interface to generate trajectories. It obtains the \ac{ur10e} description from its driver and with a move group object plans and publishes robot trajectories. The attraction node listens to the trajectories published by the Planner node and acts according to what was described in \autoref{ssec:attraction}. On the repulsion side, the Obstacles node listens to the point clouds published by the sensor driver and publishes an array with obstacle information. From that information, the Repulsion node publishes the repulsion vector, according with \autoref{ssec:repulsion}. Finally the \ac{apf} Controller node joins the attraction and repulsion vectors, publishing the final \ac{eef} velocity vector.
 
 \begin{figure}[h]
@@ -210,6 +260,7 @@
     \label{fig:gazebo}
 \end{figure}
 
+% Testing of the architecture with the execution of an offline trajectory with obstacles
 \par A testing environment was built in the Gazebo simulator. The \ac{ur10e} was placed in the center of the world, an RGBD camera was placed on top of it, overlooking an area considered the shared environment, where 2 sphere obstacles were spawned. This setup can be seen in \autoref{fig:gazebo}. A trajectory was created that would intentionally colide with these obstacles. 
 
 \begin{figure}[h]
@@ -226,5 +277,5 @@
     \label{fig:colision_avoidance}
 \end{figure}
 
+% Final remark on the final trajectory obtained
 \par The offline trajectory and the final trajectory that the robot performed with the collision avoidance nodes enabled can be seen in \autoref{fig:colision_avoidance}. Further details on the performance of this architecture and details on the implementation on a real scenario will be outlined in \autoref{sec:colision_tests}.
-

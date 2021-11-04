@@ -169,7 +169,7 @@ Nowadays, most industrial robots are shipped with teach pendants. These are hand
 \par Although the techniques developed in this dissertation are generic, the cobot with which this work will be implemented is an \ac{ur10e}. It is a 6 \ac{dof} collaborative industrial robot equipped with a \ac{ft} sensor in its \ac{eef}. Detailed technical specifications are shown in \autoref{tbl:ur10e-specs} and the various ways that it can be controlled will be explained below, as well as the chosen method and why.
 
 % UR10e technical specifications table
-\begin{table}[]
+\begin{table}[htp]
     \centering
     \begin{tabular}{|l|l|lllll}
     \cline{1-2}
@@ -247,7 +247,7 @@ Nowadays, most industrial robots are shipped with teach pendants. These are hand
 
 
 
-% TODO Chanoe the name t0 Similar Research, ou similar
+% FIXME Change the name to Similar Research, ou similar
 \section{Existing approaches}
 
 % There are no full features integrated, close, solutions
@@ -257,8 +257,10 @@ Despite these facts, extensive research efforts have, and are currently being ma
 
 
 
+% TODO Review section with newer papers
 \subsection{Proposals on \acs{hrc} and Collaborative Tasks}
 
+% READ Trends of Human-Robot Collaboration in Industry Contexts: Handover, Learning, and Metrics
 % READ Review of Interfaces for Industrial Human-Robot Interaction
 
 \par The work in \cite{colab.framework} proposes a collaborative framework for robotic task specification, where the authors start by stating that the lack of effective sensing and task variability creates too much uncertainty to reliably hard-code a robotic cell. The developed framework blends automated task specification with the experience and cognition of a human operator to provide a more accurate task specification. This work was implemented with \ac{ros} and was mainly focused on surface finishing tasks.
