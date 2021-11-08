@@ -15,9 +15,9 @@
     </group>
 
     <!-- Obstacle Spawner (only in gazebo) -->
-    <group unless="$(arg real)">
+    <!-- <group unless="$(arg real)">
         <node pkg="iris_cobot" type="spawn_obstacles.py" name="spawn_obstacles" output="screen" respawn="true"/>
-    </group>
+    </group> -->
 
     <!-- Obstacle Detection -->
     <node pkg="iris_cobot" type="obstacle_detection" name="obstacle_detection" output="screen" respawn="true"/>

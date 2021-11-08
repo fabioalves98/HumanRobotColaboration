@@ -294,14 +294,62 @@
 
 % TODO Review this section linguistically
 
-\subsection{Collision Avoidance}
+\subsection{Collision Free Execution of an Industrial Task}
 \label{sec:colision_tests}
 
 % TODO Collision avoidance tests
 
+
 \par Make a XYZ graph with the predefined trajectory and the collision avoidance trajectory
+
+
 \par Make a table with varying number of objects and benchmark completeness
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/obstacle_1.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/obstacle_2.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/obstacle_3.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/obstacle_4.png}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/obstacle_5.png}
+    \end{subfigure}
+    \caption{Simulation scenarios with multiple obstacles}
+    \label{fig:obstacle_test}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Obstacles} & \textbf{Completed} & \textbf{Average Time} \\ \hline
+    \textbf{0} & 10/10 & 11.43s \\ \hline
+    \textbf{1} & 9/10 & 19.29s \\ \hline
+    \textbf{2} & 7/10 & 20.44s \\ \hline
+    \textbf{3} & 6/10 & 20.55s \\ \hline
+    \textbf{4} & 2/10 & 22.32s \\ \hline
+    \textbf{5} & 0/10 & --- \\ \hline
+    \end{tabular}
+    \caption{Results of the obstacle avoidance test}
+    \label{tab:obstacle_test}
+    \end{table}
+
 \par Make a table with the response times of the object detection (gazebo)
+
+% TODO Explain that this tests are giving more focus to the algorithms implemented and not on the tasks itself, because the tasks are all able to be completed... The more important aspect is the capabilities of the implemented algorithms (payload compensation, collision avoidance)
 
 \section{System Stability}
 

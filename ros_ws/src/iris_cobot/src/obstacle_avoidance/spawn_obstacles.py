@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import rospkg, rospy
+import random
 from math import sin, cos, radians
 from urdf_parser_py.urdf import Sphere, URDF, Pose as URDFPose, Sphere
 from geometry_msgs.msg import Pose, Point, Quaternion
@@ -17,15 +18,31 @@ def main():
     # Obstacles description
     model = URDF.from_xml_file(BASE_DIR + '/urdf/sphere.urdf')
     init_spawn = 10
-    spheres = [
-        # ('sphere_1', 0.05 , (0, 0, init_spawn)),
-        # ('sphere_2', 0.05,  (0, 0, init_spawn)),
-        # ('sphere_3', 0.1,  (1, 1, 0.5))
-        ('sphere_right', 0.08, (0.9, 0.6, 0.55)),
-        ('sphere_left', 0.08, (0.6, 0.9, 0.35)),
-        ('sphere_center', 0.1, (0.8, 0.8, 0.2))
+    # spheres = [
+    #     # ('sphere_1', 0.05 , (0, 0, init_spawn)),
+    #     # ('sphere_2', 0.05,  (0, 0, init_spawn)),
+    #     # ('sphere_3', 0.1,  (1, 1, 0.5))
+    #     ('sphere_right', 0.08, (0.9, 0.6, 0.55)),
+    #     ('sphere_left', 0.08, (0.6, 0.9, 0.35)),
+    #     ('sphere_center', 0.1, (0.8, 0.8, 0.2))
+    # ]
 
-    ]
+    # Create X amount of randomly placed obstacles
+    num_obs = 3
+    obs_rad = 0.05
+    spheres = []
+    min_xy = 0.5
+    max_xy = 1
+    min_z = 0.3
+    max_z = 0.6
+    for i in range(num_obs):
+        x = min_xy + random.random() * (max_xy - min_xy) 
+        y = min_xy + random.random() * (max_xy - min_xy)
+        z = min_z  + random.random() * (max_z  - min_z)
+        spheres.append(('sphere_' + str(i), obs_rad, (x, y, z)))
+
+        
+
 
     # Spawn Models
     for sphere in spheres:

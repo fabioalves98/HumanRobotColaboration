@@ -1575,6 +1575,12 @@ https://answers.ros.org/question/42289/difference-between-two-rigid-body-transfo
 - Testar a tarefa 10 vezes com vários graus de accuracy 1-5
 - Tabela que com varios valores de accuracy e resultados
 
+#### Collision Avoidance Test
+
+- Teste em que se dá spawn de vários obstaculos 0-5 e se testa a capacidade do robot executar uma trajetória
+- Testar a exceução da trajetória 10 vezes
+- Tabela com o numero de testes completos e a media de tempo que o robot demora a executalos
+
 ****
 
 - Capítulo 6 da tese

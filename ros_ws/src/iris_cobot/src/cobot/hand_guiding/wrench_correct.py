@@ -105,6 +105,9 @@ def main():
     wrench_sub = rospy.Subscriber('wrench_filtered', WrenchStamped, wrenchCorrect)
     rospy.wait_for_message('wrench_filtered', WrenchStamped)
 
+    rospy.INFO("Wrench correct node node listening to wrench_filtered and wrench_theory, and \
+                publishing to wrench_filtered")
+
     rospy.spin()
 
 
