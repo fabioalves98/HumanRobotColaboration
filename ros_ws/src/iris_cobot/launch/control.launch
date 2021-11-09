@@ -1,13 +1,19 @@
 <?xml version="1.0"?>
 <launch>
 
+    <arg name="sim"   default="false"/>
+
     <!-- Jacobian Conversion -->
     <node pkg="iris_cobot" type="jacobian" name="jacobian" output="screen" respawn="true"/>
 
     <!-- Joint Velocity Controller -->
-    <!-- <node pkg="iris_cobot" type="joint_speed_controller" name="joint_speed_controller" output="screen" respawn="true"/> -->
+    <group unless="$(arg sim)">
+        <node pkg="iris_cobot" type="joint_speed_controller" name="joint_speed_controller" output="screen" respawn="true"/>
+    </group>
 
     <!-- MoveIt Positional Controller-->
-    <node pkg="iris_cobot" type="moveit_controller" name="moveit_controller" output="screen" respawn="true"/>
+    <group if="$(arg sim)">
+        <node pkg="iris_cobot" type="moveit_controller" name="moveit_controller" output="screen" respawn="true"/>
+    </group>
 
 </launch>

@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 
-    <arg name="real"   default="true"/>
+    <arg name="sim"   default="false"/>
 
     <!-- Off-line trajectory creator and attraction Vector -->
     <node pkg="iris_cobot" type="attraction" name="attraction" output="screen" respawn="true"/>
 
     <!-- Turn on real camera and calibration (only in real scenario) -->
-    <group if="$(arg real)">
+    <group unless="$(arg sim)">
         <include file="$(find openni_launch)/launch/openni.launch">
             <arg name="depth_registration"  value="false"/>
         </include>
@@ -15,7 +15,7 @@
     </group>
 
     <!-- Obstacle Spawner (only in gazebo) -->
-    <!-- <group unless="$(arg real)">
+    <!-- <group if="$(arg sim)">
         <node pkg="iris_cobot" type="spawn_obstacles.py" name="spawn_obstacles" output="screen" respawn="true"/>
     </group> -->
 

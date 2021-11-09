@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import os
-from unicodedata import normalize
-
-from numpy.core.defchararray import split
 import rospy
 import math
 import numpy as np
