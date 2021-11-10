@@ -225,11 +225,11 @@ Nowadays, most industrial robots are shipped with teach pendants. These are hand
 
 % READ Springer Handbook of Robotics - Kinematics, p. 11
 
-\par Motion planning is a computational problem with the objective of planning motions for complex bodies from a start to a goal position. It breaks down a desired movement task into discrete motions that satisfy movement constraints while avoiding collision with known obstacles. 
-\par The MoveIt Motion Planning Framework \cite{moveit.paper, moveit.online} is an easy-to-use open source robotics manipulation platform for developing commercial applications, prototyping designs, and benchmarking algorithms. Its main strength is the ability to generate high \ac{dof} trajectories trough cluttered environments and avoid local minimums. It also provides robot description and kinematics implementations for multiple robot manipulators. 
-\par In this work, MoveIt will be used mostly for off-line position-based trajectory planning. One of the objectives is to control the robot in real-time, with velocity-based commands sent at high frequency. As of writing, current MoveIt releases do not support such features, having only plans to implement them in future versions. Further details on the solution of this problem will be presented in \autoref{section:pf-method}.
+\par Motion planning is a computational problem with the objective of planning motions for complex bodies from a start to a goal position. It breaks down a desired movement task into discrete motions that satisfy movement constraints while avoiding collision with known obstacles.
+\par The MoveIt Motion Planning Framework \cite{moveit.paper, moveit.online} is an easy-to-use open source robotics manipulation platform for developing commercial applications, prototyping designs, and benchmarking algorithms. Its main strength is the ability to generate high \ac{dof} trajectories trough cluttered environments and avoid local minimums. It also provides robot description and kinematics implementations for multiple robot manipulators. One of its features that is relevant to this Dissertation is the implementation of the \ac{ompl}, which aggregates many state of the art motion planning algorithms. One of which is the \ac{rrt} Connect planner which will be the default motion planner used in this work.
+\par In this work, MoveIt will be used mostly for offline position-based trajectory planning. One of the objectives is to control the robot in real-time, with velocity-based commands sent at high frequency. As of writing, current MoveIt releases do not support such features, having only plans to implement them in future versions. Further details on the solution of this problem will be presented in \autoref{section:pf-method}.
 
-% TODO Robot Kinematics and general improvements
+% TODO Robot Kinematics, APF, and general improvements
 
 
 

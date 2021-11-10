@@ -49,25 +49,25 @@ def plotTrajPoses():
     traj_obs = openList('/curves/traj_obstacle_poses.list')
 
     trajectories = [traj_n_obs, traj_obs]
-    mpl.rcParams['font.size'] = 15
 
+    mpl.rc('font', size=15)
+    mpl.rc('axes', labelsize=20)
     
     fig = plt.figure()
     ax = fig.gca(projection='3d')
-    ax.set_xlabel('X(m)')
-    ax.set_ylabel('Y(m)')
-    ax.set_zlabel('Z(m)')
+    ax.set_xlabel('\n\nX(m)')
+    ax.set_ylabel('\n\nY(m)')
+    ax.set_zlabel('Z(m)     ')
     ax.xaxis.set_rotate_label(False) 
     ax.yaxis.set_rotate_label(False) 
     ax.zaxis.set_rotate_label(False) 
-    ax.set_xlim3d(0, 1.2)
-    ax.set_ylim3d(0, 1.2)
-    ax.set_zlim3d(0, 1)
-    
-    
-    lines = ["k--", "k"]
+    ax.set_xlim3d(0, 1)
+    ax.set_ylim3d(0, 1)
+    ax.set_zlim3d(0, 1)    
+    lines = ["k--", "b"]
     labels = ["Original", "Adjusted"]
 
+    # Plot Trajectories
     for traj in trajectories:
         idx = trajectories.index(traj)
         traj_len = len(traj)
@@ -82,6 +82,14 @@ def plotTrajPoses():
         ax.plot(traj_xyz[:,0], traj_xyz[:,1], traj_xyz[:,2], lines[idx], label=labels[idx])
         ax.legend()
 
+    # Plot Obstacle
+    obs_u = np.linspace(0, 2 * np.pi, 100)
+    obs_v = np.linspace(0, np.pi, 100)
+    obs_x = 0.8 + 0.1 * np.outer(np.cos(obs_u), np.sin(obs_v))
+    obs_y = 0.8 + 0.1 * np.outer(np.sin(obs_u), np.sin(obs_v))
+    obs_z = 0.35 + 0.1 * np.outer(np.ones(np.size(obs_u)), np.cos(obs_v))
+    
+    ax.plot_wireframe(obs_x, obs_y, obs_z, color='r', rcount = 20, ccount = 20)
 
     plt.show()
 
