@@ -281,8 +281,8 @@ void cloud_callback(const sensor_msgs::PointCloud2ConstPtr& cloud_msg)
     tf2::Vector3 w3_p = w3_camera_tf.getOrigin();
 
     double min_dist = 0.05;
-    std::vector<tf2::Vector3> primary_points {world_p, sl_p, sl_off_p, fa_off_p, fa_p, w1_off_p, w1_p, w2_p, w3_p};
-    // std::vector<tf2::Vector3> primary_points {fa_p, w1_off_p, w1_p, w2_p, w3_p};
+    // std::vector<tf2::Vector3> primary_points {world_p, sl_p, sl_off_p, fa_off_p, fa_p, w1_off_p, w1_p, w2_p, w3_p};
+    std::vector<tf2::Vector3> primary_points {fa_p, w1_off_p, w1_p, w2_p, w3_p};
     
     std::vector<tf2::Vector3>::iterator it;
     std::vector<tf2::Vector3> total_points;

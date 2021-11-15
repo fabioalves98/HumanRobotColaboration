@@ -299,8 +299,6 @@
 \subsection{Collision Free Execution of an Industrial Task}
 \label{sec:colision_tests}
 
-% TODO Collision avoidance tests
-
 \par The validity of the collision avoidance architecture has already been shown in \autoref{sec:obstacle-architecture}, and the execution of an industrial task is a simple succession of predefined steps. To obtain performance metrics on this task, a series of tests will be performed and its results outlined.
 
 \par The first test consists on a trajectory between two poses and a sphere obstacle strategically placed on top of the trajectory. Detailed parameters of this test are outlined in \autoref{tbl:obstacle_test}, where position is to read as XYZ coordinates in meters, and orientation as XYZ rotation in degrees (\textdegree).
@@ -418,7 +416,72 @@
 
 % TODO Explain real scenario test (Video?)
 
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_no_1.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_no_2.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_no_3.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_no_4.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_no_5.jpg}
+    \end{subfigure}
+    \par\smallskip
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_1.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_2.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_3.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_4.jpg}
+    \end{subfigure}%
+    \begin{subfigure}{.2\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/col_real_5.jpg}
+    \end{subfigure}
+    \caption{Succession of steps of the collision avoidance test}
+    \label{fig:col_real_test}
+\end{figure}
+
 % TODO Test in the real scenario the minimum distances of the robot according to its speed
+
+\begin{figure}[h]
+    \centering
+    \begin{subfigure}{.5\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/traj_obstacles_1.pdf}
+    \end{subfigure}%
+    \begin{subfigure}{.5\linewidth}
+        \centering
+        \includegraphics[width=.95\linewidth]{figs/chp6/traj_obstacles_2.pdf}
+    \end{subfigure}
+    \caption{Collision avoidance in real scenario with multiple speed settings}
+    \label{fig:real_col_speed}
+\end{figure}
+
+% TODO Align the graph orientation
+
+
 
 % TODO Explain that this tests are giving more focus to the algorithms implemented and not on the tasks itself, because the tasks are all able to be completed... The more important aspect is the capabilities of the implemented algorithms (payload compensation, collision avoidance)
 

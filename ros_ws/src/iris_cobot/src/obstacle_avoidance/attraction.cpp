@@ -314,16 +314,16 @@ int main(int argc, char **argv)
     //     1.8872361183166504, -2.362852712670797, -1.6420011520385742, 
     //     -0.6762150090983887, 1.5861048698425293, -0.45677310625185186
     // };
-    // // Waypoint 1
-    // sVec<double> waypoint_1 = {
-    //     1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
-    //     0.08445851385083003, 2.0642237663269043, -0.4083760420428675
-    // };
-    // // Waipoint 2
-    // sVec<double> waypoint_2 = {
-    //     3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
-    //     0.13671223699536128, 0.9651718139648438, 0.5363349914550781
-    // };
+    // Waypoint 1
+    sVec<double> waypoint_1 = {
+        1.7148256301879883, -1.995969911614889, -1.9703092575073242, 
+        0.08445851385083003, 2.0642237663269043, -0.4083760420428675
+    };
+    // Waipoint 2
+    sVec<double> waypoint_2 = {
+        3.1301183700561523, -1.707872053185934, -2.3773908615112305, 
+        0.13671223699536128, 0.9651718139648438, 0.5363349914550781
+    };
     // // End Position
     // sVec<double> end_joints = 
     // {
@@ -359,7 +359,8 @@ int main(int argc, char **argv)
     int marker_id = 0;
 
     // sVec<sVec<double>> waypoints = {start_joints, waypoint_1, waypoint_2, end_joints};
-    sVec<sVec<double>> waypoints = {start_joints, end_joints};
+    sVec<sVec<double>> waypoints = {waypoint_1, waypoint_2};
+    // sVec<sVec<double>> waypoints = {start_joints, end_joints};
 
     for (int i = 0; i < waypoints.size() - 1; i++)
     {

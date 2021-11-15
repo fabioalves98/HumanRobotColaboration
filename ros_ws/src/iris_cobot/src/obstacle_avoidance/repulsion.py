@@ -89,6 +89,7 @@ def main():
     while True:
         try:
             camera_tf = tfBuffer.lookup_transform('base_link', 'camera_depth_optical_frame', rospy.Time())
+            print(camera_tf)
             break
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException, tf2_ros.ExtrapolationException):
             continue
