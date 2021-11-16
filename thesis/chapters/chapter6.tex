@@ -414,7 +414,7 @@
 
 % TODO Make a table with the response times of the obstacle detection (gazebo)
 
-% TODO Explain real scenario test (Video?)
+% TODO Explain real scenario test
 
 \begin{figure}[h]
     \centering
@@ -463,8 +463,6 @@
     \label{fig:col_real_test}
 \end{figure}
 
-% TODO Test in the real scenario the minimum distances of the robot according to its speed
-
 \begin{figure}[h]
     \centering
     \begin{subfigure}{.5\linewidth}
@@ -479,8 +477,23 @@
     \label{fig:real_col_speed}
 \end{figure}
 
-% TODO Align the graph orientation
-
+\begin{table}[]
+    \centering
+    \begin{tabular}{|c|c|c|}
+    \hline
+    \textbf{Speed Slider} & \textbf{EEF Speed} & \textbf{Minimum Distance} \\ \hline
+    \textbf{0.1}          & 0.054              & 0.21749                   \\ \hline
+    \textbf{0.3}          & 0.155              & 0.21157                   \\ \hline
+    \textbf{0.5}          & 0.234              & 0.19893                   \\ \hline
+    \textbf{0.6}          & 0.282              & 0.19460                   \\ \hline
+    \textbf{0.7}          & 0.316              & 0.19105                   \\ \hline
+    \textbf{0.8}          & 0.359              & 0.18347                   \\ \hline
+    \textbf{0.9}          & 0.406              & Collision                 \\ \hline
+    \textbf{1.0}          & 0,449              & Collision                 \\ \hline
+    \end{tabular}
+    \caption{Minimum EEF distance to obstacle relative to its speed}
+    \label{tbl:speed_dist}
+\end{table}
 
 
 % TODO Explain that this tests are giving more focus to the algorithms implemented and not on the tasks itself, because the tasks are all able to be completed... The more important aspect is the capabilities of the implemented algorithms (payload compensation, collision avoidance)

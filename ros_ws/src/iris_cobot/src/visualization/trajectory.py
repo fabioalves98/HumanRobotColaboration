@@ -58,8 +58,6 @@ def trajReal2List():
             print(bag.get_type_and_topic_info())
 
             traj_joints = []
-
-
             for topic, msg, t in bag.read_messages():
                 if topic == "/joint_states":
                     if len(msg.name) == 6:
@@ -131,6 +129,7 @@ def plotGazTraj():
 
 
 def plotRealTraj():
+    # Get trajectories lists
     traj_n_obs = openList(FOLDER + 'traj_real_no_obstacle.list')
     traj_obs_10 = openList(FOLDER + 'traj_real_10.list')
     traj_obs_30 = openList(FOLDER + 'traj_real_30.list')
@@ -180,7 +179,7 @@ def plotRealTraj():
     
     # Plot Obstacles
     for bag_file in sorted(os.listdir(BASE_DIR + FOLDER)):
-        if "traj_real_10.bag" == bag_file:
+        if all(x in bag_file for x in["traj_real", ".bag"]):
             bag = rosbag.Bag(BASE_DIR + FOLDER + bag_file)
 
             obstacles = []
@@ -194,19 +193,126 @@ def plotRealTraj():
                             obstacles.append(obs_center)
 
             print(len(obstacles))
+            # Constrain Obstacles
+            for obstacle in list(obstacles):
+                if 0.3 < obstacle.x < 0.6 and -0.7 < obstacle.y < 0.4:
+                    continue
+                else:
+                    obstacles.remove(obstacle)
+
+            print(len(obstacles))
 
             ax.scatter([o.x for o in obstacles], [o.y for o in obstacles], [o.z + 0.05 for o in obstacles])
 
     plt.show()
 
+
+def trajSpeed():
+    # Trajecotries lists
+    traj_tests = [
+        'traj_real_10',
+        'traj_real_30',
+        'traj_real_50',
+        'traj_real_60',
+        'traj_real_70',
+        'traj_real_80',
+    ]
+
+    for test in traj_tests:
+        bag = rosbag.Bag(BASE_DIR + FOLDER + test + '.bag')
+        trajectory = openList(FOLDER + test + '.list')
+
+        times = []
+        for topic, msg, t in bag.read_messages():
+            if topic == "/joint_states":
+                if len(msg.name) == 6:
+                    joints = []
+                    for j_name in JOINT_NAMES:
+                        joints.append(msg.position[msg.name.index(j_name)])
+
+                    times.append(t)
+
+        step = 50
+        speeds = []
+        for i in range(0, len(times)-step, step):
+            time_diff = (times[i+step] - times[i]).to_sec()
+
+            next_p = trajectory[i+step].translation
+            next_point = np.array([next_p.x, next_p.y, next_p.z])
+
+            cur_p = trajectory[i].translation
+            cur_point = np.array([cur_p.x, cur_p.y, cur_p.z])
+
+            speeds.append(np.linalg.norm(next_point - cur_point) / time_diff)
+
+        print("%s Speed = %f" % (test, max(speeds)))
+        
+
+def trajMinDist():
+    # Trajecotries lists
+    traj_tests = [
+        'traj_real_10',
+        'traj_real_30',
+        'traj_real_50',
+        'traj_real_60',
+        'traj_real_70',
+        'traj_real_80',
+    ]
+
+    # Get camera TF
+    camera_tf = None
+    with open(BASE_DIR + '/curves/camera_tf.pickle', 'r') as f:
+        camera_tf = pickle.load(f)
+
+    # Get Obstacles
+    obstacles = []
+    for bag_file in sorted(os.listdir(BASE_DIR + FOLDER)):
+        if all(x in bag_file for x in["traj_real", ".bag"]):
+            bag = rosbag.Bag(BASE_DIR + FOLDER + bag_file)
+
+            for topic, msg, t in bag.read_messages():
+                
+                if topic == "/obstacles":
+                    if msg.size > 0:
+                        for i in range(msg.size):
+                            obs_point = PointStamped(point=msg.centers[i])
+                            obs_center = do_transform_point(obs_point, camera_tf).point
+                            obstacles.append(obs_center)
+    # Constrain Obstacles
+        for obstacle in list(obstacles):
+            if 0.3 < obstacle.x < 0.6 and -0.7 < obstacle.y < 0.4:
+                continue
+            else:
+                obstacles.remove(obstacle)
+
+    # Get average obstacle position
+    obstacle_mean = np.array([np.mean([o.x for o in obstacles]),
+                              np.mean([o.y for o in obstacles]),
+                              np.mean([o.z for o in obstacles])])
+
+    # Get Minimum Distance btwn each Trajectory and Obstacles
+    for test in traj_tests:
+        trajectory = openList(FOLDER + test + '.list')
+        
+        distances = []
+        for p in [x.translation for x in trajectory]:
+            point = np.array([p.x, p.y, p.z])
+            distances.append(np.linalg.norm(point - obstacle_mean))
+
+        print("%s Min Dist = %f" % (test, min(distances)))
+
+
 if __name__ == '__main__':
-    rospy.init_node('repulsion', anonymous=False)
+    # rospy.init_node('repulsion', anonymous=False)
 
     # trajGaz2List()
     # plotGazTraj()
 
     # trajReal2List()
-    plotRealTraj()
+    # plotRealTraj()
+
+    trajSpeed()
+    # trajMinDist()
     
 
 
