@@ -1,0 +1,20 @@
+<library path="src">
+  <class name="UR10e Plugin" type="rqt_ur10e.plugin.UR10ePlugin" base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Plugin that enables iris_ur10e functions as a GUI application
+    </description>
+    <qtgui>
+      <!-- optional grouping...
+      <group>
+        <label>Group</label>
+      </group>
+      <group>
+        <label>Subgroup</label>
+      </group>
+      -->
+      <label>UR10e</label>
+      <icon type="theme">system-help</icon>
+      <statustip>A Python GUI plugin to interact with the iris_ur10e ROS Driver.</statustip>
+    </qtgui>
+  </class>
+</library>

@@ -14,6 +14,7 @@ class CobotPlugin(Plugin):
         self.setObjectName('Cobot Plugin')
         # Create QWidget
         self._widget = QWidget()
+        self._widget.setWindowTitle('Cobot Plugin')
         # Get path to UI file which should be in the "resource" folder of this package
         ui_file = os.path.join(rospkg.RosPack().get_path('iris_cobot'), 'resource', 'CobotPlugin.ui')
         # Extend the widget with all attributes and children from UI file

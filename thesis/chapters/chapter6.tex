@@ -299,7 +299,10 @@
 \subsection{Collision Free Execution of an Industrial Task}
 \label{sec:colision_tests}
 
-\par The validity of the collision avoidance architecture has already been shown in \autoref{sec:obstacle-architecture}, and the execution of an industrial task is a simple succession of predefined steps. To obtain performance metrics on this task, a series of tests will be performed and its results outlined.
+\par The validity of the collision avoidance architecture has already been shown in \autoref{sec:obstacle-architecture}, and the execution of an industrial task is a simple succession of predefined steps. To obtain performance metrics on this task and the collision avoidance architecture, a series of tests will be performed, both in simulation and in a real environment, and its results outlined.
+
+
+\subsubsection{Gazebo Simulator Environment}
 
 \par The first test consists on a trajectory between two poses and a sphere obstacle strategically placed on top of the trajectory. Detailed parameters of this test are outlined in \autoref{tbl:obstacle_test}, where position is to read as XYZ coordinates in meters, and orientation as XYZ rotation in degrees (\textdegree).
 
@@ -410,11 +413,16 @@
 \end{itemize}
 
 
-\par To solve this issues, the collision avoidance architecture should be improved by taking into account multiple obstacles simultaneously, and calculating their distance to multiple parts of the robot, and not just to the \ac{eef}. A possible solution to the local minimum problem, would be the replanning of the offline trajectory taking into account the obstacles identified. Due to the nature of the goals proposed for this Dissertation, these endeavours were not implemented and rather classified as future work.
+\par To solve this issues, the collision avoidance architecture should be improved by taking into account multiple obstacles simultaneously, and calculating their distance to multiple parts of the robot, and not just to the \ac{eef}. A possible solution to the local minimum problem, would be the replanning of the offline trajectory taking into account the obstacles identified. Due to the nature of the goals proposed for this Dissertation, these endeavours were not implemented but rather classified as future work.
 
-% TODO Make a table with the response times of the obstacle detection (gazebo)
+% TODO Make a table with the response times of the obstacle detection (gazebo, from obstacle to movement)
 
-% TODO Explain real scenario test
+
+\subsubsection{Real Environment}
+
+\par Regarding the implementation of this task in a real scenario, the executed tests and recorded performance metrics were not the same as the simulation tests. Instead of testing the ability to adapt the trajectory in a cluttered environment, focus was given to the relation between robot speed and minimum collision distance. Reasons for this choice rely on the fact that arranging various obstacles in a real scenario is more time consuming than in the Gazebo simulator. On the other hand, the joint speed control in the simulator is not possible since, currently, the \ac{ur10e} Gazebo implementation only supports joint position based control. Therefore, since the \ac{ur10e} Polyscope interface allows velocity control through a speed slider variable, it is possible to correlate the speed of the robot \ac{eef} to the effectiveness of the collision avoidance architecture.
+
+\par To achieve these metrics, a similar test was performed were a table served as a shared workspace, and the robot would execute a trajectory between its extremes. On the first test, there were no obstacles between the 2 points, but on the following tests an orange cone is placed in a position that would intentionally colide with the offline trajectory. \autoref{fig:col_real_test} illustrates both the execution of the trajectory without obstacles and with an orange cone directly interfering with the trajectory.
 
 \begin{figure}[h]
     \centering
@@ -463,6 +471,8 @@
     \label{fig:col_real_test}
 \end{figure}
 
+\par As observed, the robot is able to avoid the obstacle, complete its trajectory and keep a safe distance from the obstacle, preventing a collision with any part of the robot. This base test was performed with a speed slider of 10\%. To observe how the robot speed impacts its behavior when avoiding obstacles, this test was repeated in multiple speed slider settings. \autoref{fig:real_col_speed} demonstrates the trajectory of the \ac{eef} when performing the aforementioned tests, and it also denotes in space the points that were identified as obstacles.
+
 \begin{figure}[h]
     \centering
     \begin{subfigure}{.5\linewidth}
@@ -477,7 +487,9 @@
     \label{fig:real_col_speed}
 \end{figure}
 
-\begin{table}[]
+\par When increasing the speed of the robot, the point in space where the robot starts adapting its trajectory gets closer to the identified obstacles. The maximum speed slider value was 80\% due to the fact that an higher values causes a collision. \autoref{tbl:speed_dist} shows in each speed setting the minimum distance that the robot \ac{eef} was in relation to the identified obstacle at that time. The table also shows the conversion of speed slider to real \ac{eef} speed in $m/s$.
+
+\begin{table}[h]
     \centering
     \begin{tabular}{|c|c|c|}
     \hline
@@ -495,12 +507,22 @@
     \label{tbl:speed_dist}
 \end{table}
 
+\par The configured parameter, on the collision avoidance architecture, by which a point is considered to be inside the \ac{roi}, for the execution of theses tests, was 0.3m. The results obtained are as expected since when the robot moves with a relatively low speed, the distance it keeps from the obstacle is constant and high enough to prevent collisions, throughout the execution of the trajectory. But as the speed of the robot increases, the minimum distance starts to decrease, reaching a point where this implementation is not fast enough to make the robot avoid the obstacle. This behavior happens for a couple of reasons:
+
+\begin{itemize}
+    \item The distance between the \ac{eef} and the tip of the gripper tool is exactly 0.18m, therefore, according to \autoref{tbl:speed_dist}, when the speed slider is higher than 80\%, the robot colides with the obstacle because it cannot maintain a minimum distance higher than 0.18m.
+    \item The rate of identification of obstacles is limited, due to the fact that the Microsoft Kinect camera can only publish point clouds at a maximum rate of 30Hz. The fact that this architecture and tests were executed on a laptop also does not help performance.
+    \item As demonstrated in \autoref{chp:4-obstacle}, when identifying obstacles and calculating the repulsion vector, only the \ac{eef} position is used.
+\end{itemize}
+
+\par A simple fix to obtain better results in this test is increasing the \ac{roi} minimum distance constant, but in theory, 0.3m should be enough to avoid collisions at the \ac{eef} level, therefore, the performance of the robot when avoiding obstacles can be improved in various other aspects. The collision avoidance architecture should use more points to identify obstacles and calculate the repulsion vector, than using only the \ac{eef} position. Examples are the tip of the gripper tool and the wrist links. The use of a faster camera with an higher sample frequency should also be considered, since, by industry standards, 30Hz is not enough to detect dynamic obstacles. Even though the results can be improved with the aforementioned solutions, this implementation is considered successful in what it proposes, which is the execution of an offline trajectory with realtime dynamic collision avoidance.
+
 
 % TODO Explain that this tests are giving more focus to the algorithms implemented and not on the tasks itself, because the tasks are all able to be completed... The more important aspect is the capabilities of the implemented algorithms (payload compensation, collision avoidance)
 
 \section{System Stability}
 
-% TODO Make tests on system latency and performance
+% TODO Make tests on system latency and performance (in all components)
 
 % System cannot maintain activity for long periods of time
 \par A more general performance metric is the ability for the system to maintain activity for long periods of time. There are several factors that prevent this from happen. During the execution of the previous tests and any other time directly interfacing with the robot, there were some events that injured the overall experience.

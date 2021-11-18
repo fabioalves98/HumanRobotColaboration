@@ -79,6 +79,8 @@ add_dependencies(obstacle_detection ${PROJECT_NAME}_gencfg ${PROJECT_NAME}_gener
 
 add_executable(attraction src/obstacle_avoidance/attraction.cpp)
 target_link_libraries(attraction ${catkin_LIBRARIES})
+add_dependencies(attraction ${PROJECT_NAME}_generate_messages_cpp)
+
 
 # Control
 add_executable(jacobian src/control/jacobian.cpp)
