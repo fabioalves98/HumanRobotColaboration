@@ -307,7 +307,11 @@
 \section{Software Tools for \ac{hrc}}
 \label{sec:tools-hrc}
 
-\par iris\_ur10e
+\par The collaborative state machine provides an integrated interface for robot usage and control, but it order to extend it with new features, the user needs to have programming skills and robotic knowledge. To facilitate this job, 2 rqt \acp{gui} were developed. Integrations with the plotjuggler and smach\_viewer visualization tools were also implemented.
+
+\subsection{rqt\_ur10e}
+
+\par When working with a robotic arm, there are a group of actions that are constantly being executed by the programmer. The rqt\_ur10e is a \ac{gui} developed for the iris\_ur10e \ac{ros} package that gives the user a set of shortcuts for robot interaction and configuration, and can be seen on \autoref{fig:rqt_ur10e}. These actions are specific to the \ac{ur10e} and the WEISS CRG 200, and depend on the correct execution of their \ac{ros} drivers.
 
 \begin{figure}[h]
     \centering
@@ -316,7 +320,31 @@
     \label{fig:rqt_ur10e}
 \end{figure}
 
-\par iris\_sami
+\par The choice of actions implemented on this \ac{gui} were based on personal experience with the robot. They consist on gripper control, which opens or closes the gripper; common service calling on the \ac{ur10e} \ac{ros} driver, with the Zero button which tares the \ac{ft} sensor values and the Resend button used when the \ac{ros} driver looses connection with the robot and a new connection needs to be performed; a Switch button used to interchange between the joint positional controller and the joint speed controller; and a configuration field to control the robot speed slider value. 
+\par The standard way of executing this actions would be through the command line or by sending scripts in URScript to the robot. This plugin allows for quicker and cleaner execution of such actions.
+
+
+
+\subsection{rqt\_sami}
+
+\par The iris\_sami \ac{ros} package, where \textit{sami} stands for Simple Arm Manipulation Interface, was developed at IRISLab prior to the development of this Dissertation. It provided easy robot motion planning through an abstraction of the MoveIt motion planning library with simple functions like \textit{move\_joitns()} or \textit{move\_pose()}. With these functions, a \ac{ros} service server was developed, in which a single instantiation of the MoveIt commander was created and the user could control the robot with \ac{ros} service calls through the command line. Theses functions, contrary to the previous package, are robot agnostic and the only requirement is compatibility with the MoveIt library. Examples of such \ac{ros} services include:
+
+% FIXME Change this to permanent single location (chapter 1)
+\acused{xyz}
+\acused{rpy}
+
+\begin{itemize}
+    \item \textbf{/iris\_sami/status: } Returns status information about the robot arm.
+    \item \textbf{/iris\_sami/alias: } Sends the robot to the alias position passed as input argument.
+    \item \textbf{/iris\_sami/save\_alias: } Takes as input a string variable and saves the current robot position as an alias position.
+    \item \textbf{/iris\_sami/move: } Takes \ac{xyz} \ac{rpy} arguments and moves the robot relatively referenced to the \ac{eef} frame.
+    \item \textbf{/iris\_sami/pose: } Takes \ac{xyz} \ac{rpy} arguments and sends the robot to the designated global pose on the world reference frame.
+    \item \textbf{/iris\_sami/joints: } Takes an array of 6 joints positions and sends the robot to the designated joint space position.
+    \item \textbf{/iris\_sami/velocity: } Takes an array of 6 joints speeds and a time variable and moves the robot with the designated joint speeds during the designated time.
+\end{itemize}
+
+\par With these services the user is empowered with complex control on robot motion planning and can easily combine multiple services on shell scripts for high-level task plans. During the development of this Dissertation it was noted that the interface through command line calls is not intuitive and on a practical level could be improved with a \ac{gui}. Hence, rqt\_sami was developed. It consists on another rqt plugin, but this time, implementing the functionality found in the iris\_sami \ac{ros} package. \autoref{fig:rqt_sami} demonstrates the interface. 
+\par It is horizontally divided in control functionality and status feedback. Starting at the top, there is an alias position selector where the use can send the robots to previously saved positions. Then, the area with arrow buttons allows the user to quickly move the robot in any direction, with bot linear movements and rotations. These actions can be performed relative to the \ac{eef} frame or the world frame, and the buttons work in a press and hold fashion which means that the robot only moves while the button is being pressed, stopping its with it is released. On the right of the arrow buttons the user can call the movement services with text input fields, accordingly labeled to each function. The Send button executes the service an the Reset button clears the fields. On the status feedback section, the first text area shows relevant information about the robot such as its mode of operation, joint positions and world pose. This information is updated at a rate of 50Hz. Finally on the bottom of the interface there is a text area where the feedback of each command is presented to the user.
 
 \begin{figure}[h]
     \centering
@@ -325,6 +353,10 @@
     \label{fig:rqt_sami}
 \end{figure}
 
+\par The development of the tasks proposed in this Dissertation was greatly enhanced by this interface, which is the main purpose it was initially designed for.
+
 % TODO rqt_cobot with current state, important variables and zero ft service
 
-\par other viewers and tools such as plotjuggler integration and smach\_viewer
+% \subsection{Visualization Integrations}
+
+% TODO plotjuggler, smach_viewer, rViz 
