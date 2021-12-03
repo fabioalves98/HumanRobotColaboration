@@ -1,8 +1,7 @@
 \chapter{Collaborative Tasks}
 \label{chp:5-tasks}
 
-% TODO Add intro to chapter 5
-
+\par In this chapter, we describe the implementation of the previous models in order to create the proposed collaborative tasks. We start by outlining how each task was achieved, describing its interface, flow and parameters. Then, we present the culmination of said tasks in a collaborative state machine that allows seamless integration and execution of each task. We finish this chapter showcasing 2 \ac{gui} that were developed with the purpose of enhancing the development of cobotic applications.
 
 
 
@@ -11,7 +10,7 @@
 \section{Hand Guiding}
 
 % Introduction on hand guiding and what is needed for it to happen
-\par So far, it has been explained how to obtain a compensated \ac{ft} measurement in order to obtain \acf{hgft}, which is caused by the user. This value is used to move the robot in the direction that it is applied. For this to happen, this values felt on the \ac{ft} reference frame need to be converted to a velocity vector, referenced on the base frame of the robot. 
+\par \autoref{sec:weight_comp} explained how to obtain a compensated \ac{ft} measurement in order to obtain \acf{hgft}, which is caused by the user. This value is used to move the robot in the direction that it is applied. For this to happen, these values felt on the \ac{ft} reference frame need to be converted to a velocity vector, referenced on the base frame of the robot. 
 
 
 
@@ -19,14 +18,14 @@
 \label{ssec:ft_to_eef}
 
 % Use of threshold and division constants to parse HGFT
-\par \ac{hgft} should only converted in robot motion when it reaches a certain threshold, otherwise, it should be zero. It should also exist a way to define the ration of conversion between \ac{ft} and velocity To achieve this behavior, the \ac{hgft} is controlled according to \autoref{eq:f_thresh} and \autoref{eq:t_thresh}.
+\par \ac{hgft} should only converted in robot motion when it reaches a certain threshold, otherwise, it should be zero. It should also exist a way to define the ratio of conversion between \ac{ft} and velocity. To achieve this behavior, the \ac{hgft} is controlled according to \autoref{eq:f_thresh} and \autoref{eq:t_thresh}.
 
 \begin{multicols}{2}
     \begin{equation}
         \mathbf{f_i} =
         \begin{cases}
           \frac{f_i - f_{th}}{f_{div}} & f_i > f_{th}\\
-          \frac{f_i + f_{th}}{f_{div}} & f_i < f_{th}\\
+          \frac{f_i + f_{th}}{f_{div}} & f_i < -f_{th}\\
           0 & \text{otherwise}
         \end{cases}
         \label{eq:f_thresh}
@@ -35,7 +34,7 @@
         \mathbf{t_i} =
         \begin{cases}
           \frac{t_i - t_{th}}{t_{div}} & t_i > t_{th}\\
-          \frac{t_i + t_{th}}{t_{div}} & t_i < t_{th}\\
+          \frac{t_i + t_{th}}{t_{div}} & t_i < -t_{th}\\
           0 & \text{otherwise}
         \end{cases}
         \label{eq:t_thresh} 
@@ -49,21 +48,21 @@
 % TODO Change the description of this process, either by saying its a point (instead of pose), or not using an analogy at all
 
 % Conversion of force to linear velocity 
-\par It is done by creating a pose with the force measurement as the position component, and transforming this pose with the rotation matrix of the \ac{ft} sensor frame. The resulting pose position can be directly used as global velocity. \autoref{eq:force_to_linear_vel} is used to calculate the linear velocity from the \ac{hg} force.
+\par It is performed by multiplying the force vector by the rotation matrix between the base frame and the sensor frame. Then, the resulting vector can be used as cartesian velocity. \autoref{eq:force_to_linear_vel} is used to calculate the linear velocity from the \ac{hg} force.
 
 \begin{equation}
     \vec{\mathbf{V_{lin}}} = R^b_e \cdot R^e_s \cdot P_{force}
     \label{eq:force_to_linear_vel}
 \end{equation}
 
-\noindent Where $\mathbf{R^b_e}$ is the rotation matrix of the \ac{eef} frame in relation to the robot base frame, $\mathbf{R^e_s}$ is a constant rotation matrix of the sensor frame in relation to the \ac{eef} frame, and $P_{force}$ is a point with the force measurements as its coordinates. $\vec{\mathbf{V_{lin}}}$ is obtained as a cartesian points which can directly be used as a linear velocity vector in the robot base frame.
+\noindent Where $\mathbf{R^b_e}$ is the rotation matrix of the \ac{eef} frame in relation to the robot base frame, $\mathbf{R^e_s}$ is a constant rotation matrix of the sensor frame in relation to the \ac{eef} frame, and $P_{force}$ is a point, referenced in the base frame, with the force measurements as its coordinates. $\vec{\mathbf{V_{lin}}}$ is obtained as a cartesian points which can directly be used as a linear velocity vector in the robot base frame.
 
 \subsubsection{Torque to Angular Velocity}
 
 % TODO Again, change the analogy used
 
 % Conversion of torque to angular velocity
-\par It is done by creating a pose with the torque measurement as the orientation component, transforming this orientation with the rotation matrix of the \ac{ft} sensor frame, and with this orientation, rotate the inverse rotation of the \ac{ft} sensor frame. \autoref{eq:force_to_linear_vel} is used to calculate the angular velocity from the \ac{hg} torque.
+\par It is performed by obtaining the difference between the sensor rotation, and another rotation with the torque measurement as its components. Both of these rotations are referenced in the base frame. \autoref{eq:force_to_linear_vel} is used to calculate the angular velocity from the \ac{hg} torque.
 
 \begin{equation}
     \vec{\mathbf{V_{ang}}} = (R^b_e \cdot R^e_s \cdot R_{torque}) \cdot (R^b_e \cdot R^e_s)^{-1}
