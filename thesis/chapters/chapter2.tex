@@ -1,7 +1,7 @@
 \chapter{Collaborative Robotics}
 \label{chp:2-collab-robots}
 
-\par In this chapter, we explore the theoretical background of this work, as well as some related research done in this field. We start by giving some historical context to see when and why collaborative robots started to emerge. Then, we define the field of \ac{hrc} detailing all of its subfields and characteristics. Afterwards, we outline the current technological trends used to develop such systems and give a thorough description of the \ac{ur10e} system. Finally, we give light to several research efforts performed not only in the general field of \ac{hrc}, but also in specific problems directly correlated to this work.
+\par In this chapter, we explore the theoretical background of this work, as well as related research performed in this field. We start by giving some historical context to see when and why collaborative robots started to emerge. Then, we define the field of \ac{hrc} detailing all of its subfields and characteristics. Afterwards, we outline the current technological trends used to develop such systems and give a thorough description of the \ac{ur10e} system. Finally, we give light to several research efforts performed not only in the general field of \ac{hrc}, but also in specific problems directly correlated to this work.
 
 
 
@@ -40,9 +40,7 @@
 \section{Human Robot Collaboration}
 
 % Explain Human Robot Collaboration
-\par \ac{hrc} is a subsection of the general field of study called \ac{hri} which according to research \cite{hri.1, hri.2} is defined as '\textit{a general term for all form of interaction between humans and robots}' or '\textit{the process of conveying human intentions and interpreting task descriptions into a sequence of robot motions complying with robot capabilities and working requirements}'. It is an umbrella term used to describe a multidisciplinary field that includes knowledge and understanding from human-computer interaction, robotics, artificial intelligence, design and psychology. 
-
-% FIXME There are many categorizations and views of HRI and HRC (cite many sources) but a general consensus revolving this subject...
+\par \ac{hrc} is a subsection of the general field of study called \ac{hri} which according to research \cite{hri.1, hri.2} is defined as '\textit{a general term for all form of interaction between humans and robots}' or '\textit{the process of conveying human intentions and interpreting task descriptions into a sequence of robot motions complying with robot capabilities and working requirements}'. It is an umbrella term used to describe a multidisciplinary field that includes knowledge and understanding from human-computer interaction, robotics, artificial intelligence, design and psychology.
 
 % Criteria used in order to classify Human Robot Collaboration
 \noindent \ac{hri} can be divided in several sub-categories based on the following four criteria \cite{paper.review.1, paper.review.2}:
@@ -137,8 +135,7 @@ Nowadays, most industrial robots are shipped with teach pendants. These are hand
 
 
 
-% TODO Change the name to Technologies and Background, or similar
-\section{Predominant Technologies}
+\section{Technological Background}
 
 % TODO Subsection on high level robot control with behavioral trees and ros_smach
 
@@ -166,7 +163,7 @@ Nowadays, most industrial robots are shipped with teach pendants. These are hand
 \label{ssec:ur10e}
 
 % The work will be implemented on a UR10e
-\par Although the techniques developed in this dissertation are generic, the cobot with which this work will be implemented is an \ac{ur10e}. It is a 6 \ac{dof} collaborative industrial robot equipped with a \ac{ft} sensor in its \ac{eef}. A visual description of its configuration is show in \autoref{fig:ur10e}, detailed technical specifications are shown in \autoref{tbl:ur10e-specs}, and the various ways that it can be controlled will be explained below, as well as the chosen method and why.
+\par Although the techniques developed in this dissertation are generic, the cobot with which this work will be implemented is an \ac{ur10e}. It is a 6 \ac{dof} collaborative industrial robot equipped with a \ac{ft} sensor in its \ac{eef}. A visual description of its configuration is shown in \autoref{fig:ur10e}, detailed technical specifications are shown in \autoref{tbl:ur10e-specs}, and the various ways that it can be controlled will be explained below, as well as the chosen method and why.
 
 \begin{figure}[h]
     \centering
@@ -254,8 +251,7 @@ Nowadays, most industrial robots are shipped with teach pendants. These are hand
 
 
 
-% FIXME Change the name to Similar Research, ou similar
-\section{Existing approaches}
+\section{Related Research}
 
 % There are no full features integrated, close, solutions
 \par In the topic of collaborative tasks between a human and a cobot, there is no record of  commercially available, full-featured frameworks or systems, that could allow the accomplishment of the objectives proposed in this dissertation. Even though manufacturers ship their cobots and accessories with extensible and flexible software, that allow the creation of such tasks, there is much work left for the user to design, program and implement the system architectures that aggregate the collaborative tasks and deliver a cohesive, seamless experience. Furthermore, there is no limit on the amount of collaboration that can exist, or on how the available tools can be used together in their final working environments.
@@ -298,7 +294,7 @@ Despite these facts, extensive research efforts have, and are currently being ma
 
 \par While studying the problem of collision prediction, the authors in \cite{spec.selfidentification} developed a method for robot self-identification based on a over-segmentation approach and the kinematic model of the robot. A similar method will be implemented in this Dissertation, since the vision system will be based on an \acs{rgbd} camera, and the points belonging to the robot must be segmented from the raw point cloud.
 
-\par The KUKA Sunrise Toolbox \cite{spec.kuka} is a MATLAB toolbox developed to interface and control KUKA iiwa robots. It contains functionalities for networking, real-time control, point-to-point motion and physical interaction. This work heavily inspired the contributions made to the \textit{iris\_sami} \ac{ros} package and the development of the plugins \textit{rqt\_sami} and \textit{rqt\_cobot}, where similar features were developed for \ac{ur} cobots.
+\par The KUKA Sunrise Toolbox \cite{spec.kuka} is a MATLAB toolbox developed to interface and control KUKA iiwa robots. It contains functionalities for networking, real-time control, point-to-point motion and physical interaction. This work heavily inspired the contributions made to the \textit{iris\_sami} \ac{ros} package and the development of the plugins \textit{rqt\_sami} and \textit{rqt\_ur10e}, where similar features were developed for \ac{ur} cobots.
 
 
 

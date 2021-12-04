@@ -33,26 +33,25 @@
 % Build a skeleton of the robot and identify points belonging to it
 \par The technique developed in this work starts by building a skeleton model of the robot, starting with the location of its links. The position of these links, defined in the robot \ac{urdf} present in its \ac{ros} driver, does not match the real position of the robot arms and wrists, therefore, from these links, a set of points are created representing the start and end of each real link. Using this set of points and a minimum distance constant, the skeleton model is created based on \autoref{code:robot_skeleton}. The difference between the links defined in the robot \ac{urdf} and the points created can be seen in \autoref{fig:links_to_points}.
 
-% FIXME Aproveitar e explicar melhor porque é que este processo é necessário, e que os links nao descrevem a estrutura do robot
-
 \begin{listing}[h]
     \centering
     \begin{minted}{python}
 
-    MIN_DISTANCE = 0.05
-    links = ROS.TransformLibrary.getLinks()
-    points = obtainPoints(links)
-    skeleton = []
+    def ur10eSkeleton(min_dist = 0.05):
+        skeleton = []
+        links = ROS.TransformLibrary.getLinks()
+        points = obtainPoints(links)
 
-    for point in points:  
-        skeleton.append(point)
-        distance = point.distance(point.next())
-        num_skeleton_points = distance / MIN_DISTANCE
-        increment = (point - point.next()) / num_skeleton_points
+        for point in points:  
+            skeleton.append(point)
+            distance = point.distance(point.next())
+            num_skeleton_points = distance / min_dist
+            increment = (point - point.next()) / num_skeleton_points
 
-        for i in range(num_skeleton_points):
-            skeleton.append(point + i * increment)
+            for i in range(num_skeleton_points):
+                skeleton.append(point + i * increment)
 
+        return skeleton
     
     \end{minted}
 \caption{Creation of a point based skeleton model of the robot}
@@ -102,7 +101,7 @@
 \par Starting from the raw point cloud obtained from the sensor, each point is categorized. Points belonging to the robot, and points too distant from it are removed. Only points belonging to the \ac{roi}, if there are any, are considered obstacles, therefore, a new point cloud is created with these points.
 
 % Application of CEC to the categorized point cloud
-\par To this new point cloud, a clustering algorithm is applied in order to represent the point cloud in a set of small clusters, each one to be considered an obstacle. The algorithm applied is the \ac{cec}, which is a region growing algorithm based on the \ac{ece} algorithm. It has the advantage of allowing a customizable clustering condition and also classifying clusters as too small or too large, based on defined parameters. The parameters for the \ac{cec} implementation,used in this work, can be found in \autoref{tbl:cec_params}.
+\par To this new point cloud, a clustering algorithm is applied in order to represent the point cloud in a set of small clusters, each one to be considered an obstacle. The algorithm applied is the \ac{cec}, which is a region growing algorithm based on the \ac{ece} algorithm. It has the advantage of allowing a customizable clustering condition and also classifying clusters as too small or too large, based on defined parameters. The parameters for the \ac{cec} implementation, used in this work, can be found in \autoref{tbl:cec_params}.
 
 \begin{table}[h]
     \centering

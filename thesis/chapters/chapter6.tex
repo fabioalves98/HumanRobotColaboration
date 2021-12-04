@@ -54,7 +54,7 @@
     \label{tab:interaction_test}
 \end{table}
 
-\par In 300 interactions, 94,5\% were correctly registered. Between the fails, the majority were due to weak execution of the double tap. There was record of a few interactions in which the direction was wrongly classified. The cause of this is due to the ambiguous direction in which the user performed the double tap.
+\par In 300 interactions, 94,5\% were correctly registered. The majority of the fails were due to weak execution of the double tap. There was record of a few interactions in which the direction was wrongly classified. The cause of this is due to the ambiguous direction in which the user performed the double tap.
 
 
 
@@ -90,7 +90,7 @@
 \end{figure}
 
 % Description of the hang guiding test
-\par The test consists on  \ac{hg} the cobot with the objective of walking the gripper fingers through an object that is placed on the table. The system must compensate the \ac{ft} caused by the gripper in every orientation, therefore the cobot must only move due to external forces caused by the user. On the other hand, the user must align the gripper fingers with the object without difficulty. To test the system responsiveness, the user must walk the gripper through the object in a linear motion, while the gripper finger are aligned with it. The succession of steps for this test is shown in \autoref{fig:hg_test}. 
+\par The test consists on  \ac{hg} the cobot with the objective of walking the gripper fingers through an object that is placed on the table. The system must compensate the \ac{ft} caused by the gripper in every orientation, therefore the cobot must only move due to external forces caused by the user. On the other hand, the user must align the gripper fingers with the object without difficulty. To test the system responsiveness, the user must walk the gripper through the object in a linear motion, while the gripper fingers are aligned with it. The succession of steps for this test is shown in \autoref{fig:hg_test}. 
 
 % Test metrics
 \par The metrics for this test are effectiveness and responsiveness. Effective means that the user was able to complete the test, therefore the gripper weight was always correctly compensated and the robot only moved according to the force applied by the user. Responsive means that the robot motion was smooth and specifically in the part that the user must align the gripper fingers with the object on the table, while performing the linear movement, the griper fingers never touched the object. The results should be interpreted as number os successes in the amount of attempts. This test was performed 10 times in multiple settings of force thresholds from the compensation model, and the results are outlined in \autoref{tab:hand_guiding_test}. 
@@ -127,7 +127,7 @@
 \subsection{Object Manipulation}
 
 % Requirements for the object manipulation task
-\par The object manipulation task requires the dynamic attachment of extra weight to the cobot \ac{eef}. It has been showed previously that the \ac{eef} weight compensation model supports dynamic changing of the weight and \ac{cog} parameters, but the performance of this manipulation task is directly proportional to the accurate measurement of this parameters.
+\par The object manipulation task requires the dynamic attachment of extra weight to the cobot \ac{eef}. It has been shown previously that the \ac{eef} weight compensation model supports dynamic changing of the weight and \ac{cog} parameters, but the performance of this manipulation task is directly proportional to the accurate measurement of these parameters.
 
 % Weight measurement test
 \par The first test regarding this task should be to find both system and \ac{ft} sensor performance on correctly measuring the weight of the coupled object. In order to do this, a 1Kg iron weight will be gripped by the cobot 10 times in 6 different orientations. These orientations consist on vertically aligning each \ac{ft} axis, in each direction, with gravity, in order to obtain the accuracy of each measurement component, and can be seen in \autoref{fig:weight_poses}.
@@ -167,7 +167,7 @@
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.8\linewidth]{figs/chp6/weight_measurements.pdf}
+    \includegraphics[width=0.9\linewidth]{figs/chp6/weight_measurements.pdf}
     \caption{Results of the weight measurement test in each position}
     \label{fig:weight_result}
 \end{figure}
@@ -197,11 +197,11 @@
 \par At first, the raw values are neither precise nor accurate showing a wrong weight average and an arguably high standard deviation. Applying the correction constants obtained from \ac{dls} optimization in \autoref{ssec:ft_theory_model}, it is possible to improve the precision of the measurements, with a significantly lower standard deviation, but the final average weight value is still far from the correct. Applying a scalar correction with the value of 1.2 provides an accurate and precise weight measurement, with an improved and much lower standard deviation, meaning it is expected that in real use scenarios, the weight of a coupled object should only deviate, in the maximum, by this value.
 
 % Object manipulation test
-\par Assuming the weight is correctly obtained, a real time test was performed to demonstrate that the \ac{eef} weight compensation model can sustain the same levels of accuracy independent of the weight coupled to the robot. \autoref{fig:object_result} shows a real time test where Wrist1 and Wrist2 joints are rotated causing multiple \ac{eef} orientations. Similar to previous real time tests the \ac{eef} weight is compensated with minimal error.
+\par Assuming the weight is correctly obtained, a real time test was performed to demonstrate that the \ac{eef} weight compensation model can sustain the same levels of accuracy independently of the weight coupled to the robot. \autoref{fig:object_result} shows a real time test where Wrist1 and Wrist2 joints are rotated causing multiple \ac{eef} orientations. Similar to previous real time tests the \ac{eef} weight is compensated with minimal error.
 
 \begin{figure}[h]
     \centering
-    \includegraphics[width=0.9\linewidth]{figs/chp6/object_result.png}
+    \includegraphics[width=\linewidth]{figs/chp6/object_result.png}
     \caption{Result of the compensation architecture applied in a real time test}
     \label{fig:object_result}
 \end{figure}
@@ -272,10 +272,10 @@
 \end{table}
 
 % Interpretation of the results
-\par \autoref{tab:object_manipulation_test} presents the results of the test and similar to the previous task a qualitative interpretation of them will follow: 
+\par \autoref{tab:object_manipulation_test} presents the results of the test and similarly to the previous task a qualitative interpretation of them will follow: 
 \begin{itemize}
-    \item Similar to the \ac{hg} task and for the same reasons, 1N of force threshold is unusable.
-    \item At 2N, the results improve but there is still prone to a lot of deviations, therefore not enough.
+    \item Similarly to the \ac{hg} task, and for the same reasons, 1N of force threshold is unusable.
+    \item At 2N, the results improve but they are still prone to a lot of deviations, therefore not enough.
     \item 3N show enough improvements on the results to be considered usable, since the majority of tests are completed. Given this fact, in a real manipulation scenario, the objective would be for the robot to never fail, even if it means sacrificing on responsiveness.
     \item 4N would be the ideal force threshold value for this task since it allows the completion of all the tests without significant sacrifice on motion responsiveness.
     \item 5N presents results similar to the \ac{hg} task where all tests are completed at the cost of motion smoothness.
@@ -333,7 +333,7 @@
     \label{fig:obstacle_test}
 \end{figure}
 
-\par Once the control service on the \ac{apf} controller is called with the \textit{play} instruction, the robot starts executing the trajectory. Since the obstacle node is not detecting any obstacles, the motion vector is equal to the attraction vector, therefore the executed trajectory is the same as the predefined one. When the robot approaches the obstacle, and the minimum distance constant is reached, a repulsion vector is generated making the final motion vector steer the robot away from the obstacle. Once the robot is enough distant from the obstacle and the repulsion vector disappears, it resumes the original trajectory. \autoref{fig:trajectory} shows this behavior, where the original and adjusted trajectories are plotted with the sphere obstacle.
+\par Once the control service on the \ac{apf} controller is called with the \textit{play} instruction, the robot starts executing the trajectory. Since the obstacle node is not detecting any obstacles, the motion vector is equal to the attraction vector, therefore the executed trajectory is the same as the predefined one. When the robot approaches the obstacle, and the maximum distance constant is reached, a repulsion vector is generated making the final motion vector steer the robot away from the obstacle. Once the robot is enough distant from the obstacle and the repulsion vector disappears, it resumes the original trajectory. \autoref{fig:trajectory} shows this behavior, where the original and adjusted trajectories are plotted with the sphere obstacle.
 
 \begin{figure}[h]
     \centering
@@ -348,7 +348,7 @@
     \centering
     \begin{tabular}{|c|c|c|}
     \hline
-    \textbf{Axis} & \textbf{Minimum} & \textbf{Maximum} \\ \hline
+    \textbf{Axis} & \textbf{Minimum} (m) & \textbf{Maximum} (m) \\ \hline
     \textbf{X} & 0.5 & 1.0 \\ \hline
     \textbf{Y} & 0.5 & 1.0 \\ \hline
     \textbf{Z} & 0.3 & 0.5 \\ \hline
@@ -385,18 +385,18 @@
     \label{fig:mult_obstacle_test}
 \end{figure}
 
-\par The test consists on executing the trajectory of the previous test 10 times in each randomly generated environment. The ability to complete the trajectory without colliding with any obstacle, and the time it tool was recorded. These results are outlined in \autoref{tbl:random_obstacle_test}.
+\par The test consists on executing the trajectory of the previous test 10 times in each randomly generated environment. The ability to complete the trajectory without colliding with any obstacle, and the time it took was recorded. These results are outlined in \autoref{tbl:random_obstacle_test}.
 
 \begin{table}[h]
     \centering
     \begin{tabular}{|c|c|c|}
     \hline
-    \textbf{Obstacles} & \textbf{Completed} & \textbf{Average Time} \\ \hline
-    \textbf{0} & 10/10 & 11.43s \\ \hline
-    \textbf{1} & 9/10 & 19.29s \\ \hline
-    \textbf{2} & 7/10 & 20.44s \\ \hline
-    \textbf{3} & 6/10 & 20.55s \\ \hline
-    \textbf{4} & 2/10 & 22.32s \\ \hline
+    \textbf{Obstacles} & \textbf{Completed} & \textbf{Average Time} (s) \\ \hline
+    \textbf{0} & 10/10 & 11.43 \\ \hline
+    \textbf{1} & 9/10 & 19.29 \\ \hline
+    \textbf{2} & 7/10 & 20.44 \\ \hline
+    \textbf{3} & 6/10 & 20.55 \\ \hline
+    \textbf{4} & 2/10 & 22.32 \\ \hline
     \textbf{5} & 0/10 & --- \\ \hline
     \end{tabular}
     \caption{Results of the obstacle avoidance test}
@@ -412,7 +412,7 @@
 \end{itemize}
 
 
-\par To solve this issues, the collision avoidance architecture should be improved by taking into account multiple obstacles simultaneously, and calculating their distance to multiple parts of the robot, and not just to the \ac{eef}. A possible solution to the local minimum problem, would be the replanning of the offline trajectory taking into account the obstacles identified. Due to the nature of the goals proposed for this Dissertation, these endeavours were not implemented but rather classified as future work.
+\par To solve these issues, the collision avoidance architecture should be improved by taking into account multiple obstacles simultaneously, and calculating their distance to multiple parts of the robot, and not just to the \ac{eef}. A possible solution to the local minimum problem, would be the replanning of the offline trajectory taking into account the obstacles identified. Due to the nature of the goals proposed for this Dissertation, these endeavours were not implemented but rather classified as future work.
 
 % TODO Make a table with the response times of the obstacle detection (gazebo, from obstacle to movement)
 
@@ -492,15 +492,15 @@
     \centering
     \begin{tabular}{|c|c|c|}
     \hline
-    \textbf{Speed Slider} & \textbf{EEF Speed} & \textbf{Minimum Distance} \\ \hline
-    \textbf{0.1}          & 0.054              & 0.21749                   \\ \hline
-    \textbf{0.3}          & 0.155              & 0.21157                   \\ \hline
-    \textbf{0.5}          & 0.234              & 0.19893                   \\ \hline
-    \textbf{0.6}          & 0.282              & 0.19460                   \\ \hline
-    \textbf{0.7}          & 0.316              & 0.19105                   \\ \hline
-    \textbf{0.8}          & 0.359              & 0.18347                   \\ \hline
-    \textbf{0.9}          & 0.406              & Collision                 \\ \hline
-    \textbf{1.0}          & 0,449              & Collision                 \\ \hline
+    \textbf{Speed Slider} (\%) & \textbf{EEF Speed} (m/s) & \textbf{Minimum Distance} (m) \\ \hline
+    \textbf{10}          & 0.054              & 0.217                     \\ \hline
+    \textbf{30}          & 0.155              & 0.211                     \\ \hline
+    \textbf{50}          & 0.234              & 0.198                     \\ \hline
+    \textbf{60}          & 0.282              & 0.194                     \\ \hline
+    \textbf{70}          & 0.316              & 0.191                     \\ \hline
+    \textbf{80}          & 0.359              & 0.183                     \\ \hline
+    \textbf{90}          & 0.406              & Collision                 \\ \hline
+    \textbf{100}          & 0,449              & Collision                 \\ \hline
     \end{tabular}
     \caption{Minimum EEF distance to obstacle relative to its speed}
     \label{tbl:speed_dist}

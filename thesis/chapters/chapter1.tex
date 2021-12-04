@@ -23,27 +23,27 @@
 
 \par This Dissertation has as its main objective the promotion of shared execution of tasks, between humans and industrial robots, specifically targeting collaborative robotic manipulators. To do so, it aims to develop the following set of techniques:
 
-% TODO Recheck techniques and tasks 
-
 \begin{itemize}
-    \item Interaction and communication with cobot through touch;
+    \item Interaction and communication with the cobot through touch;
     \item Manipulation of the cobot by physically \ac{hg} it;
-    \item Dynamic compensation of weight coupled to the \ac{eef};
+    \item Compensation of payload coupled to the \ac{eef};
     \item Detection of dynamic obstacles in the environment;
-    \item Safe motion planning aware of dynamic obstacles;
+    \item Motion planning aware of dynamic obstacles;
     \item Creation of high-level task plans;
 \end{itemize}
 
-\par With theses techniques, this Dissertation also aims to achieve the following collaborative tasks:
+\par Combining theses techniques, this Dissertation also aims to achieve the following collaborative tasks:
 
 \begin{itemize}
-    \item Precise \ac{hg} at the \ac{eef} level;
-    \item Transfer of tools and objects between human and cobot;
+    \item Precise and responsive \ac{hg} at the \ac{eef} level;
+    \item Transfer of objects between human and cobot, in both directions;
     \item Lift assistance and precise manipulation of heavy objects;
     \item Collision free execution of an industrial task;
 \end{itemize}
 
-\par Besides the main objectives, efforts were made to increase the ease of use of a robotic manipulator, with the development of 2 graphical toolbox interfaces, which help control and monitor the status of the cobot and the task being executed. Finally, all techniques were deployed in a modular task-level architecture, which allows the user to rapidly implement new collaborative tasks and easily monitor their execution.
+\par Finally, all techniques were arranged in a real time concurrent architecture, and all tasks grouped in a state machine where the user interacts or changes the current task by physically interacting with the cobot, while receiving visual feedback through its gripper attachment.
+
+\par Besides the main objectives, efforts were made to increase the ease of use of a robotic manipulator, with the development of 2 \acp{gui}, which help control and monitor the status of the cobot and the task being executed.
 
 
 
@@ -52,13 +52,13 @@
 \section{Outline}
 
 \par This Dissertation is divided into 7 chapters.
-\par \autoref{chp:2-collab-robots} (Collaborative Robotics) enlightens the theoretical background that supports this work. It starts with the historical context and various definitions on the \ac{hrc} field. Some technologies used for the development of cobotic applications are outlined and specific details are given on the hardware used in this work. Then, it gives an analysis on existing research proposals done in this field.
+\par \autoref{chp:2-collab-robots} (Collaborative Robotics) enlightens the theoretical background that supports this work. It starts with the historical context and various definitions on the \ac{hrc} field. Some technologies used for the development of cobotic applications are outlined and specific details are given on the hardware used in this work. Then, it gives an analysis on existing research proposals performed in this field.
 
 \par \autoref{chp:3-ft-sensor-correction} (Force Torque Sensor Compensation) explains how a 6-Axis \ac{ft} sensor located at the cobot \ac{eef} can be leveraged for precise \ac{hg} applications. It also presents a payload compensation system based on a theoretical \ac{ft} model, that is used to separate forces caused by the human from forces caused by attached payload. Finally, it describes a real time architecture for correction and compensation of \ac{ft}.
 
-\par \autoref{chp:4-obstacle} (Dynamic Obstacle Avoidance) demonstrates how a depth camera can be integrated with a cobot and make its motion planning collision aware. It outlines techniques for point cloud segmentation that correctly identify moving obstacles in the environment. Then, it presents a collision avoidance system that takes into account the identified obstacles when executing predefined trajectories. Just like the previous chapter, it also described a real time architecture that implements these models.
+\par \autoref{chp:4-obstacle} (Dynamic Obstacle Avoidance) demonstrates how a depth camera can be integrated with a cobot and make its motion planning collision aware. It outlines techniques for point cloud segmentation that identify moving obstacles in the environment. Then, it presents a collision avoidance system that takes into account the identified obstacles when executing predefined trajectories. Just like the previous chapter, it also describes a real time architecture that implements these models.
 
-\par \autoref{chp:5-tasks} (Collaborative Tasks) uses the previous architectures to build the proposed collaborative tasks. Then, it aggregates all tasks in a collaborative state machine where a human can seamlessly execute and switch between tasks through touch interaction. It also showcases 2 \ac{gui} designed for the development of robotic applications.
+\par \autoref{chp:5-tasks} (Collaborative Tasks) uses the previous architectures to build the proposed collaborative tasks. Then, it aggregates all tasks in a collaborative state machine where a human can seamlessly execute and switch between tasks through touch interaction. It also showcases 2 \acp{gui} designed for the development of robotic applications.
 
 \par \autoref{chp:6-tests} (Experiments and Results) demonstrates the performance of the tasks created though various metrics obtained from experiments made, both in simulated and real environments.
 
